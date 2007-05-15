@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="dbdeploy_example" default="generate-script" basedir="." xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+  <loadtasks assembly="./Net.Sf.Dbdeploy.dll" />
+	
+    <target name="generate-script" description="generate a sql upgrade script">
+      <dbdeploy dbType="mssql"
+          dbConnection="Server=localhost;Initial Catalog=tbpromo;User Id=sa;Password=1234"
+                dir="."  outputFile="output.sql" undoOutputFile="output-undo.sql" />
+    </target>
+</project>

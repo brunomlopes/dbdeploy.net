@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<project name="dbdeploy" default="all" basedir="." xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+
+  <property name="configuration" value="Debug"/>
+  
+  <property name="src.dir" value="src"/>
+  <property name="lib.dir" value="lib" />
+  <property name="build.dir" value="build" />
+  <property name="test.dir" value="${build.dir}/"/>
+  <property name="dist.dir" value="dist" />
+  <property name="testoutput.dir" value="${build.dir}/testoutput" />
+  <property name="testreport.dir" value="${build.dir}/testreport" />
+
+  <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
+  
+  <target name="all" depends="clean, compile, test, dist" />
+
+  <target name="init">
+    <mkdir dir="${dist.dir}" />
+    <mkdir dir="${testreport.dir}" />
+    <mkdir dir="${testoutput.dir}" />
+  </target>
+
+  <target name="compile" depends="init">
+    <csc target="library" output="${build.dir}/Net.Sf.Dbdeploy.dll" debug="false" >
+      <sources>
+        <include name="Net.Sf.Dbdeploy/**/*.cs"/>
+      </sources>
+      <references>
+        <include name="${lib.dir}/**/*.dll"/>
+      </references>
+    </csc>
+
+    <csc target="library" output="${build.dir}/Test.Net.Sf.Dbdeploy.dll" debug="false" >
+      <sources>
+        <include name="Test.Net.Sf.Dbdeploy/**/*.cs"/>
+      </sources>
+      <references>
+        <include name="${lib.dir}/**/*.dll"/>
+        <include name="${build.dir}/**/*.dll"/>
+      </references>
+    </csc>
+
+    <copy file="dbproviders.xml" todir="${build.dir}" overwrite="true" />
+    <copy file="${lib.dir}/NAnt.Core.dll" todir="${build.dir}" overwrite="true" />
+    <copy file="Test.Net.Sf.Dbdeploy/App.config" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true" />
+  </target>
+
+  <target name="clean" description="Delete compiled classes etc">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+    <delete dir="${testreport.dir}" />
+    <delete dir="${testoutput.dir}" />
+  </target>
+
+  <target name="test">
+    <nunit2>
+      <formatter type="Plain" />
+      <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
+    </nunit2>
+  </target>
+
+  <target name="dist">
+    <zip zipfile="${dist.dir}/dbdeploy.net.zip">
+      <fileset basedir="${build.dir}" >
+        <include name="dbproviders.xml" />
+        <include name="Net.Sf.Dbdeploy.dll" />
+      </fileset>
+    </zip>
+  </target>
+</project> 
