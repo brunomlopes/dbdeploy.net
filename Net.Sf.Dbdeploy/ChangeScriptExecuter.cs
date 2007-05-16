@@ -36,7 +36,7 @@ namespace Net.Sf.Dbdeploy
 
         private void CopyFileDoContentsToStdOut(FileInfo file)
         {
-            using (StreamReader input = File.OpenText(file.Name))
+            using (StreamReader input = File.OpenText(file.FullName))
             {
                 string str;
                 while ((str = input.ReadLine()) != null && !IsUndoToken(str))
@@ -53,7 +53,7 @@ namespace Net.Sf.Dbdeploy
 
         private void CopyFileUndoContentsToStdOut(FileInfo file)
         {
-            using (StreamReader input = File.OpenText(file.Name))
+            using (StreamReader input = File.OpenText(file.FullName))
             {
                 string str;
                 while ((str = input.ReadLine()) != null)
