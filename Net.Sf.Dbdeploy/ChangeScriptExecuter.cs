@@ -48,7 +48,7 @@ namespace Net.Sf.Dbdeploy
 
         private bool IsUndoToken(string text)
         {
-            return (text != null && "--//@UNDO".Equals(text.Trim()));
+            return "--//@UNDO" == text.Trim();
         }
 
         private void CopyFileUndoContentsToStdOut(FileInfo file)
@@ -58,7 +58,7 @@ namespace Net.Sf.Dbdeploy
                 string str;
                 while ((str = input.ReadLine()) != null)
                 {
-                    if (!IsUndoToken(str))
+                    if (IsUndoToken(str))
                     {
                         // Just keep looping until we find the magic "--//@UNDO"
                         break;
