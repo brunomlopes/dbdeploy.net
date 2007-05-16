@@ -5,11 +5,12 @@ namespace Net.Sf.Dbdeploy.Database
 {
     public class DbProviderFile
     {
+        private const string ProviderFilename = @"dbproviders.xml";
         private string path;
 
         public DbProviderFile()
         {
-            LoadFrom(Environment.CurrentDirectory + @"\dbproviders.xml");
+            LoadFrom(System.IO.Path.Combine(Environment.CurrentDirectory, ProviderFilename));
         }
 
         public string Path
@@ -22,7 +23,7 @@ namespace Net.Sf.Dbdeploy.Database
             path = providerPath;
             if (!File.Exists(path))
             {
-                throw new FileNotFoundException("Could not load dbproviders.xml from " + path);
+                throw new FileNotFoundException("Could not load provider file from " + path);
             }
         }
     }

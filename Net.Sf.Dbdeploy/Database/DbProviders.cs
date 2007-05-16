@@ -1,9 +1,4 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -21,16 +16,16 @@ namespace Net.Sf.Dbdeploy.Database
 
         public DatabaseProvider GetProvider(string dbmsType)
         {
-            foreach(DatabaseProvider provider in itemsField)
+            foreach (DatabaseProvider provider in itemsField)
             {
                 if (dbmsType.Equals(provider.Name))
                     return provider;
             }
-            return null;  // TODO: Add exception here for unknown type.
+            return null; // TODO: Add exception here for unknown type.
         }
     }
 
-    
+
     public class DatabaseProvider
     {
         private string nameField;
@@ -42,7 +37,7 @@ namespace Net.Sf.Dbdeploy.Database
         private string connectionClassField;
 
         /// <remarks/>
-        [XmlAttribute("name")] 
+        [XmlAttribute("name")]
         public string Name
         {
             get { return nameField; }

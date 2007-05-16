@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeScriptExecuter.cs" />
-    <Compile Include="CommandLine.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManager.cs" />
     <Compile Include="Database\DbmsSyntax.cs" />
