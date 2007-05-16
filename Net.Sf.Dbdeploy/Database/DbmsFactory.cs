@@ -1,8 +1,6 @@
 using System;
 using System.Data.Common;
 using System.Reflection;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -16,7 +14,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             this.dbms = dbms;
             this.connectionString = connectionString;
-            LoadProviders();
+            providers = new DbProviderFile().LoadProviders();
         }
 
 
@@ -56,15 +54,6 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 throw new ArgumentException(
                     "Supported dbms: ora, mssql, mysql.");
-            }
-        }
-
-        private void LoadProviders()
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof (Providers));
-            using (XmlReader reader = new XmlTextReader(new DbProviderFile().Path))
-            {
-                providers = (Providers) serializer.Deserialize(reader);
             }
         }
     }

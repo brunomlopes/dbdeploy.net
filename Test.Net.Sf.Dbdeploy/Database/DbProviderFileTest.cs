@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using NUnit.Framework;
 
@@ -11,21 +10,15 @@ namespace Net.Sf.Dbdeploy.Database
         public void ShouldUseCurrentWorkingDirByDefault()
         {
             DbProviderFile providerFile = new DbProviderFile();
-            string expectedPath = Environment.CurrentDirectory + @"\dbproviders.xml";
-            Assert.AreEqual(expectedPath, providerFile.Path);
+            Assert.IsNotNull(providerFile.LoadProviders());
         }
 
-        [Test]
-        public void ShouldLoadFromAssemblyDirectory()
-        {
-                
-        }
-
-        [Test, ExpectedException(typeof(FileNotFoundException))]
+        [Test, ExpectedException(typeof (FileNotFoundException))]
         public void ShouldNotInitializeInvalidPath()
         {
             DbProviderFile providerFile = new DbProviderFile();
-            providerFile.LoadFrom("bogus path");
+            providerFile.Path = "bogus path";
+            providerFile.LoadProviders();
         }
     }
 }
