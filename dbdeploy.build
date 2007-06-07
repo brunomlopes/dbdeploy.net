@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <project name="dbdeploy" default="all" basedir="." xmlns="http://nant.sf.net/release/0.85/nant.xsd">
 
-  <property name="configuration" value="Debug"/>
-  
+  <property name="configuration" value="Build"/>
   <property name="src.dir" value="src"/>
   <property name="lib.dir" value="lib" />
   <property name="build.dir" value="build" />
@@ -10,8 +9,7 @@
   <property name="dist.dir" value="dist" />
   <property name="testoutput.dir" value="${build.dir}/testoutput" />
   <property name="testreport.dir" value="${build.dir}/testreport" />
-
-  <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
+  <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
   
   <target name="all" depends="clean, compile, test, dist" />
 
@@ -22,24 +20,10 @@
   </target>
 
   <target name="compile" depends="init">
-    <csc target="library" output="${build.dir}/Net.Sf.Dbdeploy.dll" debug="false" >
-      <sources>
-        <include name="Net.Sf.Dbdeploy/**/*.cs"/>
-      </sources>
-      <references>
-        <include name="${lib.dir}/**/*.dll"/>
-      </references>
-    </csc>
-
-    <csc target="library" output="${build.dir}/Test.Net.Sf.Dbdeploy.dll" debug="false" >
-      <sources>
-        <include name="Test.Net.Sf.Dbdeploy/**/*.cs"/>
-      </sources>
-      <references>
-        <include name="${lib.dir}/**/*.dll"/>
-        <include name="${build.dir}/**/*.dll"/>
-      </references>
-    </csc>
+	<loadtasks assembly="${nantcontrib.assembly}" />
+	<msbuild project="dbdeploy.net.sln">
+		<property name="Configuration" value="${configuration}" />
+	</msbuild>
 
     <copy file="dbproviders.xml" todir="${build.dir}" overwrite="true" />
     <copy file="${lib.dir}/NAnt.Core.dll" todir="${build.dir}" overwrite="true" />
@@ -54,6 +38,7 @@
   </target>
 
   <target name="test">
+	<loadtasks assembly="${lib.dir}/nunit.framework.dll" />
     <nunit2>
       <formatter type="Plain" />
       <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
@@ -65,6 +50,8 @@
       <fileset basedir="${build.dir}" >
         <include name="dbproviders.xml" />
         <include name="Net.Sf.Dbdeploy.dll" />
+        <include name="NAnt.Core.dll" />
+        <include name="dbdeploy.exe*" />
       </fileset>
     </zip>
   </target>
