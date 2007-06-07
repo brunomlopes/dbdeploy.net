@@ -7,7 +7,7 @@ namespace Net.Sf.Dbdeploy.Scripts
     public class FilenameParserTest
     {
         [Test]
-        public void TestCanParseAnyFilenameThatStartsWithANumber()
+        public void CanParseAnyFilenameThatStartsWithANumber()
         {
             FilenameParser parser = new FilenameParser();
             Assert.AreEqual(1, parser.ExtractIdFromFilename("0001_a_filename.txt"));
@@ -15,21 +15,19 @@ namespace Net.Sf.Dbdeploy.Scripts
             Assert.AreEqual(1, parser.ExtractIdFromFilename("1 a filename.txt"));
             Assert.AreEqual(1, parser.ExtractIdFromFilename("1.txt"));
             Assert.AreEqual(123, parser.ExtractIdFromFilename("00123_something.txt"));
+            Assert.AreEqual(1, parser.ExtractIdFromFilename("1.foo.2.txt"));
         }
 
-        [Test]
-        public void TestThrowsWhenFilenameDoesNotStartWithANumber()
+        [Test, ExpectedException(typeof(UnrecognisedFilenameException), "Could not extract a change script number from filename: blah blah blah")]
+        public void ThrowsWhenFilenameDoesNotStartWithANumber()
         {
-            FilenameParser parser = new FilenameParser();
-            try
-            {
-                parser.ExtractIdFromFilename("blah blah blah");
-                Assert.Fail("expected exception");
-            }
-            catch (UnrecognisedFilenameException e)
-            {
-                Assert.AreEqual("Could not extract a change script number from filename: blah blah blah", e.Message);
-            }
+            new FilenameParser().ExtractIdFromFilename("blah blah blah");
+        }
+
+        [Test, ExpectedException(typeof(UnrecognisedFilenameException), "Could not extract a change script number from filename: foo.2.txt")]
+        public void ThrowsWhenFilenameDoesNotStartWithANumberAndContainsANumber()
+        {
+            new FilenameParser().ExtractIdFromFilename("foo.2.txt");
         }
     }
 }
