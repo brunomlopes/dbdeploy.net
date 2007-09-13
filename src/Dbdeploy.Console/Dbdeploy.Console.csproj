@@ -4,13 +4,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A7A5B171-0A90-4652-A6F1-D4E1A480ACBE}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{E1E0EC53-D4C1-4C8D-BAAB-A9AD18EE8E2B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Net.Sf.Dbdeploy</RootNamespace>
-    <AssemblyName>Net.Sf.Dbdeploy</AssemblyName>
-    <StartupObject>
-    </StartupObject>
+    <AssemblyName>dbdeploy</AssemblyName>
+    <StartupObject>Net.Sf.Dbdeploy.CommandLine</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,7 +30,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\build\</OutputPath>
+    <OutputPath>..\..\build\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,44 +39,21 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\NAnt.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangeScriptExecuter.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="Database\DatabaseSchemaVersionManager.cs" />
-    <Compile Include="Database\DbmsSyntax.cs" />
-    <Compile Include="Database\DbmsFactory.cs" />
-    <Compile Include="Database\DbProviderFile.cs" />
-    <Compile Include="Database\DbProviders.cs" />
-    <Compile Include="Database\HsqlDbmsSyntax.cs" />
-    <Compile Include="Database\MsSqlDbmsSyntax.cs" />
-    <Compile Include="Database\MySqlDbmsSyntax.cs" />
-    <Compile Include="Database\OracleDbmsSyntax.cs" />
-    <Compile Include="Database\OracleSqlPlusDbmsSyntax.cs" />
-    <Compile Include="Database\SybAseDbmsSyntax.cs" />
-    <Compile Include="Exceptions\DbDeployException.cs" />
-    <Compile Include="Exceptions\DuplicateChangeScriptException.cs" />
-    <Compile Include="Exceptions\RequiredChangeScriptNotFoundException.cs" />
-    <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />
-    <Compile Include="Exceptions\UnrecognisedFilenameException.cs" />
-    <Compile Include="NAntTask.cs" />
-    <Compile Include="PrettyPrinter.cs" />
+    <Compile Include="CommandLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scripts\ChangeScript.cs" />
-    <Compile Include="Scripts\ChangeScriptRepository.cs" />
-    <Compile Include="Scripts\DirectoryScanner.cs" />
-    <Compile Include="Scripts\FilenameParser.cs" />
-    <Compile Include="ToPrintStreamDeployer.cs" />
-    <Compile Include="Validator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Net.Sf.Dbdeploy\Net.Sf.Dbdeploy.csproj">
+      <Project>{A7A5B171-0A90-4652-A6F1-D4E1A480ACBE}</Project>
+      <Name>Net.Sf.Dbdeploy</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

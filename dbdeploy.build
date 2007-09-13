@@ -27,7 +27,7 @@
 
     <copy file="dbproviders.xml" todir="${build.dir}" overwrite="true" />
     <copy file="${lib.dir}/NAnt.Core.dll" todir="${build.dir}" overwrite="true" />
-    <copy file="Test.Net.Sf.Dbdeploy/App.config" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true" />
+    <copy file="${src.dir}/Test.Net.Sf.Dbdeploy/App.config" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true" />
   </target>
 
   <target name="clean" description="Delete compiled classes etc">
