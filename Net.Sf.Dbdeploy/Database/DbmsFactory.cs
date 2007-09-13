@@ -6,21 +6,15 @@ namespace Net.Sf.Dbdeploy.Database
 {
     public class DbmsFactory
     {
-        private string dbms;
+        private readonly string dbms;
         private readonly string connectionString;
-        private Providers providers;
+        private readonly Providers providers;
 
         public DbmsFactory(string dbms, string connectionString)
         {
             this.dbms = dbms;
             this.connectionString = connectionString;
             providers = new DbProviderFile().LoadProviders();
-        }
-
-
-        public Providers Providers
-        {
-            get { return providers; }
         }
 
         public DbmsSyntax CreateDbmsSyntax()
@@ -41,20 +35,11 @@ namespace Net.Sf.Dbdeploy.Database
         public DbConnection CreateConnection()
         {
             DatabaseProvider provider = providers.GetProvider(dbms);
+            if (provider == null) throw new ArgumentException("Supported dbms: ora, mssql, mysql.");
 
-            if (provider != null)
-            {
-                Assembly assembly =
-                    Assembly.Load(provider.AssemblyName);
-                Type type = assembly.GetType(provider.ConnectionClass);
-
-                return (DbConnection) Activator.CreateInstance(type, connectionString);
-            }
-            else
-            {
-                throw new ArgumentException(
-                    "Supported dbms: ora, mssql, mysql.");
-            }
+            Assembly assembly = Assembly.Load(provider.AssemblyName);
+            Type type = assembly.GetType(provider.ConnectionClass);
+            return (DbConnection) Activator.CreateInstance(type, connectionString);
         }
     }
 }

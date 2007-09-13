@@ -12,20 +12,13 @@ namespace Net.Sf.Dbdeploy
     public class NAntTask : Task
     {
         private string dbType;
-        private string connectionClass;
         private string dbConnection;
-
         private DirectoryInfo dir;
         private FileInfo outputfile;
-        private int lastChangeToApply = Int32.MaxValue;
-        private String deltaSet = "Main";
         private FileInfo undoOutputfile;
 
-        [TaskAttribute("connectionClass")]
-        public string ConnectionClass
-        {
-            set { connectionClass = value; }
-        }
+        private int lastChangeToApply = Int32.MaxValue;
+        private String deltaSet = "Main";
 
         [TaskAttribute("dbType", Required = true)]
         public string DbType
@@ -52,6 +45,13 @@ namespace Net.Sf.Dbdeploy
             get { return outputfile; }
             set { outputfile = value; }
         }
+       
+        [TaskAttribute("undoOutputFile")]
+        public FileInfo UndoOutputfile
+        {
+            get { return undoOutputfile; }
+            set { undoOutputfile = value; }
+        }
 
         [TaskAttribute("lastChangeToApply")]
         public int LastChangeToApply
@@ -66,14 +66,6 @@ namespace Net.Sf.Dbdeploy
             get { return deltaSet; }
             set { deltaSet = value; }
         }
-
-        [TaskAttribute("undoOutputFile")]
-        public FileInfo UndoOutputfile
-        {
-            get { return undoOutputfile; }
-            set { undoOutputfile = value; }
-        }
-
 
         protected override void InitializeTask(XmlNode taskNode)
         {
@@ -93,16 +85,12 @@ namespace Net.Sf.Dbdeploy
                     {
                         undoOutputPrintStream = new StreamWriter(undoOutputfile.FullName);
                     }
-                    DbmsFactory factory =
-                        new DbmsFactory(dbType, dbConnection);
+                    DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
                     DbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
+                    DatabaseSchemaVersionManager databaseSchemaVersion =new DatabaseSchemaVersionManager(factory, deltaSet);
 
-                    DatabaseSchemaVersionManager databaseSchemaVersion =
-                        new DatabaseSchemaVersionManager(factory, deltaSet);
-
-                    ToPrintStreamDeployer toPrintSteamDeployer =
-                        new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax,
-                                                  undoOutputPrintStream);
+                    ToPrintStreamDeployer toPrintSteamDeployer 
+                        = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax,undoOutputPrintStream);
                     toPrintSteamDeployer.doDeploy(lastChangeToApply);
 
                     if (undoOutputPrintStream != null)

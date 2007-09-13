@@ -56,7 +56,6 @@
     <Compile Include="Database\DatabaseSchemaVersionManager.cs" />
     <Compile Include="Database\DbmsSyntax.cs" />
     <Compile Include="Database\DbmsFactory.cs" />
-    <Compile Include="Database\DbmsType.cs" />
     <Compile Include="Database\DbProviderFile.cs" />
     <Compile Include="Database\DbProviders.cs" />
     <Compile Include="Database\HsqlDbmsSyntax.cs" />

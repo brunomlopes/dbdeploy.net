@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\AbstractDatabaseSchemaVersionManagerTest.cs" />
-    <Compile Include="Database\DbmsFactoryTest.cs" />
+    <Compile Include="Database\DbProvidersTest.cs" />
     <Compile Include="Database\DbProviderFileTest.cs" />
     <Compile Include="Database\MsSqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="PrettyPrinterTest.cs" />

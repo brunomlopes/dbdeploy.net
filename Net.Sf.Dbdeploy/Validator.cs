@@ -7,10 +7,10 @@ namespace Net.Sf.Dbdeploy
     {
         private String usage;
 
-        private static String ERROR_MESSAGE_HEADER = "Dbdeploy parameter validation error" + Environment.NewLine +
+        private static readonly String ERROR_MESSAGE_HEADER = "Dbdeploy parameter validation error" + Environment.NewLine +
                                                      Environment.NewLine;
 
-        private static String NANT_USAGE = Environment.NewLine + Environment.NewLine + "Dbdeploy NAnt Task Usage"
+        private static readonly String NANT_USAGE = Environment.NewLine + Environment.NewLine + "Dbdeploy NAnt Task Usage"
                                            + Environment.NewLine + "======================="
                                            + Environment.NewLine + Environment.NewLine + "\t<dbdeploy"
                                            + Environment.NewLine + "\t\tconnectionString=\"[DATABASE URL]\" *"
@@ -25,7 +25,7 @@ namespace Net.Sf.Dbdeploy
                                            + Environment.NewLine + Environment.NewLine +
                                            "* - Indicates mandatory parameter";
 
-        private static String COMMAND_LINE_USAGE = "\n\n\nDbdeploy Command Line Usage"
+        private static readonly String COMMAND_LINE_USAGE = "\n\n\nDbdeploy Command Line Usage"
                                                    + "\n==========================="
                                                    + "\n\n\tTODO - SPECIFY USAGE HERE";
 

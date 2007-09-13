@@ -11,9 +11,9 @@ namespace Net.Sf.Dbdeploy
         private readonly ChangeScriptExecuter changeScriptExecuter;
         private readonly ChangeScriptRepository changeScriptRepository;
         private readonly PrettyPrinter prettyPrinter = new PrettyPrinter();
-        private List<ChangeScript> doChangeScripts;
+        private readonly List<ChangeScript> doChangeScripts;
         private List<ChangeScript> undoChangeScripts;
-        private List<int> appliedChanges;
+        private readonly List<int> appliedChanges;
         private List<int> changesToApply;
 
         public Controller(DatabaseSchemaVersionManager schemaVersion,
@@ -25,7 +25,6 @@ namespace Net.Sf.Dbdeploy
             this.changeScriptExecuter = changeScriptExecuter;
 
             doChangeScripts = changeScriptRepository.GetOrderedListOfDoChangeScripts();
-
             appliedChanges = schemaVersion.GetAppliedChangeNumbers();
         }
 

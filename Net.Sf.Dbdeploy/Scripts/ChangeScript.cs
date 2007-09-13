@@ -47,7 +47,6 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             ChangeScript other = (ChangeScript) o;
             return id.CompareTo(other.id);
-//            return id - other.id;
         }
 
         public override string ToString()

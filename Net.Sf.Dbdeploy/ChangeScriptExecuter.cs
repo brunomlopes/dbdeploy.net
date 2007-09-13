@@ -8,7 +8,7 @@ namespace Net.Sf.Dbdeploy
 {
     public class ChangeScriptExecuter
     {
-        private TextWriter output;
+        private readonly TextWriter output;
 
         public ChangeScriptExecuter(TextWriter printStream, DbmsSyntax dbmsSyntax)
         {
@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy
             CopyFileUndoContentsToStdOut(script.GetFile());
         }
 
-        private void CopyFileDoContentsToStdOut(FileInfo file)
+        private void CopyFileDoContentsToStdOut(FileSystemInfo file)
         {
             using (StreamReader input = File.OpenText(file.FullName))
             {
@@ -51,7 +51,7 @@ namespace Net.Sf.Dbdeploy
             return "--//@UNDO" == text.Trim();
         }
 
-        private void CopyFileUndoContentsToStdOut(FileInfo file)
+        private void CopyFileUndoContentsToStdOut(FileSystemInfo file)
         {
             using (StreamReader input = File.OpenText(file.FullName))
             {

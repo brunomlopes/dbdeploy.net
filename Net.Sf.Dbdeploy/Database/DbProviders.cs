@@ -29,11 +29,8 @@ namespace Net.Sf.Dbdeploy.Database
     public class DatabaseProvider
     {
         private string nameField;
-
         private string descriptionField;
-
         private string assemblyNameField;
-
         private string connectionClassField;
 
         /// <remarks/>

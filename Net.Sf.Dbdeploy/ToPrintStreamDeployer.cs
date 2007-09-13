@@ -7,10 +7,9 @@ namespace Net.Sf.Dbdeploy
 {
     public class ToPrintStreamDeployer
     {
-        private DirectoryInfo dir;
-
-        private TextWriter doOutputPrintStream;
-        private TextWriter undoOutputPrintStream;
+        private readonly DirectoryInfo dir;
+        private readonly TextWriter doOutputPrintStream;
+        private readonly TextWriter undoOutputPrintStream;
         private readonly DatabaseSchemaVersionManager schemaManager;
         private readonly DbmsSyntax dbmsSyntax;
 

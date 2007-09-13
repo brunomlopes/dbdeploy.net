@@ -7,15 +7,11 @@ namespace Net.Sf.Dbdeploy.Scripts
 {
     public class DirectoryScanner
     {
-        private FilenameParser filenameParser;
+        private readonly FilenameParser filenameParser;
 
-        public DirectoryScanner() : this(new FilenameParser())
+        public DirectoryScanner()
         {
-        }
-
-        public DirectoryScanner(FilenameParser filenameParser)
-        {
-            this.filenameParser = filenameParser;
+            filenameParser = new FilenameParser();
         }
 
         public List<ChangeScript> getChangeScriptsForDirectory(DirectoryInfo directory)
