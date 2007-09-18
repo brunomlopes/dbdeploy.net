@@ -20,10 +20,10 @@
   </target>
 
   <target name="compile" depends="init">
-	<loadtasks assembly="${nantcontrib.assembly}" />
-	<msbuild project="dbdeploy.net.sln">
-		<property name="Configuration" value="${configuration}" />
-	</msbuild>
+	  <loadtasks assembly="${nantcontrib.assembly}" />
+	  <msbuild project="dbdeploy.net.sln">
+		  <property name="Configuration" value="${configuration}" />
+	  </msbuild>
 
     <copy file="dbproviders.xml" todir="${build.dir}" overwrite="true" />
     <copy file="${lib.dir}/NAnt.Core.dll" todir="${build.dir}" overwrite="true" />
@@ -38,7 +38,7 @@
   </target>
 
   <target name="test">
-	<loadtasks assembly="${lib.dir}/nunit.framework.dll" />
+	  <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
     <nunit2>
       <formatter type="Plain" />
       <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
@@ -47,11 +47,17 @@
 
   <target name="dist">
     <zip zipfile="${dist.dir}/dbdeploy.net.zip">
-      <fileset basedir="${build.dir}" >
+      <fileset basedir="${build.dir}" prefix="bin/">
         <include name="dbproviders.xml" />
         <include name="Net.Sf.Dbdeploy.dll" />
         <include name="NAnt.Core.dll" />
         <include name="dbdeploy.exe*" />
+      </fileset>
+      <fileset basedir="scripts" prefix="scripts/">
+        <include name="**/*" />
+      </fileset>
+      <fileset basedir="example_scripts" prefix="example/">
+        <include name="**/*" />
       </fileset>
     </zip>
   </target>
