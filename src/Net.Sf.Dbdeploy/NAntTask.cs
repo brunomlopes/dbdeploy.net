@@ -19,6 +19,7 @@ namespace Net.Sf.Dbdeploy
 
         private int lastChangeToApply = Int32.MaxValue;
         private String deltaSet = "Main";
+        private int currentDbVersion;
 
         [TaskAttribute("dbType", Required = true)]
         public string DbType
@@ -26,7 +27,7 @@ namespace Net.Sf.Dbdeploy
             set { dbType = value; }
         }
 
-        [TaskAttribute("dbConnection", Required = true)]
+        [TaskAttribute("dbConnection")]
         public string DbConnection
         {
             set { dbConnection = value; }
@@ -35,43 +36,50 @@ namespace Net.Sf.Dbdeploy
         [TaskAttribute("dir", Required=true)]
         public DirectoryInfo Dir
         {
-            get { return dir; }
             set { dir = value; }
         }
 
         [TaskAttribute("outputFile", Required = true)]
         public FileInfo Outputfile
         {
-            get { return outputfile; }
             set { outputfile = value; }
         }
        
         [TaskAttribute("undoOutputFile")]
         public FileInfo UndoOutputfile
         {
-            get { return undoOutputfile; }
             set { undoOutputfile = value; }
         }
 
         [TaskAttribute("lastChangeToApply")]
         public int LastChangeToApply
         {
-            get { return lastChangeToApply; }
             set { lastChangeToApply = value; }
         }
 
         [TaskAttribute("deltaSet")]
         public string DeltaSet
         {
-            get { return deltaSet; }
             set { deltaSet = value; }
+        }
+
+        [TaskAttribute("currentDbVersion")]
+        public int CurrentDbVersion
+        {
+            set { currentDbVersion = value; }
+        }
+
+        private int? GetCurrentDbVersion()
+        {
+            if (currentDbVersion == 0) return null;
+            return currentDbVersion;
         }
 
         protected override void InitializeTask(XmlNode taskNode)
         {
             Validator validator = new Validator();
             validator.SetUsage("nant");
-            validator.Validate(dbConnection, dbType, dir.FullName, outputfile.Name);
+            validator.Validate(dbConnection, dbType, dir.FullName, outputfile.Name, GetCurrentDbVersion());
         }
 
         protected override void ExecuteTask()
@@ -87,11 +95,11 @@ namespace Net.Sf.Dbdeploy
                     }
                     DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
                     DbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
-                    DatabaseSchemaVersionManager databaseSchemaVersion =new DatabaseSchemaVersionManager(factory, deltaSet);
+                    DatabaseSchemaVersionManager databaseSchemaVersion =new DatabaseSchemaVersionManager(factory, deltaSet, GetCurrentDbVersion());
 
                     ToPrintStreamDeployer toPrintSteamDeployer 
                         = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax,undoOutputPrintStream);
-                    toPrintSteamDeployer.doDeploy(lastChangeToApply);
+                    toPrintSteamDeployer.DoDeploy(lastChangeToApply);
 
                     if (undoOutputPrintStream != null)
                     {

@@ -13,27 +13,45 @@ namespace Net.Sf.Dbdeploy.Database
 
         private readonly DbmsFactory factory;
         private readonly string deltaSet;
+        private readonly int? currentVersion;
 
-        public DatabaseSchemaVersionManager(DbmsFactory factory, string deltaSet)
+        public DatabaseSchemaVersionManager(DbmsFactory factory, string deltaSet, int? currentVersion)
         {
             this.factory = factory;
             this.deltaSet = deltaSet;
+            this.currentVersion = currentVersion;
         }
 
-        public DbmsSyntax DbmsSyntax
+        private DbmsSyntax DbmsSyntax
         {
             get { return factory.CreateDbmsSyntax(); }
         }
 
-        public DbConnection Connection
+        private DbConnection Connection
         {
             get { return factory.CreateConnection(); }
         }
 
         public List<int> GetAppliedChangeNumbers()
         {
-            List<int> changeNumbers = new List<int>();
+            if (currentVersion == null)
+            {
+                return GetCurrentVersionFromDb();
+            }
+            else
+            {
+                List<int> changeNumbers = new List<int>();
+                for (int i = 1; i <= currentVersion.Value; i++)
+                {
+                    changeNumbers.Add(i);
+                }
+                return changeNumbers;
+            }
+        }
 
+        private List<int> GetCurrentVersionFromDb()
+        {
+            List<int> changeNumbers = new List<int>();
             try
             {
                 using (DbConnection connection = Connection)
@@ -64,15 +82,18 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 throw new SchemaVersionTrackingException("Could not retrieve change log from database because: "
                                                          + e.Message, e);
-            }
+            }            
         }
 
         public string GenerateDoDeltaFragmentHeader(ChangeScript changeScript)
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append("--------------- Fragment begins: " + changeScript + " ---------------\n");
-            builder.Append("INSERT INTO " + TABLE_NAME +
+            builder.AppendLine("--------------- Fragment begins: " + changeScript + " ---------------");
+
+            if (currentVersion != null) GenerateVersionCheck(changeScript, builder);
+
+            builder.AppendLine("INSERT INTO " + TABLE_NAME +
                            " (change_number, delta_set, start_dt, applied_by, description)" +
                            " VALUES (" + changeScript.GetId() + ", '" + deltaSet + "', " +
                            DbmsSyntax.GenerateTimestamp() +
@@ -86,13 +107,13 @@ namespace Net.Sf.Dbdeploy.Database
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append("UPDATE " + TABLE_NAME + " SET complete_dt = "
+            builder.AppendLine("UPDATE " + TABLE_NAME + " SET complete_dt = "
                            + DbmsSyntax.GenerateTimestamp()
                            + " WHERE change_number = " + changeScript.GetId()
                            + " AND delta_set = '" + deltaSet + "'"
                            + DbmsSyntax.GenerateStatementDelimiter());
-            builder.Append(DbmsSyntax.GenerateCommit());
-            builder.Append("\n--------------- Fragment ends: " + changeScript + " ---------------\n");
+            builder.AppendLine(DbmsSyntax.GenerateCommit());
+            builder.Append("--------------- Fragment ends: " + changeScript + " ---------------");
             return builder.ToString();
         }
 
@@ -100,13 +121,20 @@ namespace Net.Sf.Dbdeploy.Database
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append("DELETE FROM " + TABLE_NAME
+            builder.AppendLine("DELETE FROM " + TABLE_NAME
                            + " WHERE change_number = " + changeScript.GetId()
                            + " AND delta_set = '" + deltaSet + "'"
                            + DbmsSyntax.GenerateStatementDelimiter());
-            builder.Append(DbmsSyntax.GenerateCommit());
-            builder.Append("\n--------------- Fragment ends: " + changeScript + " ---------------\n");
+            builder.AppendLine(DbmsSyntax.GenerateCommit());
+            builder.Append("--------------- Fragment ends: " + changeScript + " ---------------");
             return builder.ToString();
+        }
+
+        private void GenerateVersionCheck(ChangeScript changeScript, StringBuilder builder)
+        {
+            builder.Append("IF ((SELECT MAX(change_number) from ").Append(TABLE_NAME).Append(") > ").Append(changeScript.GetId()).AppendLine(")").
+                Append("    RAISERROR ('Invalid change number. Delta script: ").Append(changeScript.GetId()).Append(" has already been applied to this database.', 1, 1)").
+                AppendLine(DbmsSyntax.GenerateStatementDelimiter()).AppendLine();
         }
     }
 }

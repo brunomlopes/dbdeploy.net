@@ -16,41 +16,41 @@ namespace Net.Sf.Dbdeploy
         }
 
         [Test]
-        public void TestShouldDisplayNonRangedNumbersAsSeperateEntities()
+        public void ShouldDisplayNonRangedNumbersAsSeperateEntities()
         {
             int[] list = {1, 3, 5};
             Assert.AreEqual("1, 3, 5", prettyPrinter.Format(new List<int>(list)));
         }
 
         [Test]
-        public void TestShouldDisplayARangeAsSuch()
+        public void ShouldDisplayARangeAsSuch()
         {
             int[] list = {1, 2, 3, 4, 5};
             Assert.AreEqual("1..5", prettyPrinter.Format(new List<int>(list)));
         }
 
         [Test]
-        public void TestRangesOfTwoAreNotDisplayedAsARange()
+        public void RangesOfTwoAreNotDisplayedAsARange()
         {
             int[] list = {1, 2};
             Assert.AreEqual("1, 2", prettyPrinter.Format(new List<int>(list)));
         }
 
         [Test]
-        public void TestShouldReturnNoneWithAnEmptyList()
+        public void ShouldReturnNoneWithAnEmptyList()
         {
             Assert.AreEqual("(none)", prettyPrinter.Format(new List<int>()));
         }
 
         [Test]
-        public void TestCanDealWithMixtureOfRangesAndNonRanges()
+        public void CanDealWithMixtureOfRangesAndNonRanges()
         {
             int[] list = {1, 2, 4, 7, 8, 9, 10, 12};
             Assert.AreEqual("1, 2, 4, 7..10, 12", prettyPrinter.Format(new List<int>(list)));
         }
 
         [Test]
-        public void TestCanFormatAChangeScriptList()
+        public void CanFormatAChangeScriptList()
         {
             ChangeScript change1 = new ChangeScript(1);
             ChangeScript change3 = new ChangeScript(3);
@@ -58,7 +58,7 @@ namespace Net.Sf.Dbdeploy
             list.Add(change1);
             list.Add(change3);
 
-            Assert.AreEqual("1, 3", prettyPrinter.formatChangeScriptList(list));
+            Assert.AreEqual("1, 3", prettyPrinter.FormatChangeScriptList(list));
         }
     }
 }

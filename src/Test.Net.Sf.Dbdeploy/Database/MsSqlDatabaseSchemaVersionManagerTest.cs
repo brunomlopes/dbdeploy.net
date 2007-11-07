@@ -7,8 +7,7 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["ConnString"];
         private static readonly string DELTA_SET = "All";
-
-        private static string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE =
+        private static readonly string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE =
             "Could not retrieve change log from database because: Invalid object name 'dbo.changelog'.";
 
         protected override string ConnectionString
@@ -25,7 +24,6 @@ namespace Net.Sf.Dbdeploy.Database
         {
             get { return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE; }
         }
-
 
         protected override void EnsureTableDoesNotExist()
         {
@@ -61,7 +59,6 @@ namespace Net.Sf.Dbdeploy.Database
         {
             base.TestCanRetrieveDeltaFragmentFooterSql();
         }
-
 
         [Test]
         public override void TestCanRetrieveSchemaVersionFromDatabase()

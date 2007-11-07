@@ -14,7 +14,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             filenameParser = new FilenameParser();
         }
 
-        public List<ChangeScript> getChangeScriptsForDirectory(DirectoryInfo directory)
+        public List<ChangeScript> GetChangeScriptsForDirectory(DirectoryInfo directory)
         {
             try
             {

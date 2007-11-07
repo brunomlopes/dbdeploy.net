@@ -1,3 +1,5 @@
+using System;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     public class MsSqlDbmsSyntax : DbmsSyntax
@@ -19,7 +21,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public string GenerateStatementDelimiter()
         {
-            return "\nGO";
+            return Environment.NewLine + "GO";
         }
 
         public string GenerateCommit()

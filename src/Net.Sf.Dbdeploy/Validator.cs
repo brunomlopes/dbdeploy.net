@@ -29,9 +29,9 @@ namespace Net.Sf.Dbdeploy
                                                    + "\n==========================="
                                                    + "\n\n\tTODO - SPECIFY USAGE HERE";
 
-        public void Validate(String connectionString, String dbms, String dir, String outputFile)
+        public void Validate(string connectionString, string dbms, string dir, string outputFile, int? currentDbVersion)
         {
-            if (connectionString == null || connectionString == "")
+            if ((connectionString == null || connectionString == "") && currentDbVersion == null)
             {
                 throw new BuildException(ConstructErrorMessage("connectionString expected"));
             }

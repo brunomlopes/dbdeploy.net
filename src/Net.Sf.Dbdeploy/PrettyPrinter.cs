@@ -72,7 +72,7 @@ namespace Net.Sf.Dbdeploy
             builder.Append(o);
         }
 
-        public String formatChangeScriptList(List<ChangeScript> changeScripts)
+        public String FormatChangeScriptList(List<ChangeScript> changeScripts)
         {
             List<int> numberList = new List<int>(changeScripts.Count);
 

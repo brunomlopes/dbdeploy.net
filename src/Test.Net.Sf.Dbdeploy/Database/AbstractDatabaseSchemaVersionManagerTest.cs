@@ -16,8 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
         [SetUp]
         protected void SetUp()
         {
-            databaseSchemaVersion =
-                new DatabaseSchemaVersionManager(new DbmsFactory("mssql", ConnectionString), DeltaSet);
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(new DbmsFactory("mssql", ConnectionString), DeltaSet, null);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
@@ -57,8 +56,10 @@ namespace Net.Sf.Dbdeploy.Database
         public virtual void TestCanRetrieveDeltaFragmentHeaderSql()
         {
             ChangeScript script = new ChangeScript(3, "description");
-            Assert.AreEqual(
-                "--------------- Fragment begins: #3 ---------------\nINSERT INTO changelog (change_number, delta_set, start_dt, applied_by, description) VALUES (3, 'All', getdate(), user_name(), 'description')\nGO",
+            Assert.AreEqual(@"--------------- Fragment begins: #3 ---------------
+INSERT INTO changelog (change_number, delta_set, start_dt, applied_by, description) VALUES (3, 'All', getdate(), user_name(), 'description')
+GO
+",
                 databaseSchemaVersion.GenerateDoDeltaFragmentHeader(script));
         }
 
@@ -66,7 +67,10 @@ namespace Net.Sf.Dbdeploy.Database
         {
             ChangeScript script = new ChangeScript(3, "description");
             Assert.AreEqual(
-                "UPDATE changelog SET complete_dt = getdate() WHERE change_number = 3 AND delta_set = 'All'\nGO\n--------------- Fragment ends: #3 ---------------\n",
+                @"UPDATE changelog SET complete_dt = getdate() WHERE change_number = 3 AND delta_set = 'All'
+GO
+
+--------------- Fragment ends: #3 ---------------",
                 databaseSchemaVersion.GenerateDoDeltaFragmentFooter(script));
         }
 
