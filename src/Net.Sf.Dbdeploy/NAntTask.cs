@@ -19,7 +19,7 @@ namespace Net.Sf.Dbdeploy
 
         private int lastChangeToApply = Int32.MaxValue;
         private String deltaSet = "Main";
-        private int currentDbVersion;
+        private int currentDbVersion = Int32.MinValue;
 
         [TaskAttribute("dbType", Required = true)]
         public string DbType
@@ -71,7 +71,7 @@ namespace Net.Sf.Dbdeploy
 
         private int? GetCurrentDbVersion()
         {
-            if (currentDbVersion == 0) return null;
+            if (currentDbVersion < 0) return null;
             return currentDbVersion;
         }
 

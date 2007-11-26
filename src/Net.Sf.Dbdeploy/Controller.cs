@@ -32,6 +32,7 @@ namespace Net.Sf.Dbdeploy
             List<ChangeScript> doChangeScripts = changeScriptRepository.GetOrderedListOfDoChangeScripts();
             Info("Scripts available:\n  " + prettyPrinter.FormatChangeScriptList(doChangeScripts));
 
+            changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateVersionCheck());
             List<int> changesToApply = LoopThruDoScripts(lastChangeToApply, doChangeScripts, appliedChanges);
             Info("To be applied:\n  " + prettyPrinter.Format(changesToApply));
         }

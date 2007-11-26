@@ -91,8 +91,6 @@ namespace Net.Sf.Dbdeploy.Database
 
             builder.AppendLine("--------------- Fragment begins: " + changeScript + " ---------------");
 
-            if (currentVersion != null) GenerateVersionCheck(changeScript, builder);
-
             builder.AppendLine("INSERT INTO " + TABLE_NAME +
                            " (change_number, delta_set, start_dt, applied_by, description)" +
                            " VALUES (" + changeScript.GetId() + ", '" + deltaSet + "', " +
@@ -130,11 +128,20 @@ namespace Net.Sf.Dbdeploy.Database
             return builder.ToString();
         }
 
-        private void GenerateVersionCheck(ChangeScript changeScript, StringBuilder builder)
+        public string GenerateVersionCheck()
         {
-            builder.Append("IF ((SELECT MAX(change_number) from ").Append(TABLE_NAME).Append(") > ").Append(changeScript.GetId()).AppendLine(")").
-                Append("    RAISERROR ('Invalid change number. Delta script: ").Append(changeScript.GetId()).Append(" has already been applied to this database.', 1, 1)").
-                AppendLine(DbmsSyntax.GenerateStatementDelimiter()).AppendLine();
+            if (currentVersion == null) return string.Empty;
+
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("DECLARE @currentDatabaseVersion INTEGER, @errMsg VARCHAR(1000)");
+            builder.Append("SELECT @currentDatabaseVersion = MAX(change_number) FROM ").AppendLine(TABLE_NAME);
+            builder.Append("IF (@currentDatabaseVersion <> ").Append(currentVersion).AppendLine(")");
+            builder.AppendLine("BEGIN");
+            builder.Append("    SET @errMsg = 'Error: current database version is not ").Append(currentVersion).AppendLine(", but ' + CONVERT(VARCHAR, @currentDatabaseVersion)"); 
+            builder.AppendLine("    RAISERROR (@errMsg, 16, 1)"); 
+            builder.AppendLine("END");
+            builder.AppendLine(DbmsSyntax.GenerateStatementDelimiter()).AppendLine();
+            return builder.ToString();
         }
     }
 }
