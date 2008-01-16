@@ -134,10 +134,10 @@ namespace Net.Sf.Dbdeploy.Database
 
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("DECLARE @currentDatabaseVersion INTEGER, @errMsg VARCHAR(1000)");
-            builder.Append("SELECT @currentDatabaseVersion = MAX(change_number) FROM ").AppendLine(TABLE_NAME);
+            builder.Append("SELECT @currentDatabaseVersion = MAX(change_number) FROM ").Append(TABLE_NAME).AppendLine(" WHERE delta_set = '" + deltaSet + "'");
             builder.Append("IF (@currentDatabaseVersion <> ").Append(currentVersion).AppendLine(")");
             builder.AppendLine("BEGIN");
-            builder.Append("    SET @errMsg = 'Error: current database version is not ").Append(currentVersion).AppendLine(", but ' + CONVERT(VARCHAR, @currentDatabaseVersion)"); 
+            builder.Append("    SET @errMsg = 'Error: current database version on delta_set <").Append(deltaSet).Append("> is not ").Append(currentVersion).AppendLine(", but ' + CONVERT(VARCHAR, @currentDatabaseVersion)"); 
             builder.AppendLine("    RAISERROR (@errMsg, 16, 1)"); 
             builder.AppendLine("END");
             builder.AppendLine(DbmsSyntax.GenerateStatementDelimiter()).AppendLine();
