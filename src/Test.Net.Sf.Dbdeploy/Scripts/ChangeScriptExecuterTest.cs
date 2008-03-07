@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Net.Sf.Dbdeploy.Database;
 using NUnit.Framework;
@@ -21,6 +22,34 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             script.GetFile().Delete();
         }
+
+    	[Test]
+    	public void ShouldInsertBeginAndEndTransactionStatementsForEachDelta()
+    	{
+			string deltaScriptContent = @"foo bar";
+			using (StreamWriter stream = script.GetFile().CreateText())
+				stream.Write(deltaScriptContent);
+
+    		StringWriter writer = new StringWriter();
+			ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, new MsSqlDbmsSyntax());
+			executer.ApplyChangeDoScript(script);
+
+    		string deltaFragment = writer.ToString();
+
+			Console.Write(deltaFragment);
+
+    		string expectedBegin = "begin transaction" + Environment.NewLine;
+			int startOfBegin = deltaFragment.IndexOf(deltaScriptContent) - expectedBegin.Length - Environment.NewLine.Length;
+    		string resultBegin = deltaFragment.Substring(startOfBegin, expectedBegin.Length);
+
+			Assert.AreEqual(expectedBegin, resultBegin);
+
+			string expectedCommit = Environment.NewLine + "commit transaction";
+			int startOfCommit = deltaFragment.IndexOf(deltaScriptContent) + deltaScriptContent.Length + Environment.NewLine.Length;
+			string resultCommit = deltaFragment.Substring(startOfCommit, expectedCommit.Length);
+
+			Assert.AreEqual(expectedCommit, resultCommit);
+		}
 
         [Test]
         public void ShouldNotOutputUndoScriptIfUndoTagIsMissing()

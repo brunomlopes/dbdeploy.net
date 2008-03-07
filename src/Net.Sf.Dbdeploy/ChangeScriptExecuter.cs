@@ -24,8 +24,13 @@ namespace Net.Sf.Dbdeploy
         {
             output.WriteLine();
             output.WriteLine("-- Change script: " + script);
-            CopyFileDoContentsToStdOut(script.GetFile());
-        }
+
+			output.WriteLine("begin transaction" + Environment.NewLine);
+
+			CopyFileDoContentsToStdOut(script.GetFile());
+		
+			output.WriteLine(Environment.NewLine + "commit transaction");
+		}
 
         public void ApplyChangeUndoScript(ChangeScript script)
         {
