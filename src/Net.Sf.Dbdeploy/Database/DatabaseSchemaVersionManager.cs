@@ -60,7 +60,7 @@ namespace Net.Sf.Dbdeploy.Database
 
                     DbCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT change_number FROM dbo." + TABLE_NAME +
+                    command.CommandText = "SELECT change_number, complete_dt FROM dbo." + TABLE_NAME +
                                           " WHERE delta_set = @delta_set ORDER BY change_number";
                     DbParameter parameter = command.CreateParameter();
                     parameter.ParameterName = "@delta_set";
@@ -71,7 +71,15 @@ namespace Net.Sf.Dbdeploy.Database
                     {
                         while (reader.Read())
                         {
-                            changeNumbers.Add(reader.GetInt32(0));
+                        	int changeNumber = reader.GetInt32(0);
+
+							if (reader.IsDBNull(1))
+							{
+								string errorMessage = string.Format("Incompleted delta script {0} found from last execution.", changeNumber);
+								throw new DbDeployException(errorMessage);
+							}
+
+							changeNumbers.Add(changeNumber);
                         }
                     }
 

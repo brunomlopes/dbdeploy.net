@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Configuration;
+using Net.Sf.Dbdeploy.Exceptions;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -53,6 +55,32 @@ namespace Net.Sf.Dbdeploy.Database
                        + i + ", '" + DELTA_SET
                        + "', getdate(), getdate(), user_name(), 'Unit test')");
         }
+
+    	[Test]
+		[ExpectedException(typeof(DbDeployException))]
+    	public void ShouldThrowExceptionIfIncompletedScriptIsFound()
+    	{
+    		EnsureTableDoesNotExist();
+    		CreateTable();
+			ExecuteSql("INSERT INTO " + DatabaseSchemaVersionManager.TABLE_NAME
+					   + " (change_number, delta_set, start_dt, complete_dt, applied_by, description) VALUES ( "
+					   + 1 + ", '" + DELTA_SET
+					   + "', getdate(), NULL, user_name(), 'Unit test')");
+
+    		databaseSchemaVersion.GetAppliedChangeNumbers();
+    	}
+
+    	[Test]
+    	public void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
+    	{
+			EnsureTableDoesNotExist();
+			CreateTable();
+    		InsertRowIntoTable(3);
+			List<int> changeNumbers = databaseSchemaVersion.GetAppliedChangeNumbers();
+
+			Assert.AreEqual(1, changeNumbers.Count);
+			Assert.AreEqual(3, changeNumbers[0]);
+		}
 
         [Test]
         public override void TestCanRetrieveDeltaFragmentFooterSql()
