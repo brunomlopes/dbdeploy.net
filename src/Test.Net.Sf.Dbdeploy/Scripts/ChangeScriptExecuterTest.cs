@@ -31,20 +31,21 @@ namespace Net.Sf.Dbdeploy.Scripts
 				stream.Write(deltaScriptContent);
 
     		StringWriter writer = new StringWriter();
-			ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, new MsSqlDbmsSyntax());
+    		MsSqlDbmsSyntax syntax = new MsSqlDbmsSyntax();
+    		ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, syntax);
 			executer.ApplyChangeDoScript(script);
 
     		string deltaFragment = writer.ToString();
 
 			Console.Write(deltaFragment);
 
-    		string expectedBegin = "begin transaction" + Environment.NewLine;
+			string expectedBegin = syntax.GenerateBeginTransaction();
 			int startOfBegin = deltaFragment.IndexOf(deltaScriptContent) - expectedBegin.Length - Environment.NewLine.Length;
     		string resultBegin = deltaFragment.Substring(startOfBegin, expectedBegin.Length);
 
 			Assert.AreEqual(expectedBegin, resultBegin);
 
-			string expectedCommit = Environment.NewLine + "commit transaction";
+			string expectedCommit = syntax.GenerateCommitTransaction();
 			int startOfCommit = deltaFragment.IndexOf(deltaScriptContent) + deltaScriptContent.Length + Environment.NewLine.Length;
 			string resultCommit = deltaFragment.Substring(startOfCommit, expectedCommit.Length);
 

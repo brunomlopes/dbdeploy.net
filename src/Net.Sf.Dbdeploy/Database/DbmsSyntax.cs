@@ -11,5 +11,9 @@ namespace Net.Sf.Dbdeploy.Database
         string GenerateStatementDelimiter();
 
         string GenerateCommit();
+
+    	string GenerateBeginTransaction();
+    	
+		string GenerateCommitTransaction();
     }
 }

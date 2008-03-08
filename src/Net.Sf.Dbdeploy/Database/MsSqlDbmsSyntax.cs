@@ -28,5 +28,15 @@ namespace Net.Sf.Dbdeploy.Database
         {
             return string.Empty;
         }
+
+    	public string GenerateBeginTransaction()
+    	{
+    		return "BEGIN TRANSACTION" + Environment.NewLine;
+    	}
+
+    	public string GenerateCommitTransaction()
+    	{
+    		return Environment.NewLine + "COMMIT TRANSACTION";
+    	}
     }
 }

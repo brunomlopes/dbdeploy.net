@@ -9,11 +9,13 @@ namespace Net.Sf.Dbdeploy
     public class ChangeScriptExecuter
     {
         private readonly TextWriter output;
+    	private readonly DbmsSyntax _dbmsSyntax;
 
-        public ChangeScriptExecuter(TextWriter printStream, DbmsSyntax dbmsSyntax)
+    	public ChangeScriptExecuter(TextWriter printStream, DbmsSyntax dbmsSyntax)
         {
             output = printStream;
-            /* Header data: information and control settings for the entire script. */
+        	_dbmsSyntax = dbmsSyntax;
+        	/* Header data: information and control settings for the entire script. */
             DateTime now = DateTime.Now;
             output.WriteLine("-- Script generated at " + now.ToString(new DateTimeFormatInfo().SortableDateTimePattern));
             output.WriteLine();
@@ -24,20 +26,19 @@ namespace Net.Sf.Dbdeploy
         {
             output.WriteLine();
             output.WriteLine("-- Change script: " + script);
-
-			output.WriteLine("begin transaction" + Environment.NewLine);
-
-			CopyFileDoContentsToStdOut(script.GetFile());
-		
-			output.WriteLine(Environment.NewLine + "commit transaction");
+			output.WriteLine(_dbmsSyntax.GenerateBeginTransaction());
+			CopyFileDoContentsToStdOut(script.GetFile());		
+			output.WriteLine(_dbmsSyntax.GenerateCommitTransaction());
 		}
 
         public void ApplyChangeUndoScript(ChangeScript script)
         {
             output.WriteLine();
             output.WriteLine("-- Change script: " + script);
-            CopyFileUndoContentsToStdOut(script.GetFile());
-        }
+			output.WriteLine(_dbmsSyntax.GenerateBeginTransaction());
+			CopyFileUndoContentsToStdOut(script.GetFile());
+			output.WriteLine(_dbmsSyntax.GenerateCommitTransaction());
+		}
 
         private void CopyFileDoContentsToStdOut(FileSystemInfo file)
         {
@@ -51,7 +52,7 @@ namespace Net.Sf.Dbdeploy
             }
         }
 
-        private bool IsUndoToken(string text)
+        private static bool IsUndoToken(string text)
         {
             return "--//@UNDO" == text.Trim();
         }

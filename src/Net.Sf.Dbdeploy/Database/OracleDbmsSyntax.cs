@@ -26,5 +26,15 @@ namespace Net.Sf.Dbdeploy.Database
         {
             return "COMMIT" + GenerateStatementDelimiter();
         }
+
+    	public string GenerateBeginTransaction()
+    	{
+			return string.Empty;
+    	}
+
+    	public string GenerateCommitTransaction()
+    	{
+			return string.Empty;
+		}
     }
 }

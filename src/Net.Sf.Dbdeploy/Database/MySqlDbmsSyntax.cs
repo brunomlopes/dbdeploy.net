@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -30,6 +28,16 @@ namespace Net.Sf.Dbdeploy.Database
         {
             return "COMMIT" + GenerateStatementDelimiter();
         }
+
+    	public string GenerateBeginTransaction()
+    	{
+			return "START TRANSACTION" + GenerateStatementDelimiter() + Environment.NewLine;
+    	}
+
+    	public string GenerateCommitTransaction()
+    	{
+    		return Environment.NewLine + GenerateCommit();
+    	}
     }
 }
     
