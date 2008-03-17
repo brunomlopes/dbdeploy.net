@@ -18,7 +18,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             try
             {
-                Console.Error.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
+                Console.Out.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
             }
             catch (IOException)
             {
