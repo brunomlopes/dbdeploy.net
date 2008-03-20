@@ -29,6 +29,9 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             foreach (FileInfo file in directory.GetFiles())
             {
+				if ((file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+					continue;
+
                 string filename = file.Name;
                 try
                 {
