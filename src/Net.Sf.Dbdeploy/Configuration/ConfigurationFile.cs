@@ -31,5 +31,10 @@ namespace Net.Sf.Dbdeploy.Configuration
                 return version;
             }
         }
+
+    	public string TableName
+    	{
+			get { return ConfigurationManager.AppSettings["db.tableName"]; }
+    	}
     }
 }

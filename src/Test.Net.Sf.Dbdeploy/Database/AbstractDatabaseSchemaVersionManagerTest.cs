@@ -74,9 +74,16 @@ GO
                 databaseSchemaVersion.GenerateDoDeltaFragmentFooter(script));
         }
 
+		public virtual void TestCanSetChangeLogTableName()
+		{
+			string expectedTableName = "FooTable";
+			DatabaseSchemaVersionManager databaseSchemaVersionManager = new DatabaseSchemaVersionManager(new DbmsFactory("mssql", ConnectionString), DeltaSet, null, expectedTableName);
+			Assert.AreEqual(expectedTableName, databaseSchemaVersionManager.TableName);
+		}
+
         protected virtual void EnsureTableDoesNotExist()
         {
-            ExecuteSql("DROP TABLE " + DatabaseSchemaVersionManager.TABLE_NAME);
+			ExecuteSql("DROP TABLE " + databaseSchemaVersion.TableName);
         }
 
         protected void ExecuteSql(String sql)

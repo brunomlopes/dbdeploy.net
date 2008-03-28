@@ -30,13 +30,13 @@ namespace Net.Sf.Dbdeploy.Database
         protected override void EnsureTableDoesNotExist()
         {
             ExecuteSql(string.Format(
-                "IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", DatabaseSchemaVersionManager.TABLE_NAME));
+				"IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", databaseSchemaVersion.TableName));
         }
 
         protected override void CreateTable()
         {
             ExecuteSql(
-                "CREATE TABLE " + DatabaseSchemaVersionManager.TABLE_NAME + "( " +
+				"CREATE TABLE " + databaseSchemaVersion.TableName + "( " +
                 "change_number INTEGER NOT NULL, " +
                 "delta_set VARCHAR(10) NOT NULL, " +
                 "start_dt DATETIME NOT NULL, " +
@@ -44,13 +44,13 @@ namespace Net.Sf.Dbdeploy.Database
                 "applied_by VARCHAR(100) NOT NULL, " +
                 "description VARCHAR(500) NOT NULL )");
             ExecuteSql(
-                "ALTER TABLE " + DatabaseSchemaVersionManager.TABLE_NAME +
+				"ALTER TABLE " + databaseSchemaVersion.TableName +
                 " ADD CONSTRAINT Pkchangelog  PRIMARY KEY (change_number, delta_set)");
         }
 
         protected override void InsertRowIntoTable(int i)
         {
-            ExecuteSql("INSERT INTO " + DatabaseSchemaVersionManager.TABLE_NAME
+			ExecuteSql("INSERT INTO " + databaseSchemaVersion.TableName
                        + " (change_number, delta_set, start_dt, complete_dt, applied_by, description) VALUES ( "
                        + i + ", '" + DELTA_SET
                        + "', getdate(), getdate(), user_name(), 'Unit test')");
@@ -62,7 +62,7 @@ namespace Net.Sf.Dbdeploy.Database
     	{
     		EnsureTableDoesNotExist();
     		CreateTable();
-			ExecuteSql("INSERT INTO " + DatabaseSchemaVersionManager.TABLE_NAME
+			ExecuteSql("INSERT INTO " + databaseSchemaVersion.TableName
 					   + " (change_number, delta_set, start_dt, complete_dt, applied_by, description) VALUES ( "
 					   + 1 + ", '" + DELTA_SET
 					   + "', getdate(), NULL, user_name(), 'Unit test')");
@@ -111,5 +111,11 @@ namespace Net.Sf.Dbdeploy.Database
         {
             base.TestCanRetrieveDeltaFragmentHeaderSql();
         }
+
+		[Test]
+		public override void TestCanSetChangeLogTableName()
+		{
+			base.TestCanSetChangeLogTableName();
+		}
     }
 }

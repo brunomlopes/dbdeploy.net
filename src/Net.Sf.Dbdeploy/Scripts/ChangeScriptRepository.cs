@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             CheckForDuplicateIds(scripts);
         }
 
-        private void CheckForDuplicateIds(List<ChangeScript> scripts)
+        private static void CheckForDuplicateIds(List<ChangeScript> scripts)
         {
             int lastId = -1;
 

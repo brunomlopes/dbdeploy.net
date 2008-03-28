@@ -14,7 +14,7 @@ namespace Net.Sf.Dbdeploy
             {
                 IConfiguration config = new ConfigurationFile();
                 DbmsFactory factory = new DbmsFactory(config.DbType, config.DbConnectionString);
-                DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, config.DbDeltaSet, config.CurrentDbVersion);
+                DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, config.DbDeltaSet, config.CurrentDbVersion, config.TableName);
 
                 new ToPrintStreamDeployer(databaseSchemaVersion, new DirectoryInfo("."), Console.Out, factory.CreateDbmsSyntax(), null).
                     DoDeploy(Int32.MaxValue);

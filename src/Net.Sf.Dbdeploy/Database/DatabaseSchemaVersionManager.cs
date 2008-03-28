@@ -9,17 +9,24 @@ namespace Net.Sf.Dbdeploy.Database
 {
     public class DatabaseSchemaVersionManager
     {
-        public static readonly string TABLE_NAME = "changelog";
+        public static readonly string DEFAULT_TABLE_NAME = "changelog";
 
         private readonly DbmsFactory factory;
         private readonly string deltaSet;
         private readonly int? currentVersion;
+    	private readonly string tableName;
 
         public DatabaseSchemaVersionManager(DbmsFactory factory, string deltaSet, int? currentVersion)
+			: this(factory, deltaSet, currentVersion, DEFAULT_TABLE_NAME)
+        {        	
+        }
+
+        public DatabaseSchemaVersionManager(DbmsFactory factory, string deltaSet, int? currentVersion, string tableName)
         {
             this.factory = factory;
             this.deltaSet = deltaSet;
             this.currentVersion = currentVersion;
+        	this.tableName = tableName;
         }
 
         private DbmsSyntax DbmsSyntax
@@ -31,8 +38,12 @@ namespace Net.Sf.Dbdeploy.Database
         {
             get { return factory.CreateConnection(); }
         }
+    	public string TableName
+    	{
+    		get { return tableName; }
+    	}
 
-        public List<int> GetAppliedChangeNumbers()
+    	public List<int> GetAppliedChangeNumbers()
         {
             if (currentVersion == null)
             {
@@ -60,7 +71,7 @@ namespace Net.Sf.Dbdeploy.Database
 
                     DbCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT change_number, complete_dt FROM dbo." + TABLE_NAME +
+					command.CommandText = "SELECT change_number, complete_dt FROM dbo." + TableName +
                                           " WHERE delta_set = @delta_set ORDER BY change_number";
                     DbParameter parameter = command.CreateParameter();
                     parameter.ParameterName = "@delta_set";
@@ -99,7 +110,7 @@ namespace Net.Sf.Dbdeploy.Database
 
             builder.AppendLine("--------------- Fragment begins: " + changeScript + " ---------------");
 
-            builder.AppendLine("INSERT INTO " + TABLE_NAME +
+			builder.AppendLine("INSERT INTO " + TableName +
                            " (change_number, delta_set, start_dt, applied_by, description)" +
                            " VALUES (" + changeScript.GetId() + ", '" + deltaSet + "', " +
                            DbmsSyntax.GenerateTimestamp() +
@@ -113,7 +124,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine("UPDATE " + TABLE_NAME + " SET complete_dt = "
+			builder.AppendLine("UPDATE " + TableName + " SET complete_dt = "
                            + DbmsSyntax.GenerateTimestamp()
                            + " WHERE change_number = " + changeScript.GetId()
                            + " AND delta_set = '" + deltaSet + "'"
@@ -127,7 +138,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine("DELETE FROM " + TABLE_NAME
+			builder.AppendLine("DELETE FROM " + TableName
                            + " WHERE change_number = " + changeScript.GetId()
                            + " AND delta_set = '" + deltaSet + "'"
                            + DbmsSyntax.GenerateStatementDelimiter());
@@ -138,11 +149,12 @@ namespace Net.Sf.Dbdeploy.Database
 
         public string GenerateVersionCheck()
         {
-            if (currentVersion == null) return string.Empty;
+            if (currentVersion == null)
+				return string.Empty;
 
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("DECLARE @currentDatabaseVersion INTEGER, @errMsg VARCHAR(1000)");
-            builder.Append("SELECT @currentDatabaseVersion = MAX(change_number) FROM ").Append(TABLE_NAME).AppendLine(" WHERE delta_set = '" + deltaSet + "'");
+			builder.Append("SELECT @currentDatabaseVersion = MAX(change_number) FROM ").Append(TableName).AppendLine(" WHERE delta_set = '" + deltaSet + "'");
             builder.Append("IF (@currentDatabaseVersion <> ").Append(currentVersion).AppendLine(")");
             builder.AppendLine("BEGIN");
             builder.Append("    SET @errMsg = 'Error: current database version on delta_set <").Append(deltaSet).Append("> is not ").Append(currentVersion).AppendLine(", but ' + CONVERT(VARCHAR, @currentDatabaseVersion)"); 

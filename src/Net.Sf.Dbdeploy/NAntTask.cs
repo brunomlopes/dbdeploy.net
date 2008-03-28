@@ -20,6 +20,7 @@ namespace Net.Sf.Dbdeploy
         private int lastChangeToApply = Int32.MaxValue;
         private String deltaSet = "Main";
         private int currentDbVersion = Int32.MinValue;
+    	private string changeLogTable = DatabaseSchemaVersionManager.DEFAULT_TABLE_NAME;
 
         [TaskAttribute("dbType", Required = true)]
         public string DbType
@@ -69,6 +70,12 @@ namespace Net.Sf.Dbdeploy
             set { currentDbVersion = value; }
         }
 
+		[TaskAttribute("changeLogTable")]
+		public string ChangeLogTable
+    	{
+			set { changeLogTable = value; }
+    	}
+
         private int? GetCurrentDbVersion()
         {
             if (currentDbVersion < 0) return null;
@@ -95,10 +102,9 @@ namespace Net.Sf.Dbdeploy
                     }
                     DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
                     DbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
-                    DatabaseSchemaVersionManager databaseSchemaVersion =new DatabaseSchemaVersionManager(factory, deltaSet, GetCurrentDbVersion());
+                    DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, deltaSet, GetCurrentDbVersion(), changeLogTable);
 
-                    ToPrintStreamDeployer toPrintSteamDeployer 
-                        = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax,undoOutputPrintStream);
+                    ToPrintStreamDeployer toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax,undoOutputPrintStream);
                     toPrintSteamDeployer.DoDeploy(lastChangeToApply);
 
                     if (undoOutputPrintStream != null)

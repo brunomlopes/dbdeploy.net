@@ -6,5 +6,6 @@ namespace Net.Sf.Dbdeploy.Configuration
         string DbType { get; }
         string DbDeltaSet { get; }
         int? CurrentDbVersion { get; }
+		string TableName { get; }
     }
 }
