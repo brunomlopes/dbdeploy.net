@@ -134,6 +134,11 @@ namespace Net.Sf.Dbdeploy.Database
             return builder.ToString();
         }
 
+		public string GenerateUndoDeltaFragmentHeader(ChangeScript changeScript)
+		{
+			return "--------------- Fragment begins: " + changeScript + " ---------------";
+		}
+
         public string GenerateUndoDeltaFragmentFooter(ChangeScript changeScript)
         {
             StringBuilder builder = new StringBuilder();

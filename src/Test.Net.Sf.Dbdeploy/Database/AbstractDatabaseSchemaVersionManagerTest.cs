@@ -74,6 +74,23 @@ GO
                 databaseSchemaVersion.GenerateDoDeltaFragmentFooter(script));
         }
 
+		public virtual void TestCanRetrieveUndoDeltaFragmentHeaderSql()
+		{
+			ChangeScript script = new ChangeScript(3, "description");
+			Assert.AreEqual(@"--------------- Fragment begins: #3 ---------------", databaseSchemaVersion.GenerateUndoDeltaFragmentHeader(script));
+		}
+
+		public virtual void TestCanRetrieveUndoDeltaFragmentFooterSql()
+		{
+			ChangeScript script = new ChangeScript(3, "description");
+			Assert.AreEqual(
+				@"DELETE FROM changelog WHERE change_number = 3 AND delta_set = 'All'
+GO
+
+--------------- Fragment ends: #3 ---------------",
+				databaseSchemaVersion.GenerateUndoDeltaFragmentFooter(script));
+		}
+
 		public virtual void TestCanSetChangeLogTableName()
 		{
 			string expectedTableName = "FooTable";

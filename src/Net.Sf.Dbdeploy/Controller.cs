@@ -70,7 +70,8 @@ namespace Net.Sf.Dbdeploy
 
                 if (changeScriptId <= lastChangeToApply && !appliedChanges.Contains(changeScriptId))
                 {
-                    changeScriptExecuter.ApplyChangeUndoScript(changeScript);
+					changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateUndoDeltaFragmentHeader(changeScript));
+					changeScriptExecuter.ApplyChangeUndoScript(changeScript);
                     changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateUndoDeltaFragmentFooter(changeScript));
                 }
             }
