@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Data.Common;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using Net.Sf.Dbdeploy.Exceptions;
@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy.Database
             get { return factory.CreateDbmsSyntax(); }
         }
 
-        private DbConnection Connection
+        private IDbConnection Connection
         {
             get { return factory.CreateConnection(); }
         }
@@ -49,15 +49,13 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 return GetCurrentVersionFromDb();
             }
-            else
-            {
-                List<int> changeNumbers = new List<int>();
-                for (int i = 1; i <= currentVersion.Value; i++)
-                {
-                    changeNumbers.Add(i);
-                }
-                return changeNumbers;
-            }
+    		
+			List<int> changeNumbers = new List<int>();
+    		for (int i = 1; i <= currentVersion.Value; i++)
+    		{
+    			changeNumbers.Add(i);
+    		}
+    		return changeNumbers;
         }
 
         private List<int> GetCurrentVersionFromDb()
@@ -65,20 +63,20 @@ namespace Net.Sf.Dbdeploy.Database
             List<int> changeNumbers = new List<int>();
             try
             {
-                using (DbConnection connection = Connection)
+                using (IDbConnection connection = Connection)
                 {
                     connection.Open();
 
-                    DbCommand command = connection.CreateCommand();
+                    IDbCommand command = connection.CreateCommand();
 
 					command.CommandText = "SELECT change_number, complete_dt FROM dbo." + TableName +
                                           " WHERE delta_set = @delta_set ORDER BY change_number";
-                    DbParameter parameter = command.CreateParameter();
+                    IDbDataParameter parameter = command.CreateParameter();
                     parameter.ParameterName = "@delta_set";
                     parameter.Value = deltaSet;
                     command.Parameters.Add(parameter);
 
-                    using (DbDataReader reader = command.ExecuteReader())
+                    using (IDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
