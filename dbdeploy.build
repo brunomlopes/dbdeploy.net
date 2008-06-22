@@ -10,8 +10,8 @@
   <property name="testoutput.dir" value="${build.dir}/testoutput" />
   <property name="testreport.dir" value="${build.dir}/testreport" />
   <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
-  
-  <target name="all" depends="clean, compile, test, dist" />
+ 
+  <target name="all" depends="clean, db, compile, test, dist" />
 
   <target name="init">
     <mkdir dir="${dist.dir}" />
@@ -60,5 +60,33 @@
         <include name="**/*" />
       </fileset>
     </zip>
+  </target>
+  
+  <target name="db">
+    <loadtasks assembly="tools\nant\contrib\NAnt.Contrib.Tasks.dll"/>
+  
+    <property name="sql.dir" value="${path::get-full-path('db')}" />
+    <property name="sql.file" value="db\create.database.sql" />
+    <property name="sql.server" value="." />
+    <property name="sql.db" value="DBDEPLOY" />
+    <property name="sql.username" value="DBDeployUser"/>
+    <property name="sql.password" value="password"/>
+    
+    <copy file="${sql.file}.template" tofile="${sql.file}" overwrite="true">
+        <filterchain>
+            <replacetokens>
+                <token key="DB_DIR" value="${sql.dir}" />
+                <token key="DB_NAME" value="${sql.db}" />
+                <token key="DB_USER_NAME" value="${sql.username}" />
+                <token key="DB_USER_PWD" value="${sql.password}" />
+            </replacetokens>
+        </filterchain>
+    </copy>
+    
+    <sql connstring="Provider=sqloledb;Data Source=${sql.server};Initial Catalog=master;Integrated Security=SSPI" 
+        source="${sql.file}" output="${sql.file}.output.txt"
+        delimiter="GO" delimstyle="Line"
+        transaction="false" batch="false" print="true" />
+        
   </target>
 </project> 
