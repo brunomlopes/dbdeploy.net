@@ -1,0 +1,26 @@
+USE [master]
+GO
+IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'@DB_NAME@')
+DROP DATABASE [@DB_NAME@]
+GO
+
+CREATE DATABASE [@DB_NAME@] ON  PRIMARY 
+( NAME = N'@DB_NAME@', FILENAME = N'@DB_DIR@\@DB_NAME@.mdf' , SIZE = 10240KB , FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'@DB_NAME@_log', FILENAME = N'@DB_DIR@\@DB_NAME@_log.ldf' , SIZE = 1024KB , FILEGROWTH = 10%)
+GO
+EXEC dbo.sp_dbcmptlevel @dbname=N'@DB_NAME@', @new_cmptlevel=90
+GO
+USE [@DB_NAME@]
+GO
+IF NOT EXISTS (SELECT name FROM sys.filegroups WHERE is_default=1 AND name = N'PRIMARY') 
+ALTER DATABASE [@DB_NAME@] MODIFY FILEGROUP [PRIMARY] DEFAULT
+GO
+
+USE [@DB_NAME@]
+GO
+CREATE USER [@DB_USER_NAME@] FOR LOGIN [@DB_USER_NAME@]
+GO
+EXEC sp_addrolemember N'db_owner', N'@DB_USER_NAME@'
+GO
+EXEC sp_password NULL, '@DB_USER_PWD@', '@DB_USER_NAME@'
