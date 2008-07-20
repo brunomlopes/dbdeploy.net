@@ -1,0 +1,15 @@
+<Project DefaultTargets="dbDeploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<UsingTask TaskName="MSBuild.Dbdeploy.Task" AssemblyFile="MSBuild.Dbdeploy.Task.dll"/>
+
+	<Target Name="dbDeploy">
+		<DBDeploy  DbType="mssql"
+				   DbConnection="Server=localhost;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=password"
+				   Dir="."
+				   OutputFile="output.sql"
+				   UndoOutputFile="output-undo.sql"
+				   LastChangeToApply="1"
+				   DeltaSet="Main" />
+	</Target>
+	
+</Project>
