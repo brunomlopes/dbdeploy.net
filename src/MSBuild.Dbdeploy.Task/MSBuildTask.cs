@@ -38,13 +38,13 @@ namespace MSBuild.Dbdeploy.Task
 		}
 
 		[Required]
-		public string Outputfile
+		public string OutputFile
 		{
 			get { return outputfile.FullName; }
 			set { outputfile = new FileInfo(value); }
 		}
 
-		public string UndoOutputfile
+		public string UndoOutputFile
 		{
 			get { return undoOutputfile.FullName; }
 			set { undoOutputfile = new FileInfo(value); }
@@ -120,10 +120,10 @@ namespace MSBuild.Dbdeploy.Task
 	        builder.Append("Dir=");
 	        builder.Append(dir);
 	        builder.AppendLine();
-	        builder.Append("Outputfile=");
+	        builder.Append("OutputFile=");
 	        builder.Append(outputfile);
 	        builder.AppendLine();
-	        builder.Append("UndoOutputfile=");
+	        builder.Append("UndoOutputFile=");
 	        builder.Append(undoOutputfile);
 	        builder.AppendLine();
 	        builder.Append("LastChangeToApply=");
