@@ -86,7 +86,7 @@
     <Compile Include="ValidatorTest.cs" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy $(SolutionDir)dbproviders.xml $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>copy "$(SolutionDir)dbproviders.xml" "$(TargetDir)"</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
