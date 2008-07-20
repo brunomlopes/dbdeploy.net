@@ -50,6 +50,7 @@
       <fileset basedir="${build.dir}" prefix="bin/">
         <include name="dbproviders.xml" />
         <include name="Net.Sf.Dbdeploy.dll" />
+        <include name="MSBuild.Dbdeploy.Task.dll" />
         <include name="NAnt.Core.dll" />
         <include name="dbdeploy.exe*" />
       </fileset>
