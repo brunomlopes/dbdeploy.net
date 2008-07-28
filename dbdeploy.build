@@ -40,7 +40,7 @@
   <target name="test">
 	  <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
     <nunit2>
-      <formatter type="Plain" />
+      <formatter type="Xml" usefile="true" extension=".xml" outputdir="${testoutput.dir}" />
       <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
     </nunit2>
   </target>
