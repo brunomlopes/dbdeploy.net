@@ -8,9 +8,8 @@ namespace Net.Sf.Dbdeploy.Database
     public class MsSqlDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["ConnString"];
-        private static readonly string DELTA_SET = "All";
-        private static readonly string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE =
-            "Could not retrieve change log from database because: Invalid object name 'dbo.changelog'.";
+        private const string DELTA_SET = "All";
+        private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: Invalid object name 'dbo.changelog'.";
 
         protected override string ConnectionString
         {

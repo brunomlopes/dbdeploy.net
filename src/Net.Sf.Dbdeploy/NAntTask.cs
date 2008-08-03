@@ -21,8 +21,9 @@ namespace Net.Sf.Dbdeploy
         private String deltaSet = "Main";
         private int currentDbVersion = Int32.MinValue;
     	private string changeLogTable = DatabaseSchemaVersionManager.DEFAULT_TABLE_NAME;
+    	private bool useTransaction = false;
 
-        [TaskAttribute("dbType", Required = true)]
+    	[TaskAttribute("dbType", Required = true)]
         public string DbType
         {
             set { dbType = value; }
@@ -76,9 +77,17 @@ namespace Net.Sf.Dbdeploy
 			set { changeLogTable = value; }
     	}
 
+		[TaskAttribute("userTransaction")]
+		public bool UseTransaction
+		{
+			set { useTransaction = value; }
+		}
+
         private int? GetCurrentDbVersion()
         {
-            if (currentDbVersion < 0) return null;
+            if (currentDbVersion < 0)
+				return null;
+
             return currentDbVersion;
         }
 
@@ -97,20 +106,17 @@ namespace Net.Sf.Dbdeploy
                 {
                     TextWriter undoOutputPrintStream = null;
                     if (undoOutputfile != null)
-                    {
                         undoOutputPrintStream = new StreamWriter(undoOutputfile.FullName);
-                    }
+
                     DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
-                    DbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
+                    IDbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
                     DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, deltaSet, GetCurrentDbVersion(), changeLogTable);
 
-                    ToPrintStreamDeployer toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax,undoOutputPrintStream);
+                    ToPrintStreamDeployer toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax, useTransaction, undoOutputPrintStream);
                     toPrintSteamDeployer.DoDeploy(lastChangeToApply);
 
                     if (undoOutputPrintStream != null)
-                    {
                         undoOutputPrintStream.Close();
-                    }
                 }
             }
             catch (DbDeployException ex)

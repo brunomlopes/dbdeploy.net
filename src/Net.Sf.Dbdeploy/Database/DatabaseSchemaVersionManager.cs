@@ -29,7 +29,7 @@ namespace Net.Sf.Dbdeploy.Database
         	this.tableName = tableName;
         }
 
-        private DbmsSyntax DbmsSyntax
+        private IDbmsSyntax DbmsSyntax
         {
             get { return factory.CreateDbmsSyntax(); }
         }

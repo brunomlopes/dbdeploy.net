@@ -1,6 +1,6 @@
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class OracleDbmsSyntax : DbmsSyntax
+    public class OracleDbmsSyntax : IDbmsSyntax
     {
         public string GenerateScriptHeader()
         {

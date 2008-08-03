@@ -1,6 +1,5 @@
 using System;
 using System.Data;
-using System.Data.Common;
 using System.Reflection;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -18,7 +17,7 @@ namespace Net.Sf.Dbdeploy.Database
             providers = new DbProviderFile().LoadProviders();
         }
 
-        public DbmsSyntax CreateDbmsSyntax()
+        public IDbmsSyntax CreateDbmsSyntax()
         {
             switch (dbms)
             {

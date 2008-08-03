@@ -12,17 +12,19 @@ namespace Net.Sf.Dbdeploy
         private readonly TextWriter doOutputPrintStream;
         private readonly TextWriter undoOutputPrintStream;
         private readonly DatabaseSchemaVersionManager schemaManager;
-        private readonly DbmsSyntax dbmsSyntax;
+        private readonly IDbmsSyntax dbmsSyntax;
+    	private readonly bool useTransaction;
 
-        public ToPrintStreamDeployer(DatabaseSchemaVersionManager schemaManager, DirectoryInfo dir,
+    	public ToPrintStreamDeployer(DatabaseSchemaVersionManager schemaManager, DirectoryInfo dir,
                                      TextWriter outputPrintStream,
-                                     DbmsSyntax dbmsSyntax, TextWriter undoOutputPrintStream)
+                                     IDbmsSyntax dbmsSyntax, bool useTransaction, TextWriter undoOutputPrintStream)
         {
             this.schemaManager = schemaManager;
             this.dir = dir;
             doOutputPrintStream = outputPrintStream;
             this.dbmsSyntax = dbmsSyntax;
-            this.undoOutputPrintStream = undoOutputPrintStream;
+        	this.useTransaction = useTransaction;
+        	this.undoOutputPrintStream = undoOutputPrintStream;
         }
 
         public void DoDeploy(int lastChangeToApply)
@@ -42,7 +44,7 @@ namespace Net.Sf.Dbdeploy
 
         private void GenerateChangeScripts(ChangeScriptRepository repository, int lastChangeToApply, List<int> appliedChanges)
         {
-            ChangeScriptExecuter doScriptExecuter = new ChangeScriptExecuter(doOutputPrintStream, dbmsSyntax);
+            ChangeScriptExecuter doScriptExecuter = new ChangeScriptExecuter(doOutputPrintStream, dbmsSyntax, useTransaction);
             Controller doController = new Controller(schemaManager, repository, doScriptExecuter);
             doController.ProcessDoChangeScripts(lastChangeToApply, appliedChanges);
             doOutputPrintStream.Flush();
@@ -50,7 +52,7 @@ namespace Net.Sf.Dbdeploy
 
         private void GenerateUndoChangeScripts(ChangeScriptRepository repository, int lastChangeToApply, List<int> appliedChanges)
         {
-            ChangeScriptExecuter undoScriptExecuter = new ChangeScriptExecuter(undoOutputPrintStream, dbmsSyntax);
+            ChangeScriptExecuter undoScriptExecuter = new ChangeScriptExecuter(undoOutputPrintStream, dbmsSyntax, useTransaction);
             Controller undoController = new Controller(schemaManager, repository, undoScriptExecuter);
             undoController.ProcessUndoChangeScripts(lastChangeToApply, appliedChanges);
             undoOutputPrintStream.Flush();

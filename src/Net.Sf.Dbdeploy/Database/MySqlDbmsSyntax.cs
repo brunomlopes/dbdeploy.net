@@ -2,7 +2,7 @@ using System;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class MySqlDbmsSyntax : DbmsSyntax
+    public class MySqlDbmsSyntax : IDbmsSyntax
     {
         public string GenerateScriptHeader()
         {

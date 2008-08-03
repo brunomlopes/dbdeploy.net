@@ -17,6 +17,7 @@ namespace MSBuild.Dbdeploy.Task
 		private FileInfo undoOutputfile;
 		private int lastChangeToApply = Int32.MaxValue;
 		private string deltaSet = "Main";
+		private bool useTransaction = false;
 
 		[Required]
 		public string DbType
@@ -62,6 +63,12 @@ namespace MSBuild.Dbdeploy.Task
 			set { deltaSet = value; }
 		}
 
+		public bool UseTransaction
+		{
+			get { return useTransaction; }
+			set { useTransaction = value; }
+		}
+
 		public override bool Execute()
 		{
 			bool result = false;
@@ -77,10 +84,10 @@ namespace MSBuild.Dbdeploy.Task
 						undoOutputPrintStream = new StreamWriter(undoOutputfile.FullName);
 					}
 					DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
-					DbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
+					IDbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
 					DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, deltaSet, null);
 
-					ToPrintStreamDeployer toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax, undoOutputPrintStream);
+					ToPrintStreamDeployer toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax, useTransaction, undoOutputPrintStream);
 					toPrintSteamDeployer.DoDeploy(lastChangeToApply);
 
 					if (undoOutputPrintStream != null)

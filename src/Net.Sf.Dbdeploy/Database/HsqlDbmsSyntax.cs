@@ -1,6 +1,6 @@
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class HsqlDbmsSyntax : DbmsSyntax
+    public class HsqlDbmsSyntax : IDbmsSyntax
     {
         public string GenerateScriptHeader()
         {

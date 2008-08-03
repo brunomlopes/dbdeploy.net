@@ -26,13 +26,13 @@ namespace Net.Sf.Dbdeploy.Scripts
     	[Test]
     	public void ShouldInsertBeginAndEndTransactionStatementsForEachDelta()
     	{
-			string deltaScriptContent = @"foo bar";
+			const string deltaScriptContent = @"foo bar";
 			using (StreamWriter stream = script.GetFile().CreateText())
 				stream.Write(deltaScriptContent);
 
     		StringWriter writer = new StringWriter();
     		MsSqlDbmsSyntax syntax = new MsSqlDbmsSyntax();
-    		ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, syntax);
+    		ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, syntax, true);
 			executer.ApplyChangeDoScript(script);
 
     		string deltaFragment = writer.ToString();
@@ -50,6 +50,29 @@ namespace Net.Sf.Dbdeploy.Scripts
 			string resultCommit = deltaFragment.Substring(startOfCommit, expectedCommit.Length);
 
 			Assert.AreEqual(expectedCommit, resultCommit);
+		}
+
+    	[Test]
+    	public void ShouldNotInsertBeginOrEndTransactionStatementIfPropertyIsNotSet()
+    	{
+			const string deltaScriptContent = @"foo bar";
+			using (StreamWriter stream = script.GetFile().CreateText())
+				stream.Write(deltaScriptContent);
+
+			StringWriter writer = new StringWriter();
+			MsSqlDbmsSyntax syntax = new MsSqlDbmsSyntax();
+			ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, syntax, false);
+			executer.ApplyChangeDoScript(script);
+
+			string deltaFragment = writer.ToString();
+
+			Console.Write(deltaFragment);
+
+    		int beingIndex = deltaFragment.IndexOf(syntax.GenerateBeginTransaction());
+			Assert.AreEqual(-1, beingIndex);
+
+    		int endIndex = deltaFragment.IndexOf(syntax.GenerateCommitTransaction());
+			Assert.AreEqual(-1, endIndex);
 		}
 
         [Test]
@@ -76,7 +99,7 @@ END");
             }
 
             StringWriter writer = new StringWriter();
-            ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, new MsSqlDbmsSyntax());
+            ChangeScriptExecuter executer = new ChangeScriptExecuter(writer, new MsSqlDbmsSyntax(), false);
             executer.ApplyChangeUndoScript(script);
             Assert.IsFalse(writer.ToString().Contains("CREATE TABLE"), "output should not contain the original script!");
         }

@@ -9,13 +9,15 @@ namespace Net.Sf.Dbdeploy
     public class ChangeScriptExecuter
     {
         private readonly TextWriter output;
-    	private readonly DbmsSyntax _dbmsSyntax;
+    	private readonly IDbmsSyntax _dbmsSyntax;
+    	private readonly bool _useTransaction;
 
-    	public ChangeScriptExecuter(TextWriter printStream, DbmsSyntax dbmsSyntax)
+    	public ChangeScriptExecuter(TextWriter printStream, IDbmsSyntax dbmsSyntax, bool useTransaction)
         {
             output = printStream;
         	_dbmsSyntax = dbmsSyntax;
-        	/* Header data: information and control settings for the entire script. */
+    		_useTransaction = useTransaction;
+    		/* Header data: information and control settings for the entire script. */
             DateTime now = DateTime.Now;
             output.WriteLine("-- Script generated at " + now.ToString(new DateTimeFormatInfo().SortableDateTimePattern));
             output.WriteLine();
@@ -26,18 +28,28 @@ namespace Net.Sf.Dbdeploy
         {
             output.WriteLine();
             output.WriteLine("-- Change script: " + script);
-			output.WriteLine(_dbmsSyntax.GenerateBeginTransaction());
-			CopyFileDoContentsToStdOut(script.GetFile());		
-			output.WriteLine(_dbmsSyntax.GenerateCommitTransaction());
-		}
+
+			if (_useTransaction)
+				output.WriteLine(_dbmsSyntax.GenerateBeginTransaction());
+
+        	CopyFileDoContentsToStdOut(script.GetFile());
+			
+			if (_useTransaction)
+				output.WriteLine(_dbmsSyntax.GenerateCommitTransaction());
+        }
 
         public void ApplyChangeUndoScript(ChangeScript script)
         {
             output.WriteLine();
             output.WriteLine("-- Change script: " + script);
-			output.WriteLine(_dbmsSyntax.GenerateBeginTransaction());
+			
+			if (_useTransaction)
+				output.WriteLine(_dbmsSyntax.GenerateBeginTransaction());
+
 			CopyFileUndoContentsToStdOut(script.GetFile());
-			output.WriteLine(_dbmsSyntax.GenerateCommitTransaction());
+
+			if (_useTransaction)
+				output.WriteLine(_dbmsSyntax.GenerateCommitTransaction());
 		}
 
         private void CopyFileDoContentsToStdOut(FileSystemInfo file)

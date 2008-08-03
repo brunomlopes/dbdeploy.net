@@ -1,6 +1,6 @@
 namespace Net.Sf.Dbdeploy.Database
 {
-    public interface DbmsSyntax
+    public interface IDbmsSyntax
     {
         string GenerateScriptHeader();
 

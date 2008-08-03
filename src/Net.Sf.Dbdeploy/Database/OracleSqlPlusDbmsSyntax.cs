@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class OracleSqlPlusDbmsSyntax : DbmsSyntax
+    public class OracleSqlPlusDbmsSyntax : IDbmsSyntax
     {
         public string GenerateScriptHeader()
         {

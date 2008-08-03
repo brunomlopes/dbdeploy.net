@@ -20,6 +20,18 @@ namespace Net.Sf.Dbdeploy.Configuration
             get { return ConfigurationManager.AppSettings["db.deltaSet"]; }
         }
 
+    	public bool UseTransaction
+    	{
+			get
+			{
+				string useTransactionSetting = ConfigurationManager.AppSettings["db.usetransaction"];
+				bool useTransaction;
+				bool.TryParse(useTransactionSetting, out useTransaction);
+
+				return useTransaction;
+			}
+    	}
+
         public int? CurrentDbVersion
         {
             get
