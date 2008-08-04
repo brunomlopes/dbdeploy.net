@@ -9,7 +9,8 @@
 				   OutputFile="output.sql"
 				   UndoOutputFile="output-undo.sql"
 				   LastChangeToApply="1"
-				   DeltaSet="Main" />
+				   DeltaSet="Main"
+				   UseTransaction="false" />
 	</Target>
 	
 </Project>
