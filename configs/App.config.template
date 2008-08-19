@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <appSettings>
+        <add key="ConnString" value="Server=@DB_SERVER@;Initial Catalog=@DB_NAME@;User Id=@DB_USER_NAME@;Password=@DB_USER_PASSWORD@"/>
+    </appSettings>
+</configuration>

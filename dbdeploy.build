@@ -4,6 +4,7 @@
   <property name="configuration" value="Build"/>
   <property name="src.dir" value="src"/>
   <property name="lib.dir" value="lib" />
+  <property name="config.dir" value="configs" />
   <property name="build.dir" value="build" />
   <property name="test.dir" value="${build.dir}/"/>
   <property name="dist.dir" value="dist" />
@@ -25,6 +26,13 @@
   
   <target name="all" depends="clean, db, compile, test, dist" />
   
+  <target name="clean" description="Delete compiled classes etc">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+    <delete dir="${testreport.dir}" />
+    <delete dir="${testoutput.dir}" />
+  </target>
+  
   <target name="init">
     <mkdir dir="${dist.dir}" />
     <mkdir dir="${testreport.dir}" />
@@ -32,28 +40,30 @@
   </target>
 
   <target name="compile" depends="init">
-	  <loadtasks assembly="${nantcontrib.assembly}" />
-	  <msbuild project="dbdeploy.net.sln">
-		  <property name="Configuration" value="${configuration}" />
-	  </msbuild>
+    <loadtasks assembly="${nantcontrib.assembly}" />
+    <msbuild project="dbdeploy.net.sln">
+        <property name="Configuration" value="${configuration}" />
+    </msbuild>
 
     <copy file="dbproviders.xml" todir="${build.dir}" overwrite="true" />
     <copy file="${lib.dir}/NAnt.Core.dll" todir="${build.dir}" overwrite="true" />
-    <copy file="${src.dir}/Test.Net.Sf.Dbdeploy/App.config" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true" />
-  </target>
-
-  <target name="clean" description="Delete compiled classes etc">
-    <delete dir="${build.dir}" />
-    <delete dir="${dist.dir}" />
-    <delete dir="${testreport.dir}" />
-    <delete dir="${testoutput.dir}" />
+    <copy file="${config.dir}/App.config.template" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true">
+        <filterchain>
+            <replacetokens>
+                <token key="DB_SERVER" value="${sql.server}" />
+                <token key="DB_NAME" value="${sql.db}" />
+                <token key="DB_USER_NAME" value="${sql.username}" />
+                <token key="DB_USER_PASSWORD" value="${sql.password}" />
+            </replacetokens>
+        </filterchain>
+    </copy>
   </target>
 
   <target name="test">
-	  <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
+    <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
     <nunit2>
-      <formatter type="Xml" usefile="true" extension=".xml" outputdir="${testoutput.dir}" />
-      <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
+        <formatter type="Xml" usefile="true" extension=".xml" outputdir="${testoutput.dir}" />
+        <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
     </nunit2>
   </target>
 
