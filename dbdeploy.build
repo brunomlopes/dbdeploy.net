@@ -11,8 +11,20 @@
   <property name="testreport.dir" value="${build.dir}/testreport" />
   <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
  
+<!-- 
+    DEFAULT PROPERTIES FOR CI Build on CCNETLIVE.THOUGHTWORKS.COM
+    To use different settings locally,  copy and rename local.properties.template to local.properties.xml
+    and overwrite those properties.
+  -->
+  <property name="sql.server" value=".\SQLEXPRESS" />
+  <property name="sql.db" value="DBDEPLOY" />
+  <property name="sql.username" value="DBDeployUser"/>
+  <property name="sql.password" value="password"/>
+  
+  <include buildfile="local.properties.xml" if="${file::exists('local.properties.xml')}" />    
+  
   <target name="all" depends="clean, db, compile, test, dist" />
-
+  
   <target name="init">
     <mkdir dir="${dist.dir}" />
     <mkdir dir="${testreport.dir}" />
@@ -68,11 +80,7 @@
   
     <property name="sql.dir" value="${path::get-full-path('db')}" />
     <property name="sql.file" value="db\create.database.sql" />
-    <property name="sql.server" value="." />
-    <property name="sql.db" value="DBDEPLOY" />
-    <property name="sql.username" value="DBDeployUser"/>
-    <property name="sql.password" value="password"/>
-    
+  
     <copy file="${sql.file}.template" tofile="${sql.file}" overwrite="true">
         <filterchain>
             <replacetokens>
