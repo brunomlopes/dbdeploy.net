@@ -41,6 +41,7 @@
 	  <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
     <nunit2>
       <formatter type="Xml" usefile="true" extension=".xml" outputdir="${testoutput.dir}" />
+      <formatter type="Plain" />
       <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
     </nunit2>
   </target>
@@ -68,10 +69,10 @@
   
     <property name="sql.dir" value="${path::get-full-path('db')}" />
     <property name="sql.file" value="db\create.database.sql" />
-    <property name="sql.server" value="." />
+    <property name="sql.server" value=".\SQLEXPRESS" />
     <property name="sql.db" value="DBDEPLOY" />
     <property name="sql.username" value="DBDeployUser"/>
-    <property name="sql.password" value="password"/>
+    <property name="sql.password" value="Password01"/>
     
     <copy file="${sql.file}.template" tofile="${sql.file}" overwrite="true">
         <filterchain>
