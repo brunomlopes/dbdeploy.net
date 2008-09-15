@@ -4,13 +4,26 @@
   <property name="configuration" value="Build"/>
   <property name="src.dir" value="src"/>
   <property name="lib.dir" value="lib" />
+  <property name="config.dir" value="config" />
   <property name="build.dir" value="build" />
   <property name="test.dir" value="${build.dir}/"/>
   <property name="dist.dir" value="dist" />
   <property name="testoutput.dir" value="${build.dir}/testoutput" />
   <property name="testreport.dir" value="${build.dir}/testreport" />
   <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
- 
+  
+  <!-- DEFAULT CCNET PROPERTIES, to override: create a copy of local.properties.template, rename it local.properties, and modify the values as needed-->
+  <property name="sql.dir" value="${path::get-full-path('db')}" />
+  <property name="sql.server" value=".\SQLEXPRESS" />
+  <property name="sql.db" value="DBDEPLOY" />
+  <property name="sql.username" value="DBDeployUser"/>
+  <property name="sql.password" value="Password01"/>
+
+  <include buildfile="local.properties" if="${file::exists('local.properties')}" />    
+  
+  <target name="env">
+    <echo message="sql server: ${sql.server}"/>
+  </target>
   <target name="all" depends="clean, db, compile, test, dist" />
 
   <target name="init">
@@ -27,7 +40,16 @@
 
     <copy file="dbproviders.xml" todir="${build.dir}" overwrite="true" />
     <copy file="${lib.dir}/NAnt.Core.dll" todir="${build.dir}" overwrite="true" />
-    <copy file="${src.dir}/Test.Net.Sf.Dbdeploy/App.config" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true" />
+    <copy file="${config.dir}/App.config.template" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true">
+        <filterchain>
+            <replacetokens>
+                <token key="DB_SERVER" value="${sql.server}" />
+                <token key="DB_NAME" value="${sql.db}" />
+                <token key="DB_USER_NAME" value="${sql.username}" />
+                <token key="DB_USER_PWD" value="${sql.password}" />
+            </replacetokens>
+        </filterchain>
+    </copy>
   </target>
 
   <target name="clean" description="Delete compiled classes etc">
@@ -66,14 +88,8 @@
   
   <target name="db">
     <loadtasks assembly="tools\nant\contrib\NAnt.Contrib.Tasks.dll"/>
-  
-    <property name="sql.dir" value="${path::get-full-path('db')}" />
     <property name="sql.file" value="db\create.database.sql" />
-    <property name="sql.server" value=".\SQLEXPRESS" />
-    <property name="sql.db" value="DBDEPLOY" />
-    <property name="sql.username" value="DBDeployUser"/>
-    <property name="sql.password" value="Password01"/>
-    
+  
     <copy file="${sql.file}.template" tofile="${sql.file}" overwrite="true">
         <filterchain>
             <replacetokens>

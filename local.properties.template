@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="local.properties" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+  <property name="sql.server" value="." />
+  <property name="sql.db" value="DBDEPLOY" />
+  <property name="sql.username" value="DBDeployUser"/>
+  <property name="sql.password" value="Password01"/>
+</project>
