@@ -72,6 +72,7 @@
     <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />
     <Compile Include="Exceptions\UnrecognisedFilenameException.cs" />
     <Compile Include="NAntTask.cs" />
+    <Compile Include="OutputFileEncoding.cs" />
     <Compile Include="PrettyPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\ChangeScript.cs" />

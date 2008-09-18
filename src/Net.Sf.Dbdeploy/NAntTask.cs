@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 using NAnt.Core;
 using NAnt.Core.Attributes;
@@ -22,8 +23,9 @@ namespace Net.Sf.Dbdeploy
         private int currentDbVersion = Int32.MinValue;
     	private string changeLogTable = DatabaseSchemaVersionManager.DEFAULT_TABLE_NAME;
     	private bool useTransaction = false;
+        private string outputFileEncoding = string.Empty;
 
-    	[TaskAttribute("dbType", Required = true)]
+        [TaskAttribute("dbType", Required = true)]
         public string DbType
         {
             set { dbType = value; }
@@ -45,6 +47,12 @@ namespace Net.Sf.Dbdeploy
         public FileInfo Outputfile
         {
             set { outputfile = value; }
+        }
+
+        [TaskAttribute("outputFileEncoding")]
+        public string OutputFileEncoding
+        {
+            set { outputFileEncoding = value;}
         }
        
         [TaskAttribute("undoOutputFile")]
@@ -90,23 +98,25 @@ namespace Net.Sf.Dbdeploy
 
             return currentDbVersion;
         }
-
+        
         protected override void InitializeTask(XmlNode taskNode)
         {
             Validator validator = new Validator();
             validator.SetUsage("nant");
             validator.Validate(dbConnection, dbType, dir.FullName, outputfile.Name, GetCurrentDbVersion());
+//            TODO: Add validation for the OutputFileEncoding
         }
 
         protected override void ExecuteTask()
         {
             try
             {
-                using (TextWriter outputPrintStream = new StreamWriter(outputfile.FullName))
+                Encoding encoding = new OutputFileEncoding(outputFileEncoding).AsEncoding();
+                using (TextWriter outputPrintStream = new StreamWriter(outputfile.FullName, true, encoding))
                 {
                     TextWriter undoOutputPrintStream = null;
                     if (undoOutputfile != null)
-                        undoOutputPrintStream = new StreamWriter(undoOutputfile.FullName);
+                        undoOutputPrintStream = new StreamWriter(undoOutputfile.FullName, true, encoding);
 
                     DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
                     IDbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
