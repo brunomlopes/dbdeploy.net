@@ -2,39 +2,39 @@ using System;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class SybAseDbmsSyntax : IDbmsSyntax
+    public class SybAseDbmsSyntax : DbmsSyntax
     {
-        public string GenerateScriptHeader()
+        public override string GenerateScriptHeader()
         {
             return string.Empty;
         }
 
-        public string GenerateTimestamp()
+        public override string GenerateTimestamp()
         {
             return "getdate()";
         }
 
-        public string GenerateUser()
+        public override string GenerateUser()
         {
             return "user_name()";
         }
 
-        public string GenerateStatementDelimiter()
+        public override string GenerateStatementDelimiter()
         {
             return Environment.NewLine + "GO";
         }
 
-        public string GenerateCommit()
+        public override string GenerateCommit()
         {
             return "COMMIT" + GenerateStatementDelimiter();
         }
 
-		public string GenerateBeginTransaction()
+		public override string GenerateBeginTransaction()
 		{
 			return string.Empty;
 		}
 
-		public string GenerateCommitTransaction()
+		public override string GenerateCommitTransaction()
 		{
 			return string.Empty;
 		}

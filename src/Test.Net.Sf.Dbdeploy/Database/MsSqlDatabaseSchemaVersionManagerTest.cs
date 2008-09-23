@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using Net.Sf.Dbdeploy.Exceptions;
 using NUnit.Framework;
 
@@ -9,7 +11,8 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["ConnString"];
         private const string DELTA_SET = "All";
-        private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: Invalid object name 'dbo.changelog'.";
+		private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: Invalid object name 'changelog'.";
+		private const string DBMS = "mssql";
 
         protected override string ConnectionString
         {
@@ -26,13 +29,23 @@ namespace Net.Sf.Dbdeploy.Database
             get { return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE; }
         }
 
-        protected override void EnsureTableDoesNotExist()
+    	protected override string Dbms
+    	{
+			get { return DBMS; }
+    	}
+
+    	protected override void EnsureTableDoesNotExist()
         {
             ExecuteSql(string.Format(
 				"IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", databaseSchemaVersion.TableName));
         }
 
-        protected override void CreateTable()
+    	protected override IDbConnection GetConnection()
+    	{
+			return new SqlConnection(CONNECTION_STRING);
+    	}
+
+    	protected override void CreateTable()
         {
             ExecuteSql(
 				"CREATE TABLE " + databaseSchemaVersion.TableName + "( " +
@@ -81,7 +94,24 @@ namespace Net.Sf.Dbdeploy.Database
 			Assert.AreEqual(3, changeNumbers[0]);
 		}
 
-        [Test]
+		[Test]
+		public void TestCanGenerateVersionCheck()
+		{
+			databaseSchemaVersion = new DatabaseSchemaVersionManager(new DbmsFactory(DBMS, CONNECTION_STRING), "Main", 5);
+			Assert.AreEqual(@"DECLARE @currentDatabaseVersion INTEGER, @errMsg VARCHAR(1000)
+SELECT @currentDatabaseVersion = MAX(change_number) FROM changelog WHERE delta_set = 'Main'
+IF (@currentDatabaseVersion <> 5)
+BEGIN
+    SET @errMsg = 'Error: current database version on delta_set <Main> is not 5, but ' + CONVERT(VARCHAR, @currentDatabaseVersion)
+    RAISERROR (@errMsg, 16, 1)
+END
+
+GO
+
+", databaseSchemaVersion.GenerateVersionCheck());
+		}
+
+    	[Test]
         public override void TestCanRetrieveDeltaFragmentFooterSql()
         {
             base.TestCanRetrieveDeltaFragmentFooterSql();

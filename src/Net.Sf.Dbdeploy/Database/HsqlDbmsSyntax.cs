@@ -1,38 +1,38 @@
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class HsqlDbmsSyntax : IDbmsSyntax
+    public class HsqlDbmsSyntax : DbmsSyntax
     {
-        public string GenerateScriptHeader()
+        public override string GenerateScriptHeader()
         {
             return string.Empty;
         }
 
-        public string GenerateTimestamp()
+        public override string GenerateTimestamp()
         {
             return "CURRENT_TIMESTAMP";
         }
 
-        public string GenerateUser()
+        public override string GenerateUser()
         {
             return "USER()";
         }
 
-        public string GenerateStatementDelimiter()
+        public override string GenerateStatementDelimiter()
         {
             return ";";
         }
 
-        public string GenerateCommit()
+        public override string GenerateCommit()
         {
             return "COMMIT" + GenerateStatementDelimiter();
         }
 
-    	public string GenerateBeginTransaction()
+    	public override string GenerateBeginTransaction()
     	{
     		return string.Empty;
     	}
 
-    	public string GenerateCommitTransaction()
+    	public override string GenerateCommitTransaction()
     	{
 			return string.Empty;
 		}

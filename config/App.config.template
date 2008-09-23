@@ -2,5 +2,6 @@
 <configuration>
   <appSettings>
     <add key="ConnString" value="Server=@DB_SERVER@;Initial Catalog=@DB_NAME@;User Id=@DB_USER_NAME@;Password=@DB_USER_PWD@"/>
+    <add key="OracleConnString" value="data source=ORACLE;user id=scott;password=tiger"/>
   </appSettings>
 </configuration>

@@ -1,40 +1,54 @@
+using System;
+using System.Text;
+
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class OracleDbmsSyntax : IDbmsSyntax
+    public class OracleDbmsSyntax : DbmsSyntax
     {
-        public string GenerateScriptHeader()
+        public override string GenerateScriptHeader()
         {
-            return string.Empty;
-        }
+			StringBuilder builder = new StringBuilder();
+			/* Halt the script on error. */
+			builder.Append("WHENEVER SQLERROR EXIT sql.sqlcode ROLLBACK");
+			builder.Append(Environment.NewLine);
+			/* Disable '&' variable substitution. */
+			builder.Append("SET DEFINE OFF");
+			return builder.ToString();       
+		}
 
-        public string GenerateTimestamp()
+        public override string GenerateTimestamp()
         {
             return "CURRENT_TIMESTAMP";
         }
 
-        public string GenerateUser()
+        public override string GenerateUser()
         {
             return "USER";
         }
 
-        public string GenerateStatementDelimiter()
+        public override string GenerateStatementDelimiter()
         {
             return ";";
         }
 
-        public string GenerateCommit()
+        public override string GenerateCommit()
         {
             return "COMMIT" + GenerateStatementDelimiter();
         }
 
-    	public string GenerateBeginTransaction()
+    	public override string GenerateBeginTransaction()
     	{
 			return string.Empty;
     	}
 
-    	public string GenerateCommitTransaction()
+    	public override string GenerateCommitTransaction()
     	{
 			return string.Empty;
+		}
+
+		public override string GenerateVersionCheck(string tableName, string currentVersion, string deltaSet)
+		{
+			return String.Format("execute versionCheck('{0}', {1}, '{2}');", deltaSet, currentVersion, tableName);
 		}
     }
 }

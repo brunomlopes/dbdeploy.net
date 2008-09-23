@@ -59,14 +59,26 @@
     <delete dir="${testoutput.dir}" />
   </target>
 
-  <target name="test">
-	  <loadtasks assembly="${lib.dir}/nunit.framework.dll" />
-    <nunit2>
-      <formatter type="Xml" usefile="true" extension=".xml" outputdir="${testoutput.dir}" />
-      <formatter type="Plain" />
-      <test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
-    </nunit2>
-  </target>
+	<target name="test">
+		<loadtasks assembly="${lib.dir}/nunit.framework.dll" />
+		<nunit2>
+			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${testoutput.dir}" />
+			<test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config">
+				<categories>
+					<exclude name="Oracle" />
+				</categories>  
+			</test>
+		</nunit2>
+	</target>
+	  
+	<target name="test_all">
+		<loadtasks assembly="${lib.dir}/nunit.framework.dll" />
+		<nunit2>
+			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${testoutput.dir}" />
+			<formatter type="Plain" />
+			<test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config"/>
+		</nunit2>
+	</target>
 
   <target name="dist">
     <zip zipfile="${dist.dir}/dbdeploy.net.zip">

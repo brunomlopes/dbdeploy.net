@@ -3,9 +3,9 @@ using System.Text;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class OracleSqlPlusDbmsSyntax : IDbmsSyntax
+    public class OracleSqlPlusDbmsSyntax : DbmsSyntax
     {
-        public string GenerateScriptHeader()
+        public override string GenerateScriptHeader()
         {
             StringBuilder builder = new StringBuilder();
             /* Halt the script on error. */
@@ -16,34 +16,39 @@ namespace Net.Sf.Dbdeploy.Database
             return builder.ToString();
         }
 
-        public string GenerateTimestamp()
+        public override string GenerateTimestamp()
         {
             return "CURRENT_TIMESTAMP";
         }
 
-        public string GenerateUser()
+        public override string GenerateUser()
         {
             return "USER";
         }
 
-        public string GenerateStatementDelimiter()
+        public override string GenerateStatementDelimiter()
         {
             return ";";
         }
 
-        public string GenerateCommit()
+        public override string GenerateCommit()
         {
             return "COMMIT" + GenerateStatementDelimiter();
         }
 
-		public string GenerateBeginTransaction()
+		public override string GenerateBeginTransaction()
 		{
 			return string.Empty;
 		}
 
-		public string GenerateCommitTransaction()
+		public override string GenerateCommitTransaction()
 		{
 			return string.Empty;
+		}
+
+		public override string GenerateVersionCheck(string tableName, string currentVersion, string deltaSet)
+		{
+			return String.Format("execute versionCheck('{0}', {1}, '{2}');", deltaSet, currentVersion, tableName);
 		}
 	}
 }

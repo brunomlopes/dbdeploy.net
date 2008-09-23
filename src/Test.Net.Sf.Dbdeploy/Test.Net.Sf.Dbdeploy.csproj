@@ -64,6 +64,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +79,7 @@
     <Compile Include="Database\DbProvidersTest.cs" />
     <Compile Include="Database\DbProviderFileTest.cs" />
     <Compile Include="Database\MsSqlDatabaseSchemaVersionManagerTest.cs" />
+    <Compile Include="Database\OracleDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="OutputFileEncodingTest.cs" />
     <Compile Include="PrettyPrinterTest.cs" />
     <Compile Include="Scripts\ChangeScriptExecuterTest.cs" />

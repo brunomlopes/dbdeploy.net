@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Text;
 using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
@@ -67,14 +67,12 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     connection.Open();
 
-                    IDbCommand command = connection.CreateCommand();
+					StringBuilder commandBuilder = new StringBuilder();
+                    commandBuilder.AppendFormat("SELECT change_number, complete_dt FROM {0}", TableName);
+                    commandBuilder.AppendFormat(" WHERE delta_set = '{0}' ORDER BY change_number", deltaSet);
 
-					command.CommandText = "SELECT change_number, complete_dt FROM dbo." + TableName +
-                                          " WHERE delta_set = @delta_set ORDER BY change_number";
-                    IDbDataParameter parameter = command.CreateParameter();
-                    parameter.ParameterName = "@delta_set";
-                    parameter.Value = deltaSet;
-                    command.Parameters.Add(parameter);
+                    IDbCommand command = connection.CreateCommand();
+					command.CommandText = commandBuilder.ToString();
 
                     using (IDataReader reader = command.ExecuteReader())
                     {
@@ -95,7 +93,7 @@ namespace Net.Sf.Dbdeploy.Database
                     return changeNumbers;
                 }
             }
-            catch (SqlException e)
+            catch (DbException e)
             {
                 throw new SchemaVersionTrackingException("Could not retrieve change log from database because: "
                                                          + e.Message, e);
@@ -152,19 +150,11 @@ namespace Net.Sf.Dbdeploy.Database
 
         public string GenerateVersionCheck()
         {
-            if (currentVersion == null)
-				return string.Empty;
+            string versionCheckSql = string.Empty;
+            if (currentVersion.HasValue)
+				versionCheckSql = DbmsSyntax.GenerateVersionCheck(TableName, currentVersion.Value.ToString(), deltaSet);
 
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine("DECLARE @currentDatabaseVersion INTEGER, @errMsg VARCHAR(1000)");
-			builder.Append("SELECT @currentDatabaseVersion = MAX(change_number) FROM ").Append(TableName).AppendLine(" WHERE delta_set = '" + deltaSet + "'");
-            builder.Append("IF (@currentDatabaseVersion <> ").Append(currentVersion).AppendLine(")");
-            builder.AppendLine("BEGIN");
-            builder.Append("    SET @errMsg = 'Error: current database version on delta_set <").Append(deltaSet).Append("> is not ").Append(currentVersion).AppendLine(", but ' + CONVERT(VARCHAR, @currentDatabaseVersion)"); 
-            builder.AppendLine("    RAISERROR (@errMsg, 16, 1)"); 
-            builder.AppendLine("END");
-            builder.AppendLine(DbmsSyntax.GenerateStatementDelimiter()).AppendLine();
-            return builder.ToString();
+			return versionCheckSql;
         }
     }
 }

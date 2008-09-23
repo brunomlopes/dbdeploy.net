@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SqlClient;
+using System.Data;
 using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
 using NUnit.Framework;
@@ -16,7 +15,7 @@ namespace Net.Sf.Dbdeploy.Database
         [SetUp]
         protected void SetUp()
         {
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(new DbmsFactory("mssql", ConnectionString), DeltaSet, null);
+			databaseSchemaVersion = new DatabaseSchemaVersionManager(new DbmsFactory(Dbms, ConnectionString), DeltaSet, null);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
@@ -93,8 +92,8 @@ GO
 
 		public virtual void TestCanSetChangeLogTableName()
 		{
-			string expectedTableName = "FooTable";
-			DatabaseSchemaVersionManager databaseSchemaVersionManager = new DatabaseSchemaVersionManager(new DbmsFactory("mssql", ConnectionString), DeltaSet, null, expectedTableName);
+			const string expectedTableName = "FooTable";
+			DatabaseSchemaVersionManager databaseSchemaVersionManager = new DatabaseSchemaVersionManager(new DbmsFactory(Dbms, ConnectionString), DeltaSet, null, expectedTableName);
 			Assert.AreEqual(expectedTableName, databaseSchemaVersionManager.TableName);
 		}
 
@@ -105,10 +104,10 @@ GO
 
         protected void ExecuteSql(String sql)
         {
-            using (DbConnection connection = new SqlConnection(ConnectionString))
+			using (IDbConnection connection = GetConnection())
             {
                 connection.Open();
-                DbCommand command = connection.CreateCommand();
+                IDbCommand command = connection.CreateCommand();
                 command.CommandText = sql;
                 command.ExecuteNonQuery();
             }
@@ -117,6 +116,8 @@ GO
         protected abstract string ConnectionString { get; }
         protected abstract string DeltaSet { get; }
         protected abstract string ChangelogTableDoesNotExistMessage { get; }
+		protected abstract string Dbms { get; }
+		protected abstract IDbConnection GetConnection();
         protected abstract void CreateTable();
         protected abstract void InsertRowIntoTable(int i);
     }

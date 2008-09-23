@@ -2,39 +2,39 @@ using System;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class MySqlDbmsSyntax : IDbmsSyntax
+    public class MySqlDbmsSyntax : DbmsSyntax
     {
-        public string GenerateScriptHeader()
+        public override string GenerateScriptHeader()
         {
             return String.Empty;
         }
 
-        public string GenerateTimestamp()
+        public override string GenerateTimestamp()
         {
             return "CURRENT_TIMESTAMP";
         }
 
-        public string GenerateUser()
+        public override string GenerateUser()
         {
             return "USER()";
         }
 
-        public string GenerateStatementDelimiter()
+        public override string GenerateStatementDelimiter()
         {
             return ";";
         }
 
-        public string GenerateCommit()
+        public override string GenerateCommit()
         {
             return "COMMIT" + GenerateStatementDelimiter();
         }
 
-    	public string GenerateBeginTransaction()
+    	public override string GenerateBeginTransaction()
     	{
 			return "START TRANSACTION" + GenerateStatementDelimiter() + Environment.NewLine;
     	}
 
-    	public string GenerateCommitTransaction()
+    	public override string GenerateCommitTransaction()
     	{
     		return Environment.NewLine + GenerateCommit();
     	}
