@@ -85,7 +85,7 @@ namespace Net.Sf.Dbdeploy
 			set { changeLogTable = value; }
     	}
 
-		[TaskAttribute("userTransaction")]
+		[TaskAttribute("useTransaction")]
 		public bool UseTransaction
 		{
 			set { useTransaction = value; }
