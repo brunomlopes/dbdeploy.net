@@ -8,17 +8,19 @@ namespace Net.Sf.Dbdeploy.Scripts
     public class DirectoryScanner
     {
         private readonly FilenameParser filenameParser;
+        private TextWriter infoTextWriter;
 
-        public DirectoryScanner()
+        public DirectoryScanner(TextWriter infoTextWriter)
         {
             filenameParser = new FilenameParser();
+            this.infoTextWriter = infoTextWriter;
         }
 
         public List<ChangeScript> GetChangeScriptsForDirectory(DirectoryInfo directory)
         {
             try
             {
-                Console.Out.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
+                infoTextWriter.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
             }
             catch (IOException)
             {

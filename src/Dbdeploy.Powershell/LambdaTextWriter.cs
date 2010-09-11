@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Management.Automation;
 using System.Text;
 
-namespace Dbdeploy.Powershell.Commands
+namespace Dbdeploy.Powershell
 {
-    public class PowershellTextWriter : TextWriter
+    public class LambdaTextWriter : TextWriter
     {
-        public Cmdlet Cmdlet { get; private set; }
+        private readonly Action<string> _writer;
         private UnicodeEncoding _encoding;
 
         public override Encoding Encoding
@@ -22,20 +21,21 @@ namespace Dbdeploy.Powershell.Commands
             }
         }
 
-        public PowershellTextWriter(Cmdlet cmdlet)
+        public LambdaTextWriter(Action<string> writer)
         {
-            Cmdlet = cmdlet;
+            _writer = writer;
         }
 
 
-        public PowershellTextWriter(IFormatProvider formatProvider, Cmdlet cmdlet) : base(formatProvider)
+        public LambdaTextWriter(IFormatProvider formatProvider, Action<string> writer)
+            : base(formatProvider)
         {
-            Cmdlet = cmdlet;
+            _writer = writer;
         }
 
         public override void Write(string value)
         {
-            Cmdlet.WriteObject(value);
+            _writer(value);
         }
 
         public override void Write(char[] buffer, int index, int count)

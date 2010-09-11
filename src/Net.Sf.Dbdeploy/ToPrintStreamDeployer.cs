@@ -31,7 +31,7 @@ namespace Net.Sf.Dbdeploy
         {
             Console.Out.WriteLine("dbdeploy v2.12");
 
-            List<ChangeScript> changeScripts = new DirectoryScanner().GetChangeScriptsForDirectory(dir);
+            List<ChangeScript> changeScripts = new DirectoryScanner(Console.Out).GetChangeScriptsForDirectory(dir);
             ChangeScriptRepository repository = new ChangeScriptRepository(changeScripts);
             List<int> appliedChanges = schemaManager.GetAppliedChangeNumbers();
 
@@ -45,7 +45,7 @@ namespace Net.Sf.Dbdeploy
         private void GenerateChangeScripts(ChangeScriptRepository repository, int lastChangeToApply, List<int> appliedChanges)
         {
             ChangeScriptExecuter doScriptExecuter = new ChangeScriptExecuter(doOutputPrintStream, dbmsSyntax, useTransaction);
-            Controller doController = new Controller(schemaManager, repository, doScriptExecuter);
+            Controller doController = new Controller(schemaManager, repository, doScriptExecuter, Console.Out);
             doController.ProcessDoChangeScripts(lastChangeToApply, appliedChanges);
             doOutputPrintStream.Flush();
         }
@@ -53,7 +53,7 @@ namespace Net.Sf.Dbdeploy
         private void GenerateUndoChangeScripts(ChangeScriptRepository repository, int lastChangeToApply, List<int> appliedChanges)
         {
             ChangeScriptExecuter undoScriptExecuter = new ChangeScriptExecuter(undoOutputPrintStream, dbmsSyntax, useTransaction);
-            Controller undoController = new Controller(schemaManager, repository, undoScriptExecuter);
+            Controller undoController = new Controller(schemaManager, repository, undoScriptExecuter, Console.Out);
             undoController.ProcessUndoChangeScripts(lastChangeToApply, appliedChanges);
             undoOutputPrintStream.Flush();
         }

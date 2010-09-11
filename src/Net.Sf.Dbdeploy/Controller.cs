@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Scripts;
 
@@ -11,15 +12,21 @@ namespace Net.Sf.Dbdeploy
         private readonly ChangeScriptExecuter changeScriptExecuter;
         private readonly ChangeScriptRepository changeScriptRepository;
         private readonly PrettyPrinter prettyPrinter = new PrettyPrinter();
+        private static TextWriter infoWriter;
 
         public Controller(DatabaseSchemaVersionManager schemaManager,
                           ChangeScriptRepository changeScriptRepository,
-                          ChangeScriptExecuter changeScriptExecuter)
+                          ChangeScriptExecuter changeScriptExecuter,
+                          TextWriter infoTextWriter)
         {
             this.schemaManager = schemaManager;
             this.changeScriptRepository = changeScriptRepository;
             this.changeScriptExecuter = changeScriptExecuter;
+            infoWriter = infoTextWriter;
+
         }
+
+
 
         public void ProcessDoChangeScripts(int lastChangeToApply, List<int> appliedChanges)
         {
@@ -77,9 +84,9 @@ namespace Net.Sf.Dbdeploy
             }
         }
 
-        private static void Info(string text)
+        private void Info(string text)
         {
-            Console.Out.WriteLine(text);
+            infoWriter.WriteLine(text);
         }
     }
 }
