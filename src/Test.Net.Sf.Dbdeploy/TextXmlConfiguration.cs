@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using Dbdeploy.Powershell;
 using Dbdeploy.Powershell.Commands;
 using NUnit.Framework;
 

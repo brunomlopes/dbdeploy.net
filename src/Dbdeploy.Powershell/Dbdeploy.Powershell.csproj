@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DbUpdateBase.cs" />
+    <Compile Include="Commands\ExportDbUpdate.cs" />
     <Compile Include="LambdaTextWriter.cs" />
     <Compile Include="Commands\SelectDbUpdate.cs" />
+    <Compile Include="PowershellPrintStreamDeployer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlConfiguration.cs" />
   </ItemGroup>

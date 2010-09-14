@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Net.Sf.Dbdeploy.Configuration;
-using Enumerable = System.Linq.Enumerable;
 
-namespace Dbdeploy.Powershell.Commands
+namespace Dbdeploy.Powershell
 {
     public class XmlConfiguration : IConfiguration
     {
@@ -28,7 +28,9 @@ namespace Dbdeploy.Powershell.Commands
         private void LoadXmlFile(TextReader xmlFile)
         {
             XDocument doc = XDocument.Load(xmlFile);
-            this.keys = Enumerable.ToDictionary(doc.XPathSelectElements("/configuration/appSettings/add"), n => n.Attribute("key").Value, n => n.Attribute("value").Value);
+            this.keys = doc.XPathSelectElements("/configuration/appSettings/add")
+                .ToDictionary(n => n.Attribute("key").Value,
+                              n => n.Attribute("value").Value);
 
             DbConnectionString = ValueOrException("db.connection", "Connection string");
             DbType = ValueOrException("db.type", "Database type");

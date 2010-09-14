@@ -108,6 +108,7 @@
     <Compile Include="Database\DbProviderFileTest.cs" />
     <Compile Include="Database\MsSqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\OracleDatabaseSchemaVersionManagerTest.cs" />
+    <Compile Include="DescriptionPrettyPrinterTest.cs" />
     <Compile Include="OutputFileEncodingTest.cs" />
     <Compile Include="PrettyPrinterTest.cs" />
     <Compile Include="Scripts\ChangeScriptExecuterTest.cs" />
