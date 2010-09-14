@@ -12,7 +12,7 @@ namespace Dbdeploy.Powershell.Commands
     {
         protected override void ProcessRecord()
         {
-            this.ProcessRecord();
+            base.ProcessRecord();
 
             if (!string.IsNullOrEmpty(UndoOutputFile) && string.IsNullOrEmpty(OutputFile))
             {

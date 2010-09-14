@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Management.Automation;
 using Net.Sf.Dbdeploy.Configuration;
 using Net.Sf.Dbdeploy.Database;
@@ -10,7 +11,7 @@ namespace Dbdeploy.Powershell.Commands
         protected DatabaseSchemaVersionManager _databaseSchemaVersion;
         protected string _deltasDirectory;
         protected DbmsFactory _dbmsFactory;
-        protected IConfiguration _config;
+        protected XmlConfiguration _config;
         protected string _configurationFile;
 
         protected override void ProcessRecord()
@@ -20,13 +21,15 @@ namespace Dbdeploy.Powershell.Commands
 
 
             _config = new XmlConfiguration(_configurationFile);
-            _dbmsFactory = new DbmsFactory(_config.DbType, _config.DbConnectionString);
+            _dbmsFactory = new DbmsFactory(_config.DbType, _config.DbConnectionString, ForDirectExecution);
             _databaseSchemaVersion = new DatabaseSchemaVersionManager(_dbmsFactory,
                                                                      _config.DbDeltaSet,
                                                                      _config.CurrentDbVersion,
                                                                      _config.TableName);
 
         }
+
+        protected virtual bool ForDirectExecution { get { return false; } }
 
         protected string ToAbsolutePath(string deltasDirectory)
         {

@@ -8,12 +8,19 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private readonly string dbms;
         private readonly string connectionString;
+        private readonly bool forDirectExecution;
         private readonly Providers providers;
 
-        public DbmsFactory(string dbms, string connectionString)
+
+        public DbmsFactory(string dbms, string connectionString) : this(dbms, connectionString, false)
+        {
+        }
+
+        public DbmsFactory(string dbms, string connectionString, bool forDirectExecution)
         {
             this.dbms = dbms;
             this.connectionString = connectionString;
+            this.forDirectExecution = forDirectExecution;
             providers = new DbProviderFile().LoadProviders();
         }
 
@@ -24,7 +31,7 @@ namespace Net.Sf.Dbdeploy.Database
                 case "ora":
                     return new OracleDbmsSyntax();
                 case "mssql":
-                    return new MsSqlDbmsSyntax();
+                    return new MsSqlDbmsSyntax(forDirectExecution);
                 case "mysql":
                     return new MySqlDbmsSyntax();
                 default:

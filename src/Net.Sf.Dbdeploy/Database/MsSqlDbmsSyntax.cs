@@ -4,6 +4,17 @@ namespace Net.Sf.Dbdeploy.Database
 {
     public class MsSqlDbmsSyntax : DbmsSyntax
     {
+        private readonly bool forDirectExecution;
+
+        public MsSqlDbmsSyntax() : this(false)
+        {
+        }
+
+        public MsSqlDbmsSyntax(bool forDirectExecution)
+        {
+            this.forDirectExecution = forDirectExecution;
+        }
+
         public override string GenerateScriptHeader()
         {
             return string.Empty;
@@ -21,7 +32,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public override string GenerateStatementDelimiter()
         {
-            return Environment.NewLine + "GO";
+            return Environment.NewLine + (forDirectExecution ? ";" : "GO");
         }
 
         public override string GenerateCommit()
