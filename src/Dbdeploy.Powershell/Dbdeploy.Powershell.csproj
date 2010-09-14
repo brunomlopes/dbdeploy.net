@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Commands\DbUpdateBase.cs" />
     <Compile Include="Commands\ExportDbUpdate.cs" />
+    <Compile Include="DescriptionPrettyPrinter.cs" />
     <Compile Include="LambdaTextWriter.cs" />
     <Compile Include="Commands\SelectDbUpdate.cs" />
     <Compile Include="PowershellPrintStreamDeployer.cs" />

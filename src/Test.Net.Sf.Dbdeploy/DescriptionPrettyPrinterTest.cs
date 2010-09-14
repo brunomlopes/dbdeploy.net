@@ -1,4 +1,5 @@
-﻿using Dbdeploy.Powershell.Commands;
+﻿using Dbdeploy.Powershell;
+using Dbdeploy.Powershell.Commands;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy
@@ -29,6 +30,12 @@ namespace Net.Sf.Dbdeploy
         public void UnderscoreShouldBeConvertedToSpace()
         {
             Assert.AreEqual("001 - Description Of Change", prettyPrinter.Format("001_Description_Of_Change"));
+        }
+
+        [Test]
+        public void DescriptionWithoutNumberShouldStillBeConvertedFromCamelCase()
+        {
+            Assert.AreEqual("Description Of Change", prettyPrinter.Format("Description_Of_Change"));
         }
     }
 }
