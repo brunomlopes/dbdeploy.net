@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Dbdeploy.Task", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.Powershell", "src\Dbdeploy.Powershell\Dbdeploy.Powershell.csproj", "{BEA3109E-9EBC-4D3E-A69C-971059FF661F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.NAnt", "src\Dbdeploy.NAnt\Dbdeploy.NAnt.csproj", "{C2382F42-1186-463C-B270-DD074FD4BA09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
@@ -54,6 +56,12 @@ Global
 		{BEA3109E-9EBC-4D3E-A69C-971059FF661F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEA3109E-9EBC-4D3E-A69C-971059FF661F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEA3109E-9EBC-4D3E-A69C-971059FF661F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2382F42-1186-463C-B270-DD074FD4BA09}.Build|Any CPU.ActiveCfg = Release|Any CPU
+		{C2382F42-1186-463C-B270-DD074FD4BA09}.Build|Any CPU.Build.0 = Release|Any CPU
+		{C2382F42-1186-463C-B270-DD074FD4BA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2382F42-1186-463C-B270-DD074FD4BA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2382F42-1186-463C-B270-DD074FD4BA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2382F42-1186-463C-B270-DD074FD4BA09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

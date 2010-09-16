@@ -92,6 +92,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dbdeploy.NAnt\Dbdeploy.NAnt.csproj">
+      <Project>{C2382F42-1186-463C-B270-DD074FD4BA09}</Project>
+      <Name>Dbdeploy.NAnt</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dbdeploy.Powershell\Dbdeploy.Powershell.csproj">
       <Project>{BEA3109E-9EBC-4D3E-A69C-971059FF661F}</Project>
       <Name>Dbdeploy.Powershell</Name>

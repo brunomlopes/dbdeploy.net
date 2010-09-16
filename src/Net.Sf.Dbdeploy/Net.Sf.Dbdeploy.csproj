@@ -64,10 +64,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\NAnt.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -95,7 +91,6 @@
     <Compile Include="Exceptions\RequiredChangeScriptNotFoundException.cs" />
     <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />
     <Compile Include="Exceptions\UnrecognisedFilenameException.cs" />
-    <Compile Include="NAntTask.cs" />
     <Compile Include="OutputFileEncoding.cs" />
     <Compile Include="PrettyPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,7 +99,6 @@
     <Compile Include="Scripts\DirectoryScanner.cs" />
     <Compile Include="Scripts\FilenameParser.cs" />
     <Compile Include="ToPrintStreamDeployer.cs" />
-    <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
