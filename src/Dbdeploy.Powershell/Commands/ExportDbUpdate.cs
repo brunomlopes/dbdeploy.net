@@ -24,35 +24,52 @@ namespace Dbdeploy.Powershell.Commands
             var infoTextWriter = new LambdaTextWriter(WriteVerbose);
 
             TextWriter outputTextWriter;
-            if (string.IsNullOrEmpty(OutputFile))
+            var openedFiles = new List<FileStream>();
+
+            try
             {
-                outputTextWriter = new LambdaTextWriter(WriteObject);
+                if (string.IsNullOrEmpty(OutputFile))
+                {
+                    outputTextWriter = new LambdaTextWriter(WriteObject);
+                }
+                else
+                {
+                    var outputFile = ToAbsolutePath(OutputFile);
+                    WriteObject(String.Format("Writing update script to {0}", outputFile));
+                    var openedFile = File.OpenWrite(outputFile);
+                    openedFiles.Add(openedFile);
+
+                    outputTextWriter = new StreamWriter(openedFile, Encoding.UTF8);
+                    infoTextWriter = new LambdaTextWriter(WriteObject);
+                }
+
+                TextWriter undoTextWriter = null;
+                if (!string.IsNullOrEmpty(UndoOutputFile))
+                {
+                    var undoOutputFile = ToAbsolutePath(UndoOutputFile);
+                    WriteObject(String.Format("Writing undo update script to {0}", undoOutputFile));
+                    var openedFile = File.OpenWrite(undoOutputFile);
+                    openedFiles.Add(openedFile);
+                    undoTextWriter = new StreamWriter(openedFile, Encoding.UTF8);
+                }
+
+                infoTextWriter.WriteLine("dbdeploy v2.12");
+
+                List<ChangeScript> changeScripts = new DirectoryScanner(infoTextWriter).GetChangeScriptsForDirectory(new DirectoryInfo(_deltasDirectory));
+                new PowershellPrintStreamDeployer(_databaseSchemaVersion, new ChangeScriptRepository(changeScripts),
+                                                  outputTextWriter,
+                                                  _dbmsFactory.CreateDbmsSyntax(), _config.UseTransaction, undoTextWriter,
+                                                  infoTextWriter)
+                    .DoDeploy(Int32.MaxValue, infoTextWriter);
+
             }
-            else
+            finally
             {
-                var outputFile = ToAbsolutePath(OutputFile);
-                WriteObject(String.Format("Writing update script to {0}", (object)outputFile));
-                outputTextWriter = new StreamWriter(File.OpenWrite(outputFile), Encoding.UTF8);
-                infoTextWriter = new LambdaTextWriter(WriteObject);
+                foreach(var file in openedFiles)
+                {
+                    file.Close();
+                }
             }
-
-            TextWriter undoTextWriter = null;
-            if (!string.IsNullOrEmpty(UndoOutputFile))
-            {
-                var undoOutputFile = ToAbsolutePath(UndoOutputFile);
-                WriteObject(String.Format("Writing undo update script to {0}", (object)undoOutputFile));
-                undoTextWriter = new StreamWriter(File.OpenWrite(undoOutputFile), Encoding.UTF8);
-            }
-
-            infoTextWriter.WriteLine("dbdeploy v2.12");
-
-            List<ChangeScript> changeScripts = new DirectoryScanner(infoTextWriter).GetChangeScriptsForDirectory(new DirectoryInfo(_deltasDirectory));
-            new PowershellPrintStreamDeployer(_databaseSchemaVersion, new ChangeScriptRepository(changeScripts),
-                                              outputTextWriter,
-                                              _dbmsFactory.CreateDbmsSyntax(), _config.UseTransaction, undoTextWriter,
-                                              infoTextWriter)
-                .DoDeploy(Int32.MaxValue, infoTextWriter);
-
         }
 
         [Parameter]
