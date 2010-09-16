@@ -8,7 +8,6 @@ namespace Dbdeploy.Powershell
 {
     public class PowershellPrintStreamDeployer
     {
-        private readonly DirectoryInfo dir;
         private readonly TextWriter doOutputPrintStream;
         private readonly TextWriter undoOutputPrintStream;
         private readonly TextWriter infoPrintStream;
@@ -24,7 +23,6 @@ namespace Dbdeploy.Powershell
                                              TextWriter infoPrintStream)
         {   
             this.schemaManager = schemaManager;
-            this.dir = dir;
             this.doOutputPrintStream = outputPrintStream;
             this.dbmsSyntax = dbmsSyntax;
             this.useTransaction = useTransaction;
