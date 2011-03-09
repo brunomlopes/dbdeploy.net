@@ -23,7 +23,7 @@ namespace Dbdeploy.Powershell.Commands
             List<ChangeScript> changeScripts = new DirectoryScanner(infoTextWriter).GetChangeScriptsForDirectory(new DirectoryInfo(_deltasDirectory));
             new PowershellPrintStreamDeployer(_databaseSchemaVersion, new ChangeScriptRepository(changeScripts),
                                               stringWriterForUpdateScript,
-                                              _dbmsFactory.CreateDbmsSyntax(), _config.UseTransaction, null,
+                                              _dbmsFactory.CreateDbmsSyntax(), UseTransaction, null,
                                               infoTextWriter)
                 .DoDeploy(Int32.MaxValue, infoTextWriter);
 
