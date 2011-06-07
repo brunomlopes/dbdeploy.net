@@ -11,18 +11,16 @@ namespace Dbdeploy.Powershell.Commands
         protected DatabaseSchemaVersionManager _databaseSchemaVersion;
         protected string _deltasDirectory;
         protected DbmsFactory _dbmsFactory;
-        protected string _configurationFile;
         private XmlConfiguration _config;
 
         protected override void ProcessRecord()
         {
-            _configurationFile = ToAbsolutePath(ConfigurationFile);
+            var configurationFile = ToAbsolutePath(ConfigurationFile);
             _deltasDirectory = ToAbsolutePath(DeltasDirectory);
 
-
-            if (!string.IsNullOrEmpty(ConfigurationFile))
+            if (!string.IsNullOrEmpty(configurationFile) && File.Exists(configurationFile))
             {
-                EnsureConfigurationIsLoaded();
+                _config = new XmlConfiguration(configurationFile);
                 if(string.IsNullOrEmpty(DatabaseType))
                     DatabaseType = _config.DbType;
                 if(string.IsNullOrEmpty(ConnectionString))
@@ -46,6 +44,8 @@ namespace Dbdeploy.Powershell.Commands
 
         protected string ToAbsolutePath(string deltasDirectory)
         {
+            if (string.IsNullOrEmpty(deltasDirectory))
+                return null;
             if (!Path.IsPathRooted(deltasDirectory))
             {
                 deltasDirectory = Path.Combine(SessionState.Path.CurrentFileSystemLocation.Path, deltasDirectory);
@@ -53,11 +53,6 @@ namespace Dbdeploy.Powershell.Commands
             return deltasDirectory;
         }
 
-
-        private void EnsureConfigurationIsLoaded()
-        {
-            _config = new XmlConfiguration(_configurationFile);
-        }
 
         [Parameter(Mandatory = false, Position = 0)]
         public string ConfigurationFile { get; set; }
