@@ -33,6 +33,12 @@ namespace Dbdeploy.Powershell.Commands
                     CurrentDbVersion = _config.CurrentDbVersion;
             }
 
+            if(string.IsNullOrEmpty(ConnectionString))
+            {
+                throw new InvalidDataException(
+                    "Missing connection string. It must either be in the config file or passed as a parameter");
+            }
+
             _dbmsFactory = new DbmsFactory(DatabaseType, ConnectionString, ForDirectExecution);
             _databaseSchemaVersion = new DatabaseSchemaVersionManager(_dbmsFactory,
                                                                      DeltaSet,
@@ -54,15 +60,21 @@ namespace Dbdeploy.Powershell.Commands
         }
 
 
-        [Parameter(Mandatory = false, Position = 0)]
+        [Parameter(Mandatory = false)]
         public string ConfigurationFile { get; set; }
 
-        [Parameter(Mandatory = true, Position = 1)]
+        [Parameter(Mandatory = true, Position = 0)]
         public string DeltasDirectory { get; set; }
 
-        [Parameter(Mandatory = false)]
-        public string DatabaseType { get; set; }
-        
+        private string _databaseType = "mssql";
+
+        [Parameter(Mandatory = false, HelpMessage = "Defaults to mssql")]
+        public string DatabaseType
+        {
+            get { return _databaseType; }
+            set { _databaseType = value; }
+        }
+
         [Parameter(Mandatory = false)]
         public string ConnectionString { get; set; }
 
