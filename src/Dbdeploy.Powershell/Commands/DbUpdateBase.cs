@@ -21,16 +21,18 @@ namespace Dbdeploy.Powershell.Commands
             if (!string.IsNullOrEmpty(configurationFile) && File.Exists(configurationFile))
             {
                 _config = new XmlConfiguration(configurationFile);
-                if(string.IsNullOrEmpty(DatabaseType))
+                if(string.IsNullOrEmpty(DatabaseType) || DatabaseType == DatabaseTypeDefault)
                     DatabaseType = _config.DbType;
                 if(string.IsNullOrEmpty(ConnectionString))
                     ConnectionString = _config.DbConnectionString;
-                if(string.IsNullOrEmpty(DeltaSet))
+                if (string.IsNullOrEmpty(DeltaSet) || DeltaSet == DeltaSetDefault)
                     DeltaSet = _config.DbDeltaSet;
-                if(string.IsNullOrEmpty(TableName))
+                if(string.IsNullOrEmpty(TableName) || TableName == TableNameDefault)
                     TableName = _config.TableName;
                 if(!CurrentDbVersion.HasValue)
                     CurrentDbVersion = _config.CurrentDbVersion;
+
+                UseTransaction = _config.UseTransaction;
             }
 
             if(string.IsNullOrEmpty(ConnectionString))
@@ -66,7 +68,8 @@ namespace Dbdeploy.Powershell.Commands
         [Parameter(Mandatory = true, Position = 0)]
         public string DeltasDirectory { get; set; }
 
-        private string _databaseType = "mssql";
+        private const string DatabaseTypeDefault = "mssql";
+        private string _databaseType = DatabaseTypeDefault;
 
         [Parameter(Mandatory = false, HelpMessage = "Defaults to mssql")]
         public string DatabaseType
@@ -87,7 +90,8 @@ namespace Dbdeploy.Powershell.Commands
             set { _useTransaction = value; }
         }
         
-        private string _deltaSet = "Main";
+        private const string DeltaSetDefault = "Main";
+        private string _deltaSet = DeltaSetDefault;
 
         [Parameter(Mandatory = false, HelpMessage = "Defaults to 'Main'")]
         public string DeltaSet
@@ -99,7 +103,8 @@ namespace Dbdeploy.Powershell.Commands
         [Parameter(Mandatory = false, HelpMessage = "If not set, fetches current version from database")]
         public int? CurrentDbVersion { get; set; }
 
-        private string _tableName = "changelog";
+        private const string TableNameDefault = "changelog";
+        private string _tableName = TableNameDefault;
 
         [Parameter(Mandatory = false, HelpMessage = "Changelog table name. Defaults to changelog")]
         public string TableName
