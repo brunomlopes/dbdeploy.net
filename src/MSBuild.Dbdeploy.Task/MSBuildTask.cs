@@ -8,7 +8,7 @@ using Net.Sf.Dbdeploy.Exceptions;
 
 namespace MSBuild.Dbdeploy.Task
 {
-	public class Dbdeploy : Microsoft.Build.Utilities.Task
+	public class Dbdeploy : ITask
 	{
 		private string dbType;
 		private string dbConnection;
@@ -17,9 +17,14 @@ namespace MSBuild.Dbdeploy.Task
 		private FileInfo undoOutputfile;
 		private int lastChangeToApply = Int32.MaxValue;
 		private string deltaSet = "Main";
-		private bool useTransaction = false;
+		private bool useTransaction;
 
-		[Required]
+	    public Dbdeploy()
+	    {
+	        TableName = DatabaseSchemaVersionManager.DEFAULT_TABLE_NAME;
+	    }
+
+	    [Required]
 		public string DbType
 		{
 			set { dbType = value; }
@@ -67,11 +72,17 @@ namespace MSBuild.Dbdeploy.Task
 		{
 			get { return useTransaction; }
 			set { useTransaction = value; }
-		}
+        }
 
-		public override bool Execute()
+        public string TableName { get; set; }
+
+        public IBuildEngine BuildEngine { get; set; }
+
+        public ITaskHost HostObject { get; set; }
+
+		public bool Execute()
 		{
-			bool result = false;
+			var result = false;
 			try
 			{
 				LogTaskProperties();
@@ -83,11 +94,11 @@ namespace MSBuild.Dbdeploy.Task
 					{
 						undoOutputPrintStream = new StreamWriter(undoOutputfile.FullName);
 					}
-					DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
-					IDbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
-					DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, deltaSet, null);
+					var factory = new DbmsFactory(dbType, dbConnection);
+					var dbmsSyntax = factory.CreateDbmsSyntax();
+					var databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, deltaSet, null, TableName);
 
-					ToPrintStreamDeployer toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax, useTransaction, undoOutputPrintStream);
+					var toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax, useTransaction, undoOutputPrintStream);
 					toPrintSteamDeployer.DoDeploy(lastChangeToApply);
 
 					if (undoOutputPrintStream != null)
@@ -99,12 +110,10 @@ namespace MSBuild.Dbdeploy.Task
 			}
 			catch (DbDeployException ex)
 			{
-				Log.LogErrorFromException(ex, true);
 				Console.Error.WriteLine(ex.Message);
 			}
 			catch (Exception ex)
 			{
-				Log.LogErrorFromException(ex, true);
 				Console.Error.WriteLine("Failed to apply changes: " + ex.Message);
 				Console.Error.WriteLine("Stack Trace:");
 				Console.Error.Write(ex.StackTrace);
@@ -117,7 +126,7 @@ namespace MSBuild.Dbdeploy.Task
 	        if (BuildEngine == null)
                 return;
 
-	        StringBuilder builder = new StringBuilder();
+	        var builder = new StringBuilder();
 	        builder.Append("DbType=");
 	        builder.Append(dbType);
 	        builder.AppendLine();
@@ -139,8 +148,8 @@ namespace MSBuild.Dbdeploy.Task
 	        builder.Append("DeltaSet=");
 	        builder.Append(deltaSet);
 	        builder.AppendLine();
-                
-	        Log.LogMessage(builder.ToString());
+
+            Console.Error.WriteLine(builder.ToString());
 	    }
 	}
 }
