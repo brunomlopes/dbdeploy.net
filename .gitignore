@@ -30,3 +30,5 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 *.vs10x
+/local.properties
+/db/create.database.*
