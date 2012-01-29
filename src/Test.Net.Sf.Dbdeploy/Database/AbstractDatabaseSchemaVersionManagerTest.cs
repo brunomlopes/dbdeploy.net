@@ -40,7 +40,20 @@ namespace Net.Sf.Dbdeploy.Database
             }
             catch (SchemaVersionTrackingException ex)
             {
-                Assert.AreEqual(ChangelogTableDoesNotExistMessage, ex.Message);
+                // Allow exception messages in different languages.
+                // Kind of complicated, but with this way you see [expected] vs. [actual] on test failure.
+
+                string expected = ChangelogTableDoesNotExistMessages[0];
+
+                for (int i = 0; i < ChangelogTableDoesNotExistMessages.Length; i++)
+                {
+                    if (ChangelogTableDoesNotExistMessages[i].Equals(ex.Message))
+                    {
+                        expected = ChangelogTableDoesNotExistMessages[i];
+                    }
+                }
+
+                Assert.AreEqual(expected, ex.Message);
             }
         }
 
@@ -115,7 +128,7 @@ GO
 
         protected abstract string ConnectionString { get; }
         protected abstract string DeltaSet { get; }
-        protected abstract string ChangelogTableDoesNotExistMessage { get; }
+        protected abstract string[] ChangelogTableDoesNotExistMessages { get; }
 		protected abstract string Dbms { get; }
 		protected abstract IDbConnection GetConnection();
         protected abstract void CreateTable();

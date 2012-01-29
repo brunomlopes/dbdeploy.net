@@ -14,7 +14,10 @@ namespace Net.Sf.Dbdeploy.Database
 	{
 		private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["OracleConnString"];
 		private const string DELTA_SET = "All";
-		private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: ORA-00942: table or view does not exist\n";
+		private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new []
+		{ 
+			"Could not retrieve change log from database because: ORA-00942: table or view does not exist\n" 
+		};
 		private const string DBMS = "ora";
 
 		protected override string ConnectionString
@@ -27,9 +30,9 @@ namespace Net.Sf.Dbdeploy.Database
 			get { return DELTA_SET; }
 		}
 
-		protected override string ChangelogTableDoesNotExistMessage
+		protected override string[] ChangelogTableDoesNotExistMessages
 		{
-			get { return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE; }
+			get { return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES; }
 		}
 
 		protected override string Dbms
