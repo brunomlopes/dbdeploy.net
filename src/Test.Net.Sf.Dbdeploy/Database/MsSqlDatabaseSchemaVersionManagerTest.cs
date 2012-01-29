@@ -1,3 +1,5 @@
+#define GERMAN
+
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -11,7 +13,11 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["ConnString"];
         private const string DELTA_SET = "All";
-		private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: Invalid object name 'changelog'.";
+#if GERMAN
+        private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: Ungültiger Objektname 'changelog'.";
+#else
+        private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: Invalid object name 'changelog'.";
+#endif
 		private const string DBMS = "mssql";
 
         protected override string ConnectionString
