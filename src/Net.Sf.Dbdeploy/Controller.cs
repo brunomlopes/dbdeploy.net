@@ -14,19 +14,17 @@ namespace Net.Sf.Dbdeploy
         private readonly PrettyPrinter prettyPrinter = new PrettyPrinter();
         private static TextWriter infoWriter;
 
-        public Controller(DatabaseSchemaVersionManager schemaManager,
-                          ChangeScriptRepository changeScriptRepository,
-                          ChangeScriptExecuter changeScriptExecuter,
-                          TextWriter infoTextWriter)
+        public Controller(
+            DatabaseSchemaVersionManager schemaManager,
+            ChangeScriptRepository changeScriptRepository,
+            ChangeScriptExecuter changeScriptExecuter,
+            TextWriter infoTextWriter)
         {
             this.schemaManager = schemaManager;
             this.changeScriptRepository = changeScriptRepository;
             this.changeScriptExecuter = changeScriptExecuter;
             infoWriter = infoTextWriter;
-
         }
-
-
 
         public void ProcessDoChangeScripts(int lastChangeToApply, List<int> appliedChanges)
         {
@@ -40,7 +38,7 @@ namespace Net.Sf.Dbdeploy
             Info("Scripts available:\n  " + prettyPrinter.FormatChangeScriptList(doChangeScripts));
 
             changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateVersionCheck());
-            List<int> changesToApply = LoopThruDoScripts(lastChangeToApply, doChangeScripts, appliedChanges);
+            List<int> changesToApply = LoopThroughDoScripts(lastChangeToApply, doChangeScripts, appliedChanges);
             Info("To be applied:\n  " + prettyPrinter.Format(changesToApply));
         }
 
@@ -50,7 +48,7 @@ namespace Net.Sf.Dbdeploy
             LoopThruUndoScripts(lastChangeToApply, undoChangeScripts, appliedChanges);
         }
 
-        private List<int> LoopThruDoScripts(int lastChangeToApply, IEnumerable<ChangeScript> doChangeScripts, ICollection<int> appliedChanges)
+        private List<int> LoopThroughDoScripts(int lastChangeToApply, IEnumerable<ChangeScript> doChangeScripts, ICollection<int> appliedChanges)
         {
             List<int> changesToApply = new List<int>();
             foreach (ChangeScript changeScript in doChangeScripts)

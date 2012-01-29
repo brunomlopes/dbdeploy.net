@@ -8,7 +8,7 @@ namespace Net.Sf.Dbdeploy.Scripts
     public class DirectoryScanner
     {
         private readonly FilenameParser filenameParser;
-        private TextWriter infoTextWriter;
+        private readonly TextWriter infoTextWriter;
 
         public DirectoryScanner(TextWriter infoTextWriter)
         {
