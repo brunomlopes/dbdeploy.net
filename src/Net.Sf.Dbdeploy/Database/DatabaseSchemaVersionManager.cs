@@ -94,7 +94,7 @@ namespace Net.Sf.Dbdeploy.Database
                     return changeNumbers;
                 }
             }
-            catch (Exception e)
+            catch (DbException e)
             {
                 throw new SchemaVersionTrackingException("Could not retrieve change log from database because: "
                                                          + e.Message, e);
