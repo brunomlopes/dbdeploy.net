@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -78,7 +79,7 @@ namespace Net.Sf.Dbdeploy.Database
                     {
                         while (reader.Read())
                         {
-                        	int changeNumber = reader.GetInt32(0);
+                            int changeNumber = Int32.Parse(reader.GetValue(0).ToString());
 
 							if (reader.IsDBNull(1))
 							{
@@ -93,7 +94,7 @@ namespace Net.Sf.Dbdeploy.Database
                     return changeNumbers;
                 }
             }
-            catch (DbException e)
+            catch (Exception e)
             {
                 throw new SchemaVersionTrackingException("Could not retrieve change log from database because: "
                                                          + e.Message, e);
