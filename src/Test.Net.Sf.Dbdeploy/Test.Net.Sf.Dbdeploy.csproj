@@ -33,6 +33,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\dbdeploy.net\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +75,9 @@
   </Target>
   -->
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET35\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NAnt.Core.dll</HintPath>
@@ -106,21 +111,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Appliers\DirectToDbApplierAccessor.cs" />
+    <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Database\AbstractDatabaseSchemaVersionManagerTest.cs" />
-    <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\DbProvidersTest.cs" />
     <Compile Include="Database\DbProviderFileTest.cs" />
     <Compile Include="Database\MsSqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\OracleDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="DescriptionPrettyPrinterTest.cs" />
+    <Compile Include="DummyDbException.cs" />
     <Compile Include="OutputFileEncodingTest.cs" />
     <Compile Include="PrettyPrinterTest.cs" />
-    <Compile Include="Scripts\ChangeScriptExecuterTest.cs" />
     <Compile Include="Scripts\ChangeScriptRepositoryTest.cs" />
     <Compile Include="Scripts\ChangeScriptTest.cs" />
     <Compile Include="Scripts\FilenameParserTest.cs" />
+    <Compile Include="Scripts\StubChangeScript.cs" />
     <Compile Include="TextXmlConfiguration.cs" />
-    <Compile Include="ValidatorTest.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)dbproviders.xml" "$(TargetDir)"</PostBuildEvent>
@@ -129,6 +135,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -147,4 +154,5 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

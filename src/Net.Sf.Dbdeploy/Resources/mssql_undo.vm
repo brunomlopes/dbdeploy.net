@@ -1,0 +1,14 @@
+﻿#foreach($script in $scripts)
+
+-- START UNDO OF CHANGE SCRIPT $script
+
+$script.content
+
+DELETE FROM $changeLogTableName WHERE change_number = $script.id
+GO
+
+COMMIT
+GO
+
+-- END UNDO OF CHANGE SCRIPT ${script}
+#end

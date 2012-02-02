@@ -5,7 +5,7 @@ namespace Net.Sf.Dbdeploy.Database
     [TestFixture]
     public class DbProvidersTest
     {
-        private Providers providers;
+        private DbProviders providers;
 
         [SetUp]
         public void Setup()

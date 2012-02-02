@@ -33,16 +33,16 @@ namespace Net.Sf.Dbdeploy.Database
             return path;
         }
 
-        public Providers LoadProviders()
+        public DbProviders LoadProviders()
         {
             if (!File.Exists(Path))
             {
                 throw new FileNotFoundException("Could not load provider file from " + path);
             }
-            XmlSerializer serializer = new XmlSerializer(typeof(Providers));
+            XmlSerializer serializer = new XmlSerializer(typeof(DbProviders));
             using (XmlReader reader = new XmlTextReader(Path))
             {
-                return (Providers)serializer.Deserialize(reader);
+                return (DbProviders)serializer.Deserialize(reader);
             }
         }
     }

@@ -34,14 +34,7 @@ namespace Dbdeploy.Powershell
 
             DbConnectionString = ValueOrException("db.connection", "Connection string");
             DbType = ValueOrException("db.type", "Database type");
-            DbDeltaSet = ValueOrException("db.deltaSet", "Delta set name");
             TableName = ValueOrException("db.tableName", "Table name for change log");
-            UseTransaction = ValueOrDefault("db.useTransaction", false);
-        }
-
-        private bool ValueOrDefault(string key, bool defaultValue)
-        {
-            return keys.ContainsKey(key) ? keys[key].Trim().ToLowerInvariant() == "true" : defaultValue;
         }
 
         private string ValueOrException(string key, string message)
@@ -55,9 +48,6 @@ namespace Dbdeploy.Powershell
 
         public string DbConnectionString { get; private set; }
         public string DbType { get; private set; }
-        public string DbDeltaSet { get; private set; }
-        public bool UseTransaction { get; private set; }
-        public int? CurrentDbVersion { get; private set; }
         public string TableName { get; private set; }
     }
 }

@@ -3,7 +3,7 @@ using Net.Sf.Dbdeploy.Exceptions;
 
 namespace Net.Sf.Dbdeploy.Scripts
 {
-    public class ChangeScriptRepository
+    public class ChangeScriptRepository : IAvailableChangeScriptsProvider
     {
         private readonly List<ChangeScript> scripts;
 
@@ -24,8 +24,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             {
                 if (script.GetId() == lastId)
                 {
-                    throw new DuplicateChangeScriptException("There is more than one change script with number " +
-                                                             lastId);
+                    throw new DuplicateChangeScriptException("There is more than one change script with number " + lastId);
                 }
 
                 lastId = script.GetId();
@@ -41,6 +40,11 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             scripts.Reverse();
             return new List<ChangeScript>(scripts.AsReadOnly());
+        }
+
+        ICollection<ChangeScript> IAvailableChangeScriptsProvider.GetAvailableChangeScripts()
+        {
+            return this.GetOrderedListOfDoChangeScripts();
         }
     }
 }

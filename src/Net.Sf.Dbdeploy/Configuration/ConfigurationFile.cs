@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Configuration;
 
 namespace Net.Sf.Dbdeploy.Configuration
@@ -15,38 +15,9 @@ namespace Net.Sf.Dbdeploy.Configuration
             get { return ConfigurationManager.AppSettings["db.type"]; }
         }
 
-        public string DbDeltaSet
+        public string TableName
         {
-            get { return ConfigurationManager.AppSettings["db.deltaSet"]; }
+            get { return ConfigurationManager.AppSettings["db.tableName"]; }
         }
-
-    	public bool UseTransaction
-    	{
-			get
-			{
-				string useTransactionSetting = ConfigurationManager.AppSettings["db.usetransaction"];
-				bool useTransaction;
-				bool.TryParse(useTransactionSetting, out useTransaction);
-
-				return useTransaction;
-			}
-    	}
-
-        public int? CurrentDbVersion
-        {
-            get
-            {
-                string versionSetting = ConfigurationManager.AppSettings["db.currentversion"];
-                int version;
-                Int32.TryParse(versionSetting, out version);
-                if (version == 0) return null;
-                return version;
-            }
-        }
-
-    	public string TableName
-    	{
-			get { return ConfigurationManager.AppSettings["db.tableName"]; }
-    	}
     }
 }

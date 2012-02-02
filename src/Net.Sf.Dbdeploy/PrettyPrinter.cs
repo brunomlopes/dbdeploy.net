@@ -7,7 +7,7 @@ namespace Net.Sf.Dbdeploy
 {
     public class PrettyPrinter
     {
-        public String Format(List<int> appliedChanges)
+        public String Format(ICollection<int> appliedChanges)
         {
             if (appliedChanges.Count == 0)
             {
@@ -72,7 +72,7 @@ namespace Net.Sf.Dbdeploy
             builder.Append(o);
         }
 
-        public String FormatChangeScriptList(List<ChangeScript> changeScripts)
+        public String FormatChangeScriptList(ICollection<ChangeScript> changeScripts)
         {
             List<int> numberList = new List<int>(changeScripts.Count);
 

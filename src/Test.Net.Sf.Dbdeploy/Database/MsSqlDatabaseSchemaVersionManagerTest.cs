@@ -43,7 +43,7 @@ namespace Net.Sf.Dbdeploy.Database
     	protected override void EnsureTableDoesNotExist()
         {
             ExecuteSql(string.Format(
-				"IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", databaseSchemaVersion.TableName));
+				"IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", TableName));
         }
 
     	protected override IDbConnection GetConnection()
@@ -54,7 +54,7 @@ namespace Net.Sf.Dbdeploy.Database
     	protected override void CreateTable()
         {
             ExecuteSql(
-				"CREATE TABLE " + databaseSchemaVersion.TableName + "( " +
+				"CREATE TABLE " + TableName + "( " +
                 "change_number INTEGER NOT NULL, " +
                 "delta_set VARCHAR(10) NOT NULL, " +
                 "start_dt DATETIME NOT NULL, " +
@@ -62,31 +62,17 @@ namespace Net.Sf.Dbdeploy.Database
                 "applied_by VARCHAR(100) NOT NULL, " +
                 "description VARCHAR(500) NOT NULL )");
             ExecuteSql(
-				"ALTER TABLE " + databaseSchemaVersion.TableName +
+				"ALTER TABLE " + TableName +
                 " ADD CONSTRAINT Pkchangelog  PRIMARY KEY (change_number, delta_set)");
         }
 
         protected override void InsertRowIntoTable(int i)
         {
-			ExecuteSql("INSERT INTO " + databaseSchemaVersion.TableName
+			ExecuteSql("INSERT INTO " + TableName
                        + " (change_number, delta_set, start_dt, complete_dt, applied_by, description) VALUES ( "
                        + i + ", '" + DELTA_SET
                        + "', getdate(), getdate(), user_name(), 'Unit test')");
         }
-
-    	[Test]
-		[ExpectedException(typeof(DbDeployException))]
-    	public void ShouldThrowExceptionIfIncompletedScriptIsFound()
-    	{
-    		EnsureTableDoesNotExist();
-    		CreateTable();
-			ExecuteSql("INSERT INTO " + databaseSchemaVersion.TableName
-					   + " (change_number, delta_set, start_dt, complete_dt, applied_by, description) VALUES ( "
-					   + 1 + ", '" + DELTA_SET
-					   + "', getdate(), NULL, user_name(), 'Unit test')");
-
-    		databaseSchemaVersion.GetAppliedChangeNumbers();
-    	}
 
     	[Test]
     	public void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
@@ -94,34 +80,11 @@ namespace Net.Sf.Dbdeploy.Database
 			EnsureTableDoesNotExist();
 			CreateTable();
     		InsertRowIntoTable(3);
-			List<int> changeNumbers = databaseSchemaVersion.GetAppliedChangeNumbers();
+			List<int> changeNumbers = new List<int>(databaseSchemaVersion.GetAppliedChanges());
 
 			Assert.AreEqual(1, changeNumbers.Count);
 			Assert.AreEqual(3, changeNumbers[0]);
 		}
-
-		[Test]
-		public void TestCanGenerateVersionCheck()
-		{
-			databaseSchemaVersion = new DatabaseSchemaVersionManager(new DbmsFactory(DBMS, CONNECTION_STRING), "Main", 5);
-			Assert.AreEqual(@"DECLARE @currentDatabaseVersion INTEGER, @errMsg VARCHAR(1000)
-SELECT @currentDatabaseVersion = MAX(change_number) FROM changelog WHERE delta_set = 'Main'
-IF (@currentDatabaseVersion <> 5)
-BEGIN
-    SET @errMsg = 'Error: current database version on delta_set <Main> is not 5, but ' + CONVERT(VARCHAR, @currentDatabaseVersion)
-    RAISERROR (@errMsg, 16, 1)
-END
-
-GO
-
-", databaseSchemaVersion.GenerateVersionCheck());
-		}
-
-    	[Test]
-        public override void TestCanRetrieveDeltaFragmentFooterSql()
-        {
-            base.TestCanRetrieveDeltaFragmentFooterSql();
-        }
 
         [Test]
         public override void TestCanRetrieveSchemaVersionFromDatabase()
@@ -140,17 +103,5 @@ GO
         {
             base.TestShouldReturnEmptySetWhenTableHasNoRows();
         }
-
-        [Test]
-        public override void TestCanRetrieveDeltaFragmentHeaderSql()
-        {
-            base.TestCanRetrieveDeltaFragmentHeaderSql();
-        }
-
-		[Test]
-		public override void TestCanSetChangeLogTableName()
-		{
-			base.TestCanSetChangeLogTableName();
-		}
     }
 }

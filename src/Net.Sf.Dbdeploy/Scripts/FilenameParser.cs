@@ -10,16 +10,16 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         public FilenameParser()
         {
-            pattern = new Regex(@"^(\d+)");
+            pattern = new Regex(@"^(\d+)", RegexOptions.Compiled);
         }
 
         public int ExtractIdFromFilename(String filename)
         {
             Match match = pattern.Match(filename);
+            
             if (!match.Success || match.Groups.Count != 2)
-            {
                 throw new UnrecognisedFilenameException("Could not extract a change script number from filename: " + filename);
-            }
+
             return Int32.Parse(match.Groups[1].Value);
         }
     }

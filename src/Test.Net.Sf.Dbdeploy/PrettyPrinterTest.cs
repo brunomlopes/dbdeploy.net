@@ -10,7 +10,7 @@ namespace Net.Sf.Dbdeploy
         private PrettyPrinter prettyPrinter;
 
         [SetUp]
-        protected void setUp()
+        protected void SetUp()
         {
             prettyPrinter = new PrettyPrinter();
         }
