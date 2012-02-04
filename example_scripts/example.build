@@ -5,9 +5,8 @@
 	<target name="generate-script" description="generate a sql upgrade script">
 	<dbdeploy dbType="mssql" 
 		dbConnection="Server=localhost;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=password"
-                dir="."  
+		dir="."  
 		outputFile="output.sql" 
-		undoOutputFile="output-undo.sql"
-		useTransaction="false" />
+		undoOutputFile="output-undo.sql" />
     </target>
 </project>

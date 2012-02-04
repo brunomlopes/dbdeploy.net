@@ -80,6 +80,7 @@
             <include name="MSBuild.Dbdeploy.Task.dll" />
             <include name="NAnt.Core.dll" />
             <include name="dbdeploy.exe*" />
+			<include name="Resources/*.sql" />
           </fileset>
           <fileset basedir="scripts" prefix="scripts/">
             <include name="**/*" />
