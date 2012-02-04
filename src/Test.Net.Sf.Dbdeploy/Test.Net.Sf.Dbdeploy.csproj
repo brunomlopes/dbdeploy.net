@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="Appliers\DirectToDbApplierAccessor.cs" />
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
+    <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\QueryStatementSplitterTest.cs" />
     <Compile Include="Database\ScriptGenerationTest.cs" />
     <Compile Include="NullWriter.cs" />

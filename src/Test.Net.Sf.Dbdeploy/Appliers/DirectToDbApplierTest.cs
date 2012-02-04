@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Moq;
 using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Exceptions;
@@ -10,22 +11,28 @@ namespace Net.Sf.Dbdeploy.Appliers
 {
     class DirectToDbApplierTest
     {
-        private readonly Mock<QueryExecuter> queryExecuter;
-        private readonly Mock<DatabaseSchemaVersionManager> schemaVersionManager;
-        private readonly Mock<QueryStatementSplitter> splitter;
+        private Mock<QueryExecuter> queryExecuter;
+        private Mock<DatabaseSchemaVersionManager> schemaVersionManager;
+        private Mock<QueryStatementSplitter> splitter;
 
         private DirectToDbApplierAccessor applier;
 
-        public DirectToDbApplierTest()
-        {
-            this.queryExecuter = new Mock<QueryExecuter>();
-            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>();
-            this.splitter = new Mock<QueryStatementSplitter>();
-        }
-
         [SetUp]
-        public void SetUp() 
+        public void SetUp()
         {
+            IDbmsSyntax syntax = null;
+            QueryExecuter nullExecuter = null;
+
+            var factory = new Mock<DbmsFactory>("mssql", string.Empty);
+            factory.Setup(f => f.CreateConnection()).Returns(new Mock<IDbConnection>().Object);
+            factory.Setup(f => f.CreateDbmsSyntax()).Returns(syntax);
+
+            this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
+
+            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty");
+
+            this.splitter = new Mock<QueryStatementSplitter>();
+
             this.applier = new DirectToDbApplierAccessor(
                 this.queryExecuter.Object,
                 this.schemaVersionManager.Object,

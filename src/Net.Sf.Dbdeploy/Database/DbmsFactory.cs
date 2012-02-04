@@ -20,7 +20,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.providers = new DbProviderFile().LoadProviders();
         }
 
-        public IDbmsSyntax CreateDbmsSyntax()
+        public virtual IDbmsSyntax CreateDbmsSyntax()
         {
             switch (this.dbms)
             {
@@ -35,7 +35,7 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        public IDbConnection CreateConnection()
+        public virtual IDbConnection CreateConnection()
         {
             DatabaseProvider provider = this.providers.GetProvider(dbms);
 

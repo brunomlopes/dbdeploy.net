@@ -17,12 +17,12 @@ namespace Net.Sf.Dbdeploy.Appliers
         
         public void ApplyChangeScript(ChangeScript script)
         {
-            this.ApplyChangeScript(script);
+            base.ApplyChangeScript(script);
         }
 
         public void InsertToSchemaVersionTable(ChangeScript changeScript)
         {
-            this.InsertToSchemaVersionTable(changeScript);
+            base.InsertToSchemaVersionTable(changeScript);
         }
     }
 }

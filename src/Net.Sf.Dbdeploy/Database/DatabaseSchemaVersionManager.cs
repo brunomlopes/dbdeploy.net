@@ -48,12 +48,12 @@ namespace Net.Sf.Dbdeploy.Database
             }            
         }
 
-        public string GetChangelogDeleteSql(ChangeScript script)
+        public virtual string GetChangelogDeleteSql(ChangeScript script)
         {
             return string.Format("DELETE FROM {0} WHERE change_number = {1}", this.changeLogTableName, script.GetId());
         }
 
-        public void RecordScriptApplied(ChangeScript script)
+        public virtual void RecordScriptApplied(ChangeScript script)
         {
             try
             {

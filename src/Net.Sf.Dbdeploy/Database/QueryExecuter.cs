@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.connection.Open();
         }
 
-        public IDataReader ExecuteQuery(string sql)
+        public virtual IDataReader ExecuteQuery(string sql)
         {
             using (IDbCommand command = this.connection.CreateCommand())
             {
@@ -26,7 +26,7 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        public IDataReader Execute(string sql, params object[] parameters)
+        public virtual IDataReader Execute(string sql, params object[] parameters)
         {
             using (IDbCommand command = this.connection.CreateCommand())
             {
@@ -49,7 +49,7 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        public void Execute(string sql)
+        public virtual void Execute(string sql)
         {
             using (IDbCommand command = this.connection.CreateCommand())
             {
@@ -59,7 +59,7 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        public void BeginTransaction()
+        public virtual void BeginTransaction()
         {
             if (this.transaction != null)
                 throw new InvalidOperationException("There is already an open transaction.");
@@ -67,7 +67,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.transaction = this.connection.BeginTransaction();
         }
 
-        public void CommitTransaction()
+        public virtual void CommitTransaction()
         {
             if (this.transaction == null)
                 throw new InvalidOperationException("There is no open transaction.");
@@ -78,7 +78,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.transaction = null;
         }
 
-        public void Close()
+        public virtual void Close()
         {
             if (this.connection.State == ConnectionState.Open)
             {
