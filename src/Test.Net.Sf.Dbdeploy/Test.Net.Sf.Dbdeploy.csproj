@@ -113,6 +113,10 @@
   <ItemGroup>
     <Compile Include="Appliers\DirectToDbApplierAccessor.cs" />
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
+    <Compile Include="Database\QueryStatementSplitterTest.cs" />
+    <Compile Include="Database\ScriptGenerationTest.cs" />
+    <Compile Include="NullWriter.cs" />
+    <Compile Include="Appliers\TemplateBaseApplierTest.cs" />
     <Compile Include="Database\AbstractDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\DbProvidersTest.cs" />
     <Compile Include="Database\DbProviderFileTest.cs" />
@@ -153,6 +157,17 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Database\ora_expected.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Database\mysql_expected.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Database\mssql_expected.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

@@ -6,6 +6,9 @@ using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Scripts;
 using NVelocity;
 using NVelocity.App;
+using Net.Sf.Dbdeploy.Exceptions;
+using NVelocity.Exception;
+using Commons.Collections;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
@@ -31,11 +34,11 @@ namespace Net.Sf.Dbdeploy.Appliers
             IDelimiterType delimiterType,
             DirectoryInfo templateDirectory)
         {
-            this.templateDirectory = templateDirectory;
             this.delimiterType = delimiterType;
             this.delimiter = delimiter;
             this.changeLogTableName = changeLogTableName;
             this.syntax = syntax;
+            this.templateDirectory = templateDirectory ?? new DirectoryInfo(@".\Resources");
             this.writer = writer;
         }
 
@@ -48,15 +51,28 @@ namespace Net.Sf.Dbdeploy.Appliers
             model.Add("scripts", changeScripts);
             model.Add("changeLogTableName", this.changeLogTableName);
             model.Add("delimiter", this.delimiter);
-            model.Add("seperator", this.delimiterType is RowDelimiter ? Environment.NewLine : string.Empty);
+            model.Add("separator", this.delimiterType is RowDelimiter ? Environment.NewLine : string.Empty);
 
-            var templateEngine = new VelocityEngine();
-            var context = new VelocityContext(model);
+            try
+            {
+                ExtendedProperties props = new ExtendedProperties();
+                props.SetProperty("file.resource.loader.path", this.templateDirectory.FullName);
 
-            Template template = templateEngine.GetTemplate(
-                Path.Combine(this.templateDirectory.FullName, filename));
+                var templateEngine = new VelocityEngine(props);
 
-            template.Merge(context, this.writer);
+                var context = new VelocityContext(model);
+
+                Template template = templateEngine.GetTemplate(filename);
+
+                template.Merge(context, this.writer);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                throw new UsageException(
+                    "Could not find template named " + filename + Environment.NewLine 
+                    + "Check that you have got the name of the database syntax correct.", 
+                    ex);
+            }
         }
 
         protected virtual string GetTemplateQualifier()

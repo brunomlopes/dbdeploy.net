@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -39,12 +38,14 @@ namespace Net.Sf.Dbdeploy.Database
         {
             var statements = new List<string>();
             var currentSql = new StringBuilder();
-            string[] lines = Regex.Split(input, "\r\n");
-
+            string[] lines = input.Split("\r\n".ToCharArray());
 
             foreach (string line in lines)
             {
                 string strippedLine = line.TrimEnd();
+
+                if (string.IsNullOrEmpty(strippedLine))
+                    continue;
 
                 if (currentSql.Length != 0)
                 {

@@ -2,13 +2,14 @@
 
 -- START UNDO OF CHANGE SCRIPT $script
 
-$script.content
+$script.getContent()
 
-DELETE FROM $changeLogTableName WHERE change_number = $script.id
+DELETE FROM $changeLogTableName WHERE change_number = $script.getId()
 GO
 
 COMMIT
 GO
 
 -- END UNDO OF CHANGE SCRIPT ${script}
+
 #end

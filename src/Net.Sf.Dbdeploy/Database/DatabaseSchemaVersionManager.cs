@@ -22,7 +22,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.changeLogTableName = changeLogTableName;
         }
 
-    	public ICollection<int> GetAppliedChanges()
+    	public virtual ICollection<int> GetAppliedChanges()
         {
             List<int> changeNumbers = new List<int>();
             try

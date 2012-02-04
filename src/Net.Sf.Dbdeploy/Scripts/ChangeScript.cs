@@ -9,7 +9,9 @@ namespace Net.Sf.Dbdeploy.Scripts
         private const string UndoToken = "--//@UNDO";
 
         private readonly int id;
+
         private readonly FileInfo file;
+        
         private readonly String description;
 
         public ChangeScript(int id)
@@ -21,35 +23,35 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             this.id = id;
             this.file = file;
-            description = file.Name;
+            this.description = file.Name;
         }
 
         public ChangeScript(int id, String description)
         {
             this.id = id;
-            file = null;
+            this.file = null;
             this.description = description;
         }
 
         public FileInfo GetFile()
         {
-            return file;
+            return this.file;
         }
 
         public int GetId()
         {
-            return id;
+            return this.id;
         }
 
         public String GetDescription()
         {
-            return description;
+            return this.description;
         }
 
         public int CompareTo(object o)
         {
             ChangeScript other = (ChangeScript) o;
-            return id.CompareTo(other.id);
+            return this.id.CompareTo(other.id);
         }
 
         public virtual string GetContent()
@@ -68,7 +70,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             bool foundUndo = false;
 
-            using (StreamReader input = File.OpenText(file.FullName))
+            using (StreamReader input = File.OpenText(this.file.FullName))
             {
                 string str;
                 while ((str = input.ReadLine()) != null)
@@ -95,10 +97,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         public override string ToString()
         {
-            if (file != null)
-                return "#" + id + ": " + file.Name;
-
-            return "#" + id;
+            return "#" + this.id + ": " + this.description;
         }
     }
 }
