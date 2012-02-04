@@ -20,7 +20,7 @@ namespace Dbdeploy.Powershell.Commands
                 .GetChangeScriptsForDirectory(new DirectoryInfo(this.deltasDirectory));
             
             var repository = new ChangeScriptRepository(allChangeScripts);
-            var changeScripts = repository.GetOrderedListOfDoChangeScripts();
+            var changeScripts = repository.GetAvailableChangeScripts();
 
             DbmsFactory factory = new DbmsFactory(this.DatabaseType, this.ConnectionString);
             var queryExecuter = new QueryExecuter(factory);

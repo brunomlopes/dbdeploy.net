@@ -31,20 +31,9 @@ namespace Net.Sf.Dbdeploy.Scripts
             }
         }
 
-        public List<ChangeScript> GetOrderedListOfDoChangeScripts()
+        public ICollection<ChangeScript> GetAvailableChangeScripts()
         {
             return new List<ChangeScript>(scripts.AsReadOnly());
-        }
-
-        public List<ChangeScript> GetOrderedListOfUndoChangeScripts()
-        {
-            scripts.Reverse();
-            return new List<ChangeScript>(scripts.AsReadOnly());
-        }
-
-        ICollection<ChangeScript> IAvailableChangeScriptsProvider.GetAvailableChangeScripts()
-        {
-            return this.GetOrderedListOfDoChangeScripts();
         }
     }
 }
