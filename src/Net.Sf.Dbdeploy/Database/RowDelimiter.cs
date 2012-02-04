@@ -1,7 +1,7 @@
 ﻿namespace Net.Sf.Dbdeploy.Database
 {
     /// <summary>
-    /// Delimiter must be on a line all to itself
+    /// Delimiter must be on a line all by itself
     /// </summary>
     public class RowDelimiter : IDelimiterType
     {

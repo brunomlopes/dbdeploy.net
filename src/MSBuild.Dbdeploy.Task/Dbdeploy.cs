@@ -15,7 +15,7 @@ namespace MSBuild.Dbdeploy.Task
         {
             this.dbDeploy = new DbDeployer();
 
-            this.dbDeploy.InfoWriter = Console.Error;
+            this.dbDeploy.InfoWriter = Console.Out;
         }
 
         [Required]
@@ -37,7 +37,6 @@ namespace MSBuild.Dbdeploy.Task
             set { this.dbDeploy.ScriptDirectory = new DirectoryInfo(value); }
         }
 
-        [Required]
         public string OutputFile
         {
             get { return this.dbDeploy.OutputFile.FullName; }
@@ -83,10 +82,7 @@ namespace MSBuild.Dbdeploy.Task
 
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                switch (value.ToUpperInvariant())
+                switch ((value ?? string.Empty).ToUpperInvariant())
                 {
                     case "ROW":
                         this.dbDeploy.DelimiterType = new RowDelimiter();
@@ -134,21 +130,24 @@ namespace MSBuild.Dbdeploy.Task
 
         public void PrintUsage()
         {
-            string message = "\n\nDbdeploy MSBuild Task Usage"
-                + "\n======================="
-                + "\n\n\t<Dbdeploy"
-                + "\n\t\tDbConnection=\"[DATABASE CONECTIONSTRING]\" *"
-                + "\n\t\tdbms=\"[YOUR DBMS]\" *"
-                + "\n\t\ttemplatedir=\"[DIRECTORY FOR DBMS TEMPLATE SCRIPTS, IF NOT USING BUILT-IN]\""
-                + "\n\t\tdir=\"[YOUR SCRIPT FOLDER]\" *"
-                + "\n\t\toutputfile=\"[OUTPUT SCRIPT PATH + NAME]\""
-                + "\n\t\tlastChangeToApply=\"[NUMBER OF THE LAST SCRIPT TO APPLY]\""
-                + "\n\t\tundoOutputfile=\"[UNDO SCRIPT PATH + NAME]\""
-                + "\n\t\tchangeLogTableName=\"[CHANGE LOG TABLE NAME - default changelog]\""
-                + "\n\t\tdelimiter=\"[STATEMENT DELIMITER - default ;]\""
-                + "\n\t\tdelimitertype=\"[STATEMENT DELIMITER TYPE - row or normal, default normal]\""
-                + "\n\t/>"
-                + "\n\n* - Indicates mandatory parameter";
+            string message = Environment.NewLine 
+                + Environment.NewLine + "Dbdeploy MSBuild Task Usage"
+                + Environment.NewLine + "======================="
+                + Environment.NewLine 
+                + Environment.NewLine + "\t<Dbdeploy"
+                + Environment.NewLine + "\t\tDbConnection=\"[DATABASE CONECTIONSTRING]\" *"
+                + Environment.NewLine + "\t\tdbms=\"[YOUR DBMS]\" *"
+                + Environment.NewLine + "\t\ttemplatedir=\"[DIRECTORY FOR DBMS TEMPLATE SCRIPTS, IF NOT USING BUILT-IN]\""
+                + Environment.NewLine + "\t\tdir=\"[YOUR SCRIPT FOLDER]\" *"
+                + Environment.NewLine + "\t\toutputfile=\"[OUTPUT SCRIPT PATH + NAME]\""
+                + Environment.NewLine + "\t\tlastChangeToApply=\"[NUMBER OF THE LAST SCRIPT TO APPLY]\""
+                + Environment.NewLine + "\t\tundoOutputfile=\"[UNDO SCRIPT PATH + NAME]\""
+                + Environment.NewLine + "\t\tchangeLogTableName=\"[CHANGE LOG TABLE NAME - default changelog]\""
+                + Environment.NewLine + "\t\tdelimiter=\"[STATEMENT DELIMITER - default ;]\""
+                + Environment.NewLine + "\t\tdelimitertype=\"[STATEMENT DELIMITER TYPE - row or normal, default normal]\""
+                + Environment.NewLine + "\t/>"
+                + Environment.NewLine 
+                + Environment.NewLine + "* - Indicates mandatory parameter";
 
             Console.Out.WriteLine(message);
         }

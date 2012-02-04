@@ -34,10 +34,11 @@ namespace Net.Sf.Dbdeploy.Database
             set { this.lineEnding = value; }
         }
 
-        public virtual IEnumerable<string> Split(string input)
+        public virtual ICollection<string> Split(string input)
         {
             var statements = new List<string>();
             var currentSql = new StringBuilder();
+
             string[] lines = input.Split("\r\n".ToCharArray());
 
             foreach (string line in lines)

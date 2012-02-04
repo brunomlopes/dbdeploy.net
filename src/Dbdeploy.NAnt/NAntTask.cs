@@ -32,17 +32,17 @@ namespace Net.Sf.Dbdeploy
         }
         
         [TaskAttribute("dir", Required = true)]
-        public string Dir
+        public DirectoryInfo Dir
         {
-            get { return this.dbDeploy.ScriptDirectory.FullName; }
-            set { this.dbDeploy.ScriptDirectory = new DirectoryInfo(value); }
+            get { return this.dbDeploy.ScriptDirectory; }
+            set { this.dbDeploy.ScriptDirectory = value; }
         }
         
         [TaskAttribute("outputFile")]
-        public string OutputFile
+        public FileInfo OutputFile
         {
-            get { return this.dbDeploy.OutputFile.FullName; }
-            set { this.dbDeploy.OutputFile = new FileInfo(value); }
+            get { return this.dbDeploy.OutputFile; }
+            set { this.dbDeploy.OutputFile = value; }
         }
         
         [TaskAttribute("outputFileEncoding")]
@@ -53,17 +53,17 @@ namespace Net.Sf.Dbdeploy
         }
         
         [TaskAttribute("undoOutputFile")]
-        public string UndoOutputFile
+        public FileInfo UndoOutputFile
         {
-            get { return this.dbDeploy.UndoOutputFile.FullName; }
-            set { this.dbDeploy.UndoOutputFile = new FileInfo(value); }
+            get { return this.dbDeploy.UndoOutputFile; }
+            set { this.dbDeploy.UndoOutputFile = value; }
         }
         
         [TaskAttribute("templateDir")]
-        public string TemplateDir
+        public DirectoryInfo TemplateDir
         {
-            get { return this.dbDeploy.TemplateDir.FullName; }
-            set { this.dbDeploy.TemplateDir = new DirectoryInfo(value); }
+            get { return this.dbDeploy.TemplateDir; }
+            set { this.dbDeploy.TemplateDir = value; }
         }
         
         [TaskAttribute("lastChangeToApply")]
@@ -97,10 +97,7 @@ namespace Net.Sf.Dbdeploy
 
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                switch (value.ToUpperInvariant())
+                switch ((value ?? string.Empty).ToUpperInvariant())
                 {
                     case "ROW":
                         this.dbDeploy.DelimiterType = new RowDelimiter();
@@ -129,6 +126,7 @@ namespace Net.Sf.Dbdeploy
             catch (DbDeployException ex)
             {
                 Console.Error.WriteLine(ex.Message);
+
                 throw new BuildException(ex.Message);
             }
             catch (Exception ex)
@@ -136,6 +134,7 @@ namespace Net.Sf.Dbdeploy
                 Console.Error.WriteLine("Failed to apply changes: " + ex);
                 Console.Error.WriteLine("Stack Trace:");
                 Console.Error.Write(ex.StackTrace);
+
                 throw new BuildException(ex.Message);
             }
         }

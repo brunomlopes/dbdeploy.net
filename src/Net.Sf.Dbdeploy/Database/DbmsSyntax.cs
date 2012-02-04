@@ -1,4 +1,3 @@
-
 namespace Net.Sf.Dbdeploy.Database
 {
     public abstract class DbmsSyntax : IDbmsSyntax

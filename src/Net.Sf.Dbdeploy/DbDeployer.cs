@@ -50,7 +50,7 @@ namespace Net.Sf.Dbdeploy
         {
             Version version = Assembly.GetAssembly(this.GetType()).GetName().Version;
             
-            return "dbdeploy " + version;
+            return "dbdeploy.net " + version;
         }
 
         public void Go()
@@ -81,12 +81,12 @@ namespace Net.Sf.Dbdeploy
                 doWriter = new StreamWriter(this.OutputFile.OpenWrite(), this.OutputEncoding);
 
                 doScriptApplier = new TemplateBasedApplier(
-                        doWriter, 
-                        this.Dbms, 
-                        this.ChangeLogTableName, 
-                        this.Delimiter, 
-                        this.DelimiterType, 
-                        this.TemplateDir);
+                    doWriter, 
+                    this.Dbms, 
+                    this.ChangeLogTableName, 
+                    this.Delimiter, 
+                    this.DelimiterType, 
+                    this.TemplateDir);
             } 
             else 
             {
@@ -97,7 +97,11 @@ namespace Net.Sf.Dbdeploy
                     LineEnding = this.LineEnding,
                 };
 
-                doScriptApplier = new DirectToDbApplier(queryExecuter, databaseSchemaVersionManager, splitter, this.InfoWriter);
+                doScriptApplier = new DirectToDbApplier(
+                    queryExecuter, 
+                    databaseSchemaVersionManager, 
+                    splitter, 
+                    this.InfoWriter);
             }
 
             IChangeScriptApplier undoScriptApplier = null;
@@ -141,12 +145,12 @@ namespace Net.Sf.Dbdeploy
 
         private void Validate() 
         {
-            CheckForRequiredParameter(this.Dbms, "dbms");
-            CheckForRequiredParameter(this.ConnectionString, "connectionString");
-            CheckForRequiredParameter(this.ScriptDirectory, "dir");
-            CheckForRequiredParameter(this.InfoWriter, "infoWriter");
+            this.CheckForRequiredParameter(this.Dbms, "dbms");
+            this.CheckForRequiredParameter(this.ConnectionString, "connectionString");
+            this.CheckForRequiredParameter(this.ScriptDirectory, "dir");
+            this.CheckForRequiredParameter(this.InfoWriter, "infoWriter");
 
-            if (ScriptDirectory == null || !ScriptDirectory.Exists) 
+            if (this.ScriptDirectory == null || !this.ScriptDirectory.Exists) 
             {
                 throw new UsageException("Script directory must point to a valid directory");
             }

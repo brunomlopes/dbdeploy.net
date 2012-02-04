@@ -4,16 +4,18 @@ namespace Net.Sf.Dbdeploy.Exceptions
 {
     public class UnrecognisedFilenameException : DbDeployException
     {
-        public UnrecognisedFilenameException(String message, Exception cause) : base(message, cause)
+        public UnrecognisedFilenameException(string message, Exception inner) 
+            : base(message, inner)
         {
         }
 
-        public UnrecognisedFilenameException(String message) : base(message)
+        public UnrecognisedFilenameException(string message) 
+            : base(message)
         {
         }
 
-        public UnrecognisedFilenameException(Exception cause)
-            : base(cause)
+        public UnrecognisedFilenameException(Exception inner)
+            : base(inner)
         {
         }
     }

@@ -8,19 +8,23 @@ namespace Net.Sf.Dbdeploy.Scripts
     public class DirectoryScanner
     {
         private readonly FilenameParser filenameParser;
+
         private readonly TextWriter infoTextWriter;
 
         public DirectoryScanner(TextWriter infoTextWriter)
         {
-            filenameParser = new FilenameParser();
+            this.filenameParser = new FilenameParser();
             this.infoTextWriter = infoTextWriter;
         }
 
         public List<ChangeScript> GetChangeScriptsForDirectory(DirectoryInfo directory)
         {
+            if (directory == null)
+                throw new ArgumentNullException("directory");
+
             try
             {
-                infoTextWriter.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
+                this.infoTextWriter.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
             }
             catch (IOException)
             {
@@ -35,9 +39,11 @@ namespace Net.Sf.Dbdeploy.Scripts
                     continue;
 
                 string filename = file.Name;
+
                 try
                 {
-                    int id = filenameParser.ExtractIdFromFilename(filename);
+                    int id = this.filenameParser.ExtractIdFromFilename(filename);
+
                     scripts.Add(new ChangeScript(id, file));
                 }
                 catch (UnrecognisedFilenameException)

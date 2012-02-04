@@ -4,6 +4,7 @@ using System.IO;
 using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
+using System;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
@@ -23,10 +24,22 @@ namespace Net.Sf.Dbdeploy.Appliers
             QueryStatementSplitter splitter,
             TextWriter infoTextWriter)
         {
-            this.infoTextWriter = infoTextWriter;
+            if (queryExecuter == null)
+                throw new ArgumentNullException("queryExecuter");
+
+            if (schemaVersionManager == null)
+                throw new ArgumentNullException("schemaVersionManager");
+
+            if (splitter == null)
+                throw new ArgumentNullException("splitter");
+
+            if (infoTextWriter == null)
+                throw new ArgumentNullException("infoTextWriter");
+
             this.queryExecuter = queryExecuter;
             this.schemaVersionManager = schemaVersionManager;
             this.splitter = splitter;
+            this.infoTextWriter = infoTextWriter;
         }
 
         public void Apply(IEnumerable<ChangeScript> changeScripts)
@@ -49,7 +62,7 @@ namespace Net.Sf.Dbdeploy.Appliers
 
         protected void ApplyChangeScript(ChangeScript script)
         {
-            IList<string> statements = new List<string>(this.splitter.Split(script.GetContent()));
+            ICollection<string> statements = this.splitter.Split(script.GetContent());
 
             int i = 0;
 

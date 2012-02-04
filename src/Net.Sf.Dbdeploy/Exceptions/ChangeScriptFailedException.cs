@@ -39,8 +39,7 @@ namespace Net.Sf.Dbdeploy.Exceptions
         {
 	        get
             {
-                return "change script " + this.script
-                  + " failed while executing statement " + this.statement + ":" + Environment.NewLine
+                return "Change script " + this.script + " failed while executing statement " + this.statement + ":" + Environment.NewLine
                   + this.executedSql + Environment.NewLine 
                   + " -> " + this.InnerException.Message;
 	        }

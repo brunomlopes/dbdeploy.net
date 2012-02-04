@@ -28,7 +28,7 @@ namespace Net.Sf.Dbdeploy.Appliers
             factory.Setup(f => f.CreateDbmsSyntax()).Returns(syntax);
 
             this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
-
+            
             this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty");
 
             this.splitter = new Mock<QueryStatementSplitter>();
@@ -89,6 +89,11 @@ namespace Net.Sf.Dbdeploy.Appliers
         public void ShouldCommitTransaction() 
         {
             var scripts = new List<ChangeScript> { new StubChangeScript(1, "description", "content") };
+
+            this.queryExecuter.Setup(e => e.BeginTransaction()).Callback(() => { return; });
+            this.queryExecuter.Setup(e => e.CommitTransaction()).Callback(() => { return; });
+
+            this.splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new [] { s });
 
             this.applier.Apply(scripts);
 

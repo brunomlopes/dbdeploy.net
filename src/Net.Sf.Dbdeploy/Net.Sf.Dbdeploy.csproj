@@ -78,7 +78,6 @@
   <ItemGroup>
     <Compile Include="Appliers\TemplateBasedApplier.cs" />
     <Compile Include="Appliers\UndoTemplateBasedApplier.cs" />
-    <Compile Include="Appliers\ApplyMode.cs" />
     <Compile Include="Configuration\ConfigurationFile.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Controller.cs" />
@@ -107,7 +106,6 @@
     <Compile Include="Exceptions\ChangeScriptFailedException.cs" />
     <Compile Include="Exceptions\DbDeployException.cs" />
     <Compile Include="Exceptions\DuplicateChangeScriptException.cs" />
-    <Compile Include="Exceptions\RequiredChangeScriptNotFoundException.cs" />
     <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />
     <Compile Include="Exceptions\UnrecognisedFilenameException.cs" />
     <Compile Include="Exceptions\UsageException.cs" />

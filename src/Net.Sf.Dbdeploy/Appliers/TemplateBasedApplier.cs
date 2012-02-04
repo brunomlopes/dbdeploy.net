@@ -34,12 +34,20 @@ namespace Net.Sf.Dbdeploy.Appliers
             IDelimiterType delimiterType,
             DirectoryInfo templateDirectory)
         {
-            this.delimiterType = delimiterType;
+            if (writer == null)
+                throw new ArgumentNullException("writer");
+
+            if (syntax == null)
+                throw new ArgumentNullException("syntax");
+
+            this.writer = writer;
+            this.syntax = syntax;
             this.delimiter = delimiter;
             this.changeLogTableName = changeLogTableName;
-            this.syntax = syntax;
+
+            this.delimiterType = delimiterType ?? new NormalDelimiter();
+            
             this.templateDirectory = templateDirectory ?? new DirectoryInfo(@".\Resources");
-            this.writer = writer;
         }
 
         public void  Apply(IEnumerable<ChangeScript> changeScripts)
