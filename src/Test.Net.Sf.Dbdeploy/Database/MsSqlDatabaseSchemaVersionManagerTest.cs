@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using Net.Sf.Dbdeploy.Exceptions;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database

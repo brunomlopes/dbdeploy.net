@@ -17,7 +17,7 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 try 
                 {
-                    Console.WriteLine("Testing syntax {0}\n", syntax);
+                    System.Console.WriteLine("Testing syntax {0}\n", syntax);
 
                     this.RunIntegratedTestAndConfirmOutputResults(syntax);
                 }
@@ -43,7 +43,7 @@ namespace Net.Sf.Dbdeploy.Database
             StubSchemaManager schemaManager = new StubSchemaManager(factory.CreateDbmsSyntax());
 
             IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "changelog", ";", new NormalDelimiter(), null);
-            Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, Console.Out);
+            Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, System.Console.Out);
 
             controller.ProcessChangeScripts(null);
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Net.Sf.Dbdeploy.Exceptions;
+using System.Text;
 
 namespace Net.Sf.Dbdeploy.Scripts
 {
@@ -11,10 +12,14 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         private readonly TextWriter infoTextWriter;
 
-        public DirectoryScanner(TextWriter infoTextWriter)
+        private readonly Encoding encoding;
+
+        public DirectoryScanner(TextWriter infoTextWriter, Encoding encoding)
         {
             this.filenameParser = new FilenameParser();
+            
             this.infoTextWriter = infoTextWriter;
+            this.encoding = encoding;
         }
 
         public List<ChangeScript> GetChangeScriptsForDirectory(DirectoryInfo directory)
@@ -44,7 +49,7 @@ namespace Net.Sf.Dbdeploy.Scripts
                 {
                     int id = this.filenameParser.ExtractIdFromFilename(filename);
 
-                    scripts.Add(new ChangeScript(id, file));
+                    scripts.Add(new ChangeScript(id, file, this.encoding));
                 }
                 catch (UnrecognisedFilenameException)
                 {

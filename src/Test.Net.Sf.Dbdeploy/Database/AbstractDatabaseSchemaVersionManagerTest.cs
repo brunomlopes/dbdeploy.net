@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -20,7 +19,7 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(Dbms, ConnectionString);
             var executer = new QueryExecuter(factory);
 
-			databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), TableName);
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), TableName);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
@@ -72,12 +71,12 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected virtual void EnsureTableDoesNotExist()
         {
-			ExecuteSql("DROP TABLE " + TableName);
+            ExecuteSql("DROP TABLE " + TableName);
         }
 
         protected void ExecuteSql(String sql)
         {
-			using (IDbConnection connection = GetConnection())
+            using (IDbConnection connection = GetConnection())
             {
                 connection.Open();
                 IDbCommand command = connection.CreateCommand();
@@ -89,8 +88,8 @@ namespace Net.Sf.Dbdeploy.Database
         protected abstract string ConnectionString { get; }
         protected abstract string DeltaSet { get; }
         protected abstract string[] ChangelogTableDoesNotExistMessages { get; }
-		protected abstract string Dbms { get; }
-		protected abstract IDbConnection GetConnection();
+        protected abstract string Dbms { get; }
+        protected abstract IDbConnection GetConnection();
         protected abstract void CreateTable();
         protected abstract void InsertRowIntoTable(int i);
     }

@@ -45,11 +45,11 @@ namespace Net.Sf.Dbdeploy
             set { this.dbDeploy.OutputFile = value; }
         }
         
-        [TaskAttribute("outputFileEncoding")]
+        [TaskAttribute("encoding")]
         public string OutputEncoding
         {
-            get { return this.dbDeploy.OutputEncoding.EncodingName; }
-            set { this.dbDeploy.OutputEncoding = new OutputFileEncoding(value).AsEncoding(); }
+            get { return this.dbDeploy.Encoding.EncodingName; }
+            set { this.dbDeploy.Encoding = new OutputFileEncoding(value).AsEncoding(); }
         }
         
         [TaskAttribute("undoOutputFile")]
@@ -148,7 +148,7 @@ namespace Net.Sf.Dbdeploy
                 + "\n\t\tdbConnection=\"[DATABASE CONNECTION STRING]\" *"
                 + "\n\t\ttemplatedir=\"[DIRECTORY FOR DBMS TEMPLATE SCRIPTS, IF NOT USING BUILT-IN]\""
                 + "\n\t\tdir=\"[YOUR SCRIPT FOLDER]\" *"
-                + "\n\t\toutputfileencoding=\"[CHARSET OF OUTPUT SQL SCRIPTS - default UTF-8]\""
+                + "\n\t\tencoding=\"[CHARSET OF IN- AND OUTPUT SQL SCRIPTS - default UTF-8]\""
                 + "\n\t\toutputfile=\"[OUTPUT SCRIPT PATH + NAME]\""
                 + "\n\t\tlastChangeToApply=\"[NUMBER OF THE LAST SCRIPT TO APPLY]\""
                 + "\n\t\tundoOutputfile=\"[UNDO SCRIPT PATH + NAME]\""
@@ -156,7 +156,7 @@ namespace Net.Sf.Dbdeploy
                 + "\n\t\tdelimiter=\"[STATEMENT DELIMITER - default ;]\""
                 + "\n\t\tdelimitertype=\"[STATEMENT DELIMITER TYPE - row or normal, default normal]\""
                 + "\n\t/>"
-                + "\n\n* - Indicates mandatory parameter"; ;
+                + "\n\n* - Indicates mandatory parameter";
 
             Console.Out.WriteLine(message);
         }

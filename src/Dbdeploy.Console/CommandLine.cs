@@ -9,20 +9,39 @@ namespace Net.Sf.Dbdeploy
     {
         public static void Main(string[] args)
         {
-            try
+            var dbDeploy = new Dbdeploy.DbDeployer
+            {
+                InfoWriter = Console.Out,
+                ScriptDirectory = new DirectoryInfo("."),
+            };
+
+            try 
             {
                 IConfiguration config = new ConfigurationFile();
 
-                var dbDeploy = new Dbdeploy.DbDeployer
-                {
-                    InfoWriter = Console.Out,
-                    Dbms = config.DbType,
-                    ConnectionString = config.DbConnectionString,
-                    ChangeLogTableName = config.TableName,
-                    ScriptDirectory = new DirectoryInfo("."),
-                };
+                dbDeploy.Dbms = config.DbType;
+                dbDeploy.ConnectionString = config.DbConnectionString;
+                dbDeploy.ChangeLogTableName = config.TableName;
+            }
+            catch (System.Configuration.ConfigurationException)
+            {
+                // ignore
+            }
+
+            var parser = new Parser();
+
+            try
+            {
+                // Read arguments from command line
+                parser.Parse(args, dbDeploy);
 
                 dbDeploy.Go();
+            }
+            catch (UsageException ex)
+            {
+                Console.Error.WriteLine("ERROR: " + ex.Message);
+                
+                parser.PrintUsage();
             }
             catch (DbDeployException ex)
             {
@@ -32,11 +51,13 @@ namespace Net.Sf.Dbdeploy
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine("Failed to apply changes: " + ex);
+                Console.Error.WriteLine("Failed to apply changes: " + ex.Message);
                 Console.Error.WriteLine(ex.StackTrace);
 
                 Environment.Exit(2);
             }
+
+            Environment.Exit(0);
         }
     }
 }

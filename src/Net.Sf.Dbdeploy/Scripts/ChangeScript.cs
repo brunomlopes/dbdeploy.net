@@ -14,16 +14,18 @@ namespace Net.Sf.Dbdeploy.Scripts
         
         private readonly String description;
 
-        public ChangeScript(int id)
-            : this(id, "test")
+        private readonly Encoding encoding;
+
+        public ChangeScript(int id) : this(id, "test")
         {
         }
 
-        public ChangeScript(int id, FileInfo file)
+        public ChangeScript(int id, FileInfo file, Encoding encoding)
         {
             this.id = id;
             this.file = file;
             this.description = file.Name;
+            this.encoding = encoding;
         }
 
         public ChangeScript(int id, String description)
@@ -70,7 +72,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             bool foundUndo = false;
 
-            using (StreamReader input = File.OpenText(this.file.FullName))
+            using (var input = new StreamReader(this.file.FullName, this.encoding))
             {
                 string str;
                 while ((str = input.ReadLine()) != null)

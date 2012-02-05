@@ -97,6 +97,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dbdeploy.Console\Dbdeploy.Console.csproj">
+      <Project>{E1E0EC53-D4C1-4C8D-BAAB-A9AD18EE8E2B}</Project>
+      <Name>Dbdeploy.Console</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dbdeploy.NAnt\Dbdeploy.NAnt.csproj">
       <Project>{C2382F42-1186-463C-B270-DD074FD4BA09}</Project>
       <Name>Dbdeploy.NAnt</Name>
@@ -113,6 +117,7 @@
   <ItemGroup>
     <Compile Include="Appliers\DirectToDbApplierAccessor.cs" />
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
+    <Compile Include="Console\ParserTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\QueryStatementSplitterTest.cs" />
     <Compile Include="Database\ScriptGenerationTest.cs" />

@@ -2,7 +2,7 @@
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    internal static class LineEnding
+    public static class LineEnding
     {
         public static string Platform
         {

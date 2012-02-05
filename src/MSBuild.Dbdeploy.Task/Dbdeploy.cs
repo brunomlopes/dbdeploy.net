@@ -43,6 +43,12 @@ namespace MSBuild.Dbdeploy.Task
             set { this.dbDeploy.OutputFile = new FileInfo(value); }
         }
 
+        public string Encoding
+        {
+            get { return this.dbDeploy.Encoding.EncodingName; }
+            set { this.dbDeploy.Encoding = new OutputFileEncoding(value).AsEncoding(); }
+        }
+
         public string UndoOutputFile
         {
             get { return this.dbDeploy.UndoOutputFile.FullName; }

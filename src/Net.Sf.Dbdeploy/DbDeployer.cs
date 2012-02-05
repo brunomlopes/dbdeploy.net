@@ -13,7 +13,7 @@ namespace Net.Sf.Dbdeploy
     {
         public DbDeployer()
         {
-            this.OutputEncoding = Encoding.UTF8;
+            this.Encoding = Encoding.UTF8;
             this.LineEnding = Database.LineEnding.Platform;
             this.ChangeLogTableName = "changelog";
             this.Delimiter = ";";
@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy
 
         public FileInfo UndoOutputFile { get; set; }
 
-        public Encoding OutputEncoding { get; set; }
+        public Encoding Encoding { get; set; }
 
         public string LineEnding { get; set; }
 
@@ -68,7 +68,7 @@ namespace Net.Sf.Dbdeploy
             var databaseSchemaVersionManager =
                     new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, this.ChangeLogTableName);
 
-            var scanner = new DirectoryScanner(this.InfoWriter);
+            var scanner = new DirectoryScanner(this.InfoWriter, this.Encoding);
 
             var changeScriptRepository =
                     new ChangeScriptRepository(scanner.GetChangeScriptsForDirectory(this.ScriptDirectory));
@@ -78,7 +78,7 @@ namespace Net.Sf.Dbdeploy
 
             if (this.OutputFile != null) 
             {
-                doWriter = new StreamWriter(this.OutputFile.OpenWrite(), this.OutputEncoding);
+                doWriter = new StreamWriter(this.OutputFile.OpenWrite(), this.Encoding);
 
                 doScriptApplier = new TemplateBasedApplier(
                     doWriter, 
@@ -109,7 +109,7 @@ namespace Net.Sf.Dbdeploy
 
             if (this.UndoOutputFile != null) 
             {
-                undoWriter = new StreamWriter(this.UndoOutputFile.OpenWrite(), this.OutputEncoding);
+                undoWriter = new StreamWriter(this.UndoOutputFile.OpenWrite(), this.Encoding);
 
                 undoScriptApplier = new UndoTemplateBasedApplier(
                     undoWriter, 

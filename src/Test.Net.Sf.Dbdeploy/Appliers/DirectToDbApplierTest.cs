@@ -37,7 +37,7 @@ namespace Net.Sf.Dbdeploy.Appliers
                 this.queryExecuter.Object,
                 this.schemaVersionManager.Object,
                 this.splitter.Object,
-                Console.Out);
+                System.Console.Out);
         }
 
         [Test]
