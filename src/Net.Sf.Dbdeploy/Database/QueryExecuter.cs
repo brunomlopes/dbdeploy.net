@@ -18,7 +18,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual IDataReader ExecuteQuery(string sql)
         {
-            using (IDbCommand command = this.connection.CreateCommand())
+            using (IDbCommand command = this.CreateCommand())
             {
                 command.CommandText = sql;
 
@@ -26,32 +26,32 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        public virtual IDataReader Execute(string sql, params object[] parameters)
+        public virtual void Execute(string sql, params object[] parameters)
         {
-            using (IDbCommand command = this.connection.CreateCommand())
+            using (IDbCommand command = this.CreateCommand())
             {
                 command.CommandText = sql;
 
                 if (parameters != null)
                 {
-                    for (int i = 1; i <= parameters.Length; i++)
+                    for (int i = 0; i < parameters.Length; i++)
                     {
                         IDbDataParameter parameterObject = command.CreateParameter();
 
-                        parameterObject.ParameterName = i.ToString();
+                        parameterObject.ParameterName = (i + 1).ToString();
                         parameterObject.Value = parameters[i];
 
                         command.Parameters.Add(parameterObject);
                     }
                 }
 
-                return command.ExecuteReader();
+                command.ExecuteNonQuery();
             }
         }
 
         public virtual void Execute(string sql)
         {
-            using (IDbCommand command = this.connection.CreateCommand())
+            using (IDbCommand command = this.CreateCommand())
             {
                 command.CommandText = sql;
 
@@ -84,6 +84,18 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 this.connection.Close();
             }
+        }
+
+        private IDbCommand CreateCommand()
+        {
+            IDbCommand command = this.connection.CreateCommand();
+
+            if (this.transaction != null)
+            {
+                command.Transaction = this.transaction;
+            }
+
+            return command;
         }
     }
 }

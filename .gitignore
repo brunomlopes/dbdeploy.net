@@ -32,3 +32,4 @@ _ReSharper*/
 *.vs10x
 /local.properties
 /db/create.database.*
+/pstest

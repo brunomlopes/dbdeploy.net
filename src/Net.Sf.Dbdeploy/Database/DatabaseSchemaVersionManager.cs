@@ -58,7 +58,7 @@ namespace Net.Sf.Dbdeploy.Database
             try
             {
                 string sql = string.Format(
-                    "INSERT INTO {0} (change_number, complete_dt, applied_by, description) VALUES ($1, {1}, {2}, $2)", 
+                    "INSERT INTO {0} (change_number, complete_dt, applied_by, description) VALUES (@1, {1}, {2}, @2)", 
                     this.changeLogTableName,
                     this.syntax.GenerateTimestamp(),
                     this.syntax.GenerateUser());

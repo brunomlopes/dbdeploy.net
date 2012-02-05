@@ -2,6 +2,8 @@
 
 -- START UNDO OF CHANGE SCRIPT $script
 
+BEGIN TRANSACTION
+
 $script.getContent()
 
 DELETE FROM $changeLogTableName WHERE change_number = $script.getId()
