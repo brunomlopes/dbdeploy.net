@@ -28,11 +28,11 @@
 
     <target name="compile" depends="init">
         <loadtasks assembly="${nantcontrib.assembly}" />
-        <msbuild project="dbdeploy.net.sln">
+        <msbuild project="${src.dir}/dbdeploy.net.sln">
             <property name="Configuration" value="${configuration}" />
         </msbuild>
 
-        <copy file="dbproviders.xml" todir="${build.dir}" overwrite="true" />
+        <copy file="${src.dir}/dbproviders.xml" todir="${build.dir}" overwrite="true" />
         <copy file="${lib.dir}/NAnt.Core.dll" todir="${build.dir}" overwrite="true" />
         <copy file="${config.dir}/App.config.template" tofile="${build.dir}/Test.Net.Sf.Dbdeploy.dll.config" overwrite="true">
         <filterchain>

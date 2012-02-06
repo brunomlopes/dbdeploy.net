@@ -3,21 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{210BF4ED-AD49-4C1F-9521-C912B410608C}"
 	ProjectSection(SolutionItems) = preProject
-		dbdeploy.build = dbdeploy.build
 		dbproviders.xml = dbproviders.xml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.Console", "src\Dbdeploy.Console\Dbdeploy.Console.csproj", "{E1E0EC53-D4C1-4C8D-BAAB-A9AD18EE8E2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.Console", "Dbdeploy.Console\Dbdeploy.Console.csproj", "{E1E0EC53-D4C1-4C8D-BAAB-A9AD18EE8E2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Sf.Dbdeploy", "src\Net.Sf.Dbdeploy\Net.Sf.Dbdeploy.csproj", "{A7A5B171-0A90-4652-A6F1-D4E1A480ACBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Sf.Dbdeploy", "Net.Sf.Dbdeploy\Net.Sf.Dbdeploy.csproj", "{A7A5B171-0A90-4652-A6F1-D4E1A480ACBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net.Sf.Dbdeploy", "src\Test.Net.Sf.Dbdeploy\Test.Net.Sf.Dbdeploy.csproj", "{2A667F5F-43DC-4158-B5F0-64E6D7F1F9DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net.Sf.Dbdeploy", "Test.Net.Sf.Dbdeploy\Test.Net.Sf.Dbdeploy.csproj", "{2A667F5F-43DC-4158-B5F0-64E6D7F1F9DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Dbdeploy.Task", "src\MSBuild.Dbdeploy.Task\MSBuild.Dbdeploy.Task.csproj", "{BD12111C-BB14-4BB4-AE33-EEE50DB6B659}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Dbdeploy.Task", "MSBuild.Dbdeploy.Task\MSBuild.Dbdeploy.Task.csproj", "{BD12111C-BB14-4BB4-AE33-EEE50DB6B659}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.Powershell", "src\Dbdeploy.Powershell\Dbdeploy.Powershell.csproj", "{BEA3109E-9EBC-4D3E-A69C-971059FF661F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.Powershell", "Dbdeploy.Powershell\Dbdeploy.Powershell.csproj", "{BEA3109E-9EBC-4D3E-A69C-971059FF661F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.NAnt", "src\Dbdeploy.NAnt\Dbdeploy.NAnt.csproj", "{C2382F42-1186-463C-B270-DD074FD4BA09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbdeploy.NAnt", "Dbdeploy.NAnt\Dbdeploy.NAnt.csproj", "{C2382F42-1186-463C-B270-DD074FD4BA09}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{66D44955-E8DA-45B2-8188-38CF2AB6A073}"
 	ProjectSection(SolutionItems) = preProject
