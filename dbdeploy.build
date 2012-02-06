@@ -78,9 +78,15 @@
             <include name="dbproviders.xml" />
             <include name="Net.Sf.Dbdeploy.dll" />
             <include name="MSBuild.Dbdeploy.Task.dll" />
+            <include name="Dbdeploy.NAnt.dll" />
+            <include name="Dbdeploy.Powershell.dll" />
             <include name="NAnt.Core.dll" />
+            <include name="NDesk.Options.dll" />
+            <include name="NVelocity.dll" />
             <include name="dbdeploy.exe*" />
-			<include name="Resources/*.sql" />
+          </fileset>
+          <fileset basedir="${build.dir}/Resources" prefix="bin/Resources/">
+            <include name="**/*" />
           </fileset>
           <fileset basedir="scripts" prefix="scripts/">
             <include name="**/*" />

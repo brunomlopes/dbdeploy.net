@@ -33,3 +33,4 @@ _ReSharper*/
 /local.properties
 /db/create.database.*
 /pstest
+/dist
