@@ -15,12 +15,12 @@ namespace Net.Sf.Dbdeploy.Appliers
         {
         }
         
-        public void ApplyChangeScript(ChangeScript script)
+        public new void ApplyChangeScript(ChangeScript script)
         {
             base.ApplyChangeScript(script);
         }
 
-        public void InsertToSchemaVersionTable(ChangeScript changeScript)
+        public new void InsertToSchemaVersionTable(ChangeScript changeScript)
         {
             base.InsertToSchemaVersionTable(changeScript);
         }
