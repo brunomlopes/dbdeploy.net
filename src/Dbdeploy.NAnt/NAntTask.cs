@@ -90,25 +90,8 @@ namespace Net.Sf.Dbdeploy
         [TaskAttribute("delimiterType")]
         public string DelimiterType
         {
-            get
-            {
-                return this.dbDeploy.DelimiterType.GetType().Name;
-            }
-
-            set
-            {
-                switch ((value ?? string.Empty).ToUpperInvariant())
-                {
-                    case "ROW":
-                        this.dbDeploy.DelimiterType = new RowDelimiter();
-                        break;
-
-                    case "NORMAL":
-                    default:
-                        this.dbDeploy.DelimiterType = new NormalDelimiter();
-                        break;
-                }
-            }
+            get { return this.dbDeploy.DelimiterType.GetType().Name; }
+            set { this.dbDeploy.DelimiterType = DelimiterTypeFactory.Create(value); }
         }
 
         protected override void ExecuteTask()

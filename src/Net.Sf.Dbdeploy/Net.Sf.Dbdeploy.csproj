@@ -103,6 +103,9 @@
     </Compile>
     <Compile Include="Appliers\DirectToDbApplier.cs" />
     <Compile Include="DbDeployer.cs" />
+    <Compile Include="Database\DelimiterTypeFactory.cs">
+      <DependentUpon>IDelimiterType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Exceptions\ChangeScriptFailedException.cs" />
     <Compile Include="Exceptions\DbDeployException.cs" />
     <Compile Include="Exceptions\DuplicateChangeScriptException.cs" />
