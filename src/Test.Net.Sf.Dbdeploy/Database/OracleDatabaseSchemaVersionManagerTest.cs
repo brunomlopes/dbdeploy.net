@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-	[Category("Oracle")]
+	[Category("Oracle"), Category("DbIntegration")]
 	public class OracleDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
 	{
 		private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["OracleConnString"];

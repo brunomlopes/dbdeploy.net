@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
 {
+    [Category("MSSQL"), Category("DbIntegration")]
     public class MsSqlDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["ConnString"];

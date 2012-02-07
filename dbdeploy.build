@@ -57,7 +57,7 @@
 			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${test.dir}" />
 			<test assemblyname="${test.dir}/Test.Net.Sf.Dbdeploy.dll" appconfig="${test.dir}/Test.Net.Sf.Dbdeploy.dll.config">
 				<categories>
-					<exclude name="Oracle" />
+					<exclude name="DbIntegration" />
 				</categories>  
 			</test>
 		</nunit2>
