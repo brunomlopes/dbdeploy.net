@@ -9,6 +9,7 @@
     <property name="test.dir" value="${build.dir}/"/>
     <property name="dist.dir" value="dist" />
     <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
+    <property name="ilmerge.exe" value="Tools\ILMerge.exe" />
 
     <!-- DEFAULT CCNET PROPERTIES, to override: create a copy of local.properties.template, rename it local.properties, and modify the values as needed-->
     <property name="sql.dir" value="${path::get-full-path('db')}" />
@@ -73,17 +74,30 @@
     </target>
 
     <target name="dist">
+        <mkdir dir="${build.dir}/combined" />
+        
+        <ilmerge outputfile="${build.dir}/combined/Net.Sf.Dbdeploy.dll" program="${ilmerge.exe}" primary="${build.dir}/Net.Sf.Dbdeploy.dll">
+            <assemblies>
+                <include name="${build.dir}/NVelocity.dll" />
+            </assemblies>
+        </ilmerge>
+        <ilmerge outputfile="${build.dir}/combined/dbdeploy.exe" program="${ilmerge.exe}" primary="${build.dir}/dbdeploy.exe">
+            <assemblies>
+                <include name="${build.dir}/NDesk.Options.dll" />
+            </assemblies>
+        </ilmerge>
         <zip zipfile="${dist.dir}/dbdeploy.net.zip">
           <fileset basedir="${build.dir}" prefix="bin/">
             <include name="dbproviders.xml" />
-            <include name="Net.Sf.Dbdeploy.dll" />
             <include name="MSBuild.Dbdeploy.Task.dll" />
             <include name="Dbdeploy.NAnt.dll" />
             <include name="Dbdeploy.Powershell.dll" />
             <include name="NAnt.Core.dll" />
-            <include name="NDesk.Options.dll" />
-            <include name="NVelocity.dll" />
-            <include name="dbdeploy.exe*" />
+            <include name="dbdeploy.exe.config" />
+          </fileset>
+          <fileset basedir="${build.dir}/combined" prefix="bin/">
+            <include name="dbdeploy.exe" />
+            <include name="Net.Sf.Dbdeploy.dll" />
           </fileset>
           <fileset basedir="${build.dir}/Resources" prefix="bin/Resources/">
             <include name="**/*" />
@@ -118,4 +132,140 @@
             transaction="false" batch="false" print="true" />
         
     </target>
+    <script language="C#" prefix="custom" >
+        <references>
+          <include name="System.dll" />
+          <include name="NAnt.Core.dll" />
+        </references>
+        <imports>
+          <import namespace="System" />
+          <import namespace="System.Collections" />
+          <import namespace="System.Collections.Specialized" />
+          <import namespace="NAnt.Core.Types" />
+          <import namespace="NAnt.Core.Util" />
+          <import namespace="NAnt.Core.Tasks" />
+        </imports>
+
+        <code>
+          <![CDATA[
+                    [TaskName("ilmerge")]
+                    public class ILMergeTask : ExternalProgramBase {
+
+                      private FileSet m_assemblies;
+                      private string m_logFile;
+                      private string m_outputFile;
+                      private string m_primaryFile;
+
+
+                      [TaskAttribute("program", Required = true)]
+                      [StringValidator(AllowEmpty = false)]
+                      public override string ExeName
+                      {
+                          get { return base.ExeName; }
+                          set { base.ExeName = value; }
+                      }
+
+
+                      public override string ProgramArguments
+                      {
+                          get { return string.Empty; }
+                      }
+
+                      [BuildElement("assemblies", Required=true)]
+                      public virtual FileSet InputAssemblies
+                      {
+                            get
+                            {
+                                return this.m_assemblies;
+                            }
+                            set
+                            {
+                                this.m_assemblies = value;
+                            }
+                      }
+                     
+                      [TaskAttribute("logfile")]
+                      public virtual string LogFile
+                      {
+                            get
+                            {
+                                if (this.m_logFile == null)
+                                {
+                                    return null;
+                                }
+                                return this.Project.GetFullPath(this.m_logFile);
+                            }
+                            set
+                            {
+                                this.m_logFile = StringUtils.ConvertEmptyToNull(value);
+                            }
+                      }     
+
+                      [TaskAttribute("primary", Required=true), StringValidator(AllowEmpty=false)]
+                      public virtual string PrimaryFile
+                      {
+                          get
+                          {
+                              if (this.m_primaryFile == null)
+                              {
+                                  return null;
+                              }
+                              return this.Project.GetFullPath(this.m_primaryFile);
+                          }
+                          set
+                          {
+                              this.m_primaryFile = StringUtils.ConvertEmptyToNull(value);
+                          }
+                      }                 
+
+                      [TaskAttribute("outputfile", Required=true), StringValidator(AllowEmpty=false)]
+                      public virtual string OutputFile
+                      {
+                          get
+                          {
+                              if (this.m_outputFile == null)
+                              {
+                                  return null;
+                              }
+                              return this.Project.GetFullPath(this.m_outputFile);
+                          }
+                          set
+                          {
+                              this.m_outputFile = StringUtils.ConvertEmptyToNull(value);
+                          }
+                      }                 
+
+
+                      protected override void ExecuteTask()
+                      {
+                          try
+                          {
+                              Log(Level.Info, "Executing ILMerge.exe");
+                              Log(Level.Info, string.Format("/out:\"{0}\"", m_outputFile));
+                              Log(Level.Info, string.Format("/log:\"{0}\"", m_logFile));
+                              Arguments.Add(new Argument(string.Format("/out:\"{0}\"", m_outputFile)));
+
+                              Log(Level.Info, string.Format("assembly[{0}]: {1}", "primary", m_primaryFile));
+                              Arguments.Add(new Argument(string.Format("\"{0}\"", m_primaryFile)));
+
+                              for (int i = 0; i < m_assemblies.FileNames.Count; i++)
+                              {
+                                  Log(Level.Info, string.Format("assembly[{0}]: {1}", i, m_assemblies.FileNames[i]));
+                                  Arguments.Add(new Argument(string.Format("\"{0}\"", m_assemblies.FileNames[i])));
+                              }
+
+                              Arguments.Add(new Argument(string.Format("/log:\"{0}\"", m_logFile)));
+
+                              base.FailOnError = false;
+                              base.ExecuteTask();
+                          }
+                          catch (Exception ex)
+                          {
+                              throw new BuildException(string.Format("Error executing ILMerge {0}", "test"), Location, ex);
+                          }
+                      }
+                    }
+                  ]]>
+        </code>
+    </script>
 </project> 
