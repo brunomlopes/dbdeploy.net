@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -41,7 +42,7 @@ namespace Dbdeploy.Powershell
         {
             if (!keys.ContainsKey(key))
             {
-                throw new InvalidOperationException(string.Format("Missing key '{0}' ({1})", key, message));
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Missing key '{0}' ({1})", key, message));
             }
             return keys[key];
         }

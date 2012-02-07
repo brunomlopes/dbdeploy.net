@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Globalization;
 using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
 
@@ -27,7 +28,7 @@ namespace Net.Sf.Dbdeploy.Database
             List<int> changeNumbers = new List<int>();
             try
             {
-                string sql = string.Format("SELECT change_number FROM {0} ORDER BY change_number", this.changeLogTableName);
+                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT change_number FROM {0} ORDER BY change_number", this.changeLogTableName);
                 
                 using (IDataReader reader = this.queryExecuter.ExecuteQuery(sql))
                 {
@@ -50,7 +51,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual string GetChangelogDeleteSql(ChangeScript script)
         {
-            return string.Format("DELETE FROM {0} WHERE change_number = {1}", this.changeLogTableName, script.GetId());
+            return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE change_number = {1}", this.changeLogTableName, script.GetId());
         }
 
         public virtual void RecordScriptApplied(ChangeScript script)
@@ -58,6 +59,7 @@ namespace Net.Sf.Dbdeploy.Database
             try
             {
                 string sql = string.Format(
+                    CultureInfo.InvariantCulture,
                     "INSERT INTO {0} (change_number, complete_dt, applied_by, description) VALUES (@1, {1}, {2}, @2)", 
                     this.changeLogTableName,
                     this.syntax.GenerateTimestamp(),

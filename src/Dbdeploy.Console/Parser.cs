@@ -107,8 +107,8 @@ namespace Net.Sf.Dbdeploy
             {
                 s = s.Trim();
 
-                if ((s.StartsWith("\"") && s.EndsWith("\""))
-                    || (s.StartsWith("'") && s.EndsWith("'")))
+                if ((s.StartsWith("\"", StringComparison.OrdinalIgnoreCase) && s.EndsWith("\"", StringComparison.OrdinalIgnoreCase))
+                    || (s.StartsWith("'", StringComparison.OrdinalIgnoreCase) && s.EndsWith("'", StringComparison.OrdinalIgnoreCase)))
                 {
                     return s.Substring(1, s.Length - 2);
                 }

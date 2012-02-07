@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -43,7 +44,9 @@ namespace Net.Sf.Dbdeploy.Database
     	protected override void EnsureTableDoesNotExist()
         {
             ExecuteSql(string.Format(
-				"IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", TableName));
+                CultureInfo.InvariantCulture,
+				"IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", 
+                TableName));
         }
 
     	protected override IDbConnection GetConnection()

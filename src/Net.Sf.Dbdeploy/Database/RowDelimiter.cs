@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Database
+﻿using System;
+
+namespace Net.Sf.Dbdeploy.Database
 {
     /// <summary>
     /// Delimiter must be on a line all by itself
@@ -7,7 +9,7 @@
     {
         public bool Matches(string line, string delimiter)
         {
-            return line != null && line.Equals(delimiter);
+            return line != null && line.Equals(delimiter, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

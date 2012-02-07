@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -25,6 +26,7 @@ namespace Net.Sf.Dbdeploy.Database
 
             throw new NotImplementedException(
                 string.Format(
+                    CultureInfo.InvariantCulture,
                     "No provider for type '{0}' implemented." + Environment.NewLine + "Supported dbms: ora, mssql, mysql.", 
                     dbmsType));
         }

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using Commons.Collections;
 using Net.Sf.Dbdeploy.Database;
+using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
 using NVelocity;
 using NVelocity.App;
-using Net.Sf.Dbdeploy.Exceptions;
 using NVelocity.Exception;
-using Commons.Collections;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
@@ -52,7 +53,7 @@ namespace Net.Sf.Dbdeploy.Appliers
 
         public void  Apply(IEnumerable<ChangeScript> changeScripts)
         {
-            string filename = string.Format("{0}_{1}.vm", this.syntax, this.GetTemplateQualifier());
+            string filename = string.Format(CultureInfo.InvariantCulture, "{0}_{1}.vm", this.syntax, this.GetTemplateQualifier());
 
             var model = new Hashtable();
             
