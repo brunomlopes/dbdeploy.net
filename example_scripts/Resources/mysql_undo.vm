@@ -1,0 +1,15 @@
+#foreach($script in $scripts)
+
+-- START UNDO OF CHANGE SCRIPT ${script}
+
+START TRANSACTION${separator}${delimiter}
+
+${script.getUndoContent()}
+
+DELETE FROM ${changeLogTableName} WHERE change_number = ${script.getId()}$!{separator}${delimiter}
+
+COMMIT$!{separator}${delimiter}
+
+-- END UNDO OF CHANGE SCRIPT ${script}
+
+#end

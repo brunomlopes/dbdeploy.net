@@ -1,16 +1,15 @@
 <Project DefaultTargets="dbDeploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<UsingTask TaskName="MSBuild.Dbdeploy.Task" AssemblyFile="MSBuild.Dbdeploy.Task.dll"/>
+	<UsingTask TaskName="MSBuild.Dbdeploy.Task.Dbdeploy" AssemblyFile="MSBuild.Dbdeploy.Task.dll"/>
 
 	<Target Name="dbDeploy">
-		<DBDeploy  DbType="mssql"
-				   DbConnection="Server=localhost;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=password"
+		<MSBuild.Dbdeploy.Task.Dbdeploy
+				   DbType="mssql"
+				   DbConnection="Server=localhost\SQLEXPRESS;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01"
 				   Dir="."
 				   OutputFile="output.sql"
 				   UndoOutputFile="output-undo.sql"
-				   LastChangeToApply="1"
-				   DeltaSet="Main"
-				   UseTransaction="false" />
+				   LastChangeToApply="1" />
 	</Target>
 	
 </Project>

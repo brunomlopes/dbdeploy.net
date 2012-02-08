@@ -1,0 +1,14 @@
+#foreach($script in $scripts)
+
+-- START CHANGE SCRIPT ${script}
+
+${script.getContent()}
+
+INSERT INTO ${changeLogTableName} (change_number, complete_dt, applied_by, description)
+ VALUES (${script.getId()}, CURRENT_TIMESTAMP, USER(), '${script.getDescription()}')$!{separator}${delimiter}
+
+COMMIT$!{separator}${delimiter}
+
+-- END CHANGE SCRIPT ${script}
+
+#end
