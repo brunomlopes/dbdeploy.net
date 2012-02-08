@@ -78,9 +78,6 @@ namespace Net.Sf.Dbdeploy.Scripts
                 string str;
                 while ((str = input.ReadLine()) != null)
                 {
-                    if (str == null)
-                        continue;
-
                     // Just keep looping until we find the magic "--//@UNDO"
                     if (UndoToken == str.Trim())
                     {

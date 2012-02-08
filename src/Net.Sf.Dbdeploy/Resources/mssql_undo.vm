@@ -5,7 +5,7 @@
 BEGIN TRANSACTION
 GO
 
-$script.getContent()
+$script.GetUndoContent()
 
 DELETE FROM $changeLogTableName WHERE change_number = $script.getId()
 GO

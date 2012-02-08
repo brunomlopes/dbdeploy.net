@@ -19,7 +19,7 @@ namespace MSBuild.Dbdeploy.Task
         }
 
         [Required]
-        public string Dbms
+        public string DbType
         {
             set { this.dbDeploy.Dbms = value; }
         }
@@ -61,10 +61,10 @@ namespace MSBuild.Dbdeploy.Task
             set { this.dbDeploy.TemplateDir = new DirectoryInfo(value); }
         }
 
-        public int? LastChangeToApply
+        public int LastChangeToApply
         {
-            get { return this.dbDeploy.LastChangeToApply; }
-            set { this.dbDeploy.LastChangeToApply = value; }
+            get { return this.dbDeploy.LastChangeToApply ?? -1; }
+            set { this.dbDeploy.LastChangeToApply = value < 0 ? default(int?) : value; }
         }
 
         public string TableName
