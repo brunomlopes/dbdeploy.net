@@ -3,6 +3,7 @@
 -- START CHANGE SCRIPT $script
 
 BEGIN TRANSACTION
+GO
 
 $script.getContent()
 

@@ -16,7 +16,8 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         private readonly Encoding encoding;
 
-        public ChangeScript(int id) : this(id, "test")
+        public ChangeScript(int id) 
+            : this(id, "test")
         {
         }
 
@@ -50,9 +51,9 @@ namespace Net.Sf.Dbdeploy.Scripts
             return this.description;
         }
 
-        public int CompareTo(object o)
+        public int CompareTo(object obj)
         {
-            ChangeScript other = (ChangeScript) o;
+            ChangeScript other = (ChangeScript)obj;
             return this.id.CompareTo(other.id);
         }
 

@@ -3,6 +3,7 @@
 -- START UNDO OF CHANGE SCRIPT $script
 
 BEGIN TRANSACTION
+GO
 
 $script.getContent()
 
