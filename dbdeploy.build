@@ -100,7 +100,7 @@
             <include name="Net.Sf.Dbdeploy.dll" />
           </fileset>
           <fileset basedir="${build.dir}/Resources" prefix="bin/Resources/">
-            <include name="**/*" />
+            <include name="**/*.vm" />
           </fileset>
           <fileset basedir="scripts" prefix="scripts/">
             <include name="**/*" />
