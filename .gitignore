@@ -32,5 +32,6 @@ _ReSharper*/
 *.vs10x
 /local.properties
 /db/create.database.*
-/pstest
+/db/DBDEPLOY.mdf
+/db/DBDEPLOY_log.ldf
 /dist
