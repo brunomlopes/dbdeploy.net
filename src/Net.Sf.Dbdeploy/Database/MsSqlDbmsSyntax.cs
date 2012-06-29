@@ -9,7 +9,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public override string GenerateUser()
         {
-            return "user_name()";
+            return "suser_name()";
         }
     }
 }
