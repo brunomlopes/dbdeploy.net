@@ -42,7 +42,7 @@ namespace Net.Sf.Dbdeploy.Database
                 databaseSchemaVersion.GetAppliedChanges();
                 Assert.Fail("expected exception");
             }
-            catch (SchemaVersionTrackingException ex)
+            catch (ChangelogTableDoesNotExistException ex)
             {
                 // Allow exception messages in different languages.
                 // Kind of complicated, but with this way you see [expected] vs. [actual] on test failure.

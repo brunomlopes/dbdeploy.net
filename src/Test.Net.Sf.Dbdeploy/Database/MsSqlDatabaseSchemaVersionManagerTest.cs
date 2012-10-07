@@ -15,8 +15,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new [] 
         {
-            "Could not retrieve change log from database because: Ungültiger Objektname 'changelog'.",  // German
-            "Could not retrieve change log from database because: Invalid object name 'changelog'."     // English
+            "No table found with name 'changelog'.",
         };
 
 		private const string DBMS = "mssql";

@@ -14,7 +14,7 @@ namespace Net.Sf.Dbdeploy.Database
 		private const string DELTA_SET = "All";
 		private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new []
 		{ 
-			"Could not retrieve change log from database because: ORA-00942: table or view does not exist\n" 
+            "No table found with name 'changelog'.",
 		};
 		private const string DBMS = "ora";
 

@@ -106,6 +106,7 @@
     <Compile Include="Database\DelimiterTypeFactory.cs">
       <DependentUpon>IDelimiterType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\ChangelogTableDoesNotExistException.cs" />
     <Compile Include="Exceptions\ChangeScriptFailedException.cs" />
     <Compile Include="Exceptions\DbDeployException.cs" />
     <Compile Include="Exceptions\DuplicateChangeScriptException.cs" />

@@ -19,9 +19,13 @@ namespace Net.Sf.Dbdeploy.Database
         private Mock<QueryExecuter> queryExecuter;
         private Mock<IDbmsSyntax> syntax;
 
+        private string changeLogTableName;
+
         [SetUp]
         public void SetUp() 
         {
+            this.changeLogTableName = "changelog";
+
             this.expectedResultSet = new Mock<IDataReader>();
 
             var connection = new Mock<IDbConnection>();
@@ -37,7 +41,16 @@ namespace Net.Sf.Dbdeploy.Database
                 .Setup(e => e.ExecuteQuery(It.IsAny<string>()))
                 .Returns(this.expectedResultSet.Object);
 
-            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "changelog");
+            var checkForChangeLogDataReader = new Mock<IDataReader>();
+            checkForChangeLogDataReader
+                .Setup(r => r.Read())
+                .Returns(true);
+
+            this.queryExecuter
+                .Setup(e => e.ExecuteQuery(It.Is<string>(v => v.Contains("INFORMATION_SCHEMA")), It.Is<string>(s => s.Equals(changeLogTableName))))
+                .Returns(() => checkForChangeLogDataReader.Object);
+
+            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
         }
 
         [Test]
@@ -92,8 +105,10 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void ShouldGetAppliedChangesFromSpecifiedChangelogTableName()
         {
+            changeLogTableName = "user_specified_changelog";
+
             var schemaVersionManagerWithDifferentTableName =
-                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "user_specified_changelog");
+                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
 
             schemaVersionManagerWithDifferentTableName.GetAppliedChanges();
 
