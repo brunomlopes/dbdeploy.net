@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using Commons.Collections;
+using Net.Sf.Dbdeploy.Appliers.NVelocityReplacements;
 using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
@@ -65,12 +67,20 @@ namespace Net.Sf.Dbdeploy.Appliers
             try
             {
                 ExtendedProperties props = new ExtendedProperties();
+
+                var assemblyName = this.GetType().Assembly.GetName().Name;
+
+                ReplaceManagersWithDbDeployVersions(props, assemblyName);
+
                 if (this.templateDirectory == null)
                 {
                     props.AddProperty("resource.loader", "assembly");
                     props.AddProperty("assembly.resource.loader.class",
-                        "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader, NVelocity");
-                    props.AddProperty("assembly.resource.loader.assembly", this.GetType().Assembly.GetName().Name);
+                                      // See the ; there? It will be replaced by , in the resource loader factory
+                                      // this is because if we add a property with a comma in the value, it will add *two* values to the property.
+                                      // oh joy.
+                                      typeof (DbDeployAssemblyResourceLoader).FullName + "; " + assemblyName);
+                    props.AddProperty("assembly.resource.loader.assembly", assemblyName);
                     filename = "Net.Sf.Dbdeploy.Resources." + filename;
                 }
                 else
@@ -89,18 +99,38 @@ namespace Net.Sf.Dbdeploy.Appliers
             catch (ResourceNotFoundException ex)
             {
                 string locationMessage;
-                if(this.templateDirectory == null)
+                if (templateDirectory == null)
                 {
                     locationMessage = "";
-                }else
+                }
+                else
                 {
-                    locationMessage = " at " + this.templateDirectory.FullName;
+                    locationMessage = " at " + templateDirectory.FullName;
                 }
                 throw new UsageException(
                     "Could not find template named " + filename + locationMessage + Environment.NewLine 
                     + "Check that you have got the name of the database syntax correct.", 
                     ex);
             }
+        }
+
+        private static void ReplaceManagersWithDbDeployVersions(ExtendedProperties props, string assemblyName)
+        {
+            // our versions are straight subclasses of NVelocity's vanilla managers
+            // EXCEPT ours will always be public, even when we ilmerge the assemblies
+            var addStringProperty = props.GetType().GetMethod("AddStringProperty", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            addStringProperty.Invoke(props, new object[]
+                {
+                    "resource.manager.class",
+                    typeof (DbDeployResourceManager).FullName + "," + assemblyName
+                });
+
+            addStringProperty.Invoke(props, new object[]
+                {
+                    "directive.manager",
+                    typeof (DbDeployDirectiveManager).FullName + "," + assemblyName
+                });
         }
 
         protected virtual string GetTemplateQualifier()

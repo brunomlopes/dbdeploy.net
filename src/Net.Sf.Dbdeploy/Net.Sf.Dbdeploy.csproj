@@ -76,6 +76,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Appliers\NVelocityReplacements\DbDeployAssemblyResourceLoader.cs" />
+    <Compile Include="Appliers\NVelocityReplacements\DbDeployDirectiveManager.cs" />
+    <Compile Include="Appliers\NVelocityReplacements\DbDeployResourceManager.cs" />
     <Compile Include="Appliers\TemplateBasedApplier.cs" />
     <Compile Include="Appliers\UndoTemplateBasedApplier.cs" />
     <Compile Include="Configuration\ConfigurationFile.cs" />
