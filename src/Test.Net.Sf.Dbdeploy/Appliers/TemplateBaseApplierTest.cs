@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Exceptions;
 using NUnit.Framework;
@@ -11,7 +12,8 @@ namespace Net.Sf.Dbdeploy.Appliers
         [Test]
         public void ShouldThrowUsageExceptionWhenTemplateNotFound() 
         {
-            TemplateBasedApplier applier = new TemplateBasedApplier(new NullWriter(), "some_complete_rubbish", null, ";", new NormalDelimiter(), null);
+            var templateDirectory = new DirectoryInfo(".");
+            TemplateBasedApplier applier = new TemplateBasedApplier(new NullWriter(), "some_complete_rubbish", null, ";", new NormalDelimiter(), templateDirectory);
                 
             try
             {
@@ -22,7 +24,7 @@ namespace Net.Sf.Dbdeploy.Appliers
             catch (UsageException e) 
             {
                 Assert.AreEqual(
-                    "Could not find template named some_complete_rubbish_apply.vm" + Environment.NewLine
+                    "Could not find template named some_complete_rubbish_apply.vm" + " at " + templateDirectory.FullName + Environment.NewLine
                     + "Check that you have got the name of the database syntax correct.",
                     e.Message);
             }

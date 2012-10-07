@@ -48,7 +48,7 @@ namespace Net.Sf.Dbdeploy.Appliers
 
             this.delimiterType = delimiterType ?? new NormalDelimiter();
             
-            this.templateDirectory = templateDirectory ?? new DirectoryInfo(@".\Resources");
+            this.templateDirectory = templateDirectory;
         }
 
         public void  Apply(IEnumerable<ChangeScript> changeScripts)
@@ -65,7 +65,18 @@ namespace Net.Sf.Dbdeploy.Appliers
             try
             {
                 ExtendedProperties props = new ExtendedProperties();
-                props.SetProperty("file.resource.loader.path", this.templateDirectory.FullName);
+                if (this.templateDirectory == null)
+                {
+                    props.AddProperty("resource.loader", "assembly");
+                    props.AddProperty("assembly.resource.loader.class",
+                        "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader, NVelocity");
+                    props.AddProperty("assembly.resource.loader.assembly", this.GetType().Assembly.GetName().Name);
+                    filename = "Net.Sf.Dbdeploy.Resources." + filename;
+                }
+                else
+                {
+                    props.SetProperty("file.resource.loader.path", this.templateDirectory.FullName);
+                }
 
                 var templateEngine = new VelocityEngine(props);
 
@@ -77,8 +88,16 @@ namespace Net.Sf.Dbdeploy.Appliers
             }
             catch (ResourceNotFoundException ex)
             {
+                string locationMessage;
+                if(this.templateDirectory == null)
+                {
+                    locationMessage = "";
+                }else
+                {
+                    locationMessage = " at " + this.templateDirectory.FullName;
+                }
                 throw new UsageException(
-                    "Could not find template named " + filename + Environment.NewLine 
+                    "Could not find template named " + filename + locationMessage + Environment.NewLine 
                     + "Check that you have got the name of the database syntax correct.", 
                     ex);
             }

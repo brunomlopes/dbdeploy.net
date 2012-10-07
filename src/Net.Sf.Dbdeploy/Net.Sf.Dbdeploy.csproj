@@ -142,24 +142,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\mssql_undo.vm">
+    <EmbeddedResource Include="Resources\mssql_undo.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\mssql_apply.vm">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\mssql_apply.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\mysql_apply.vm">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\mysql_apply.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\mysql_undo.vm">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\mysql_undo.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\ora_apply.vm">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ora_apply.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\ora_undo.vm">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ora_undo.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\dbproviders.xml">

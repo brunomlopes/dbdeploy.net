@@ -19,7 +19,7 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     System.Console.WriteLine("Testing syntax {0}\n", syntax);
 
-                    this.RunIntegratedTestAndConfirmOutputResults(syntax);
+                    this.RunIntegratedTestAndConfirmOutputResults(syntax, new DirectoryInfo(@".\Resources"));
                 }
                 catch (Exception e) 
                 {
@@ -28,7 +28,25 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        private void RunIntegratedTestAndConfirmOutputResults(string syntaxName) 
+        [Test]
+        public void GenerateConsolidatedChangesScriptForAllDatabasesLoadingTemplatesFromResourcesAndCompareAgainstTemplate()
+        {
+            foreach (string syntax in new[] { "mssql", "mysql", "ora" }) 
+            {
+                try 
+                {
+                    System.Console.WriteLine("Testing syntax {0}\n", syntax);
+
+                    this.RunIntegratedTestAndConfirmOutputResults(syntax, null);
+                }
+                catch (Exception e) 
+                {
+                    throw new ApplicationException("Failed while testing syntax " + syntax, e);
+                }
+            }
+        }
+
+        private void RunIntegratedTestAndConfirmOutputResults(string syntaxName, DirectoryInfo templateDirectory) 
         {
             StringWriter writer = new StringWriter();
 
@@ -42,7 +60,7 @@ namespace Net.Sf.Dbdeploy.Database
 
             StubSchemaManager schemaManager = new StubSchemaManager(factory.CreateDbmsSyntax());
 
-            IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "changelog", ";", new NormalDelimiter(), null);
+            IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "changelog", ";", new NormalDelimiter(), templateDirectory);
             Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, System.Console.Out);
 
             controller.ProcessChangeScripts(null);
