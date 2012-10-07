@@ -33,9 +33,9 @@ namespace Net.Sf.Dbdeploy.Database
             using (providerStream)
             using (XmlReader reader = new XmlTextReader(providerStream))
             {
-                var serializer = new XmlSerializer(typeof (Providers));
+                var serializer = new XmlSerializer(typeof(DbProviders));
 
-                return (Providers) serializer.Deserialize(reader);
+                return (DbProviders)serializer.Deserialize(reader);
             }
         }
         

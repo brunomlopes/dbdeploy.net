@@ -141,9 +141,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\dbproviders.xml">
-      <Link>Database\dbproviders.xml</Link>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Resources\mssql_undo.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -164,7 +161,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\dbproviders.xml">
+      <Link>Database\dbproviders.xml</Link>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
