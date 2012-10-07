@@ -7,7 +7,15 @@ namespace Net.Sf.Dbdeploy.Database
     public class DbProviderFileTest
     {
         [Test]
-        public void ShouldUseCurrentWorkingDirByDefault()
+        public void ShouldLoadFromAssemblyResourceIfProviderPathIsNull()
+        {
+            DbProviderFile providerFile = new DbProviderFile();
+            Assert.IsNull(providerFile.Path);
+            Assert.IsNotNull(providerFile.LoadProviders());
+        }
+        
+        [Test]
+        public void ShouldLoadFromAssemblyResourceIfProviderPathIsUntouched()
         {
             DbProviderFile providerFile = new DbProviderFile();
             Assert.IsNotNull(providerFile.LoadProviders());

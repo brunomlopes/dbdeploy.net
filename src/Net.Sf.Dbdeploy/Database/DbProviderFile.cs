@@ -13,7 +13,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public DbProviderFile()
         {
-            path = GetDefaultPath();
+            path = null;
         }
 
         public string Path
@@ -35,14 +35,17 @@ namespace Net.Sf.Dbdeploy.Database
 
         public Providers LoadProviders()
         {
-            if (!File.Exists(Path))
+            Stream providerStream;
+            if (Path == null) providerStream = GetType().Assembly.GetManifestResourceStream(GetType(), ProviderFilename);
+            else if (!File.Exists(Path)) throw new FileNotFoundException("Could not load provider file from " + path);
+            else providerStream = File.OpenRead(Path);
+
+            using (providerStream)
+            using (XmlReader reader = new XmlTextReader(providerStream))
             {
-                throw new FileNotFoundException("Could not load provider file from " + path);
-            }
-            XmlSerializer serializer = new XmlSerializer(typeof(Providers));
-            using (XmlReader reader = new XmlTextReader(Path))
-            {
-                return (Providers)serializer.Deserialize(reader);
+                var serializer = new XmlSerializer(typeof (Providers));
+
+                return (Providers) serializer.Deserialize(reader);
             }
         }
     }
