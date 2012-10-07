@@ -22,17 +22,6 @@ namespace Net.Sf.Dbdeploy.Database
             set { path = value; }
         }
 
-        private static string GetDefaultPath()
-        {
-            DirectoryInfo assemblyDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-            string path = System.IO.Path.Combine(assemblyDirectory.FullName, ProviderFilename);
-            if (!File.Exists(path))
-            {
-                path = System.IO.Path.Combine(Environment.CurrentDirectory, ProviderFilename);
-            }
-            return path;
-        }
-
         public Providers LoadProviders()
         {
             Stream providerStream;
@@ -47,6 +36,17 @@ namespace Net.Sf.Dbdeploy.Database
 
                 return (Providers) serializer.Deserialize(reader);
             }
+        }
+        
+        private static string GetDefaultPath()
+        {
+            DirectoryInfo assemblyDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+            string path = System.IO.Path.Combine(assemblyDirectory.FullName, ProviderFilename);
+            if (!File.Exists(path))
+            {
+                path = System.IO.Path.Combine(Environment.CurrentDirectory, ProviderFilename);
+            }
+            return path;
         }
     }
 }
