@@ -1,66 +1,19 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Management.Automation;
-using Net.Sf.Dbdeploy.Configuration;
-using Net.Sf.Dbdeploy.Database;
 
 namespace Dbdeploy.Powershell.Commands
 {
     public class DbUpdateBase : PSCmdlet
     {
-        protected DatabaseSchemaVersionManager _databaseSchemaVersion;
-        protected string _deltasDirectory;
-        protected DbmsFactory _dbmsFactory;
-        private XmlConfiguration _config;
+        private const string DatabaseTypeDefault = "mssql";
+        private const string TableNameDefault = "changelog";
 
-        protected override void ProcessRecord()
-        {
-            var configurationFile = ToAbsolutePath(ConfigurationFile);
-            _deltasDirectory = ToAbsolutePath(DeltasDirectory);
+        private XmlConfiguration config;
 
-            if (!string.IsNullOrEmpty(configurationFile) && File.Exists(configurationFile))
-            {
-                _config = new XmlConfiguration(configurationFile);
-                if(string.IsNullOrEmpty(DatabaseType) || DatabaseType == DatabaseTypeDefault)
-                    DatabaseType = _config.DbType;
-                if(string.IsNullOrEmpty(ConnectionString))
-                    ConnectionString = _config.DbConnectionString;
-                if (string.IsNullOrEmpty(DeltaSet) || DeltaSet == DeltaSetDefault)
-                    DeltaSet = _config.DbDeltaSet;
-                if(string.IsNullOrEmpty(TableName) || TableName == TableNameDefault)
-                    TableName = _config.TableName;
-                if(!CurrentDbVersion.HasValue)
-                    CurrentDbVersion = _config.CurrentDbVersion;
+        protected string deltasDirectory;
+        private string tableName = TableNameDefault;
 
-                UseTransaction = _config.UseTransaction;
-            }
-
-            if(string.IsNullOrEmpty(ConnectionString))
-            {
-                throw new InvalidDataException(
-                    "Missing connection string. It must either be in the config file or passed as a parameter");
-            }
-
-            _dbmsFactory = new DbmsFactory(DatabaseType, ConnectionString, ForDirectExecution);
-            _databaseSchemaVersion = new DatabaseSchemaVersionManager(_dbmsFactory,
-                                                                     DeltaSet,
-                                                                     CurrentDbVersion,
-                                                                     TableName);
-        }
-
-        protected virtual bool ForDirectExecution { get { return false; } }
-
-        protected string ToAbsolutePath(string deltasDirectory)
-        {
-            if (string.IsNullOrEmpty(deltasDirectory))
-                return null;
-            if (!Path.IsPathRooted(deltasDirectory))
-            {
-                deltasDirectory = Path.Combine(SessionState.Path.CurrentFileSystemLocation.Path, deltasDirectory);
-            }
-            return deltasDirectory;
-        }
-
+        private string databaseType = DatabaseTypeDefault;
 
         [Parameter(Mandatory = false)]
         public string ConfigurationFile { get; set; }
@@ -68,49 +21,60 @@ namespace Dbdeploy.Powershell.Commands
         [Parameter(Mandatory = true, Position = 0)]
         public string DeltasDirectory { get; set; }
 
-        private const string DatabaseTypeDefault = "mssql";
-        private string _databaseType = DatabaseTypeDefault;
-
         [Parameter(Mandatory = false, HelpMessage = "Defaults to mssql")]
         public string DatabaseType
         {
-            get { return _databaseType; }
-            set { _databaseType = value; }
+            get { return this.databaseType; }
+            set { this.databaseType = value; }
         }
 
         [Parameter(Mandatory = false)]
         public string ConnectionString { get; set; }
 
-        private bool _useTransaction = false;
-
-        [Parameter(Mandatory = false, HelpMessage = "Defaults to false")]
-        public bool UseTransaction
-        {
-            get { return _useTransaction; }
-            set { _useTransaction = value; }
-        }
-        
-        private const string DeltaSetDefault = "Main";
-        private string _deltaSet = DeltaSetDefault;
-
-        [Parameter(Mandatory = false, HelpMessage = "Defaults to 'Main'")]
-        public string DeltaSet
-        {
-            get { return _deltaSet; }
-            set { _deltaSet = value; }
-        }
-
-        [Parameter(Mandatory = false, HelpMessage = "If not set, fetches current version from database")]
-        public int? CurrentDbVersion { get; set; }
-
-        private const string TableNameDefault = "changelog";
-        private string _tableName = TableNameDefault;
-
         [Parameter(Mandatory = false, HelpMessage = "Changelog table name. Defaults to changelog")]
         public string TableName
         {
-            get { return _tableName; }
-            set { _tableName = value; }
+            get { return this.tableName; }
+            set { this.tableName = value; }
+        }
+
+        protected override void ProcessRecord()
+        {
+            var configurationFile = this.ToAbsolutePath(ConfigurationFile);
+            this.deltasDirectory = this.ToAbsolutePath(DeltasDirectory);
+
+            if (!string.IsNullOrEmpty(configurationFile) && File.Exists(configurationFile))
+            {
+                this.config = new XmlConfiguration(configurationFile);
+
+                if (string.IsNullOrEmpty(this.DatabaseType) || this.DatabaseType == DatabaseTypeDefault)
+                    this.DatabaseType = this.config.DbType;
+
+                if (string.IsNullOrEmpty(this.ConnectionString))
+                    this.ConnectionString = this.config.DbConnectionString;
+
+                if (string.IsNullOrEmpty(this.TableName) || this.TableName == TableNameDefault)
+                    this.TableName = this.config.TableName;
+            }
+
+            if (string.IsNullOrEmpty(this.ConnectionString))
+            {
+                throw new InvalidDataException(
+                    "Missing connection string. It must either be in the config file or passed as a parameter");
+            }
+        }
+
+        protected string ToAbsolutePath(string deltasDirectory)
+        {
+            if (string.IsNullOrEmpty(deltasDirectory))
+                return null;
+
+            if (!Path.IsPathRooted(deltasDirectory))
+            {
+                deltasDirectory = Path.Combine(this.SessionState.Path.CurrentFileSystemLocation.Path, deltasDirectory);
+            }
+
+            return deltasDirectory;
         }
     }
 }

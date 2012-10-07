@@ -1,9 +1,11 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Globalization;
+using System.Xml.Serialization;
 
 namespace Net.Sf.Dbdeploy.Database
 {
     [XmlRoot("providers")]
-    public class Providers
+    public class DbProviders
     {
         private DatabaseProvider[] itemsField;
 
@@ -21,48 +23,12 @@ namespace Net.Sf.Dbdeploy.Database
                 if (dbmsType.Equals(provider.Name))
                     return provider;
             }
-            return null; // TODO: Add exception here for unknown type.
-        }
-    }
 
-
-    public class DatabaseProvider
-    {
-        private string nameField;
-        private string descriptionField;
-        private string assemblyNameField;
-        private string connectionClassField;
-
-        /// <remarks/>
-        [XmlAttribute("name")]
-        public string Name
-        {
-            get { return nameField; }
-            set { nameField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttribute("description")]
-        public string Description
-        {
-            get { return descriptionField; }
-            set { descriptionField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttribute("assemblyName")]
-        public string AssemblyName
-        {
-            get { return assemblyNameField; }
-            set { assemblyNameField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttribute("connectionClass")]
-        public string ConnectionClass
-        {
-            get { return connectionClassField; }
-            set { connectionClassField = value; }
+            throw new NotImplementedException(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    "No provider for type '{0}' implemented." + Environment.NewLine + "Supported dbms: ora, mssql, mysql.", 
+                    dbmsType));
         }
     }
 }

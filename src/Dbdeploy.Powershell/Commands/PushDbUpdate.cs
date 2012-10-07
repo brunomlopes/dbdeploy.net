@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
+﻿using System.IO;
 using System.Management.Automation;
-using System.Text;
-using Net.Sf.Dbdeploy.Scripts;
+using Net.Sf.Dbdeploy;
 
 namespace Dbdeploy.Powershell.Commands
 {
@@ -15,33 +11,16 @@ namespace Dbdeploy.Powershell.Commands
         {
             base.ProcessRecord();
 
-            var infoTextWriter = new LambdaTextWriter(WriteVerbose);
-                
-            var updateText = new StringBuilder();
-            var stringWriterForUpdateScript = new StringWriter(updateText);
-
-            List<ChangeScript> changeScripts = new DirectoryScanner(infoTextWriter).GetChangeScriptsForDirectory(new DirectoryInfo(_deltasDirectory));
-            new PowershellPrintStreamDeployer(_databaseSchemaVersion, new ChangeScriptRepository(changeScripts),
-                                              stringWriterForUpdateScript,
-                                              _dbmsFactory.CreateDbmsSyntax(), UseTransaction, null,
-                                              infoTextWriter)
-                .DoDeploy(Int32.MaxValue, infoTextWriter);
-
-            using (var connection = _dbmsFactory.CreateConnection())
+            var dbDeploy = new DbDeployer
             {
-                connection.Open();
+                InfoWriter = new LambdaTextWriter(WriteVerbose),
+                Dbms = DatabaseType,
+                ConnectionString = ConnectionString,
+                ChangeLogTableName = TableName,
+                ScriptDirectory = new DirectoryInfo(deltasDirectory),
+            };
 
-                var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = updateText.ToString();
-                var result = command.ExecuteNonQuery();
-                WriteObject(new {RowsChanged = result});
-            }
-        }
-
-        protected override bool ForDirectExecution
-        {
-            get { return true; }
+            dbDeploy.Go();
         }
     }
 }

@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Text;
-using System.Xml;
 using NAnt.Core;
 using NAnt.Core.Attributes;
 using Net.Sf.Dbdeploy.Database;
@@ -12,126 +10,106 @@ namespace Net.Sf.Dbdeploy
     [TaskName("dbdeploy")]
     public class NAntTask : Task
     {
-        private string dbType;
-        private string dbConnection;
-        private DirectoryInfo dir;
-        private FileInfo outputfile;
-        private FileInfo undoOutputfile;
+        private readonly DbDeployer dbDeploy;
 
-        private int lastChangeToApply = Int32.MaxValue;
-        private String deltaSet = "Main";
-        private int currentDbVersion = Int32.MinValue;
-    	private string changeLogTable = DatabaseSchemaVersionManager.DEFAULT_TABLE_NAME;
-    	private bool useTransaction = false;
-        private string outputFileEncoding = string.Empty;
+        public NAntTask()
+        {
+            this.dbDeploy = new DbDeployer();
 
+            this.dbDeploy.InfoWriter = Console.Out;
+        }
+        
         [TaskAttribute("dbType", Required = true)]
         public string DbType
         {
-            set { dbType = value; }
-        }
-
-        [TaskAttribute("dbConnection")]
-        public string DbConnection
-        {
-            set { dbConnection = value; }
-        }
-
-        [TaskAttribute("dir", Required=true)]
-        public DirectoryInfo Dir
-        {
-            set { dir = value; }
-        }
-
-        [TaskAttribute("outputFile", Required = true)]
-        public FileInfo Outputfile
-        {
-            set { outputfile = value; }
-        }
-
-        [TaskAttribute("outputFileEncoding")]
-        public string OutputFileEncoding
-        {
-            set { outputFileEncoding = value;}
-        }
-       
-        [TaskAttribute("undoOutputFile")]
-        public FileInfo UndoOutputfile
-        {
-            set { undoOutputfile = value; }
-        }
-
-        [TaskAttribute("lastChangeToApply")]
-        public int LastChangeToApply
-        {
-            set { lastChangeToApply = value; }
-        }
-
-        [TaskAttribute("deltaSet")]
-        public string DeltaSet
-        {
-            set { deltaSet = value; }
-        }
-
-        [TaskAttribute("currentDbVersion")]
-        public int CurrentDbVersion
-        {
-            set { currentDbVersion = value; }
-        }
-
-		[TaskAttribute("changeLogTable")]
-		public string ChangeLogTable
-    	{
-			set { changeLogTable = value; }
-    	}
-
-		[TaskAttribute("useTransaction")]
-		public bool UseTransaction
-		{
-			set { useTransaction = value; }
-		}
-
-        private int? GetCurrentDbVersion()
-        {
-            if (currentDbVersion < 0)
-				return null;
-
-            return currentDbVersion;
+            set { this.dbDeploy.Dbms = value; }
         }
         
-        protected override void InitializeTask(XmlNode taskNode)
+        [TaskAttribute("dbConnection", Required = true)]
+        public string DbConnection
         {
-            Validator validator = new Validator();
-            validator.SetUsage("nant");
-            validator.Validate(dbConnection, dbType, dir.FullName, outputfile.Name, GetCurrentDbVersion());
-//            TODO: Add validation for the OutputFileEncoding
+            set { this.dbDeploy.ConnectionString = value; }
+        }
+        
+        [TaskAttribute("dir", Required = true)]
+        public DirectoryInfo Dir
+        {
+            get { return this.dbDeploy.ScriptDirectory; }
+            set { this.dbDeploy.ScriptDirectory = value; }
+        }
+        
+        [TaskAttribute("outputFile")]
+        public FileInfo OutputFile
+        {
+            get { return this.dbDeploy.OutputFile; }
+            set { this.dbDeploy.OutputFile = value; }
+        }
+        
+        [TaskAttribute("encoding")]
+        public string OutputEncoding
+        {
+            get { return this.dbDeploy.Encoding.EncodingName; }
+            set { this.dbDeploy.Encoding = new OutputFileEncoding(value).AsEncoding(); }
+        }
+        
+        [TaskAttribute("undoOutputFile")]
+        public FileInfo UndoOutputFile
+        {
+            get { return this.dbDeploy.UndoOutputFile; }
+            set { this.dbDeploy.UndoOutputFile = value; }
+        }
+        
+        [TaskAttribute("templateDir")]
+        public DirectoryInfo TemplateDir
+        {
+            get { return this.dbDeploy.TemplateDir; }
+            set { this.dbDeploy.TemplateDir = value; }
+        }
+        
+        [TaskAttribute("lastChangeToApply")]
+        public int? LastChangeToApply
+        {
+            get { return this.dbDeploy.LastChangeToApply; }
+            set { this.dbDeploy.LastChangeToApply = value; }
+        }
+        
+        [TaskAttribute("changeLogTable")]
+        public string ChangeLogTable
+        {
+            get { return this.dbDeploy.ChangeLogTableName; }
+            set { this.dbDeploy.ChangeLogTableName = value; }
+        }
+        
+        [TaskAttribute("delimiter")]
+        public string Delimiter
+        {
+            get { return this.dbDeploy.Delimiter; }
+            set { this.dbDeploy.Delimiter = value; }
+        }
+        
+        [TaskAttribute("delimiterType")]
+        public string DelimiterType
+        {
+            get { return this.dbDeploy.DelimiterType.GetType().Name; }
+            set { this.dbDeploy.DelimiterType = DelimiterTypeFactory.Create(value); }
         }
 
         protected override void ExecuteTask()
         {
             try
             {
-                Encoding encoding = new OutputFileEncoding(outputFileEncoding).AsEncoding();
-                using (TextWriter outputPrintStream = new StreamWriter(outputfile.FullName, true, encoding))
-                {
-                    TextWriter undoOutputPrintStream = null;
-                    if (undoOutputfile != null)
-                        undoOutputPrintStream = new StreamWriter(undoOutputfile.FullName, true, encoding);
+                this.dbDeploy.Go();
+            }
+            catch (UsageException ex)
+            {
+                Console.Error.WriteLine(ex.Message);
 
-                    DbmsFactory factory = new DbmsFactory(dbType, dbConnection);
-                    IDbmsSyntax dbmsSyntax = factory.CreateDbmsSyntax();
-                    DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, deltaSet, GetCurrentDbVersion(), changeLogTable);
-
-                    ToPrintStreamDeployer toPrintSteamDeployer = new ToPrintStreamDeployer(databaseSchemaVersion, dir, outputPrintStream, dbmsSyntax, useTransaction, undoOutputPrintStream);
-                    toPrintSteamDeployer.DoDeploy(lastChangeToApply);
-
-                    if (undoOutputPrintStream != null)
-                        undoOutputPrintStream.Close();
-                }
+                this.PrintUsage();
             }
             catch (DbDeployException ex)
             {
                 Console.Error.WriteLine(ex.Message);
+
                 throw new BuildException(ex.Message);
             }
             catch (Exception ex)
@@ -139,8 +117,31 @@ namespace Net.Sf.Dbdeploy
                 Console.Error.WriteLine("Failed to apply changes: " + ex);
                 Console.Error.WriteLine("Stack Trace:");
                 Console.Error.Write(ex.StackTrace);
+
                 throw new BuildException(ex.Message);
             }
+        }
+
+        public void PrintUsage()
+        {
+            string message = "\n\nDbdeploy Ant Task Usage"
+                + "\n======================="
+                + "\n\n\t<dbdeploy"
+                + "\n\t\tdbType=\"[DATABASE TYPE - mssql/mysql/ora]\" *"
+                + "\n\t\tdbConnection=\"[DATABASE CONNECTION STRING]\" *"
+                + "\n\t\ttemplatedir=\"[DIRECTORY FOR DBMS TEMPLATE SCRIPTS, IF NOT USING BUILT-IN]\""
+                + "\n\t\tdir=\"[YOUR SCRIPT FOLDER]\" *"
+                + "\n\t\tencoding=\"[CHARSET OF IN- AND OUTPUT SQL SCRIPTS - default UTF-8]\""
+                + "\n\t\toutputfile=\"[OUTPUT SCRIPT PATH + NAME]\""
+                + "\n\t\tlastChangeToApply=\"[NUMBER OF THE LAST SCRIPT TO APPLY]\""
+                + "\n\t\tundoOutputfile=\"[UNDO SCRIPT PATH + NAME]\""
+                + "\n\t\tchangeLogTableName=\"[CHANGE LOG TABLE NAME]\""
+                + "\n\t\tdelimiter=\"[STATEMENT DELIMITER - default ;]\""
+                + "\n\t\tdelimitertype=\"[STATEMENT DELIMITER TYPE - row or normal, default normal]\""
+                + "\n\t/>"
+                + "\n\n* - Indicates mandatory parameter";
+
+            Console.Out.WriteLine(message);
         }
     }
 }

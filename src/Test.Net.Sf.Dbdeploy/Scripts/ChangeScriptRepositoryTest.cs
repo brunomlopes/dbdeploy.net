@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Net.Sf.Dbdeploy.Exceptions;
 using NUnit.Framework;
 
@@ -19,7 +20,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             ChangeScriptRepository repository = new ChangeScriptRepository(new List<ChangeScript>(scripts));
 
-            List<ChangeScript> list = repository.GetOrderedListOfDoChangeScripts();
+            List<ChangeScript> list = repository.GetAvailableChangeScripts().ToList();
 
             Assert.AreEqual(4, list.Count);
             Assert.AreSame(one, list[0]);
@@ -58,7 +59,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             ChangeScriptRepository repository =
                 new ChangeScriptRepository(new List<ChangeScript>(scripts));
 
-            List<ChangeScript> list = repository.GetOrderedListOfDoChangeScripts();
+            List<ChangeScript> list = repository.GetAvailableChangeScripts().ToList();
 
             Assert.AreEqual(2, list.Count);
             Assert.AreSame(zero, list[0]);

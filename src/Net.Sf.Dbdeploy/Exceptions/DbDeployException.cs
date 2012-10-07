@@ -4,18 +4,18 @@ namespace Net.Sf.Dbdeploy.Exceptions
 {
     public class DbDeployException : Exception
     {
-        public DbDeployException(String message)
+        public DbDeployException(string message)
             : base(message)
         {
         }
 
-        public DbDeployException(String message, Exception cause)
-            : base(message, cause)
+        public DbDeployException(string message, Exception inner)
+            : base(message, inner)
         {
         }
 
-        public DbDeployException(Exception cause)
-            : base(cause.Message)
+        public DbDeployException(Exception inner)
+            : base(inner.Message, inner)
         {
         }
     }

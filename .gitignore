@@ -32,3 +32,8 @@ _ReSharper*/
 *.vs10x
 *.ncrunchsolution
 *.ncrunchproject
+/local.properties
+/db/create.database.*
+/db/DBDEPLOY.mdf
+/db/DBDEPLOY_log.ldf
+/dist

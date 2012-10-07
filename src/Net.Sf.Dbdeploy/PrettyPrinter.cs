@@ -7,7 +7,7 @@ namespace Net.Sf.Dbdeploy
 {
     public class PrettyPrinter
     {
-        public String Format(List<int> appliedChanges)
+        public string Format(ICollection<int> appliedChanges)
         {
             if (appliedChanges.Count == 0)
             {
@@ -42,7 +42,8 @@ namespace Net.Sf.Dbdeploy
                 }
             }
 
-            AppendRange(builder, lastRangeStart.Value, lastNumber.Value);
+            this.AppendRange(builder, lastRangeStart.Value, lastNumber.Value);
+
             return builder.ToString();
         }
 
@@ -50,16 +51,16 @@ namespace Net.Sf.Dbdeploy
         {
             if (lastRangeStart == lastNumber)
             {
-                AppendWithPossibleComma(builder, lastNumber);
+                this.AppendWithPossibleComma(builder, lastNumber);
             }
             else if (lastRangeStart + 1 == lastNumber)
             {
-                AppendWithPossibleComma(builder, lastRangeStart);
-                AppendWithPossibleComma(builder, lastNumber);
+                this.AppendWithPossibleComma(builder, lastRangeStart);
+                this.AppendWithPossibleComma(builder, lastNumber);
             }
             else
             {
-                AppendWithPossibleComma(builder, lastRangeStart + ".." + lastNumber);
+                this.AppendWithPossibleComma(builder, lastRangeStart + ".." + lastNumber);
             }
         }
 
@@ -69,10 +70,11 @@ namespace Net.Sf.Dbdeploy
             {
                 builder.Append(", ");
             }
+
             builder.Append(o);
         }
 
-        public String FormatChangeScriptList(List<ChangeScript> changeScripts)
+        public string FormatChangeScriptList(ICollection<ChangeScript> changeScripts)
         {
             List<int> numberList = new List<int>(changeScripts.Count);
 
@@ -81,7 +83,7 @@ namespace Net.Sf.Dbdeploy
                 numberList.Add(changeScript.GetId());
             }
 
-            return Format(numberList);
+            return this.Format(numberList);
         }
     }
 }

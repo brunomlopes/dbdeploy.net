@@ -36,3 +36,7 @@ using System.Runtime.InteropServices;
 
 [assembly : AssemblyVersion("1.0.0.0")]
 [assembly : AssemblyFileVersion("1.0.0.0")]
+
+#if DEBUG
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Test.Net.Sf.Dbdeploy")]
+#endif

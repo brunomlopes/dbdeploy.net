@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Net.Sf.Dbdeploy.Configuration;
-using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Exceptions;
 
 namespace Net.Sf.Dbdeploy
@@ -10,26 +9,55 @@ namespace Net.Sf.Dbdeploy
     {
         public static void Main(string[] args)
         {
-            try
+            var dbDeploy = new Dbdeploy.DbDeployer
+            {
+                InfoWriter = Console.Out,
+                ScriptDirectory = new DirectoryInfo("."),
+            };
+
+            try 
             {
                 IConfiguration config = new ConfigurationFile();
-                DbmsFactory factory = new DbmsFactory(config.DbType, config.DbConnectionString);
-                DatabaseSchemaVersionManager databaseSchemaVersion = new DatabaseSchemaVersionManager(factory, config.DbDeltaSet, config.CurrentDbVersion, config.TableName);
 
-                new ToPrintStreamDeployer(databaseSchemaVersion, new DirectoryInfo("."), Console.Out, factory.CreateDbmsSyntax(), config.UseTransaction, null).DoDeploy(Int32.MaxValue);
+                dbDeploy.Dbms = config.DbType;
+                dbDeploy.ConnectionString = config.DbConnectionString;
+                dbDeploy.ChangeLogTableName = config.TableName;
+            }
+            catch (System.Configuration.ConfigurationException)
+            {
+                // ignore
+            }
+
+            var parser = new Parser();
+
+            try
+            {
+                // Read arguments from command line
+                parser.Parse(args, dbDeploy);
+
+                dbDeploy.Go();
+            }
+            catch (UsageException ex)
+            {
+                Console.Error.WriteLine("ERROR: " + ex.Message);
+                
+                parser.PrintUsage();
             }
             catch (DbDeployException ex)
             {
                 Console.Error.WriteLine(ex.Message);
+
                 Environment.Exit(1);
             }
-
             catch (Exception ex)
             {
-                Console.Error.WriteLine("Failed to apply changes: " + ex);
+                Console.Error.WriteLine("Failed to apply changes: " + ex.Message);
                 Console.Error.WriteLine(ex.StackTrace);
+
                 Environment.Exit(2);
             }
+
+            Environment.Exit(0);
         }
     }
 }

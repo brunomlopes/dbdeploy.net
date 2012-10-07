@@ -4,15 +4,18 @@ namespace Net.Sf.Dbdeploy.Exceptions
 {
     public class DuplicateChangeScriptException : DbDeployException
     {
-        public DuplicateChangeScriptException(String message, Exception cause) : base(message, cause)
+        public DuplicateChangeScriptException(string message, Exception inner) 
+            : base(message, inner)
         {
         }
 
-        public DuplicateChangeScriptException(String message) : base(message)
+        public DuplicateChangeScriptException(string message) 
+            : base(message)
         {
         }
 
-        public DuplicateChangeScriptException(Exception cause) : base(cause)
+        public DuplicateChangeScriptException(Exception inner) 
+            : base(inner)
         {
         }
     }

@@ -1,5 +1,4 @@
 ﻿using Dbdeploy.Powershell;
-using Dbdeploy.Powershell.Commands;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy

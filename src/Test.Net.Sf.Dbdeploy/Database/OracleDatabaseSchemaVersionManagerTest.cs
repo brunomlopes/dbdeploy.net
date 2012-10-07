@@ -1,20 +1,21 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Text;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-using NUnit.Framework;
 using System.Data.OracleClient;
+using System.Text;
+using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-	[Category("Oracle")]
+	[Category("Oracle"), Category("DbIntegration")]
 	public class OracleDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
 	{
 		private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["OracleConnString"];
 		private const string DELTA_SET = "All";
-		private const string CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE = "Could not retrieve change log from database because: ORA-00942: table or view does not exist\n";
+		private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new []
+		{ 
+			"Could not retrieve change log from database because: ORA-00942: table or view does not exist\n" 
+		};
 		private const string DBMS = "ora";
 
 		protected override string ConnectionString
@@ -27,9 +28,9 @@ namespace Net.Sf.Dbdeploy.Database
 			get { return DELTA_SET; }
 		}
 
-		protected override string ChangelogTableDoesNotExistMessage
+		protected override string[] ChangelogTableDoesNotExistMessages
 		{
-			get { return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGE; }
+			get { return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES; }
 		}
 
 		protected override string Dbms
@@ -62,7 +63,7 @@ namespace Net.Sf.Dbdeploy.Database
 		protected override void InsertRowIntoTable(int i)
 		{
 			StringBuilder commandBuilder = new StringBuilder();
-			commandBuilder.AppendFormat("INSERT INTO {0}", databaseSchemaVersion.TableName);
+			commandBuilder.AppendFormat("INSERT INTO {0}", TableName);
 			commandBuilder.Append("(change_number, delta_set, start_dt, complete_dt, applied_by, description)");
 			commandBuilder.AppendFormat(" VALUES ({0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER, 'Unit test')", i, DELTA_SET);
 			ExecuteSql(commandBuilder.ToString());
@@ -77,25 +78,11 @@ namespace Net.Sf.Dbdeploy.Database
 		{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.Append("Begin");
-			commandBuilder.AppendFormat(" execute immediate 'DROP TABLE {0}';", databaseSchemaVersion.TableName);
+			commandBuilder.AppendFormat(" execute immediate 'DROP TABLE {0}';", TableName);
 			commandBuilder.Append(" Exception when others then null;");
 			commandBuilder.Append(" End;");
 
 			ExecuteSql(commandBuilder.ToString());
-		}
-
-		[Test]
-		[ExpectedException(typeof(DbDeployException))]
-		public void ShouldThrowExceptionIfIncompletedScriptIsFound()
-		{
-			EnsureTableDoesNotExist();
-			CreateTable();
-			ExecuteSql("INSERT INTO " + databaseSchemaVersion.TableName
-					   + " (change_number, delta_set, start_dt, complete_dt, applied_by, description) VALUES ( "
-					   + 1 + ", '" + DELTA_SET
-					   + "', CURRENT_TIMESTAMP, NULL, USER, 'Unit test')");
-
-			databaseSchemaVersion.GetAppliedChangeNumbers();
 		}
 
 		[Test]
@@ -104,21 +91,10 @@ namespace Net.Sf.Dbdeploy.Database
 			EnsureTableDoesNotExist();
 			CreateTable();
 			InsertRowIntoTable(3);
-			List<int> changeNumbers = databaseSchemaVersion.GetAppliedChangeNumbers();
+			List<int> changeNumbers = new List<int>(databaseSchemaVersion.GetAppliedChanges());
 
 			Assert.AreEqual(1, changeNumbers.Count);
 			Assert.AreEqual(3, changeNumbers[0]);
-		}
-
-		[Test]
-		public override void TestCanRetrieveDeltaFragmentFooterSql()
-		{
-			ChangeScript script = new ChangeScript(3, "description");
-			Assert.AreEqual(
-				@"UPDATE changelog SET complete_dt = CURRENT_TIMESTAMP WHERE change_number = 3 AND delta_set = 'All';
-COMMIT;
---------------- Fragment ends: #3 ---------------",
-				databaseSchemaVersion.GenerateDoDeltaFragmentFooter(script));
 		}
 
 		[Test]
@@ -138,30 +114,5 @@ COMMIT;
 		{
 			base.TestShouldReturnEmptySetWhenTableHasNoRows();
 		}
-
-		[Test]
-		public override void TestCanRetrieveDeltaFragmentHeaderSql()
-		{
-			ChangeScript script = new ChangeScript(3, "description");
-			Assert.AreEqual(@"--------------- Fragment begins: #3 ---------------
-INSERT INTO changelog (change_number, delta_set, start_dt, applied_by, description) VALUES (3, 'All', CURRENT_TIMESTAMP, USER, 'description');
-COMMIT;",
-				databaseSchemaVersion.GenerateDoDeltaFragmentHeader(script));
-		}
-
-		[Test]
-		public override void TestCanSetChangeLogTableName()
-		{
-			base.TestCanSetChangeLogTableName();
-		}
-
-		[Test]
-		public void TestCanGenerateVersionCheck()
-		{
-			databaseSchemaVersion = new DatabaseSchemaVersionManager(new DbmsFactory(DBMS, CONNECTION_STRING), "Main", 5);
-			Assert.AreEqual(@"execute versionCheck('Main', 5, 'changelog');"
-			, databaseSchemaVersion.GenerateVersionCheck());
-		}
-
 	}
 }

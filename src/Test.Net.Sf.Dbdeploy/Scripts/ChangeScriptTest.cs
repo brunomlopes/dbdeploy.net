@@ -1,5 +1,5 @@
 using System.IO;
-using Net.Sf.Dbdeploy.Scripts;
+using System.Text;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Scripts
@@ -11,7 +11,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void TestChangeScriptsHaveAnIdAndAFile()
         {
             FileInfo file = new FileInfo("abc.txt");
-            ChangeScript changeScript = new ChangeScript(5, file);
+            ChangeScript changeScript = new ChangeScript(5, file, Encoding.Default);
 
             Assert.AreEqual(5, changeScript.GetId());
             Assert.AreEqual(file, changeScript.GetFile());
@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void TestToStringReturnsASensibleValue()
         {
             FileInfo file = new FileInfo("abc.txt");
-            ChangeScript changeScript = new ChangeScript(5, file);
+            ChangeScript changeScript = new ChangeScript(5, file, Encoding.Default);
             Assert.AreEqual("#5: abc.txt", changeScript.ToString());
         }
     }

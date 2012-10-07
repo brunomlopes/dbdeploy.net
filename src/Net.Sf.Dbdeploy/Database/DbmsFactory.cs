@@ -7,31 +7,27 @@ namespace Net.Sf.Dbdeploy.Database
     public class DbmsFactory
     {
         private readonly string dbms;
+
         private readonly string connectionString;
-        private readonly bool forDirectExecution;
-        private readonly Providers providers;
 
+        private readonly DbProviders providers;
 
-        public DbmsFactory(string dbms, string connectionString) : this(dbms, connectionString, false)
-        {
-        }
-
-        public DbmsFactory(string dbms, string connectionString, bool forDirectExecution)
+        public DbmsFactory(string dbms, string connectionString)
         {
             this.dbms = dbms;
             this.connectionString = connectionString;
-            this.forDirectExecution = forDirectExecution;
-            providers = new DbProviderFile().LoadProviders();
+
+            this.providers = new DbProviderFile().LoadProviders();
         }
 
-        public IDbmsSyntax CreateDbmsSyntax()
+        public virtual IDbmsSyntax CreateDbmsSyntax()
         {
-            switch (dbms)
+            switch (this.dbms)
             {
                 case "ora":
                     return new OracleDbmsSyntax();
                 case "mssql":
-                    return new MsSqlDbmsSyntax(forDirectExecution);
+                    return new MsSqlDbmsSyntax();
                 case "mysql":
                     return new MySqlDbmsSyntax();
                 default:
@@ -39,15 +35,14 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        public IDbConnection CreateConnection()
+        public virtual IDbConnection CreateConnection()
         {
-            DatabaseProvider provider = providers.GetProvider(dbms);
-            if (provider == null)
-				throw new ArgumentException("Supported dbms: ora, mssql, mysql.");
+            DatabaseProvider provider = this.providers.GetProvider(dbms);
 
             Assembly assembly = Assembly.Load(provider.AssemblyName);
             Type type = assembly.GetType(provider.ConnectionClass);
-            return (IDbConnection) Activator.CreateInstance(type, connectionString);
+
+            return (IDbConnection)Activator.CreateInstance(type, this.connectionString);
         }
     }
 }

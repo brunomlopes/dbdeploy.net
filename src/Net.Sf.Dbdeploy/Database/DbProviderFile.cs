@@ -9,20 +9,21 @@ namespace Net.Sf.Dbdeploy.Database
     public class DbProviderFile
     {
         public const string ProviderFilename = @"dbproviders.xml";
+
         private string path;
 
         public DbProviderFile()
         {
-            path = null;
+            this.path = null;
         }
 
         public string Path
         {
-            get { return path; }
-            set { path = value; }
+            get { return this.path; }
+            set { this.path = value; }
         }
 
-        public Providers LoadProviders()
+        public DbProviders LoadProviders()
         {
             Stream providerStream;
             if (Path == null) providerStream = GetType().Assembly.GetManifestResourceStream(GetType(), ProviderFilename);
@@ -38,15 +39,19 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
         
+
         private static string GetDefaultPath()
         {
             DirectoryInfo assemblyDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-            string path = System.IO.Path.Combine(assemblyDirectory.FullName, ProviderFilename);
-            if (!File.Exists(path))
+
+            string providerFilePath = System.IO.Path.Combine(assemblyDirectory.FullName, ProviderFilename);
+            
+            if (!File.Exists(providerFilePath))
             {
-                path = System.IO.Path.Combine(Environment.CurrentDirectory, ProviderFilename);
+                providerFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, ProviderFilename);
             }
-            return path;
+            
+            return providerFilePath;
         }
     }
 }

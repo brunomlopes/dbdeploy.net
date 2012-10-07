@@ -1,90 +1,90 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Scripts;
 
 namespace Net.Sf.Dbdeploy
 {
     public class Controller
     {
-        private readonly DatabaseSchemaVersionManager schemaManager;
-        private readonly ChangeScriptExecuter changeScriptExecuter;
-        private readonly ChangeScriptRepository changeScriptRepository;
+        private readonly IAvailableChangeScriptsProvider availableChangeScriptsProvider;
+        private readonly IAppliedChangesProvider appliedChangesProvider;
+
+        private readonly IChangeScriptApplier doApplier;
+        private readonly IChangeScriptApplier undoApplier;
+
         private readonly PrettyPrinter prettyPrinter = new PrettyPrinter();
+        
         private static TextWriter infoWriter;
 
-        public Controller(DatabaseSchemaVersionManager schemaManager,
-                          ChangeScriptRepository changeScriptRepository,
-                          ChangeScriptExecuter changeScriptExecuter,
-                          TextWriter infoTextWriter)
+        public Controller(
+            IAvailableChangeScriptsProvider availableChangeScriptsProvider,
+            IAppliedChangesProvider appliedChangesProvider,
+            IChangeScriptApplier doApplier,
+            IChangeScriptApplier undoApplier,
+            TextWriter infoTextWriter)
         {
-            this.schemaManager = schemaManager;
-            this.changeScriptRepository = changeScriptRepository;
-            this.changeScriptExecuter = changeScriptExecuter;
-            infoWriter = infoTextWriter;
+            this.doApplier = doApplier;
+            this.undoApplier = undoApplier;
 
+            this.appliedChangesProvider = appliedChangesProvider;
+
+            this.availableChangeScriptsProvider = availableChangeScriptsProvider;
+            
+            infoWriter = infoTextWriter;
         }
 
-
-
-        public void ProcessDoChangeScripts(int lastChangeToApply, List<int> appliedChanges)
+        public void ProcessChangeScripts(int? lastChangeToApply)
         {
-            if (lastChangeToApply != int.MaxValue)
+            if (lastChangeToApply.HasValue)
             {
                 Info("Only applying changes up and including change script #" + lastChangeToApply);
             }
-            Info("Changes currently applied to database:\n  " + prettyPrinter.Format(appliedChanges));
 
-            List<ChangeScript> doChangeScripts = changeScriptRepository.GetOrderedListOfDoChangeScripts();
-            Info("Scripts available:\n  " + prettyPrinter.FormatChangeScriptList(doChangeScripts));
+            var scripts = this.availableChangeScriptsProvider.GetAvailableChangeScripts();
+            var applied = this.appliedChangesProvider.GetAppliedChanges();
+            var toApply = this.IdentifyChangesToApply(lastChangeToApply, scripts, applied);
 
-            changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateVersionCheck());
-            List<int> changesToApply = LoopThruDoScripts(lastChangeToApply, doChangeScripts, appliedChanges);
-            Info("To be applied:\n  " + prettyPrinter.Format(changesToApply));
-        }
+            this.LogStatus(scripts, applied, toApply);
 
-        public void ProcessUndoChangeScripts(int lastChangeToApply, List<int> appliedChanges)
-        {
-            List<ChangeScript> undoChangeScripts = changeScriptRepository.GetOrderedListOfUndoChangeScripts();
-            LoopThruUndoScripts(lastChangeToApply, undoChangeScripts, appliedChanges);
-        }
+            this.doApplier.Apply(toApply);
 
-        private List<int> LoopThruDoScripts(int lastChangeToApply, IEnumerable<ChangeScript> doChangeScripts, ICollection<int> appliedChanges)
-        {
-            List<int> changesToApply = new List<int>();
-            foreach (ChangeScript changeScript in doChangeScripts)
+            if (this.undoApplier != null)
             {
-                int changeScriptId = changeScript.GetId();
+                Info("Generating undo scripts...");
 
-                if (changeScriptId <= lastChangeToApply && !appliedChanges.Contains(changeScriptId))
-                {
-                    changesToApply.Add(changeScriptId);
+                var toUndoApply = new List<ChangeScript>(toApply);
+                toUndoApply.Reverse();
 
-                    changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateDoDeltaFragmentHeader(changeScript));
-                    changeScriptExecuter.ApplyChangeDoScript(changeScript);
-                    changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateDoDeltaFragmentFooter(changeScript));
-                }
-            }
-            return changesToApply;
-        }
-
-        private void LoopThruUndoScripts(int lastChangeToApply, IEnumerable<ChangeScript> undoChangeScripts, ICollection<int> appliedChanges)
-        {
-            foreach (ChangeScript changeScript in undoChangeScripts)
-            {
-                int changeScriptId = changeScript.GetId();
-
-                if (changeScriptId <= lastChangeToApply && !appliedChanges.Contains(changeScriptId))
-                {
-					changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateUndoDeltaFragmentHeader(changeScript));
-					changeScriptExecuter.ApplyChangeUndoScript(changeScript);
-                    changeScriptExecuter.ApplyDeltaFragmentHeaderOrFooterSql(schemaManager.GenerateUndoDeltaFragmentFooter(changeScript));
-                }
+                this.undoApplier.Apply(toUndoApply);
             }
         }
 
-        private void Info(string text)
+        private void LogStatus(ICollection<ChangeScript> scripts, ICollection<int> applied, ICollection<ChangeScript> toApply)
+        {
+            Info("Changes currently applied to database:\n  " + prettyPrinter.Format(applied));
+            Info("Scripts available:\n  " + prettyPrinter.FormatChangeScriptList(scripts));
+            Info("To be applied:\n  " + prettyPrinter.FormatChangeScriptList(toApply));
+        }
+
+        private ICollection<ChangeScript> IdentifyChangesToApply(int? lastChangeToApply, IEnumerable<ChangeScript> scripts, ICollection<int> applied)
+        {
+            var result = new List<ChangeScript>();
+
+            foreach (ChangeScript script in scripts)
+            {
+                if (lastChangeToApply.HasValue && script.GetId() > lastChangeToApply.Value)
+                    break;
+
+                if (!applied.Contains(script.GetId()))
+                {
+                    result.Add(script);
+                }
+            }
+
+            return result;
+        }
+
+        private static void Info(string text)
         {
             infoWriter.WriteLine(text);
         }

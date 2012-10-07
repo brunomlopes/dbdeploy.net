@@ -32,6 +32,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,6 +66,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NVelocity">
+      <HintPath>..\packages\NVelocity.1.0.3\lib\NVelocity.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -71,26 +76,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangeScriptExecuter.cs" />
+    <Compile Include="Appliers\TemplateBasedApplier.cs" />
+    <Compile Include="Appliers\UndoTemplateBasedApplier.cs" />
     <Compile Include="Configuration\ConfigurationFile.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Database\DatabaseProvider.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManager.cs" />
     <Compile Include="Database\DbmsSyntax.cs" />
     <Compile Include="Database\DbmsFactory.cs" />
     <Compile Include="Database\DbProviderFile.cs" />
     <Compile Include="Database\DbProviders.cs" />
-    <Compile Include="Database\HsqlDbmsSyntax.cs" />
+    <Compile Include="Database\IDbmsSyntax.cs" />
+    <Compile Include="Database\IDelimiterType.cs" />
+    <Compile Include="Database\LineEnding.cs" />
     <Compile Include="Database\MsSqlDbmsSyntax.cs" />
     <Compile Include="Database\MySqlDbmsSyntax.cs" />
+    <Compile Include="Database\NormalDelimiter.cs">
+      <DependentUpon>IDelimiterType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Database\OracleDbmsSyntax.cs" />
-    <Compile Include="Database\OracleSqlPlusDbmsSyntax.cs" />
-    <Compile Include="Database\SybAseDbmsSyntax.cs" />
+    <Compile Include="Database\QueryExecuter.cs" />
+    <Compile Include="Database\QueryStatementSplitter.cs" />
+    <Compile Include="Database\RowDelimiter.cs">
+      <DependentUpon>IDelimiterType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Appliers\DirectToDbApplier.cs" />
+    <Compile Include="DbDeployer.cs" />
+    <Compile Include="Database\DelimiterTypeFactory.cs">
+      <DependentUpon>IDelimiterType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Exceptions\ChangeScriptFailedException.cs" />
     <Compile Include="Exceptions\DbDeployException.cs" />
     <Compile Include="Exceptions\DuplicateChangeScriptException.cs" />
-    <Compile Include="Exceptions\RequiredChangeScriptNotFoundException.cs" />
     <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />
     <Compile Include="Exceptions\UnrecognisedFilenameException.cs" />
+    <Compile Include="Exceptions\UsageException.cs" />
+    <Compile Include="IAppliedChangesProvider.cs" />
+    <Compile Include="IAvailableChangeScriptsProvider.cs" />
+    <Compile Include="IChangeScriptApplier.cs" />
     <Compile Include="OutputFileEncoding.cs" />
     <Compile Include="PrettyPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,7 +122,6 @@
     <Compile Include="Scripts\ChangeScriptRepository.cs" />
     <Compile Include="Scripts\DirectoryScanner.cs" />
     <Compile Include="Scripts\FilenameParser.cs" />
-    <Compile Include="ToPrintStreamDeployer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -121,8 +144,29 @@
     <EmbeddedResource Include="..\..\dbproviders.xml">
       <Link>Database\dbproviders.xml</Link>
     </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Resources\mssql_undo.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mssql_apply.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mysql_apply.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mysql_undo.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\ora_apply.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\ora_undo.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
