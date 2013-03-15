@@ -131,7 +131,7 @@ namespace MSBuild.Dbdeploy.Task
                 + Environment.NewLine + "\t\toutputfile=\"[OUTPUT SCRIPT PATH + NAME]\""
                 + Environment.NewLine + "\t\tlastChangeToApply=\"[NUMBER OF THE LAST SCRIPT TO APPLY]\""
                 + Environment.NewLine + "\t\tundoOutputfile=\"[UNDO SCRIPT PATH + NAME]\""
-                + Environment.NewLine + "\t\tchangeLogTableName=\"[CHANGE LOG TABLE NAME - default changelog]\""
+                + Environment.NewLine + "\t\tchangeLogTableName=\"[CHANGE LOG TABLE NAME - default ChangeLog]\""
                 + Environment.NewLine + "\t\tdelimiter=\"[STATEMENT DELIMITER - default ;]\""
                 + Environment.NewLine + "\t\tdelimitertype=\"[STATEMENT DELIMITER TYPE - row or normal, default normal]\""
                 + Environment.NewLine + "\t/>"

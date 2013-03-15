@@ -4,7 +4,7 @@
 
 ${script.getContent()}
 
-INSERT INTO ${changeLogTableName} (change_number, complete_dt, applied_by, description)
+INSERT INTO ${changeLogTableName} (ScriptNumber, CompleteDate, AppliedBy, FileName)
  VALUES (${script.getId()}, CURRENT_TIMESTAMP, USER(), '${script.getDescription()}')$!{separator}${delimiter}
 
 COMMIT$!{separator}${delimiter}

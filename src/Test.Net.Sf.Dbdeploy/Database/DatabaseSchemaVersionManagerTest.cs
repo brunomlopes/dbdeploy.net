@@ -24,7 +24,7 @@ namespace Net.Sf.Dbdeploy.Database
         [SetUp]
         public void SetUp() 
         {
-            this.changeLogTableName = "changelog";
+            this.changeLogTableName = "ChangeLog";
 
             this.expectedResultSet = new Mock<IDataReader>();
 
@@ -88,7 +88,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.syntax.Setup(s => s.GenerateTimestamp()).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptApplied(this.script);
-            string expected = "INSERT INTO changelog (change_number, complete_dt, applied_by, description) VALUES (@1, TIMESTAMP, DBUSER, @2)";
+            string expected = "INSERT INTO ChangeLog (ScriptNumber, CompleteDate, AppliedBy, FileName) VALUES (@1, TIMESTAMP, DBUSER, @2)";
 
             this.queryExecuter.Verify(e => e.Execute(expected, this.script.GetId(), this.script.GetDescription()), Times.Once());
         }
@@ -97,7 +97,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void ShouldGenerateSqlStringToDeleteChangelogTableAfterUndoScriptApplication() 
         {
             string sql = this.schemaVersionManager.GetChangelogDeleteSql(this.script);
-            string expected = "DELETE FROM changelog WHERE change_number = 99";
+            string expected = "DELETE FROM ChangeLog WHERE ScriptNumber = 99";
 
             Assert.AreEqual(expected, sql);
         }
@@ -112,7 +112,7 @@ namespace Net.Sf.Dbdeploy.Database
 
             schemaVersionManagerWithDifferentTableName.GetAppliedChanges();
 
-            this.queryExecuter.Verify(e => e.ExecuteQuery(It.Is<string>(s => s.StartsWith("SELECT change_number FROM user_specified_changelog "))));
+            this.queryExecuter.Verify(e => e.ExecuteQuery(It.Is<string>(s => s.StartsWith("SELECT ScriptNumber FROM user_specified_changelog "))));
         }
 
         [Test]

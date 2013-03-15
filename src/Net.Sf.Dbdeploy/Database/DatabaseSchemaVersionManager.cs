@@ -39,7 +39,7 @@ WHERE TABLE_NAME = @1", changeLogTableName))
             List<int> changeNumbers = new List<int>();
             try
             {
-                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT change_number FROM {0} ORDER BY change_number", this.changeLogTableName);
+                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ScriptNumber FROM {0} ORDER BY ScriptNumber", this.changeLogTableName);
                 
                 using (IDataReader reader = this.queryExecuter.ExecuteQuery(sql))
                 {
@@ -62,7 +62,7 @@ WHERE TABLE_NAME = @1", changeLogTableName))
 
         public virtual string GetChangelogDeleteSql(ChangeScript script)
         {
-            return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE change_number = {1}", this.changeLogTableName, script.GetId());
+            return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE ScriptNumber = {1}", this.changeLogTableName, script.GetId());
         }
 
         public virtual void RecordScriptApplied(ChangeScript script)
@@ -71,7 +71,7 @@ WHERE TABLE_NAME = @1", changeLogTableName))
             {
                 string sql = string.Format(
                     CultureInfo.InvariantCulture,
-                    "INSERT INTO {0} (change_number, complete_dt, applied_by, description) VALUES (@1, {1}, {2}, @2)", 
+                    "INSERT INTO {0} (ScriptNumber, CompleteDate, AppliedBy, FileName) VALUES (@1, {1}, {2}, @2)", 
                     this.changeLogTableName,
                     this.syntax.GenerateTimestamp(),
                     this.syntax.GenerateUser());

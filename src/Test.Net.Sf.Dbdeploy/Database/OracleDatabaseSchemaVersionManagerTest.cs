@@ -11,10 +11,10 @@ namespace Net.Sf.Dbdeploy.Database
 	public class OracleDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
 	{
 		private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["OracleConnString"];
-		private const string DELTA_SET = "All";
+		private const string FOLDER = "Scripts";
 		private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new []
 		{ 
-            "No table found with name 'changelog'.",
+            "No table found with name 'ChangeLog'.",
 		};
 		private const string DBMS = "ora";
 
@@ -23,9 +23,9 @@ namespace Net.Sf.Dbdeploy.Database
 			get { return CONNECTION_STRING; }
 		}
 
-		protected override string DeltaSet
+		protected override string Folder
 		{
-			get { return DELTA_SET; }
+			get { return FOLDER; }
 		}
 
 		protected override string[] ChangelogTableDoesNotExistMessages
@@ -42,20 +42,20 @@ namespace Net.Sf.Dbdeploy.Database
 		{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.Append("BEGIN execute immediate");
-			commandBuilder.Append(" 'CREATE TABLE changelog (");
-			commandBuilder.Append(" change_number INTEGER NOT NULL,");
-			commandBuilder.Append(" delta_set VARCHAR2(10) NOT NULL,");
-			commandBuilder.Append(" start_dt TIMESTAMP NOT NULL,");
-			commandBuilder.Append(" complete_dt TIMESTAMP NULL,");
-			commandBuilder.Append(" applied_by VARCHAR2(100) NOT NULL,");
-			commandBuilder.Append(" description VARCHAR2(500) NOT NULL");
+            commandBuilder.Append(" 'CREATE TABLE ChangeLog (");
+			commandBuilder.Append(" ScriptNumber INTEGER NOT NULL,");
+			commandBuilder.Append(" Folder VARCHAR2(256) NOT NULL,");
+			commandBuilder.Append(" StartDate TIMESTAMP NOT NULL,");
+			commandBuilder.Append(" CompleteDate TIMESTAMP NULL,");
+			commandBuilder.Append(" AppliedBy VARCHAR2(128) NOT NULL,");
+			commandBuilder.Append(" FileName VARCHAR2(512) NOT NULL");
 			commandBuilder.Append(" )';");
 			commandBuilder.Append(" END;");
 			ExecuteSql(commandBuilder.ToString());
 
 			commandBuilder = new StringBuilder();
 			commandBuilder.Append("BEGIN execute immediate");
-			commandBuilder.Append(" 'ALTER TABLE changelog ADD CONSTRAINT Pkchangelog PRIMARY KEY (change_number, delta_set)';");
+            commandBuilder.Append(" 'ALTER TABLE ChangeLog ADD CONSTRAINT PK_ChangeLog PRIMARY KEY (ScriptNumber, Folder)';");
 			commandBuilder.Append(" END;");
 			ExecuteSql(commandBuilder.ToString());
 		}
@@ -64,8 +64,8 @@ namespace Net.Sf.Dbdeploy.Database
 		{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.AppendFormat("INSERT INTO {0}", TableName);
-			commandBuilder.Append("(change_number, delta_set, start_dt, complete_dt, applied_by, description)");
-			commandBuilder.AppendFormat(" VALUES ({0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER, 'Unit test')", i, DELTA_SET);
+			commandBuilder.Append("(ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, FileName)");
+			commandBuilder.AppendFormat(" VALUES ({0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER, 'Unit test')", i, FOLDER);
 			ExecuteSql(commandBuilder.ToString());
 		}
 

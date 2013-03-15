@@ -4,7 +4,7 @@
 
 ${script.getUndoContent()}
 
-DELETE FROM ${changeLogTableName} WHERE change_number = ${script.getId()}${separator}${delimiter}
+DELETE FROM ${changeLogTableName} WHERE ScriptNumber = ${script.getId()}${separator}${delimiter}
 
 COMMIT${separator}${delimiter}
 

@@ -80,7 +80,7 @@ namespace Net.Sf.Dbdeploy
 
                 .Add(
                     "t|changeLogTableName=", 
-                    "name of change log table to use (default: changelog)",
+                    "name of change log table to use (default: ChangeLog)",
                     (string s) => dbDeploy.ChangeLogTableName = StripQuotes(s))
 
                 .Add(

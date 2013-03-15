@@ -11,11 +11,11 @@ namespace Net.Sf.Dbdeploy.Database
     public class MsSqlDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["ConnString"];
-        private const string DELTA_SET = "All";
+        private const string FOLDER = "Scripts";
 
         private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new [] 
         {
-            "No table found with name 'changelog'.",
+            "No table found with name 'ChangeLog'.",
         };
 
 		private const string DBMS = "mssql";
@@ -25,9 +25,9 @@ namespace Net.Sf.Dbdeploy.Database
             get { return CONNECTION_STRING; }
         }
 
-        protected override string DeltaSet
+        protected override string Folder
         {
-            get { return DELTA_SET; }
+            get { return FOLDER; }
         }
 
         protected override string[] ChangelogTableDoesNotExistMessages
@@ -57,22 +57,22 @@ namespace Net.Sf.Dbdeploy.Database
         {
             ExecuteSql(
 				"CREATE TABLE " + TableName + "( " +
-                "change_number INTEGER NOT NULL, " +
-                "delta_set VARCHAR(10) NOT NULL, " +
-                "start_dt DATETIME NOT NULL, " +
-                "complete_dt DATETIME NULL, " +
-                "applied_by VARCHAR(100) NOT NULL, " +
-                "description VARCHAR(500) NOT NULL )");
+                "ScriptNumber INTEGER NOT NULL, " +
+                "Folder VARCHAR(256) NOT NULL, " +
+                "StartDate DATETIME NOT NULL, " +
+                "CompleteDate DATETIME NULL, " +
+                "AppliedBy VARCHAR(100) NOT NULL, " +
+                "FileName VARCHAR(500) NOT NULL )");
             ExecuteSql(
 				"ALTER TABLE " + TableName +
-                " ADD CONSTRAINT Pkchangelog  PRIMARY KEY (change_number, delta_set)");
+                " ADD CONSTRAINT PK_ChangeLog  PRIMARY KEY (Folder, ScriptNumber)");
         }
 
         protected override void InsertRowIntoTable(int i)
         {
 			ExecuteSql("INSERT INTO " + TableName
-                       + " (change_number, delta_set, start_dt, complete_dt, applied_by, description) VALUES ( "
-                       + i + ", '" + DELTA_SET
+                       + " (ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, FileName) VALUES ( "
+                       + i + ", '" + FOLDER
                        + "', getdate(), getdate(), user_name(), 'Unit test')");
         }
 

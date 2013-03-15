@@ -15,7 +15,7 @@ namespace Net.Sf.Dbdeploy
         {
             this.Encoding = Encoding.UTF8;
             this.LineEnding = Database.LineEnding.Platform;
-            this.ChangeLogTableName = "changelog";
+            this.ChangeLogTableName = "ChangeLog";
             this.Delimiter = ";";
             this.DelimiterType = new NormalDelimiter();
         }

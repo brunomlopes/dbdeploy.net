@@ -51,7 +51,7 @@ namespace Net.Sf.Dbdeploy.Appliers
 
                 this.infoTextWriter.WriteLine("Applying " + script + "...");
 
-                // Apply changes and update changelog table
+                // Apply changes and update ChangeLog table
                 this.ApplyChangeScript(script);
                 this.InsertToSchemaVersionTable(script);
 

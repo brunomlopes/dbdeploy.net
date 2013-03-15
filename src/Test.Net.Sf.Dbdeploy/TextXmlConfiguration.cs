@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy
   <appSettings>
     <add key=""db.connection"" value=""Server=localhost;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=password""/>
     <add key=""db.type"" value=""mssql""/>
-    <add key=""db.tableName"" value=""changelog""/>
+    <add key=""db.tableName"" value=""ChangeLog""/>
   </appSettings>
 </configuration>";
 
@@ -25,7 +25,7 @@ namespace Net.Sf.Dbdeploy
 
             Assert.AreEqual("mssql", config.DbType);
             Assert.AreEqual("Server=localhost;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=password", config.DbConnectionString);
-            Assert.AreEqual("changelog", config.TableName);
+            Assert.AreEqual("ChangeLog", config.TableName);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Dbdeploy.Powershell.Commands
     public class DbUpdateBase : PSCmdlet
     {
         private const string DatabaseTypeDefault = "mssql";
-        private const string TableNameDefault = "changelog";
+        private const string TableNameDefault = "ChangeLog";
 
         private XmlConfiguration config;
 
@@ -31,7 +31,7 @@ namespace Dbdeploy.Powershell.Commands
         [Parameter(Mandatory = false)]
         public string ConnectionString { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Changelog table name. Defaults to changelog")]
+        [Parameter(Mandatory = false, HelpMessage = "Changelog table name. Defaults to ChangeLog")]
         public string TableName
         {
             get { return this.tableName; }

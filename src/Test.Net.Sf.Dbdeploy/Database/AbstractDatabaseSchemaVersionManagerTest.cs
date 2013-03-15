@@ -9,7 +9,7 @@ namespace Net.Sf.Dbdeploy.Database
     [TestFixture]
     public abstract class AbstractDatabaseSchemaVersionManagerTest
     {
-        public const string TableName = "changelog";
+        public const string TableName = "ChangeLog";
 
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
 
@@ -86,7 +86,7 @@ namespace Net.Sf.Dbdeploy.Database
         }
 
         protected abstract string ConnectionString { get; }
-        protected abstract string DeltaSet { get; }
+        protected abstract string Folder { get; }
         protected abstract string[] ChangelogTableDoesNotExistMessages { get; }
         protected abstract string Dbms { get; }
         protected abstract IDbConnection GetConnection();

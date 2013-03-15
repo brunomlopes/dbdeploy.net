@@ -60,7 +60,7 @@ namespace Net.Sf.Dbdeploy.Database
 
             StubSchemaManager schemaManager = new StubSchemaManager(factory.CreateDbmsSyntax());
 
-            IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "changelog", ";", new NormalDelimiter(), templateDirectory);
+            IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "ChangeLog", ";", new NormalDelimiter(), templateDirectory);
             Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, System.Console.Out);
 
             controller.ProcessChangeScripts(null);
@@ -113,7 +113,8 @@ namespace Net.Sf.Dbdeploy.Database
 
         private class StubSchemaManager : DatabaseSchemaVersionManager 
         {
-            public StubSchemaManager(IDbmsSyntax syntax) : base(null, syntax, "changelog")
+            public StubSchemaManager(IDbmsSyntax syntax)
+                : base(null, syntax, "ChangeLog")
             {
             }
 

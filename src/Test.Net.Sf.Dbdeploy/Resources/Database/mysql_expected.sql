@@ -3,7 +3,7 @@
 
 -- contents of change script 1
 
-INSERT INTO changelog (change_number, complete_dt, applied_by, description)
+INSERT INTO ChangeLog (ScriptNumber, CompleteDate, AppliedBy, FileName)
  VALUES (1, CURRENT_TIMESTAMP, USER(), '001_change.sql');
 
 COMMIT;
@@ -15,7 +15,7 @@ COMMIT;
 
 -- contents of change script 2
 
-INSERT INTO changelog (change_number, complete_dt, applied_by, description)
+INSERT INTO ChangeLog (ScriptNumber, CompleteDate, AppliedBy, FileName)
  VALUES (2, CURRENT_TIMESTAMP, USER(), '002_change.sql');
 
 COMMIT;

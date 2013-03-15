@@ -1,9 +1,15 @@
-CREATE TABLE changelog (
-  change_number INTEGER NOT NULL,
-  complete_dt TIMESTAMP NULL,
-  applied_by VARCHAR2(100) NOT NULL,
-  description VARCHAR2(500) NOT NULL
+CREATE TABLE ChangeLog (
+	ChangeId INT NOT NULL AUTO_INCREMENT,
+	Folder VARCHAR(256) NOT NULL,
+	ScriptNumber SMALLINT NOT NULL,
+	FileName VARCHAR(512) NOT NULL,
+	StartDate TIMESTAMP NOT NULL,
+	CompleteDate TIMESTAMP NULL,
+	AppliedBy VARCHAR(128) NOT NULL,
+	Status TINYINT NOT NULL,
+	Output CLOB NULL
 );
 
-ALTER TABLE changelog ADD CONSTRAINT Pkchangelog PRIMARY KEY (change_number)
-;
+ALTER TABLE ChangeLog ADD CONSTRAINT PK_ChangeLog PRIMARY KEY (ChangeId);
+
+CREATE INDEX IX_ChangeLog ON ChangeLog (Folder, ScriptNumber)
