@@ -6,6 +6,8 @@ using System.Text;
 
 namespace Net.Sf.Dbdeploy.Scripts
 {
+    using System.Linq;
+
     public class DirectoryScanner
     {
         private readonly FilenameParser filenameParser;
@@ -56,6 +58,10 @@ namespace Net.Sf.Dbdeploy.Scripts
                     // ignore
                 }
             }
+
+            // Order scripts by number, since they may not have leading zeros on file system.
+            // This allows us to have more than a thousand scripts (001) in a directory, and it does not have to be specified beforehand.
+            scripts = scripts.OrderBy(s => s.GetId()).ToList();
 
             return scripts;
         }

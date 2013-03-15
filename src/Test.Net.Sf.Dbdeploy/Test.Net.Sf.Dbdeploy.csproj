@@ -134,6 +134,7 @@
     <Compile Include="PrettyPrinterTest.cs" />
     <Compile Include="Scripts\ChangeScriptRepositoryTest.cs" />
     <Compile Include="Scripts\ChangeScriptTest.cs" />
+    <Compile Include="Scripts\DirectoryScannerTest.cs" />
     <Compile Include="Scripts\FilenameParserTest.cs" />
     <Compile Include="Scripts\StubChangeScript.cs" />
     <Compile Include="TextXmlConfiguration.cs" />
@@ -165,6 +166,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Mocks\Versioned\2.0.0.0\8.Create Product Table.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\2.0.0.0\09.Add Product Data.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\2.0.0.0\10.Add Sold Column.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Database\ora_expected.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -174,6 +184,12 @@
     <Content Include="Resources\Database\mssql_expected.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mocks\Versioned\10.1.0.0\" />
+    <Folder Include="Mocks\Versioned\2.0.10.0\" />
+    <Folder Include="Mocks\Versioned\2.0.4.0\" />
+    <Folder Include="Mocks\Versioned\R1\" />
   </ItemGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

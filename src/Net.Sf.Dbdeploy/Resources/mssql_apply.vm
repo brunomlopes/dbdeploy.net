@@ -7,7 +7,7 @@ GO
 
 $script.getContent()
 
-INSERT INTO ${changeLogTableName} (ScriptNumber, CompleteData, AppliedBy, FileName)
+INSERT INTO ${changeLogTableName} (ScriptNumber, CompleteDate, AppliedBy, FileName)
  VALUES ($script.getId(), getdate(), user_name(), '$script.getDescription()')
 GO
 
