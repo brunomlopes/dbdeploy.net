@@ -6,6 +6,8 @@ using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Globalization;
+
     [TestFixture]
     public abstract class AbstractDatabaseSchemaVersionManagerTest
     {
@@ -19,7 +21,7 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(Dbms, ConnectionString);
             var executer = new QueryExecuter(factory);
 
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), TableName);
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), TableName, false);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
@@ -61,6 +63,26 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
+        /// <summary>
+        /// Tests that <see cref="DatabaseSchemaVersionManager" /> will create the change log table when specified.
+        /// </summary>
+        public virtual void TestShouldCreateChangeLogTableWhenDoesNotExist()
+        {
+            this.databaseSchemaVersion.AutoCreateChangeLogTable = true;
+
+            this.EnsureTableDoesNotExist();
+
+            // Table should be created when attempted now; if table does not exist.
+            databaseSchemaVersion.GetAppliedChanges();
+
+            string schema = this.ExecuteScalar<string>(@"
+SELECT table_schema 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_NAME = 'ChangeLog'");
+
+            Assert.IsNotEmpty(schema, "ChangeLog table was not created.");
+        }
+
         public virtual void TestShouldReturnEmptySetWhenTableHasNoRows()
         {
             EnsureTableDoesNotExist();
@@ -74,7 +96,7 @@ namespace Net.Sf.Dbdeploy.Database
             ExecuteSql("DROP TABLE " + TableName);
         }
 
-        protected void ExecuteSql(String sql)
+        protected void ExecuteSql(string sql)
         {
             using (IDbConnection connection = GetConnection())
             {
@@ -83,6 +105,26 @@ namespace Net.Sf.Dbdeploy.Database
                 command.CommandText = sql;
                 command.ExecuteNonQuery();
             }
+        }
+
+        /// <summary>
+        /// Executes a query returning a scalar value.
+        /// </summary>
+        /// <typeparam name="T">Scalar value to be returned.</typeparam>
+        /// <param name="sql">The SQL.</param>
+        /// <returns>Scalar value from query.</returns>
+        protected T ExecuteScalar<T>(string sql, params object[] args)
+        {
+            T result = default(T);
+            using (IDbConnection connection = GetConnection())
+            {
+                connection.Open();
+                IDbCommand command = connection.CreateCommand();
+                command.CommandText = string.Format(CultureInfo.InvariantCulture, sql, args);
+                result = (T)command.ExecuteScalar();
+            }
+
+            return result;
         }
 
         protected abstract string ConnectionString { get; }

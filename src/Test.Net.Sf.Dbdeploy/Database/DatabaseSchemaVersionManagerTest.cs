@@ -50,7 +50,7 @@ namespace Net.Sf.Dbdeploy.Database
                 .Setup(e => e.ExecuteQuery(It.Is<string>(v => v.Contains("INFORMATION_SCHEMA")), It.Is<string>(s => s.Equals(changeLogTableName))))
                 .Returns(() => checkForChangeLogDataReader.Object);
 
-            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
+            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName, true);
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace Net.Sf.Dbdeploy.Database
             changeLogTableName = "user_specified_changelog";
 
             var schemaVersionManagerWithDifferentTableName =
-                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
+                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName, true);
 
             schemaVersionManagerWithDifferentTableName.GetAppliedChanges();
 
@@ -119,7 +119,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void ShouldGenerateSqlStringContainingSpecifiedChangelogTableNameOnDelete() 
         {
             var schemaVersionManagerWithDifferentTableName =
-                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "user_specified_changelog");
+                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "user_specified_changelog", true);
 
             string updateSql = schemaVersionManagerWithDifferentTableName.GetChangelogDeleteSql(this.script);
 

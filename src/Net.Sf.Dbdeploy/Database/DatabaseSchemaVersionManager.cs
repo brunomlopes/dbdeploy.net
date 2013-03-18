@@ -8,6 +8,8 @@ using Net.Sf.Dbdeploy.Scripts;
 
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Reflection;
+
     public class DatabaseSchemaVersionManager : IAppliedChangesProvider
     {
         private readonly QueryExecuter queryExecuter;
@@ -16,27 +18,53 @@ namespace Net.Sf.Dbdeploy.Database
 
         private readonly IDbmsSyntax syntax;
 
-        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, IDbmsSyntax syntax, string changeLogTableName)
+        /// <summary>
+        /// Gets or sets a value indicating whether the change log table should be created if it does not exist.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if auto create change log table; otherwise, <c>false</c>.
+        /// </value>
+        public bool AutoCreateChangeLogTable { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseSchemaVersionManager" /> class.
+        /// </summary>
+        /// <param name="queryExecuter">The query executer.</param>
+        /// <param name="syntax">The syntax.</param>
+        /// <param name="changeLogTableName">Name of the change log table.</param>
+        /// <param name="autoCreateChangeLogTable">if set to <c>true</c> the change log table will automatically be created.</param>
+        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, IDbmsSyntax syntax, string changeLogTableName, bool autoCreateChangeLogTable)
         {
             this.syntax = syntax;
             this.queryExecuter = queryExecuter;
             this.changeLogTableName = changeLogTableName;
+            this.AutoCreateChangeLogTable = autoCreateChangeLogTable;
         }
 
     	public virtual ICollection<int> GetAppliedChanges()
     	{
+    	    bool changeLogTableExists;
     	    using (IDataReader reader = queryExecuter.ExecuteQuery(@"
 SELECT table_schema 
 FROM INFORMATION_SCHEMA.TABLES 
 WHERE TABLE_NAME = @1", changeLogTableName))
-            {
-                if(!reader.Read())
+    	    {
+    	        changeLogTableExists = reader.Read();
+
+                // If change log table does not exist and is not going to be created automatically, throw an exception.
+                if (!changeLogTableExists && !AutoCreateChangeLogTable)
                 {
                     throw new ChangelogTableDoesNotExistException(string.Format("No table found with name '{0}'.", changeLogTableName));
                 }
             }
 
-            List<int> changeNumbers = new List<int>();
+            // Create the change log table if it does not exist.
+            if (!changeLogTableExists)
+            {
+                this.CreateChangeLogTable();
+            }
+
+    	    List<int> changeNumbers = new List<int>();
             try
             {
                 string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ScriptNumber FROM {0} ORDER BY ScriptNumber", this.changeLogTableName);
@@ -58,6 +86,16 @@ WHERE TABLE_NAME = @1", changeLogTableName))
                 throw new SchemaVersionTrackingException(
                     "Could not retrieve change log from database because: " + e.Message, e);
             }            
+        }
+
+        /// <summary>
+        /// Creates the change log table in the database.
+        /// </summary>
+        private void CreateChangeLogTable()
+        {
+            // Get table creation script from embeded file.
+            string script = this.syntax.CreateChangeLogTable(this.changeLogTableName);
+            this.queryExecuter.Execute(script);
         }
 
         public virtual string GetChangelogDeleteSql(ChangeScript script)

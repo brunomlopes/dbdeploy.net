@@ -18,6 +18,7 @@ namespace Net.Sf.Dbdeploy
             this.ChangeLogTableName = "ChangeLog";
             this.Delimiter = ";";
             this.DelimiterType = new NormalDelimiter();
+            this.AutoCreateChangeLogTable = true;
         }
         
         public string Dbms { get; set; }
@@ -39,6 +40,14 @@ namespace Net.Sf.Dbdeploy
         public string ChangeLogTableName { get; set; }
 
         public string Delimiter { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the change log table should be created if it does not exist.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if auto create change log table; otherwise, <c>false</c>.
+        /// </value>
+        public bool AutoCreateChangeLogTable { get; set; }
 
         public IDelimiterType DelimiterType  { get; set; }
 
@@ -65,8 +74,7 @@ namespace Net.Sf.Dbdeploy
 
             QueryExecuter queryExecuter = new QueryExecuter(factory);
 
-            var databaseSchemaVersionManager =
-                    new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, this.ChangeLogTableName);
+            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, this.ChangeLogTableName, this.AutoCreateChangeLogTable);
 
             var scanner = new DirectoryScanner(this.InfoWriter, this.Encoding);
 

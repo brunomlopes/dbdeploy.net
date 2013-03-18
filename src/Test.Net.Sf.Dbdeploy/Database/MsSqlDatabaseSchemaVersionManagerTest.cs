@@ -105,5 +105,11 @@ namespace Net.Sf.Dbdeploy.Database
         {
             base.TestShouldReturnEmptySetWhenTableHasNoRows();
         }
+
+        [Test]
+        public override void TestShouldCreateChangeLogTableWhenDoesNotExist()
+        {
+            base.TestShouldCreateChangeLogTableWhenDoesNotExist();
+        }
     }
 }

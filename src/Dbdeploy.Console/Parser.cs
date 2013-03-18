@@ -50,52 +50,57 @@ namespace Net.Sf.Dbdeploy
             options
                 .Add(
                     "d|dbms=",
-                    "DBMS type ('mssql', 'mysql' or 'ora')", 
+                    "DBMS type ('mssql', 'mysql' or 'ora')",
                     (string s) => dbDeploy.Dbms = s)
 
                 .Add(
-                    "c|connectionstring=", 
-                    "connection string for database", 
+                    "c|connectionstring=",
+                    "connection string for database",
                     (string s) => dbDeploy.ConnectionString = StripQuotes(s))
 
                 .Add(
-                    "s|scriptdirectory=", 
+                    "s|scriptdirectory=",
                     "directory containing change scripts (default: .)",
                     (string s) => dbDeploy.ScriptDirectory = new DirectoryInfo(StripQuotes(s)))
 
                 .Add(
-                    "e|encoding=", 
+                    "e|encoding=",
                     "encoding for input and output files (default: UTF-8)",
                     (string s) => dbDeploy.Encoding = new OutputFileEncoding(StripQuotes(s)).AsEncoding())
 
                 .Add(
-                    "o|outputfile=", 
+                    "o|outputfile=",
                     "output file",
                     (string s) => dbDeploy.OutputFile = new FileInfo(StripQuotes(s)))
 
                 .Add(
-                    "templatedir=", 
+                    "templatedir=",
                     "template directory",
                     (string s) => dbDeploy.TemplateDir = new DirectoryInfo(StripQuotes(s)))
 
                 .Add(
-                    "t|changeLogTableName=", 
+                    "t|changelogtablename=",
                     "name of change log table to use (default: ChangeLog)",
                     (string s) => dbDeploy.ChangeLogTableName = StripQuotes(s))
 
                 .Add(
-                    "delimiter=", 
-                    "delimiter to separate sql statements", 
+                    "a|autocreatechangetable=",
+                    "automatically creates the change log table if it does not exist (true or false).  Defaults to true.",
+                    (string s) => dbDeploy.AutoCreateChangeLogTable = s.ToLowerInvariant() != "false")
+
+                .Add(
+                    "delimiter=",
+                    "delimiter to separate sql statements",
                     (string s) => dbDeploy.Delimiter = s)
 
                 .Add(
-                    "delimitertype=", 
-                    "delimiter type to separate sql statements (row or normal)", 
+                    "delimitertype=",
+                    "delimiter type to separate sql statements (row or normal)",
                     (string s) => dbDeploy.DelimiterType = ParseDelimiterType(s))
 
                 .Add(
-                    "lineending=", 
-                    "line ending to use when applying scripts direct to db (platform, cr, crlf, lf)", 
+                    "lineending=",
+                    "line ending to use when applying scripts direct to db (platform, cr, crlf, lf)",
                     (string s) => dbDeploy.LineEnding = ParseLineEnding(s));
             
             return options;

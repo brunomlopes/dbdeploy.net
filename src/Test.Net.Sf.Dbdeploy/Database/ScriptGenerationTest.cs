@@ -114,7 +114,7 @@ namespace Net.Sf.Dbdeploy.Database
         private class StubSchemaManager : DatabaseSchemaVersionManager 
         {
             public StubSchemaManager(IDbmsSyntax syntax)
-                : base(null, syntax, "ChangeLog")
+                : base(null, syntax, "ChangeLog", true)
             {
             }
 
