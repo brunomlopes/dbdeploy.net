@@ -79,6 +79,19 @@ namespace Net.Sf.Dbdeploy
             get { return this.dbDeploy.ChangeLogTableName; }
             set { this.dbDeploy.ChangeLogTableName = value; }
         }
+
+        /// <summary>
+        /// Gets or sets if the change log table should be automatically created if it does not exist.
+        /// </summary>
+        /// <value>
+        /// The auto create change table.
+        /// </value>
+        [TaskAttribute("autoCreateChangeLogTable")]
+        public bool AutoCreateChangeLogTable
+        {
+            get { return this.dbDeploy.AutoCreateChangeLogTable; }
+            set { this.dbDeploy.AutoCreateChangeLogTable = value; }
+        }
         
         [TaskAttribute("delimiter")]
         public string Delimiter

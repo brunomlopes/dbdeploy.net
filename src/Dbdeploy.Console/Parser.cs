@@ -84,7 +84,7 @@ namespace Net.Sf.Dbdeploy
                     (string s) => dbDeploy.ChangeLogTableName = StripQuotes(s))
 
                 .Add(
-                    "a|autocreatechangetable=",
+                    "a|autocreatechangelogtable=",
                     "automatically creates the change log table if it does not exist (true or false).  Defaults to true.",
                     (string s) => dbDeploy.AutoCreateChangeLogTable = s.ToLowerInvariant() != "false")
 

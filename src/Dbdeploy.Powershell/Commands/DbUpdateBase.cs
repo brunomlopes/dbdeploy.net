@@ -38,6 +38,13 @@ namespace Dbdeploy.Powershell.Commands
             set { this.tableName = value; }
         }
 
+        [Parameter(Mandatory = false, HelpMessage = "Changelog table name. Defaults to ChangeLog")]
+        public bool AutoCreateChangeLogTable
+        {
+            get { return this.AutoCreateChangeLogTable; }
+            set { this.AutoCreateChangeLogTable = value; }
+        }
+
         protected override void ProcessRecord()
         {
             var configurationFile = this.ToAbsolutePath(ConfigurationFile);
