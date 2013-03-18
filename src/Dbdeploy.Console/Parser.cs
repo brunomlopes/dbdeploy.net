@@ -89,6 +89,11 @@ namespace Net.Sf.Dbdeploy
                     (string s) => dbDeploy.AutoCreateChangeLogTable = s.ToLowerInvariant() != "false")
 
                 .Add(
+                    "u|usesqlcmd=",
+                    "runs scripts in SQLCMD mode (true or false).  Defaults to false.",
+                    (string s) => dbDeploy.UseSqlCmd = s.ToLowerInvariant() == "true")
+
+                .Add(
                     "delimiter=",
                     "delimiter to separate sql statements",
                     (string s) => dbDeploy.Delimiter = s)

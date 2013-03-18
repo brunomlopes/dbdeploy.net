@@ -35,6 +35,8 @@ namespace Dbdeploy.Powershell.Commands
                 ConnectionString = this.ConnectionString,
                 ChangeLogTableName = this.TableName,
                 ScriptDirectory = new DirectoryInfo(this.deltasDirectory),
+                AutoCreateChangeLogTable = this.AutoCreateChangeLogTable,
+                UseSqlCmd = this.UseSqlCmd
             };
 
             dbDeploy.OutputFile = new FileInfo(this.ToAbsolutePath(OutputFile));

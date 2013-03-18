@@ -79,6 +79,12 @@ namespace MSBuild.Dbdeploy.Task
             set { this.dbDeploy.AutoCreateChangeLogTable = value; }
         }
 
+        public bool UseSqlCmd
+        {
+            get { return this.dbDeploy.UseSqlCmd; }
+            set { this.dbDeploy.UseSqlCmd = value; }
+        }
+
         public string Delimiter
         {
             get { return this.dbDeploy.Delimiter; }

@@ -92,6 +92,19 @@ namespace Net.Sf.Dbdeploy
             get { return this.dbDeploy.AutoCreateChangeLogTable; }
             set { this.dbDeploy.AutoCreateChangeLogTable = value; }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use SQLCMD mode.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if use SQL CMD; otherwise, <c>false</c>.
+        /// </value>
+        [TaskAttribute("useSqlCmd")]
+        public bool UseSqlCmd
+        {
+            get { return this.dbDeploy.UseSqlCmd; }
+            set { this.dbDeploy.UseSqlCmd = value; }
+        }
         
         [TaskAttribute("delimiter")]
         public string Delimiter

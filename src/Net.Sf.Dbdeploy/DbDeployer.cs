@@ -49,6 +49,14 @@ namespace Net.Sf.Dbdeploy
         /// </value>
         public bool AutoCreateChangeLogTable { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to use SQLCMD mode for MSSQL.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if use SQL CMD; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseSqlCmd { get; set; }
+
         public IDelimiterType DelimiterType  { get; set; }
 
         public DirectoryInfo TemplateDir { get; set; }
@@ -96,6 +104,16 @@ namespace Net.Sf.Dbdeploy
                     this.DelimiterType, 
                     this.TemplateDir);
             } 
+            else if (this.UseSqlCmd)
+            {
+                // Verify database is MSSQL.
+                if (!string.Equals(this.Dbms, "mssql", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new InvalidOperationException("SQLCMD mode can only be applied against an mssql database.");
+                }
+
+                doScriptApplier = new SqlCmdApplier(this.ConnectionString, databaseSchemaVersionManager, this.InfoWriter);
+            }
             else 
             {
                 QueryStatementSplitter splitter = new QueryStatementSplitter

@@ -43,26 +43,7 @@ namespace Net.Sf.Dbdeploy.Database
 
     	public virtual ICollection<int> GetAppliedChanges()
     	{
-    	    bool changeLogTableExists;
-    	    using (IDataReader reader = queryExecuter.ExecuteQuery(@"
-SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = @1", changeLogTableName))
-    	    {
-    	        changeLogTableExists = reader.Read();
-
-                // If change log table does not exist and is not going to be created automatically, throw an exception.
-                if (!changeLogTableExists && !AutoCreateChangeLogTable)
-                {
-                    throw new ChangelogTableDoesNotExistException(string.Format("No table found with name '{0}'.", changeLogTableName));
-                }
-            }
-
-            // Create the change log table if it does not exist.
-            if (!changeLogTableExists)
-            {
-                this.CreateChangeLogTable();
-            }
+    	    this.VerifyChangeLogTableExists(this.AutoCreateChangeLogTable);
 
     	    List<int> changeNumbers = new List<int>();
             try
@@ -86,6 +67,37 @@ WHERE TABLE_NAME = @1", changeLogTableName))
                 throw new SchemaVersionTrackingException(
                     "Could not retrieve change log from database because: " + e.Message, e);
             }            
+        }
+
+        /// <summary>
+        /// Verifies the change log table exists.
+        /// </summary>
+        /// <param name="autoCreate">if set to <c>true</c> the table will be created if it does not exist.</param>
+        /// <exception cref="ChangelogTableDoesNotExistException">Thrown when the change log table is not found.</exception>
+        public void VerifyChangeLogTableExists(bool autoCreate)
+        {
+            bool changeLogTableExists;
+            using (IDataReader reader = this.queryExecuter.ExecuteQuery(@"
+SELECT table_schema 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_NAME = @1", this.changeLogTableName))
+            {
+                changeLogTableExists = reader.Read();
+            }
+
+            // Create the change log table if it does not exist.
+            if (!changeLogTableExists)
+            {
+                if (autoCreate)
+                {
+                    this.CreateChangeLogTable();
+                }
+                else
+                {
+                    // If change log table does not exist and is not going to be created automatically, throw an exception.
+                    throw new ChangelogTableDoesNotExistException(string.Format("No table found with name '{0}'.", this.changeLogTableName));
+                }
+            }
         }
 
         /// <summary>

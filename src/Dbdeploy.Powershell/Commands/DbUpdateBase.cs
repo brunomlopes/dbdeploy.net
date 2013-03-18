@@ -38,12 +38,11 @@ namespace Dbdeploy.Powershell.Commands
             set { this.tableName = value; }
         }
 
-        [Parameter(Mandatory = false, HelpMessage = "Changelog table name. Defaults to ChangeLog")]
-        public bool AutoCreateChangeLogTable
-        {
-            get { return this.AutoCreateChangeLogTable; }
-            set { this.AutoCreateChangeLogTable = value; }
-        }
+        [Parameter(Mandatory = false, HelpMessage = "Sets if the Changelog table should be automatically created. Defaults to true")]
+        public bool AutoCreateChangeLogTable { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Sets if SQLCMD mode should be used. Defaults to false")]
+        public bool UseSqlCmd { get; set; }
 
         protected override void ProcessRecord()
         {
