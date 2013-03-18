@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Console
             parser.Parse(
                 ("-c \"DataSource:.\\SQLEXPRESS;...;\" " +
                 "--scriptdirectory . -o output.sql " +
-                "--changeLogTableName my-change-log " +
+                "--changelogtablename my-change-log " +
                 "--dbms ora " +
                 "--templatedir /tmp/mytemplates " +
                 "--delimiter \\ --delimitertype row").Split(' '), 

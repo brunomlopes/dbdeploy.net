@@ -29,7 +29,7 @@ namespace Net.Sf.Dbdeploy.Appliers
 
             this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
             
-            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty");
+            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty", false);
 
             this.splitter = new Mock<QueryStatementSplitter>();
 
