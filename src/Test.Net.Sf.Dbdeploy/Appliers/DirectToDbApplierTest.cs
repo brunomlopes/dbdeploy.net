@@ -9,6 +9,8 @@ using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.Text;
+
     class DirectToDbApplierTest
     {
         private Mock<QueryExecuter> queryExecuter;
@@ -47,8 +49,8 @@ namespace Net.Sf.Dbdeploy.Appliers
 
             this.applier.ApplyChangeScript(new StubChangeScript(1, "script", "split; content"));
 
-            this.queryExecuter.Verify(e => e.Execute("split"));
-            this.queryExecuter.Verify(e => e.Execute("content"));
+            this.queryExecuter.Verify(e => e.Execute("split", It.IsAny<StringBuilder>()));
+            this.queryExecuter.Verify(e => e.Execute("content", It.IsAny<StringBuilder>()));
         }
 
         [Test]
@@ -58,7 +60,7 @@ namespace Net.Sf.Dbdeploy.Appliers
                 
             ChangeScript script = new StubChangeScript(1, "script", "split; content");
             
-            this.queryExecuter.Setup(e => e.Execute("split")).Throws(new DummyDbException());
+            this.queryExecuter.Setup(e => e.Execute("split", It.IsAny<StringBuilder>())).Throws(new DummyDbException());
 
             try 
             {
@@ -80,9 +82,9 @@ namespace Net.Sf.Dbdeploy.Appliers
         {
             ChangeScript changeScript = new ChangeScript(1, "script.sql");
 
-            this.applier.InsertToSchemaVersionTable(changeScript);
+            this.applier.RecordScriptStatus(changeScript, "Script completed");
 
-            this.schemaVersionManager.Verify(s => s.RecordScriptApplied(changeScript));
+            this.schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript, ScriptStatus.Success, "Script completed"));
         }
 
         [Test]

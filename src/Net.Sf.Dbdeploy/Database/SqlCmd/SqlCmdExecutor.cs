@@ -46,11 +46,6 @@
         private readonly string connectionString;
 
         /// <summary>
-        /// The info text writer to display output.
-        /// </summary>
-        private readonly TextWriter infoTextWriter;
-
-        /// <summary>
         /// Initializes static members of the <see cref="SqlCmdApplier" /> class.
         /// </summary>
         static SqlCmdExecutor()
@@ -62,10 +57,8 @@
         /// Initializes a new instance of the <see cref="SqlCmdExecutor" /> class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
-        /// <param name="infoTextWriter">The info text writer.</param>
-        public SqlCmdExecutor(string connectionString, TextWriter infoTextWriter)
+        public SqlCmdExecutor(string connectionString)
         {
-            this.infoTextWriter = infoTextWriter;
             this.connectionString = connectionString;
             DeploySqlCmd();
         }
@@ -74,8 +67,11 @@
         /// Executes the SQL script file.
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <returns><c>true</c> if the SQL file succeeded; otherwise false.</returns>
-        public bool ExecuteFile(FileInfo file)
+        /// <param name="output">The output of the script run.</param>
+        /// <returns>
+        ///   <c>true</c> if the SQL file succeeded; otherwise false.
+        /// </returns>
+        public bool ExecuteFile(FileInfo file, StringBuilder output)
         {
             bool success;
             using (var process = new Process())
@@ -94,8 +90,11 @@
                 process.Start();
                 process.WaitForExit(SqlCmdTimeout);
 
-                this.infoTextWriter.WriteLine(process.StandardOutput.ReadToEnd());
-                this.infoTextWriter.WriteLine(process.StandardError.ReadToEnd());
+                var standardOut = process.StandardOutput.ReadToEnd();
+                output.AppendLine(standardOut);
+
+                var standardError = process.StandardError.ReadToEnd();
+                output.Append(standardError);
 
                 success = process.ExitCode == 0;
             }

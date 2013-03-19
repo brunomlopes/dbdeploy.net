@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
-using System.IO;
-using Net.Sf.Dbdeploy.Database;
+﻿using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
 using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.IO;
+using System.Text;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
@@ -52,16 +53,22 @@ namespace Net.Sf.Dbdeploy.Appliers
                 this.infoTextWriter.WriteLine("Applying " + script + "...");
 
                 // Apply changes and update ChangeLog table
-                this.ApplyChangeScript(script);
-                this.InsertToSchemaVersionTable(script);
+                var output = this.ApplyChangeScript(script);
+                this.RecordScriptStatus(script, ScriptStatus.Success, output);
 
                 // Commit transaction
                 this.queryExecuter.CommitTransaction();
             }
         }
 
-        protected void ApplyChangeScript(ChangeScript script)
+        /// <summary>
+        /// Applies the change script.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <returns>The output from applying the change script.</returns>
+        protected string ApplyChangeScript(ChangeScript script)
         {
+            var output = new StringBuilder();
             ICollection<string> statements = this.splitter.Split(script.GetContent());
 
             int i = 0;
@@ -75,7 +82,7 @@ namespace Net.Sf.Dbdeploy.Appliers
                         this.infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
                     }
 
-                    this.queryExecuter.Execute(statement);
+                    this.queryExecuter.Execute(statement, output);
 
                     i++;
                 }
@@ -83,12 +90,28 @@ namespace Net.Sf.Dbdeploy.Appliers
                 {
                     throw new ChangeScriptFailedException(e, script, i + 1, statement);
                 }
+                finally
+                {
+                    // Write out SQL execution output.
+                    if (output.Length > 0)
+                    {
+                        this.infoTextWriter.WriteLine(output.ToString());
+                    }
+                }
             }
+
+            return output.ToString();
         }
 
-        protected void InsertToSchemaVersionTable(ChangeScript changeScript) 
+        /// <summary>
+        /// Records details about a change script in the database.
+        /// </summary>
+        /// <param name="changeScript">The change script.</param>
+        /// <param name="status">Status of the script execution.</param>
+        /// <param name="output">The output from running the script.</param>
+        protected void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output) 
         {
-            this.schemaVersionManager.RecordScriptApplied(changeScript);
+            this.schemaVersionManager.RecordScriptStatus(changeScript, status, output);
         }
     }
 }

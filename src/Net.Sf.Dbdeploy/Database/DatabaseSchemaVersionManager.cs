@@ -115,13 +115,20 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
             return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE ScriptNumber = {1}", this.changeLogTableName, script.GetId());
         }
 
-        public virtual void RecordScriptApplied(ChangeScript script)
+        /// <summary>
+        /// Records the script status.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <param name="status">The status.</param>
+        /// <param name="output">The output of the script.</param>
+        /// <exception cref="SchemaVersionTrackingException">Could not update change log because:  + e.Message</exception>
+        public virtual void RecordScriptStatus(ChangeScript script, ScriptStatus status, string output)
         {
             try
             {
                 string sql = string.Format(
                     CultureInfo.InvariantCulture,
-                    "INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status) VALUES ('Scripts', @1, @2, {1}, {1}, {2}, 1)", 
+                    "INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES ('Scripts', @1, @2, {1}, {1}, {2}, 1, @3)", 
                     this.changeLogTableName,
                     this.syntax.GenerateTimestamp(),
                     this.syntax.GenerateUser());
@@ -129,7 +136,8 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
                 this.queryExecuter.Execute(
                         sql,
                         script.GetId(),
-                        script.GetDescription());
+                        script.GetDescription(),
+                        output);
             }
             catch (DbException e)
             {

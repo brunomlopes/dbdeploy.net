@@ -20,9 +20,9 @@ namespace Net.Sf.Dbdeploy.Appliers
             base.ApplyChangeScript(script);
         }
 
-        public new void InsertToSchemaVersionTable(ChangeScript changeScript)
+        public new void RecordScriptStatus(ChangeScript changeScript, string output)
         {
-            base.InsertToSchemaVersionTable(changeScript);
+            base.RecordScriptStatus(changeScript, ScriptStatus.Success, output);
         }
     }
 }

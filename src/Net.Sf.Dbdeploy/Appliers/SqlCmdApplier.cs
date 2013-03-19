@@ -1,19 +1,15 @@
-﻿using System.Collections.Generic;
-
+﻿using Net.Sf.Dbdeploy.Database;
+using Net.Sf.Dbdeploy.Database.SqlCmd;
+using Net.Sf.Dbdeploy.Exceptions;
 using Net.Sf.Dbdeploy.Scripts;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-
-using Net.Sf.Dbdeploy.Database;
+using System.Text;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
-    using System.Data.Common;
-    using System.Globalization;
-
-    using Net.Sf.Dbdeploy.Database.SqlCmd;
-    using Net.Sf.Dbdeploy.Exceptions;
-
     /// <summary>
     /// Applier for running scripts using SQLCMD mode against MSSQL.
     /// </summary>
@@ -68,15 +64,18 @@ namespace Net.Sf.Dbdeploy.Appliers
         /// <param name="changeScripts">The change scripts.</param>
         public void Apply(IEnumerable<ChangeScript> changeScripts)
         {
-            using (var sqlCmdExecutor = new SqlCmdExecutor(this.connectionString, this.infoTextWriter))
+            using (var sqlCmdExecutor = new SqlCmdExecutor(this.connectionString))
             {
                 foreach (var script in changeScripts)
                 {
                     this.infoTextWriter.WriteLine("Applying " + script + "...");
-                    var success = sqlCmdExecutor.ExecuteFile(script.GetFile());
+                    var output = new StringBuilder();
+                    var success = sqlCmdExecutor.ExecuteFile(script.GetFile(), output);
+                    this.infoTextWriter.WriteLine(output);
+
                     if (success)
                     {
-                        this.schemaVersionManager.RecordScriptApplied(script);
+                        this.schemaVersionManager.RecordScriptStatus(script, ScriptStatus.Success, output.ToString());
                     }
                     else
                     {

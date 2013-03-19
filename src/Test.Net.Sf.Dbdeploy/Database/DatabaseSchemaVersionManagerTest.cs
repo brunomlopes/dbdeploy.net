@@ -87,10 +87,10 @@ namespace Net.Sf.Dbdeploy.Database
             this.syntax.Setup(s => s.GenerateUser()).Returns("DBUSER");
             this.syntax.Setup(s => s.GenerateTimestamp()).Returns("TIMESTAMP");
 
-            this.schemaVersionManager.RecordScriptApplied(this.script);
-            string expected = "INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status) VALUES ('Scripts', @1, @2, TIMESTAMP, TIMESTAMP, DBUSER, 1)";
+            this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
+            string expected = "INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES ('Scripts', @1, @2, TIMESTAMP, TIMESTAMP, DBUSER, 1, @3)";
 
-            this.queryExecuter.Verify(e => e.Execute(expected, this.script.GetId(), this.script.GetDescription()), Times.Once());
+            this.queryExecuter.Verify(e => e.Execute(expected, this.script.GetId(), this.script.GetDescription(), "Script output"), Times.Once());
         }
 
         [Test]

@@ -70,6 +70,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NVelocity">
       <HintPath>..\packages\NVelocity.1.0.3\lib\NVelocity.dll</HintPath>
     </Reference>
@@ -134,6 +135,7 @@
     <Compile Include="Scripts\ChangeScriptRepository.cs" />
     <Compile Include="Scripts\DirectoryScanner.cs" />
     <Compile Include="Scripts\FilenameParser.cs" />
+    <Compile Include="Scripts\ScriptStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
