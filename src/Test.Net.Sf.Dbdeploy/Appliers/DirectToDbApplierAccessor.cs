@@ -4,6 +4,8 @@ using Net.Sf.Dbdeploy.Scripts;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.Text;
+
     internal class DirectToDbApplierAccessor : DirectToDbApplier
     {
         public DirectToDbApplierAccessor(
@@ -15,14 +17,14 @@ namespace Net.Sf.Dbdeploy.Appliers
         {
         }
         
-        public new void ApplyChangeScript(ChangeScript script)
+        public new void ApplyChangeScript(ChangeScript script, StringBuilder output)
         {
-            base.ApplyChangeScript(script);
+            base.ApplyChangeScript(script, output);
         }
 
-        public new void RecordScriptStatus(ChangeScript changeScript, string output)
+        public new void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output)
         {
-            base.RecordScriptStatus(changeScript, ScriptStatus.Success, output);
+            base.RecordScriptStatus(changeScript, status, output);
         }
     }
 }

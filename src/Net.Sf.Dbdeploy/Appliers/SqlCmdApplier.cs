@@ -70,16 +70,20 @@ namespace Net.Sf.Dbdeploy.Appliers
                 {
                     this.infoTextWriter.WriteLine("Applying " + script + "...");
                     var output = new StringBuilder();
-                    var success = sqlCmdExecutor.ExecuteFile(script.GetFile(), output);
-                    this.infoTextWriter.WriteLine(output);
 
-                    if (success)
+                    var success = false;
+                    try
                     {
-                        this.schemaVersionManager.RecordScriptStatus(script, ScriptStatus.Success, output.ToString());
+                        success = sqlCmdExecutor.ExecuteFile(script.GetFile(), output);
+                        if (!success)
+                        {
+                            throw new DbDeployException(string.Format(CultureInfo.InvariantCulture, "Script '{0}' failed.", script.GetDescription())); 
+                        }
                     }
-                    else
+                    finally 
                     {
-                        throw new DbDeployException(string.Format(CultureInfo.InvariantCulture, "Script '{0}' failed.", script.GetDescription()));                        
+                        this.infoTextWriter.WriteLine(output);
+                        this.schemaVersionManager.RecordScriptStatus(script, success ? ScriptStatus.Success : ScriptStatus.Failure, output.ToString());
                     }
                 }
             }

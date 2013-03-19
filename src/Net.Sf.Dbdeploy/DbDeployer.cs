@@ -91,6 +91,7 @@ namespace Net.Sf.Dbdeploy
 
             IChangeScriptApplier doScriptApplier;
             TextWriter doWriter = null;
+            QueryExecuter applierExecutor = null;
 
             if (this.OutputFile != null) 
             {
@@ -123,8 +124,10 @@ namespace Net.Sf.Dbdeploy
                     LineEnding = this.LineEnding,
                 };
 
+                // Do not share query executor between schema manager and applier, since a failure in one will effect the other.
+                applierExecutor = new QueryExecuter(factory);
                 doScriptApplier = new DirectToDbApplier(
-                    queryExecuter, 
+                    applierExecutor, 
                     databaseSchemaVersionManager, 
                     splitter, 
                     this.InfoWriter);
@@ -158,6 +161,11 @@ namespace Net.Sf.Dbdeploy
                 controller.ProcessChangeScripts(this.LastChangeToApply);
 
                 queryExecuter.Close();
+
+                if (applierExecutor != null)
+                {
+                    applierExecutor.Close();
+                }
             }
             finally
             {

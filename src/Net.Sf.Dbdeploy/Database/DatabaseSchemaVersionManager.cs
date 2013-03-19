@@ -128,7 +128,7 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
             {
                 string sql = string.Format(
                     CultureInfo.InvariantCulture,
-                    "INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES ('Scripts', @1, @2, {1}, {1}, {2}, 1, @3)", 
+                    "INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES ('Scripts', @1, @2, {1}, {1}, {2}, @3, @4)", 
                     this.changeLogTableName,
                     this.syntax.GenerateTimestamp(),
                     this.syntax.GenerateUser());
@@ -137,6 +137,7 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
                         sql,
                         script.GetId(),
                         script.GetDescription(),
+                        (int)status,
                         output);
             }
             catch (DbException e)

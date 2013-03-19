@@ -8,7 +8,7 @@
         /// <summary>
         /// The script failed to execute fully.
         /// </summary>
-        Failed = 0,
+        Failure = 0,
 
         /// <summary>
         /// The script ran successfully.

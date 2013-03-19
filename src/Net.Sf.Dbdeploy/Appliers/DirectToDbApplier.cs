@@ -53,8 +53,22 @@ namespace Net.Sf.Dbdeploy.Appliers
                 this.infoTextWriter.WriteLine("Applying " + script + "...");
 
                 // Apply changes and update ChangeLog table
-                var output = this.ApplyChangeScript(script);
-                this.RecordScriptStatus(script, ScriptStatus.Success, output);
+                var output = new StringBuilder();
+                try
+                {
+                    this.ApplyChangeScript(script, output);
+                    this.RecordScriptStatus(script, ScriptStatus.Success, output.ToString());
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException != null)
+                    {
+                        output.AppendLine(ex.InnerException.Message);
+                    }
+
+                    this.RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
+                    throw;
+                }
 
                 // Commit transaction
                 this.queryExecuter.CommitTransaction();
@@ -65,10 +79,9 @@ namespace Net.Sf.Dbdeploy.Appliers
         /// Applies the change script.
         /// </summary>
         /// <param name="script">The script.</param>
-        /// <returns>The output from applying the change script.</returns>
-        protected string ApplyChangeScript(ChangeScript script)
+        /// <param name="output">The output from applying the change script.</param>
+        protected void ApplyChangeScript(ChangeScript script, StringBuilder output)
         {
-            var output = new StringBuilder();
             ICollection<string> statements = this.splitter.Split(script.GetContent());
 
             int i = 0;
@@ -99,8 +112,6 @@ namespace Net.Sf.Dbdeploy.Appliers
                     }
                 }
             }
-
-            return output.ToString();
         }
 
         /// <summary>

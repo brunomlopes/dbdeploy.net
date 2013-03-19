@@ -92,12 +92,7 @@ namespace Net.Sf.Dbdeploy.Appliers
         public void ShouldThrowExceptionOnScriptFailure()
         {
             // Duplicate the first script to cause a failure.
-            var changeScripts = this.directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Versioned\2.0.10.0"));
-            changeScripts = new List<ChangeScript>
-                                {
-                                    changeScripts.First(),
-                                    changeScripts.First(),
-                                };
+            var changeScripts = this.directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Failures"));
 
             try
             {
@@ -108,11 +103,8 @@ namespace Net.Sf.Dbdeploy.Appliers
             {
             }
 
-            this.AssertTableExists(ChangeLogTableName);
-            this.AssertTableExists("Customer");
-
             var changeCount = this.ExecuteScalar<int>("SELECT COUNT(*) FROM {0}", ChangeLogTableName);
-            Assert.AreEqual(1, changeCount, "Only one script should have succeeded.");
+            Assert.AreEqual(2, changeCount, "Only two scripts should have run.");
         }
 
         /// <summary>
