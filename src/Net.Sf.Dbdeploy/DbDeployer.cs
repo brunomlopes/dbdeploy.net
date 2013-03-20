@@ -50,6 +50,14 @@ namespace Net.Sf.Dbdeploy
         public bool AutoCreateChangeLogTable { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to force previously failed scripts to run again.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if force update; otherwise, <c>false</c>.
+        /// </value>
+        public bool ForceUpdate { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to use SQLCMD mode for MSSQL.
         /// </summary>
         /// <value>
@@ -86,8 +94,7 @@ namespace Net.Sf.Dbdeploy
 
             var scanner = new DirectoryScanner(this.InfoWriter, this.Encoding);
 
-            var changeScriptRepository =
-                    new ChangeScriptRepository(scanner.GetChangeScriptsForDirectory(this.ScriptDirectory));
+            var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScriptsForDirectory(this.ScriptDirectory));
 
             IChangeScriptApplier doScriptApplier;
             TextWriter doWriter = null;
@@ -158,7 +165,7 @@ namespace Net.Sf.Dbdeploy
                     undoScriptApplier, 
                     this.InfoWriter);
 
-                controller.ProcessChangeScripts(this.LastChangeToApply);
+                controller.ProcessChangeScripts(this.LastChangeToApply, this.ForceUpdate);
 
                 queryExecuter.Close();
 

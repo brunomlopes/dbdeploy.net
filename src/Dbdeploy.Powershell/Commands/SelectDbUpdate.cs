@@ -28,17 +28,17 @@ namespace Dbdeploy.Powershell.Commands
 
             var schemaManager = new DatabaseSchemaVersionManager(queryExecuter, factory.CreateDbmsSyntax(), this.TableName, true);
 
-            var appliedChangeNumbers = schemaManager.GetAppliedChanges();
-            var notAppliedChangeScripts = changeScripts.Where(c => !appliedChangeNumbers.Contains(c.GetId()));
+            var appliedChanges = schemaManager.GetAppliedChanges();
+            var notAppliedChangeScripts = changeScripts.Where(c => appliedChanges.All(a => a.ScriptNumber != c.ScriptNumber));
 
             var descriptionPrettyPrinter = new DescriptionPrettyPrinter();
 
             var objects = notAppliedChangeScripts
                 .Select(script => new
                     {
-                        Id = script.GetId(),
-                        Description = descriptionPrettyPrinter.Format(script.GetDescription()),
-                        File = script.GetFile()
+                        Id = script.ScriptNumber,
+                        Description = descriptionPrettyPrinter.Format(script.FileName),
+                        File = script.FileInfo
                     });
 
             this.WriteObject(objects, true);

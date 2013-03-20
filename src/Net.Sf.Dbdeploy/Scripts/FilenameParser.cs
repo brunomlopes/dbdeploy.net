@@ -13,7 +13,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             this.pattern = new Regex(@"^(\d+)", RegexOptions.Compiled);
         }
 
-        public int ExtractIdFromFilename(string filename)
+        public int ExtractScriptNumberFromFilename(string filename)
         {
             Match match = this.pattern.Match(filename);
             

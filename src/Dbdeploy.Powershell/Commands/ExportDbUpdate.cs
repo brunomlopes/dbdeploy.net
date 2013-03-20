@@ -36,6 +36,7 @@ namespace Dbdeploy.Powershell.Commands
                 ChangeLogTableName = this.TableName,
                 ScriptDirectory = new DirectoryInfo(this.deltasDirectory),
                 AutoCreateChangeLogTable = this.AutoCreateChangeLogTable,
+                ForceUpdate = this.ForceUpdate,
                 UseSqlCmd = this.UseSqlCmd
             };
 

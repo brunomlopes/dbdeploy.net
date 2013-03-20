@@ -94,6 +94,19 @@ namespace Net.Sf.Dbdeploy
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to retry and previously failed scripts.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if force update; otherwise, <c>false</c>.
+        /// </value>
+        [TaskAttribute("forceUpdate")]
+        public bool ForceUpdate
+        {
+            get { return this.dbDeploy.ForceUpdate; }
+            set { this.dbDeploy.ForceUpdate = value; }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to use SQLCMD mode.
         /// </summary>
         /// <value>

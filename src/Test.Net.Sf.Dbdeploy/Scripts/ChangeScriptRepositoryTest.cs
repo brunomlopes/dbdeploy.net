@@ -11,10 +11,10 @@ namespace Net.Sf.Dbdeploy.Scripts
         [Test]
         public void TestGivenASetOfChangeScriptsReturnsThemCorrectly()
         {
-            ChangeScript one = new ChangeScript(1);
-            ChangeScript two = new ChangeScript(2);
-            ChangeScript three = new ChangeScript(3);
-            ChangeScript four = new ChangeScript(4);
+            ChangeScript one = new ChangeScript("Scripts", 1);
+            ChangeScript two = new ChangeScript("Scripts", 2);
+            ChangeScript three = new ChangeScript("Scripts", 3);
+            ChangeScript four = new ChangeScript("Scripts", 4);
 
             ChangeScript[] scripts = {three, two, four, one};
 
@@ -32,9 +32,9 @@ namespace Net.Sf.Dbdeploy.Scripts
         [Test]
         public void TestThrowsWhenConstructedWithAChangeScriptListThatHasDuplicates()
         {
-            ChangeScript two = new ChangeScript(2);
-            ChangeScript three = new ChangeScript(3);
-            ChangeScript anotherTwo = new ChangeScript(2);
+            ChangeScript two = new ChangeScript("Scripts", 2);
+            ChangeScript three = new ChangeScript("Scripts", 3);
+            ChangeScript anotherTwo = new ChangeScript("Scripts", 2);
 
             try
             {
@@ -51,8 +51,8 @@ namespace Net.Sf.Dbdeploy.Scripts
         [Test]
         public void TestChangeScriptsMayBeNumberedFromZero()
         {
-            ChangeScript zero = new ChangeScript(0);
-            ChangeScript four = new ChangeScript(4);
+            ChangeScript zero = new ChangeScript("Scripts", 0);
+            ChangeScript four = new ChangeScript("Scripts", 4);
 
 
             ChangeScript[] scripts = new ChangeScript[] {zero, four};

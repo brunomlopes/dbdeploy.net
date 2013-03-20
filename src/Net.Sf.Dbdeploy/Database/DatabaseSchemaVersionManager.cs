@@ -41,26 +41,33 @@ namespace Net.Sf.Dbdeploy.Database
             this.AutoCreateChangeLogTable = autoCreateChangeLogTable;
         }
 
-    	public virtual ICollection<int> GetAppliedChanges()
+    	public virtual ICollection<ChangeEntry> GetAppliedChanges()
     	{
     	    this.VerifyChangeLogTableExists(this.AutoCreateChangeLogTable);
 
-    	    List<int> changeNumbers = new List<int>();
+            List<ChangeEntry> changes = new List<ChangeEntry>();
             try
             {
-                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ScriptNumber FROM {0} ORDER BY ScriptNumber", this.changeLogTableName);
+                // Find all changes that are not resolved.
+                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ChangeId, Folder, ScriptNumber, FileName, Status, Output FROM {0}", this.changeLogTableName, ScriptStatus.ProblemResolved);
                 
                 using (IDataReader reader = this.queryExecuter.ExecuteQuery(sql))
                 {
                     while (reader.Read())
                     {
-                        int changeNumber = Int32.Parse(reader.GetValue(0).ToString());
+                        var folder = (string)reader["Folder"];
+                        var scriptNumber = (int)reader["ScriptNumber"];
+                        var changeEntry = new ChangeEntry(folder, scriptNumber);
+                        changeEntry.ChangeId = (int)reader["ChangeId"];
+                        changeEntry.FileName = (string)reader["FileName"];
+                        changeEntry.Status = (ScriptStatus)(int)reader["Status"];
+                        changeEntry.Output = (string)reader["Output"];
 
-						changeNumbers.Add(changeNumber);
+						changes.Add(changeEntry);
                     }
                 }
 
-                return changeNumbers;
+                return changes;
             }
             catch (DbException e)
             {
@@ -112,7 +119,7 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
 
         public virtual string GetChangelogDeleteSql(ChangeScript script)
         {
-            return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE ScriptNumber = {1}", this.changeLogTableName, script.GetId());
+            return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE ScriptNumber = {1}", this.changeLogTableName, script.ScriptNumber);
         }
 
         /// <summary>
@@ -135,8 +142,8 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
 
                 this.queryExecuter.Execute(
                         sql,
-                        script.GetId(),
-                        script.GetDescription(),
+                        script.ScriptNumber,
+                        script.FileName,
                         (int)status,
                         output);
             }

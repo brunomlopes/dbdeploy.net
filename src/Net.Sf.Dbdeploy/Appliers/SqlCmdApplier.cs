@@ -74,10 +74,10 @@ namespace Net.Sf.Dbdeploy.Appliers
                     var success = false;
                     try
                     {
-                        success = sqlCmdExecutor.ExecuteFile(script.GetFile(), output);
+                        success = sqlCmdExecutor.ExecuteFile(script.FileInfo, output);
                         if (!success)
                         {
-                            throw new DbDeployException(string.Format(CultureInfo.InvariantCulture, "Script '{0}' failed.", script.GetDescription())); 
+                            throw new DbDeployException(string.Format(CultureInfo.InvariantCulture, "Script '{0}' failed.", script.FileName)); 
                         }
                     }
                     finally 

@@ -41,6 +41,9 @@ namespace Dbdeploy.Powershell.Commands
         [Parameter(Mandatory = false, HelpMessage = "Sets if the Changelog table should be automatically created. Defaults to true")]
         public bool AutoCreateChangeLogTable { get; set; }
 
+        [Parameter(Mandatory = false, HelpMessage = "Sets if previously failed scripts should be retried. Defaults to false")]
+        public bool ForceUpdate { get; set; }
+
         [Parameter(Mandatory = false, HelpMessage = "Sets if SQLCMD mode should be used. Defaults to false")]
         public bool UseSqlCmd { get; set; }
 

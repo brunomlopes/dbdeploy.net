@@ -22,12 +22,12 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             foreach (ChangeScript script in scripts)
             {
-                if (script.GetId() == lastId)
+                if (script.ScriptNumber == lastId)
                 {
                     throw new DuplicateChangeScriptException("There is more than one change script with number " + lastId);
                 }
 
-                lastId = script.GetId();
+                lastId = script.ScriptNumber;
             }
         }
 

@@ -82,7 +82,7 @@ namespace Net.Sf.Dbdeploy.Appliers
         [Test]
         public void ShouldRecordSuccessInSchemaVersionTable() 
         {
-            ChangeScript changeScript = new ChangeScript(1, "script.sql");
+            ChangeScript changeScript = new ChangeScript("Scripts", 1, "script.sql");
 
             this.applier.RecordScriptStatus(changeScript, ScriptStatus.Success, "Script completed");
 
@@ -92,7 +92,7 @@ namespace Net.Sf.Dbdeploy.Appliers
         [Test]
         public void ShouldRecordFailureInSchemaVersionTable()
         {
-            ChangeScript changeScript = new ChangeScript(1, "script.sql");
+            ChangeScript changeScript = new ChangeScript("Scripts", 1, "script.sql");
 
             this.applier.RecordScriptStatus(changeScript, ScriptStatus.Failure, "Script failed");
 

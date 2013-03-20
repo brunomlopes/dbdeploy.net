@@ -64,19 +64,9 @@ namespace Net.Sf.Dbdeploy
                     (string s) => dbDeploy.ScriptDirectory = new DirectoryInfo(StripQuotes(s)))
 
                 .Add(
-                    "e|encoding=",
-                    "encoding for input and output files (default: UTF-8)",
-                    (string s) => dbDeploy.Encoding = new OutputFileEncoding(StripQuotes(s)).AsEncoding())
-
-                .Add(
                     "o|outputfile=",
                     "output file",
                     (string s) => dbDeploy.OutputFile = new FileInfo(StripQuotes(s)))
-
-                .Add(
-                    "templatedir=",
-                    "template directory",
-                    (string s) => dbDeploy.TemplateDir = new DirectoryInfo(StripQuotes(s)))
 
                 .Add(
                     "t|changelogtablename=",
@@ -89,9 +79,24 @@ namespace Net.Sf.Dbdeploy
                     (string s) => dbDeploy.AutoCreateChangeLogTable = s.ToLowerInvariant() != "false")
 
                 .Add(
+                    "f|forceupdate=",
+                    "forces previously failed scripts to be run again (true or false).  Defaults to false.",
+                    (string s) => dbDeploy.ForceUpdate = s.ToLowerInvariant() == "true")
+
+                .Add(
                     "u|usesqlcmd=",
                     "runs scripts in SQLCMD mode (true or false).  Defaults to false.",
                     (string s) => dbDeploy.UseSqlCmd = s.ToLowerInvariant() == "true")
+
+                .Add(
+                    "e|encoding=",
+                    "encoding for input and output files (default: UTF-8)",
+                    (string s) => dbDeploy.Encoding = new OutputFileEncoding(StripQuotes(s)).AsEncoding())
+
+                .Add(
+                    "templatedir=",
+                    "template directory",
+                    (string s) => dbDeploy.TemplateDir = new DirectoryInfo(StripQuotes(s)))
 
                 .Add(
                     "delimiter=",

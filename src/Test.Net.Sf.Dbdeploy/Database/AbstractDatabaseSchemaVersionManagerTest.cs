@@ -30,9 +30,9 @@ namespace Net.Sf.Dbdeploy.Database
             CreateTable();
             InsertRowIntoTable(5);
 
-            List<int> appliedChangeNumbers = new List<int>(databaseSchemaVersion.GetAppliedChanges());
-            Assert.AreEqual(1, appliedChangeNumbers.Count);
-            Assert.Contains(5, appliedChangeNumbers);
+            var appliedChanges = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
+            Assert.AreEqual(1, appliedChanges.Count);
+            Assert.Contains(5, appliedChanges);
         }
 
         public virtual void TestThrowsWhenDatabaseTableDoesNotExist()

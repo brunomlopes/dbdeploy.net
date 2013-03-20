@@ -11,7 +11,7 @@ namespace Net.Sf.Dbdeploy.Database
     [TestFixture]
     public class DatabaseSchemaVersionManagerTest
     {
-        private readonly ChangeScript script = new ChangeScript(99, "Some Description");
+        private readonly ChangeScript script = new ChangeScript("Scripts", 99, "Some Description");
 
         private DatabaseSchemaVersionManager schemaVersionManager;
 
@@ -74,11 +74,11 @@ namespace Net.Sf.Dbdeploy.Database
                 return (int)getEnumerator.Current;
             });
 
-            List<int> numbers = this.schemaVersionManager.GetAppliedChanges().ToList();
+            var changes = this.schemaVersionManager.GetAppliedChanges().ToList();
         
-            Assert.Contains(5, numbers);
-            Assert.Contains(9, numbers);
-            Assert.Contains(12, numbers);
+            Assert.Contains(5, changes);
+            Assert.Contains(9, changes);
+            Assert.Contains(12, changes);
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
             string expected = "INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES ('Scripts', @1, @2, TIMESTAMP, TIMESTAMP, DBUSER, 1, @3)";
 
-            this.queryExecuter.Verify(e => e.Execute(expected, this.script.GetId(), this.script.GetDescription(), "Script output"), Times.Once());
+            this.queryExecuter.Verify(e => e.Execute(expected, this.script.ScriptNumber, this.script.FileName, "Script output"), Times.Once());
         }
 
         [Test]

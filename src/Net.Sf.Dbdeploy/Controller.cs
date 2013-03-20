@@ -1,9 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Net.Sf.Dbdeploy.Scripts;
+using Net.Sf.Dbdeploy.Database;
 
 namespace Net.Sf.Dbdeploy
 {
+    using System.Globalization;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class Controller
     {
         private readonly IAvailableChangeScriptsProvider availableChangeScriptsProvider;
@@ -33,15 +39,26 @@ namespace Net.Sf.Dbdeploy
             infoWriter = infoTextWriter;
         }
 
-        public void ProcessChangeScripts(int? lastChangeToApply)
+        /// <summary>
+        /// Processes the change scripts.
+        /// </summary>
+        /// <param name="lastChangeToApply">The last change to apply.</param>
+        /// <param name="forceUpdate">if set to <c>true</c> any previously failed scripts will be retried.</param>
+        public void ProcessChangeScripts(int? lastChangeToApply, bool forceUpdate = false)
         {
             if (lastChangeToApply.HasValue)
             {
                 Info("Only applying changes up and including change script #" + lastChangeToApply);
             }
 
-            var scripts = this.availableChangeScriptsProvider.GetAvailableChangeScripts();
+            // If force update is not set, than if there are any previous script runs that failed it should stop.
             var applied = this.appliedChangesProvider.GetAppliedChanges();
+            if (!forceUpdate)
+            {
+                this.CheckForFailedScripts(applied);
+            }
+
+            var scripts = this.availableChangeScriptsProvider.GetAvailableChangeScripts();
             var toApply = this.IdentifyChangesToApply(lastChangeToApply, scripts, applied);
 
             this.LogStatus(scripts, applied, toApply);
@@ -59,23 +76,34 @@ namespace Net.Sf.Dbdeploy
             }
         }
 
-        private void LogStatus(ICollection<ChangeScript> scripts, ICollection<int> applied, ICollection<ChangeScript> toApply)
+        private void CheckForFailedScripts(ICollection<ChangeEntry> applied)
         {
-            Info("Changes currently applied to database:\n  " + prettyPrinter.Format(applied));
-            Info("Scripts available:\n  " + prettyPrinter.FormatChangeScriptList(scripts));
-            Info("To be applied:\n  " + prettyPrinter.FormatChangeScriptList(toApply));
+            var failedScript = applied.FirstOrDefault(a => a.Status == ScriptStatus.Failure);
+            if (failedScript != null)
+            {
+                throw new PriorFailedScriptException(string.Format(CultureInfo.InvariantCulture, "The script '{0}' failed to complete on a previous run.\r\n{1}", failedScript, failedScript.Output));
+            }
         }
 
-        private ICollection<ChangeScript> IdentifyChangesToApply(int? lastChangeToApply, IEnumerable<ChangeScript> scripts, ICollection<int> applied)
+        private void LogStatus(ICollection<ChangeScript> scripts, ICollection<ChangeEntry> applied, ICollection<ChangeScript> toApply)
+        {
+            Info("Changes currently applied to database:\n  " + prettyPrinter.Format(applied));
+            Info("Scripts available:\n  " + prettyPrinter.Format(scripts));
+            Info("To be applied:\n  " + prettyPrinter.Format(toApply));
+        }
+
+        private ICollection<ChangeScript> IdentifyChangesToApply(int? lastChangeToApply, IEnumerable<ChangeScript> scripts, ICollection<ChangeEntry> applied)
         {
             var result = new List<ChangeScript>();
 
             foreach (ChangeScript script in scripts)
             {
-                if (lastChangeToApply.HasValue && script.GetId() > lastChangeToApply.Value)
+                if (lastChangeToApply.HasValue && script.ScriptNumber > lastChangeToApply.Value)
                     break;
 
-                if (!applied.Contains(script.GetId()))
+                var appliedScript = applied.FirstOrDefault(a => a.ChangeId == script.ScriptNumber);
+
+                if (applied.Any(a => a.ScriptNumber == script.ScriptNumber))
                 {
                     result.Add(script);
                 }

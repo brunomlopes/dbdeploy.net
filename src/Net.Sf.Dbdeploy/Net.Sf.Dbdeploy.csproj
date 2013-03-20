@@ -85,6 +85,7 @@
     <Compile Include="Appliers\NVelocityReplacements\DbDeployDirectiveManager.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployResourceManager.cs" />
     <Compile Include="Appliers\SqlCmdApplier.cs" />
+    <Compile Include="Database\ChangeEntry.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
     <Compile Include="Database\SqlCmd\SqlCmdExecutor.cs" />
@@ -114,12 +115,14 @@
       <DependentUpon>IDelimiterType.cs</DependentUpon>
     </Compile>
     <Compile Include="Appliers\DirectToDbApplier.cs" />
+    <Compile Include="UniqueChange.cs" />
     <Compile Include="DbDeployer.cs" />
     <Compile Include="Database\DelimiterTypeFactory.cs">
       <DependentUpon>IDelimiterType.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\ChangelogTableDoesNotExistException.cs" />
     <Compile Include="Exceptions\ChangeScriptFailedException.cs" />
+    <Compile Include="Exceptions\PriorFailedScriptException.cs" />
     <Compile Include="Exceptions\DbDeployException.cs" />
     <Compile Include="Exceptions\DuplicateChangeScriptException.cs" />
     <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />

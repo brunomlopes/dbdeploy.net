@@ -82,7 +82,7 @@ namespace Net.Sf.Dbdeploy.Database
 			EnsureTableDoesNotExist();
 			CreateTable();
     		InsertRowIntoTable(3);
-			List<int> changeNumbers = new List<int>(databaseSchemaVersion.GetAppliedChanges());
+			var changeNumbers = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
 
 			Assert.AreEqual(1, changeNumbers.Count);
 			Assert.AreEqual(3, changeNumbers[0]);

@@ -118,9 +118,9 @@ namespace Net.Sf.Dbdeploy.Database
             {
             }
 
-            public override ICollection<int> GetAppliedChanges()
+            public override ICollection<ChangeEntry> GetAppliedChanges()
             {
-                return new List<int>();
+                return new List<ChangeEntry>();
             }
         }
     }
