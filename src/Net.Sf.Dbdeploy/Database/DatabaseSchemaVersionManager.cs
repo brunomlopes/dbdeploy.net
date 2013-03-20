@@ -170,13 +170,14 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
             {
                 string sql = string.Format(
                     CultureInfo.InvariantCulture,
-                    "INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES ('Scripts', @1, @2, {1}, {1}, {2}, @3, @4)", 
+                    "INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES (@1, @2, @3, {1}, {1}, {2}, @4, @5)", 
                     this.changeLogTableName,
                     this.syntax.GenerateTimestamp(),
                     this.syntax.GenerateUser());
 
                 this.queryExecuter.Execute(
                         sql,
+                        script.Folder,
                         script.ScriptNumber,
                         script.FileName,
                         (int)status,

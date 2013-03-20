@@ -10,6 +10,8 @@ using System.Text;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.Linq;
+
     /// <summary>
     /// Applier for running scripts using SQLCMD mode against MSSQL.
     /// </summary>
@@ -64,11 +66,14 @@ namespace Net.Sf.Dbdeploy.Appliers
         /// <param name="changeScripts">The change scripts.</param>
         public void Apply(IEnumerable<ChangeScript> changeScripts)
         {
+            this.infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
+
             using (var sqlCmdExecutor = new SqlCmdExecutor(this.connectionString))
             {
                 foreach (var script in changeScripts)
                 {
-                    this.infoTextWriter.WriteLine("Applying " + script + "...");
+                    this.infoTextWriter.WriteLine(script);
+                    this.infoTextWriter.WriteLine("----------------------------------------------------------");
                     var output = new StringBuilder();
 
                     var success = false;

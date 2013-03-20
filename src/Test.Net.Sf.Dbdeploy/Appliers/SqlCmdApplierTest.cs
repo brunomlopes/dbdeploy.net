@@ -75,7 +75,7 @@ namespace Net.Sf.Dbdeploy.Appliers
         [Test]
         public void ShouldApplySqlCmdModeScripts()
         {
-            var changeScripts = this.directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Versioned\2.0.10.0"));
+            var changeScripts = this.directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Versioned\v2.0.10.0"));
             this.sqlCmdApplier.Apply(changeScripts);
 
             this.AssertTableExists(ChangeLogTableName);

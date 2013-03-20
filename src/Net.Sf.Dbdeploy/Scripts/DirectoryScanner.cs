@@ -40,7 +40,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             List<ChangeScript> scripts = new List<ChangeScript>();
 
-            foreach (FileInfo file in directory.GetFiles())
+            foreach (FileInfo file in directory.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 if ((file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
                     continue;
@@ -51,17 +51,13 @@ namespace Net.Sf.Dbdeploy.Scripts
                 {
                     int scriptNumber = this.filenameParser.ExtractScriptNumberFromFilename(filename);
 
-                    scripts.Add(new ChangeScript("Scripts", scriptNumber, file, this.encoding));
+                    scripts.Add(new ChangeScript(file.Directory.Name, scriptNumber, file, this.encoding));
                 }
                 catch (UnrecognisedFilenameException)
                 {
                     // ignore
                 }
             }
-
-            // Order scripts by number, since they may not have leading zeros on file system.
-            // This allows us to have more than a thousand scripts (001) in a directory, and it does not have to be specified beforehand.
-            scripts = scripts.OrderBy(s => s.ScriptNumber).ToList();
 
             return scripts;
         }

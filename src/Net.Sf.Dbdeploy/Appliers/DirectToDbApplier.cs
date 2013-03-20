@@ -9,6 +9,8 @@ using System.Text;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.Linq;
+
     public class DirectToDbApplier : IChangeScriptApplier
     {
         private readonly QueryExecuter queryExecuter;
@@ -45,12 +47,15 @@ namespace Net.Sf.Dbdeploy.Appliers
 
         public void Apply(IEnumerable<ChangeScript> changeScripts)
         {
+            this.infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
+
             foreach (var script in changeScripts)
             {
                 // Begin transaction
                 this.queryExecuter.BeginTransaction();
 
-                this.infoTextWriter.WriteLine("Applying " + script + "...");
+                this.infoTextWriter.WriteLine(script);
+                this.infoTextWriter.WriteLine("----------------------------------------------------------");
 
                 // Apply changes and update ChangeLog table
                 var output = new StringBuilder();

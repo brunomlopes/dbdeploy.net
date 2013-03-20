@@ -126,7 +126,13 @@ namespace Net.Sf.Dbdeploy
             var failedScript = applied.FirstOrDefault(a => a.Status == ScriptStatus.Failure);
             if (failedScript != null)
             {
-                throw new PriorFailedScriptException(string.Format(CultureInfo.InvariantCulture, "The script '{0}' failed to complete on a previous run.\r\n{1}", failedScript, failedScript.Output));
+                throw new PriorFailedScriptException(string.Format(CultureInfo.InvariantCulture, @"
+The script '{0}' failed to complete on a previous run. 
+You must update the status to Resolved (2), or force updates.
+
+Ouput from the previous run
+----------------------------------------------------------
+{1}", failedScript, failedScript.Output));
             }
         }
 
@@ -141,6 +147,7 @@ namespace Net.Sf.Dbdeploy
             Info("Changes currently applied to database:\n  " + this.prettyPrinter.Format(applied));
             Info("Scripts available:\n  " + this.prettyPrinter.Format(scripts));
             Info("To be applied:\n  " + this.prettyPrinter.Format(toApply));
+            Info(string.Empty);
         }
 
         /// <summary>
@@ -152,6 +159,7 @@ namespace Net.Sf.Dbdeploy
         /// <returns>List of changes to apply.</returns>
         private IList<ChangeScript> IdentifyChangesToApply(UniqueChange lastChangeToApply, IEnumerable<ChangeScript> scripts, IEnumerable<ChangeEntry> applied)
         {
+            // Re-run any scripts marked as resolved.
             var changes = scripts.Where(s => applied.All(a => !string.Equals(a.UniqueKey, s.UniqueKey, StringComparison.InvariantCultureIgnoreCase)));
 
             // Only apply up to last change if specified.

@@ -53,7 +53,7 @@ namespace Net.Sf.Dbdeploy
         }
 
         /// <summary>
-        /// Gets the folder that contained the script executed.
+        /// Gets the folder that contained the script executed (part of unique key).
         /// </summary>
         /// <value>
         /// The folder.
