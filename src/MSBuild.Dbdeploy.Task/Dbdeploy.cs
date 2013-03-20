@@ -1,12 +1,14 @@
-using System;
-using System.IO;
-using Microsoft.Build.Framework;
-using Net.Sf.Dbdeploy;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-
 namespace MSBuild.Dbdeploy.Task
 {
+    using System;
+    using System.IO;
+
+    using Microsoft.Build.Framework;
+
+    using Net.Sf.Dbdeploy;
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class Dbdeploy : ITask
     {
         private readonly DbDeployer dbDeploy;
@@ -61,10 +63,10 @@ namespace MSBuild.Dbdeploy.Task
             set { this.dbDeploy.TemplateDir = new DirectoryInfo(value); }
         }
 
-        public int LastChangeToApply
+        public string LastChangeToApply
         {
-            get { return this.dbDeploy.LastChangeToApply ?? -1; }
-            set { this.dbDeploy.LastChangeToApply = value < 0 ? default(int?) : value; }
+            get { return this.dbDeploy.LastChangeToApply != null ? this.dbDeploy.LastChangeToApply.ToString() : string.Empty; }
+            set { this.dbDeploy.LastChangeToApply = string.IsNullOrWhiteSpace(value) ? null : new UniqueChange(value); }
         }
 
         public string TableName

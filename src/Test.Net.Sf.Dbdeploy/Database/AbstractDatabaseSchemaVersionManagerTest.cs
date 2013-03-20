@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using Net.Sf.Dbdeploy.Exceptions;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Collections.Generic;
+    using System.Data;
     using System.Globalization;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public abstract class AbstractDatabaseSchemaVersionManagerTest
@@ -32,7 +32,7 @@ namespace Net.Sf.Dbdeploy.Database
 
             var appliedChanges = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
             Assert.AreEqual(1, appliedChanges.Count);
-            Assert.Contains(5, appliedChanges);
+            Assert.AreEqual("Scripts/5", appliedChanges[0].UniqueKey);
         }
 
         public virtual void TestThrowsWhenDatabaseTableDoesNotExist()
@@ -127,12 +127,19 @@ WHERE TABLE_NAME = 'ChangeLog'");
             return result;
         }
 
+        /// <summary>
+        /// Creats the change log table.
+        /// </summary>
+        protected void CreateTable()
+        {
+            this.databaseSchemaVersion.VerifyChangeLogTableExists(true);            
+        }
+
         protected abstract string ConnectionString { get; }
         protected abstract string Folder { get; }
         protected abstract string[] ChangelogTableDoesNotExistMessages { get; }
         protected abstract string Dbms { get; }
         protected abstract IDbConnection GetConnection();
-        protected abstract void CreateTable();
         protected abstract void InsertRowIntoTable(int i);
     }
 }

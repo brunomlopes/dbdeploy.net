@@ -35,7 +35,7 @@ namespace Net.Sf.Dbdeploy
 
         public string LineEnding { get; set; }
 
-        public int? LastChangeToApply { get; set; }
+        public UniqueChange LastChangeToApply { get; set; }
 
         public string ChangeLogTableName { get; set; }
 

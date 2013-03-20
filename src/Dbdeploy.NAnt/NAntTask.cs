@@ -1,12 +1,14 @@
-using System;
-using System.IO;
-using NAnt.Core;
-using NAnt.Core.Attributes;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.IO;
+
+    using NAnt.Core;
+    using NAnt.Core.Attributes;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+
     [TaskName("dbdeploy")]
     public class NAntTask : Task
     {
@@ -67,10 +69,10 @@ namespace Net.Sf.Dbdeploy
         }
         
         [TaskAttribute("lastChangeToApply")]
-        public int? LastChangeToApply
+        public string LastChangeToApply
         {
-            get { return this.dbDeploy.LastChangeToApply; }
-            set { this.dbDeploy.LastChangeToApply = value; }
+            get { return this.dbDeploy.LastChangeToApply != null ? this.dbDeploy.LastChangeToApply.UniqueKey : string.Empty; }
+            set { this.dbDeploy.LastChangeToApply = string.IsNullOrWhiteSpace(value) ? null : new UniqueChange(value); }
         }
         
         [TaskAttribute("changeLogTable")]

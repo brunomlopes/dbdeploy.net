@@ -7,14 +7,42 @@ namespace Net.Sf.Dbdeploy
     /// <summary>
     /// Represents any unique change.
     /// </summary>
-    public abstract class UniqueChange : IComparable
+    public class UniqueChange : IComparable
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UniqueChange" /> class.
+        /// </summary>
+        /// <param name="uniqueKey">The unique key folder and script number combination (Alpha/2).</param>
+        /// <exception cref="System.ArgumentNullException">uniqueKey;The unique key must be a supplied.</exception>
+        public UniqueChange(string uniqueKey)
+        {
+            if (string.IsNullOrWhiteSpace(uniqueKey))
+            {
+                throw new ArgumentNullException("uniqueKey", "The unique key must be a supplied.");
+            }
+
+            var parts = uniqueKey.Split('/');
+            if (parts.Length != 2)
+            {
+                throw new ArgumentException("The unique key must be a folder and script number combination (Alpha/2).", "uniqueKey");
+            }
+
+            int scriptNumber;
+            if (!int.TryParse(parts[1], out scriptNumber))
+            {
+                throw new ArgumentException("The unique key script number must be an integer (Alpha/2).", "uniqueKey");
+            }
+
+            this.Folder = parts[0];
+            this.ScriptNumber = scriptNumber;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UniqueChange" /> class.
         /// </summary>
         /// <param name="folder">The folder.</param>
         /// <param name="scriptNumber">The script number.</param>
-        protected UniqueChange(string folder, int scriptNumber)
+        public UniqueChange(string folder, int scriptNumber)
         {
             this.Folder = folder;
             this.ScriptNumber = scriptNumber;

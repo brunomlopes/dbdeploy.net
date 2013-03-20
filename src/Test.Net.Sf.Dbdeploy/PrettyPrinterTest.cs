@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using Net.Sf.Dbdeploy.Scripts;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Scripts;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class PrettyPrinterTest

@@ -8,7 +8,7 @@ GO
 $script.getContent()
 
 INSERT INTO ${changeLogTableName} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output)
- VALUES ('Scripts', $script.getId(),'$script.getDescription()', getdate(), getdate(), user_name(), 1, '')
+ VALUES ('$script.Folder', $script.ScriptNumber,'$script.FileName', getdate(), getdate(), user_name(), 1, '')
 GO
 
 COMMIT

@@ -1,12 +1,13 @@
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Globalization;
+
+    using NUnit.Framework;
+
     [Category("MSSQL"), Category("DbIntegration")]
     public class MsSqlDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
@@ -53,27 +54,12 @@ namespace Net.Sf.Dbdeploy.Database
 			return new SqlConnection(CONNECTION_STRING);
     	}
 
-    	protected override void CreateTable()
-        {
-            ExecuteSql(
-				"CREATE TABLE " + TableName + "( " +
-                "ScriptNumber INTEGER NOT NULL, " +
-                "Folder VARCHAR(256) NOT NULL, " +
-                "StartDate DATETIME NOT NULL, " +
-                "CompleteDate DATETIME NULL, " +
-                "AppliedBy VARCHAR(100) NOT NULL, " +
-                "FileName VARCHAR(500) NOT NULL )");
-            ExecuteSql(
-				"ALTER TABLE " + TableName +
-                " ADD CONSTRAINT PK_ChangeLog  PRIMARY KEY (Folder, ScriptNumber)");
-        }
-
         protected override void InsertRowIntoTable(int i)
         {
 			ExecuteSql("INSERT INTO " + TableName
-                       + " (ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, FileName) VALUES ( "
-                       + i + ", '" + FOLDER
-                       + "', getdate(), getdate(), user_name(), 'Unit test')");
+                       + " (Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, FileName, Status) VALUES ( "
+                       + "'" + FOLDER + "', " + i
+                       + ", getdate(), getdate(), user_name(), 'Unit test', 1)");
         }
 
     	[Test]
@@ -85,7 +71,7 @@ namespace Net.Sf.Dbdeploy.Database
 			var changeNumbers = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
 
 			Assert.AreEqual(1, changeNumbers.Count);
-			Assert.AreEqual(3, changeNumbers[0]);
+			Assert.AreEqual("Scripts/3", changeNumbers[0].UniqueKey);
 		}
 
         [Test]

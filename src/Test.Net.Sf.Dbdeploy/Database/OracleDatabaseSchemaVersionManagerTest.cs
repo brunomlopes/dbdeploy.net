@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.OracleClient;
-using System.Text;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.OracleClient;
+    using System.Text;
+    using NUnit.Framework;
+
 	[Category("Oracle"), Category("DbIntegration")]
 	public class OracleDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
 	{
@@ -36,28 +36,6 @@ namespace Net.Sf.Dbdeploy.Database
 		protected override string Dbms
 		{
 			get { return DBMS; }
-		}
-
-		protected override void CreateTable()
-		{
-			StringBuilder commandBuilder = new StringBuilder();
-			commandBuilder.Append("BEGIN execute immediate");
-            commandBuilder.Append(" 'CREATE TABLE ChangeLog (");
-			commandBuilder.Append(" ScriptNumber INTEGER NOT NULL,");
-			commandBuilder.Append(" Folder VARCHAR2(256) NOT NULL,");
-			commandBuilder.Append(" StartDate TIMESTAMP NOT NULL,");
-			commandBuilder.Append(" CompleteDate TIMESTAMP NULL,");
-			commandBuilder.Append(" AppliedBy VARCHAR2(128) NOT NULL,");
-			commandBuilder.Append(" FileName VARCHAR2(512) NOT NULL");
-			commandBuilder.Append(" )';");
-			commandBuilder.Append(" END;");
-			ExecuteSql(commandBuilder.ToString());
-
-			commandBuilder = new StringBuilder();
-			commandBuilder.Append("BEGIN execute immediate");
-            commandBuilder.Append(" 'ALTER TABLE ChangeLog ADD CONSTRAINT PK_ChangeLog PRIMARY KEY (ScriptNumber, Folder)';");
-			commandBuilder.Append(" END;");
-			ExecuteSql(commandBuilder.ToString());
 		}
 
 		protected override void InsertRowIntoTable(int i)

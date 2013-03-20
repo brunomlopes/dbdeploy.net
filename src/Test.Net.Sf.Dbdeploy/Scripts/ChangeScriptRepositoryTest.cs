@@ -32,19 +32,22 @@ namespace Net.Sf.Dbdeploy.Scripts
         [Test]
         public void TestThrowsWhenConstructedWithAChangeScriptListThatHasDuplicates()
         {
-            ChangeScript two = new ChangeScript("Scripts", 2);
-            ChangeScript three = new ChangeScript("Scripts", 3);
-            ChangeScript anotherTwo = new ChangeScript("Scripts", 2);
+            var two = new ChangeScript("Alpha", 2);
+            var three = new ChangeScript("Alpha", 3);
+            var four = new ChangeScript("Beta", 3);
+            var anotherTwo = new ChangeScript("Alpha", 2);
 
             try
             {
-                ChangeScript[] scripts = {three, two, anotherTwo};
+                var scripts = new[] { three, four, two, anotherTwo };
+                // ReSharper disable ObjectCreationAsStatement
                 new ChangeScriptRepository(new List<ChangeScript>(scripts));
+                // ReSharper restore ObjectCreationAsStatement
                 Assert.Fail("expected exception");
             }
             catch (DuplicateChangeScriptException ex)
             {
-                Assert.AreEqual("There is more than one change script with number 2", ex.Message);
+                Assert.AreEqual("There is more than one change script with key 'Alpha/2'.", ex.Message);
             }
         }
 

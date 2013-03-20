@@ -5,7 +5,7 @@
 ${script.getContent()}
 
 INSERT INTO ${changeLogTableName} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output)
- VALUES ('Scripts', ${script.getId()}, '${script.getDescription()}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER(), 1, '')$!{separator}${delimiter}
+ VALUES ('${script.Folder}', ${script.ScriptNumber}, '${script.FileName}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER(), 1, '')$!{separator}${delimiter}
 
 COMMIT$!{separator}${delimiter}
 

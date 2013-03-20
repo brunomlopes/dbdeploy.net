@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Net.Sf.Dbdeploy.Appliers;
-using Net.Sf.Dbdeploy.Scripts;
-using NUnit.Framework;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using Net.Sf.Dbdeploy.Appliers;
+    using Net.Sf.Dbdeploy.Scripts;
+    using NUnit.Framework;
+
     [TestFixture]
     public class ScriptGenerationTest
     {

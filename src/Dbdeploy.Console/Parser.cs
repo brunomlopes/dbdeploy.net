@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using NDesk.Options;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-
-namespace Net.Sf.Dbdeploy
+﻿namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    using NDesk.Options;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class Parser
     {
         public void Parse(string[] args, DbDeployer dbDeploy)
@@ -44,74 +46,73 @@ namespace Net.Sf.Dbdeploy
 
         private OptionSet Initialize(DbDeployer dbDeploy) 
         {
-            OptionSet options = new OptionSet();
-
+            var options = new OptionSet();
 
             options
                 .Add(
                     "d|dbms=",
                     "DBMS type ('mssql', 'mysql' or 'ora')",
-                    (string s) => dbDeploy.Dbms = s)
+                    s => dbDeploy.Dbms = s)
 
                 .Add(
                     "c|connectionstring=",
                     "connection string for database",
-                    (string s) => dbDeploy.ConnectionString = StripQuotes(s))
+                    s => dbDeploy.ConnectionString = StripQuotes(s))
 
                 .Add(
                     "s|scriptdirectory=",
                     "directory containing change scripts (default: .)",
-                    (string s) => dbDeploy.ScriptDirectory = new DirectoryInfo(StripQuotes(s)))
+                    s => dbDeploy.ScriptDirectory = new DirectoryInfo(StripQuotes(s)))
 
                 .Add(
                     "o|outputfile=",
                     "output file",
-                    (string s) => dbDeploy.OutputFile = new FileInfo(StripQuotes(s)))
+                    s => dbDeploy.OutputFile = new FileInfo(StripQuotes(s)))
 
                 .Add(
                     "t|changelogtablename=",
                     "name of change log table to use (default: ChangeLog)",
-                    (string s) => dbDeploy.ChangeLogTableName = StripQuotes(s))
+                    s => dbDeploy.ChangeLogTableName = StripQuotes(s))
 
                 .Add(
                     "a|autocreatechangelogtable=",
                     "automatically creates the change log table if it does not exist (true or false).  Defaults to true.",
-                    (string s) => dbDeploy.AutoCreateChangeLogTable = s.ToLowerInvariant() != "false")
+                    s => dbDeploy.AutoCreateChangeLogTable = s.ToLowerInvariant() != "false")
 
                 .Add(
                     "f|forceupdate=",
                     "forces previously failed scripts to be run again (true or false).  Defaults to false.",
-                    (string s) => dbDeploy.ForceUpdate = s.ToLowerInvariant() == "true")
+                    s => dbDeploy.ForceUpdate = s.ToLowerInvariant() == "true")
 
                 .Add(
                     "u|usesqlcmd=",
                     "runs scripts in SQLCMD mode (true or false).  Defaults to false.",
-                    (string s) => dbDeploy.UseSqlCmd = s.ToLowerInvariant() == "true")
+                    s => dbDeploy.UseSqlCmd = s.ToLowerInvariant() == "true")
 
                 .Add(
                     "e|encoding=",
                     "encoding for input and output files (default: UTF-8)",
-                    (string s) => dbDeploy.Encoding = new OutputFileEncoding(StripQuotes(s)).AsEncoding())
+                    s => dbDeploy.Encoding = new OutputFileEncoding(StripQuotes(s)).AsEncoding())
 
                 .Add(
                     "templatedir=",
                     "template directory",
-                    (string s) => dbDeploy.TemplateDir = new DirectoryInfo(StripQuotes(s)))
+                    s => dbDeploy.TemplateDir = new DirectoryInfo(StripQuotes(s)))
 
                 .Add(
                     "delimiter=",
                     "delimiter to separate sql statements",
-                    (string s) => dbDeploy.Delimiter = s)
+                    s => dbDeploy.Delimiter = s)
 
                 .Add(
                     "delimitertype=",
                     "delimiter type to separate sql statements (row or normal)",
-                    (string s) => dbDeploy.DelimiterType = ParseDelimiterType(s))
+                    s => dbDeploy.DelimiterType = ParseDelimiterType(s))
 
                 .Add(
                     "lineending=",
                     "line ending to use when applying scripts direct to db (platform, cr, crlf, lf)",
-                    (string s) => dbDeploy.LineEnding = ParseLineEnding(s));
+                    s => dbDeploy.LineEnding = ParseLineEnding(s));
             
             return options;
         }

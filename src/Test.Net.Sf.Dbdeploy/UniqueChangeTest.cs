@@ -1,13 +1,10 @@
-using System;
-using System.Text;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using Net.Sf.Dbdeploy.Database;
+
+    using NUnit.Framework;
 
     /// <summary>
     /// Tests for <see cref="UniqueChange"/> base class.
@@ -93,4 +90,3 @@ namespace Net.Sf.Dbdeploy
         }
     }
 }
-

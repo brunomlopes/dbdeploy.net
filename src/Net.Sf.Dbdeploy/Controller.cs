@@ -1,27 +1,58 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Net.Sf.Dbdeploy.Scripts;
-using Net.Sf.Dbdeploy.Database;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
+    using System.Linq;
 
+    using Net.Sf.Dbdeploy.Database;
     using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
 
+    /// <summary>
+    /// Primary controller for executing DbDeploy.
+    /// </summary>
     public class Controller
     {
-        private readonly IAvailableChangeScriptsProvider availableChangeScriptsProvider;
-        private readonly IAppliedChangesProvider appliedChangesProvider;
-
-        private readonly IChangeScriptApplier doApplier;
-        private readonly IChangeScriptApplier undoApplier;
-
-        private readonly PrettyPrinter prettyPrinter = new PrettyPrinter();
-        
+        /// <summary>
+        /// The writer for displaying information to the user.
+        /// </summary>
         private static TextWriter infoWriter;
 
+        /// <summary>
+        /// The available change scripts provider.
+        /// </summary>
+        private readonly IAvailableChangeScriptsProvider availableChangeScriptsProvider;
+
+        /// <summary>
+        /// The applied changes provider.
+        /// </summary>
+        private readonly IAppliedChangesProvider appliedChangesProvider;
+
+        /// <summary>
+        /// The applier to upgrade the database.
+        /// </summary>
+        private readonly IChangeScriptApplier doApplier;
+
+        /// <summary>
+        /// The applier to undo changes to the database.
+        /// </summary>
+        private readonly IChangeScriptApplier undoApplier;
+
+        /// <summary>
+        /// The printer for handling the output of the script changes.
+        /// </summary>
+        private readonly PrettyPrinter prettyPrinter = new PrettyPrinter();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Controller" /> class.
+        /// </summary>
+        /// <param name="availableChangeScriptsProvider">The available change scripts provider.</param>
+        /// <param name="appliedChangesProvider">The applied changes provider.</param>
+        /// <param name="doApplier">The do applier.</param>
+        /// <param name="undoApplier">The undo applier.</param>
+        /// <param name="infoTextWriter">The info text writer.</param>
         public Controller(
             IAvailableChangeScriptsProvider availableChangeScriptsProvider,
             IAppliedChangesProvider appliedChangesProvider,
@@ -44,11 +75,11 @@ namespace Net.Sf.Dbdeploy
         /// </summary>
         /// <param name="lastChangeToApply">The last change to apply.</param>
         /// <param name="forceUpdate">if set to <c>true</c> any previously failed scripts will be retried.</param>
-        public void ProcessChangeScripts(int? lastChangeToApply, bool forceUpdate = false)
+        public void ProcessChangeScripts(UniqueChange lastChangeToApply, bool forceUpdate = false)
         {
-            if (lastChangeToApply.HasValue)
+            if (lastChangeToApply != null)
             {
-                Info("Only applying changes up and including change script #" + lastChangeToApply);
+                Info("Only applying changes up and including change script " + lastChangeToApply);
             }
 
             // If force update is not set, than if there are any previous script runs that failed it should stop.
@@ -76,7 +107,21 @@ namespace Net.Sf.Dbdeploy
             }
         }
 
-        private void CheckForFailedScripts(ICollection<ChangeEntry> applied)
+        /// <summary>
+        /// Writes out the specified info message.
+        /// </summary>
+        /// <param name="text">The text for the message.</param>
+        private static void Info(string text)
+        {
+            infoWriter.WriteLine(text);
+        }
+
+        /// <summary>
+        /// Checks for failed scripts from previous runs.
+        /// </summary>
+        /// <param name="applied">The applied scripts from previous runs.</param>
+        /// <exception cref="PriorFailedScriptException">Thrown if a previous run failed.</exception>
+        private void CheckForFailedScripts(IEnumerable<ChangeEntry> applied)
         {
             var failedScript = applied.FirstOrDefault(a => a.Status == ScriptStatus.Failure);
             if (failedScript != null)
@@ -85,36 +130,37 @@ namespace Net.Sf.Dbdeploy
             }
         }
 
-        private void LogStatus(ICollection<ChangeScript> scripts, ICollection<ChangeEntry> applied, ICollection<ChangeScript> toApply)
+        /// <summary>
+        /// Logs the status of the scripts.
+        /// </summary>
+        /// <param name="scripts">The scripts.</param>
+        /// <param name="applied">The applied.</param>
+        /// <param name="toApply">To apply.</param>
+        private void LogStatus(IEnumerable<ChangeScript> scripts, IEnumerable<ChangeEntry> applied, IEnumerable<ChangeScript> toApply)
         {
-            Info("Changes currently applied to database:\n  " + prettyPrinter.Format(applied));
-            Info("Scripts available:\n  " + prettyPrinter.Format(scripts));
-            Info("To be applied:\n  " + prettyPrinter.Format(toApply));
+            Info("Changes currently applied to database:\n  " + this.prettyPrinter.Format(applied));
+            Info("Scripts available:\n  " + this.prettyPrinter.Format(scripts));
+            Info("To be applied:\n  " + this.prettyPrinter.Format(toApply));
         }
 
-        private ICollection<ChangeScript> IdentifyChangesToApply(int? lastChangeToApply, IEnumerable<ChangeScript> scripts, ICollection<ChangeEntry> applied)
+        /// <summary>
+        /// Identifies the changes to apply to the database.
+        /// </summary>
+        /// <param name="lastChangeToApply">The last change to apply.</param>
+        /// <param name="scripts">The scripts.</param>
+        /// <param name="applied">The applied changes.</param>
+        /// <returns>List of changes to apply.</returns>
+        private IList<ChangeScript> IdentifyChangesToApply(UniqueChange lastChangeToApply, IEnumerable<ChangeScript> scripts, IEnumerable<ChangeEntry> applied)
         {
-            var result = new List<ChangeScript>();
+            var changes = scripts.Where(s => applied.All(a => !string.Equals(a.UniqueKey, s.UniqueKey, StringComparison.InvariantCultureIgnoreCase)));
 
-            foreach (ChangeScript script in scripts)
+            // Only apply up to last change if specified.
+            if (lastChangeToApply != null)
             {
-                if (lastChangeToApply.HasValue && script.ScriptNumber > lastChangeToApply.Value)
-                    break;
-
-                var appliedScript = applied.FirstOrDefault(a => a.ChangeId == script.ScriptNumber);
-
-                if (applied.Any(a => a.ScriptNumber == script.ScriptNumber))
-                {
-                    result.Add(script);
-                }
+                changes = changes.Where(s => s.CompareTo(lastChangeToApply) <= 0);
             }
 
-            return result;
-        }
-
-        private static void Info(string text)
-        {
-            infoWriter.WriteLine(text);
+            return changes.ToList();
         }
     }
 }
