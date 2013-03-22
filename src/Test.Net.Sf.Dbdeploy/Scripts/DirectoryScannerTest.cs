@@ -1,12 +1,11 @@
-using Net.Sf.Dbdeploy.Exceptions;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
+
+    using NUnit.Framework;
 
     /// <summary>
     /// Tests for <see cref="DirectoryScanner"/> class.

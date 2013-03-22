@@ -1,8 +1,9 @@
-using Net.Sf.Dbdeploy.Exceptions;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
+    using Net.Sf.Dbdeploy.Exceptions;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class FilenameParserTest
     {

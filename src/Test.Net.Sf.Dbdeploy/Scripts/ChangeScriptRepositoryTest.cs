@@ -1,10 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using Net.Sf.Dbdeploy.Exceptions;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class ChangeScriptRepositoryTest
     {

@@ -1,10 +1,12 @@
-﻿using System.IO;
-using Net.Sf.Dbdeploy.Database;
-using NUnit.Framework;
-using System;
-
-namespace Net.Sf.Dbdeploy.Console
+﻿namespace Net.Sf.Dbdeploy.Console
 {
+    using System;
+    using System.IO;
+
+    using Net.Sf.Dbdeploy.Database;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class ParserTest
     {

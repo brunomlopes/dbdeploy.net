@@ -211,8 +211,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mocks\Versioned\10.1.0.0\" />
-    <Folder Include="Mocks\Versioned\2.0.4.0\" />
     <Folder Include="Mocks\Versioned\R1\" />
   </ItemGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

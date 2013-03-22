@@ -1,9 +1,10 @@
-using System.IO;
-using System.Text;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
+    using System.IO;
+    using System.Text;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class ChangeScriptTest
     {

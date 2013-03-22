@@ -1,9 +1,11 @@
-using System.IO;
-using Dbdeploy.Powershell;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System.IO;
+
+    using global::Dbdeploy.Powershell;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class TextXmlConfiguration
     {
