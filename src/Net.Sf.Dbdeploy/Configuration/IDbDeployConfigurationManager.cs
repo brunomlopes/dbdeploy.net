@@ -18,7 +18,10 @@
         /// Reads the configuration.
         /// </summary>
         /// <param name="xmlFile">The XML file text reader.</param>
-        /// <returns>Configuration set.</returns>
-        DbDeploymentsConfig ReadConfiguration(TextReader xmlFile);
+        /// <param name="rootPath">The root path to resolve relative paths to.</param>
+        /// <returns>
+        /// Configuration set.
+        /// </returns>
+        DbDeploymentsConfig ReadConfiguration(TextReader xmlFile, string rootPath);
     }
 }

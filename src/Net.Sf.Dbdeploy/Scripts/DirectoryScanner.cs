@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             try
             {
-                this.infoTextWriter.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
+                this.infoTextWriter.WriteLine("Reading change scripts from directory '" + directory.FullName + "'...");
             }
             catch (IOException)
             {

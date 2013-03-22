@@ -44,9 +44,9 @@ namespace Net.Sf.Dbdeploy.Configuration
             Assert.AreEqual("mysql", deployment.Dbms, "Dbms is incorrect.");
             Assert.AreEqual(@"Server=.\;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01", deployment.ConnectionString, "ConnectionString is incorrect.");
             Assert.IsNotNull(deployment.ScriptDirectory, "ScriptDirectory is not set.");
-            Assert.AreEqual(@"C:\Database\Scripts\Versions", deployment.ScriptDirectory.FullName, "ScriptDirectory is incorrect.");
+            StringAssert.EndsWith(@"Mocks\Versioned", deployment.ScriptDirectory.FullName, "ScriptDirectory is incorrect.");
             Assert.IsNotNull(deployment.OutputFile, "OutputFile is not set.");
-            Assert.AreEqual(@"C:\Database\Scripts\Output\dbdeploy.sql", deployment.OutputFile.FullName, "OutputFile is incorrect.");
+            StringAssert.EndsWith(@"Mocks\Output\dbdeploy.sql", deployment.OutputFile.FullName, "OutputFile is incorrect.");
             Assert.AreEqual("InstallLog", deployment.ChangeLogTableName, "ChangeLogTableName is incorrect.");
             Assert.IsFalse(deployment.AutoCreateChangeLogTable, "AutoCreateChangeLogTable is incorrect.");
             Assert.IsTrue(deployment.ForceUpdate, "ForceUpdate is incorrect.");
@@ -55,7 +55,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             Assert.AreEqual("v1.1/4", deployment.LastChangeToApply.UniqueKey, "LastChangeToApply is incorrect.");
             Assert.AreEqual(Encoding.UTF32, deployment.Encoding, "Encoding is incorrect.");
             Assert.IsNotNull(deployment.TemplateDirectory, "TemplateDirectory is not set.");
-            Assert.AreEqual(@"C:\Database\Templates", deployment.TemplateDirectory.FullName, "TemplateDirectory is incorrect.");
+            StringAssert.EndsWith(@"Mocks\Templates", deployment.TemplateDirectory.FullName, "TemplateDirectory is incorrect.");
             Assert.AreEqual(@";", deployment.Delimiter, "Delimiter is incorrect.");
             Assert.IsInstanceOfType(typeof(RowDelimiter), deployment.DelimiterType, "DelimiterType is incorrect.");
             Assert.AreEqual(LineEnding.Lf, deployment.LineEnding, "LineEnding is incorrect.");
@@ -65,7 +65,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             Assert.AreEqual(DbDeployDefaults.Dbms, deployment.Dbms, "Dbms should be default.");
             Assert.AreEqual(@"Server=.\SQLEXPRESS;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01", deployment.ConnectionString, "ConnectionString is incorrect.");
             Assert.IsNotNull(deployment.ScriptDirectory, "ScriptDirectory is not set.");
-            Assert.AreEqual(@"C:\Database\Scripts\Versioning", deployment.ScriptDirectory.FullName, "ScriptDirectory is incorrect.");
+            StringAssert.EndsWith(@"Mocks\Versioned\2.0.0.0", deployment.ScriptDirectory.FullName, "ScriptDirectory is incorrect.");
             Assert.AreEqual(DbDeployDefaults.OutputFile, deployment.OutputFile, "OutputFile should be default.");
             Assert.AreEqual(DbDeployDefaults.ChangeLogTableName, deployment.ChangeLogTableName, "ChangeLogTableName should be default.");
             Assert.AreEqual(DbDeployDefaults.AutoCreateChangeLogTable, deployment.AutoCreateChangeLogTable, "AutoCreateChangeLogTable should be default.");

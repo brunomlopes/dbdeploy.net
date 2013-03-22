@@ -150,6 +150,7 @@ Ouput from the previous run
         /// <param name="toApply">To apply.</param>
         private void LogStatus(IEnumerable<ChangeScript> scripts, IEnumerable<ChangeEntry> applied, IEnumerable<ChangeScript> toApply)
         {
+            Info(string.Empty);
             Info("Changes currently applied to database:\n" + this.prettyPrinter.Format(applied));
             Info("Scripts available:\n" + this.prettyPrinter.Format(scripts));
             Info("To be applied:\n" + this.prettyPrinter.Format(toApply));

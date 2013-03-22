@@ -37,6 +37,8 @@
         {
             this.Validate(config, infoWriter);
 
+            infoWriter.WriteLine();
+            infoWriter.WriteLine("==========================================================");
             infoWriter.WriteLine(this.GenerateWelcomeString());
 
             var factory = new DbmsFactory(config.Dbms, config.ConnectionString);
@@ -158,7 +160,7 @@
 
             if (config.ScriptDirectory == null || !config.ScriptDirectory.Exists) 
             {
-                throw new UsageException("Script directory must point to a valid directory");
+                throw new UsageException(string.Format("The directory '{0}' does not exist.\nScript directory must point to a valid directory", config.ScriptDirectory));
             }
         }
 

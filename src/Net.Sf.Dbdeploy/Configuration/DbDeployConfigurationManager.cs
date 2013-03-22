@@ -20,7 +20,7 @@
             DbDeploymentsConfig config;
             using (var reader = new StreamReader(File.OpenRead(xmlFilePath)))
             {
-                config = this.ReadConfiguration(reader);
+                config = this.ReadConfiguration(reader, Path.GetDirectoryName(xmlFilePath));
             }
 
             return config;
@@ -30,13 +30,16 @@
         /// Reads the configuration.
         /// </summary>
         /// <param name="xmlFile">The XML file text reader.</param>
-        /// <returns>Configuration set.</returns>
-        public DbDeploymentsConfig ReadConfiguration(TextReader xmlFile)
+        /// <param name="rootPath">The root path to resolve relative paths to.</param>
+        /// <returns>
+        /// Configuration set.
+        /// </returns>
+        public DbDeploymentsConfig ReadConfiguration(TextReader xmlFile, string rootPath)
         {
             var doc = XDocument.Load(xmlFile);
 
             var deploymentsConfig = new DbDeploymentsConfig();
-            deploymentsConfig.Deployments = doc.Root.Descendants("dbdeploy").Select(this.ReadConfigElement).ToList();
+            deploymentsConfig.Deployments = doc.Root.Descendants("dbdeploy").Select(e => this.ReadConfigElement(e, rootPath)).ToList();
             return deploymentsConfig;
         }
 
@@ -44,26 +47,40 @@
         /// Reads the config element into a configuration.
         /// </summary>
         /// <param name="element">The element.</param>
-        /// <returns>Configuration read.</returns>
-        public DbDeployConfig ReadConfigElement(XElement element)
+        /// <param name="rootPath">The root path to resolve relative paths to.</param>
+        /// <returns>
+        /// Configuration read.
+        /// </returns>
+        public DbDeployConfig ReadConfigElement(XElement element, string rootPath)
         {
             var config = new DbDeployConfig();
             config.Dbms = GetAttribute(element, "dbms", DbDeployDefaults.Dbms);
             config.ConnectionString = GetAttribute(element, "connectionString", DbDeployDefaults.ConnectionString);
-            config.ScriptDirectory = GetAttribute(element, "scriptDirectory", DbDeployDefaults.ScriptDirectory, v => new DirectoryInfo(v));
-            config.OutputFile = GetAttribute(element, "outputFile", DbDeployDefaults.OutputFile, v => new FileInfo(v));
+            config.ScriptDirectory = GetAttribute(element, "scriptDirectory", DbDeployDefaults.ScriptDirectory, v => new DirectoryInfo(ResolveRelativePath(rootPath, v)));
+            config.OutputFile = GetAttribute(element, "outputFile", DbDeployDefaults.OutputFile, v => new FileInfo(ResolveRelativePath(rootPath, v)));
             config.ChangeLogTableName = GetAttribute(element, "changeLogTableName", DbDeployDefaults.ChangeLogTableName);
             config.AutoCreateChangeLogTable = GetAttribute(element, "autoCreateChangeLogTable", DbDeployDefaults.AutoCreateChangeLogTable, bool.Parse);
             config.ForceUpdate = GetAttribute(element, "forceUpdate", DbDeployDefaults.ForceUpdate, bool.Parse);
             config.UseSqlCmd = GetAttribute(element, "useSqlCmd", DbDeployDefaults.UseSqlCmd, bool.Parse);
             config.LastChangeToApply = GetAttribute(element, "lastChangeToApply", DbDeployDefaults.LastChangeToApply, v => new UniqueChange(v));
             config.Encoding = GetAttribute(element, "encoding", DbDeployDefaults.Encoding, v => new OutputFileEncoding(v).AsEncoding());
-            config.TemplateDirectory = GetAttribute(element, "templateDirectory", DbDeployDefaults.TemplateDirectory, v => new DirectoryInfo(v));
+            config.TemplateDirectory = GetAttribute(element, "templateDirectory", DbDeployDefaults.TemplateDirectory, v => new DirectoryInfo(ResolveRelativePath(rootPath, v)));
             config.Delimiter = GetAttribute(element, "delimiter", DbDeployDefaults.Delimiter);
             config.DelimiterType = GetAttribute(element, "delimiterType", DbDeployDefaults.DelimiterType, Parser.ParseDelimiterType);
             config.LineEnding = GetAttribute(element, "lineEnding", DbDeployDefaults.LineEnding, Parser.ParseLineEnding);
 
             return config;
+        }
+
+        /// <summary>
+        /// Resolves the relative path to an absolute path relative to the specified root path.
+        /// </summary>
+        /// <param name="rootPath">The root path to resolve relative to.</param>
+        /// <param name="path">The relative path to resolve.</param>
+        /// <returns>Full path.</returns>
+        private static string ResolveRelativePath(string rootPath, string path)
+        {
+            return Path.IsPathRooted(path) ? path : Path.GetFullPath(Path.Combine(rootPath, path));
         }
 
         /// <summary>
