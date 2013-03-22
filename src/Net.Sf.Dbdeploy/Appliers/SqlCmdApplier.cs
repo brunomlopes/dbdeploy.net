@@ -1,16 +1,16 @@
-﻿using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Database.SqlCmd;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
+    using System.Text;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Database.SqlCmd;
+    using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
 
     /// <summary>
     /// Applier for running scripts using SQLCMD mode against MSSQL.
@@ -72,6 +72,8 @@ namespace Net.Sf.Dbdeploy.Appliers
             {
                 foreach (var script in changeScripts)
                 {
+                    this.schemaVersionManager.RecordScriptStatus(script, ScriptStatus.Started);
+
                     this.infoTextWriter.WriteLine(script);
                     this.infoTextWriter.WriteLine("----------------------------------------------------------");
                     var output = new StringBuilder();

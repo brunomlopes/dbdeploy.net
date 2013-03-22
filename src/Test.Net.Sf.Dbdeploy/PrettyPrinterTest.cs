@@ -22,47 +22,47 @@ namespace Net.Sf.Dbdeploy
         [Test]
         public void ShouldDisplayNonRangedNumbersAsSeperateEntities()
         {
-            var list = this.CreateUniqueChangeList("Scripts", 1, 3, 5);
-            Assert.AreEqual("Scripts: 1, 3, 5", prettyPrinter.Format(list));
+            var list = this.CreateUniqueChangeList("v1.0", 1, 3, 5);
+            Assert.AreEqual("  v1.0\t1, 3, 5", prettyPrinter.Format(list));
         }
 
         [Test]
         public void ShouldDisplayARangeAsSuch()
         {
-            var list = this.CreateUniqueChangeList("Scripts", 1, 2, 3, 4, 5);
-            Assert.AreEqual("Scripts: 1..5", prettyPrinter.Format(list));
+            var list = this.CreateUniqueChangeList("v1.0", 1, 2, 3, 4, 5);
+            Assert.AreEqual("  v1.0\t1..5", prettyPrinter.Format(list));
         }
 
         [Test]
         public void RangesOfTwoAreNotDisplayedAsARange()
         {
-            var list = this.CreateUniqueChangeList("Scripts", 1, 2);
-            Assert.AreEqual("Scripts: 1, 2", prettyPrinter.Format(list));
+            var list = this.CreateUniqueChangeList("v1.0", 1, 2);
+            Assert.AreEqual("  v1.0\t1, 2", prettyPrinter.Format(list));
         }
 
         [Test]
         public void ShouldReturnNoneWithAnEmptyList()
         {
-            Assert.AreEqual("(none)", prettyPrinter.Format(new List<ChangeEntry>()));
+            Assert.AreEqual("  (none)", prettyPrinter.Format(new List<ChangeEntry>()));
         }
 
         [Test]
         public void CanDealWithMixtureOfRangesAndNonRanges()
         {
-            var list = this.CreateUniqueChangeList("Scripts", 1, 2, 4, 7, 8, 9, 10, 12);
-            Assert.AreEqual("Scripts: 1, 2, 4, 7..10, 12", prettyPrinter.Format(list));
+            var list = this.CreateUniqueChangeList("v1.0", 1, 2, 4, 7, 8, 9, 10, 12);
+            Assert.AreEqual("  v1.0\t1, 2, 4, 7..10, 12", prettyPrinter.Format(list));
         }
 
         [Test]
         public void CanFormatAChangeScriptList()
         {
-            ChangeScript change1 = new ChangeScript("Scripts", 1);
-            ChangeScript change3 = new ChangeScript("Scripts", 3);
+            ChangeScript change1 = new ChangeScript("v1.0", 1);
+            ChangeScript change3 = new ChangeScript("v1.0", 3);
             List<ChangeScript> list = new List<ChangeScript>();
             list.Add(change1);
             list.Add(change3);
 
-            Assert.AreEqual("Scripts: 1, 3", prettyPrinter.Format(list));
+            Assert.AreEqual("  v1.0\t1, 3", prettyPrinter.Format(list));
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Net.Sf.Dbdeploy
         public void CanHandleMultipleFolders()
         {
             var list = this.CreateUniqueChangeList("v1.0", 4, 5, 6).Concat(this.CreateUniqueChangeList("v2.0", 1, 2));
-            Assert.AreEqual("v1.0: 4..6\r\nv2.0: 1, 2", prettyPrinter.Format(list));
+            Assert.AreEqual("  v1.0\t4..6\r\n  v2.0\t1, 2", prettyPrinter.Format(list));
         }
 
         /// <summary>

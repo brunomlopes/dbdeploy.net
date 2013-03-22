@@ -90,6 +90,11 @@
                     s => dbDeploy.UseSqlCmd = s.ToLowerInvariant() == "true")
 
                 .Add(
+                    "l|lastchange=",
+                    "sets the last change to apply in the form of folder/scriptnumber (v1.0.0/4).",
+                    s => dbDeploy.LastChangeToApply = !string.IsNullOrWhiteSpace(s) ? new UniqueChange(s) : null)
+
+                .Add(
                     "e|encoding=",
                     "encoding for input and output files (default: UTF-8)",
                     s => dbDeploy.Encoding = new OutputFileEncoding(StripQuotes(s)).AsEncoding())

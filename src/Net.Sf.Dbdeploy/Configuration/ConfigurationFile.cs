@@ -1,8 +1,7 @@
-﻿using System;
-using System.Configuration;
-
-namespace Net.Sf.Dbdeploy.Configuration
+﻿namespace Net.Sf.Dbdeploy.Configuration
 {
+    using System.Configuration;
+
     public class ConfigurationFile : IConfiguration
     {
         public string DbConnectionString

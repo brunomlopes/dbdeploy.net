@@ -1,9 +1,9 @@
-using System;
-using System.Text.RegularExpressions;
-using Net.Sf.Dbdeploy.Exceptions;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
+    using System.Text.RegularExpressions;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class FilenameParser
     {
         private readonly Regex pattern;

@@ -1,21 +1,17 @@
-﻿using NUnit.Framework;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Scripts;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Configuration;
     using System.Data;
     using System.Data.SqlClient;
     using System.Globalization;
+    using System.IO;
+    using System.Text;
 
+    using Net.Sf.Dbdeploy.Database;
     using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
+
+    using NUnit.Framework;
 
     /// <summary>
     /// Tests for <see cref="SqlCmdApplier"/> class.

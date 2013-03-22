@@ -1,15 +1,15 @@
-﻿using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.IO;
-using System.Text;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Common;
+    using System.IO;
     using System.Linq;
+    using System.Text;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
 
     public class DirectToDbApplier : IChangeScriptApplier
     {
@@ -51,6 +51,8 @@ namespace Net.Sf.Dbdeploy.Appliers
 
             foreach (var script in changeScripts)
             {
+                this.RecordScriptStatus(script, ScriptStatus.Started);
+
                 // Begin transaction
                 this.queryExecuter.BeginTransaction();
 
@@ -125,7 +127,7 @@ namespace Net.Sf.Dbdeploy.Appliers
         /// <param name="changeScript">The change script.</param>
         /// <param name="status">Status of the script execution.</param>
         /// <param name="output">The output from running the script.</param>
-        protected void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output) 
+        protected void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output = null) 
         {
             this.schemaVersionManager.RecordScriptStatus(changeScript, status, output);
         }

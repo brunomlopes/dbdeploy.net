@@ -30,6 +30,7 @@ namespace Net.Sf.Dbdeploy
             }
 
             var parser = new Parser();
+            var exitCode = 0;
 
             try
             {
@@ -47,18 +48,16 @@ namespace Net.Sf.Dbdeploy
             catch (DbDeployException ex)
             {
                 Console.Error.WriteLine(ex.Message);
-
-                Environment.Exit(1);
+                exitCode = 1;
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine("Failed to apply changes: " + ex.Message);
                 Console.Error.WriteLine(ex.StackTrace);
-
-                Environment.Exit(2);
+                exitCode = 2;
             }
 
-            Environment.Exit(0);
+            Environment.Exit(exitCode);
         }
     }
 }

@@ -18,6 +18,11 @@
         /// <summary>
         /// The problem was resolved from a previous script failure, and it should be retried.
         /// </summary>
-        ProblemResolved = 2
+        ProblemResolved = 2,
+
+        /// <summary>
+        /// The script has started execution.
+        /// </summary>
+        Started = 3
     }
 }

@@ -1,7 +1,7 @@
-using System;
-
 namespace Net.Sf.Dbdeploy.Exceptions
 {
+    using System;
+
     public class PriorFailedScriptException : DbDeployException
     {
         public PriorFailedScriptException(string message, Exception inner) 

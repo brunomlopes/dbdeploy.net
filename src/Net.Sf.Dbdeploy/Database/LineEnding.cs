@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+
     public static class LineEnding
     {
         public static string Platform

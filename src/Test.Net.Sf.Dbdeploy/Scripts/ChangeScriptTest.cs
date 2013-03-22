@@ -11,7 +11,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void TestChangeScriptsHaveAnIdAndAFile()
         {
             FileInfo file = new FileInfo("abc.txt");
-            ChangeScript changeScript = new ChangeScript("Scripts", 5, file, Encoding.Default);
+            ChangeScript changeScript = new ChangeScript("v1.0", 5, file, Encoding.Default);
 
             Assert.AreEqual(5, changeScript.ScriptNumber);
             Assert.AreEqual(file, changeScript.FileInfo);
@@ -20,8 +20,8 @@ namespace Net.Sf.Dbdeploy.Scripts
         [Test]
         public void TestChangeScriptsNaturallyOrderById()
         {
-            ChangeScript one = new ChangeScript("Scripts", 1);
-            ChangeScript two = new ChangeScript("Scripts", 2);
+            ChangeScript one = new ChangeScript("v1.0", 1);
+            ChangeScript two = new ChangeScript("v1.0", 2);
             Assert.IsTrue(one.CompareTo(two) < 1);
             Assert.IsTrue(two.CompareTo(one) >= 1);
         }
@@ -30,8 +30,8 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void TestToStringReturnsASensibleValue()
         {
             FileInfo file = new FileInfo("abc.txt");
-            ChangeScript changeScript = new ChangeScript("Scripts", 5, file, Encoding.Default);
-            Assert.AreEqual("Scripts/abc.txt", changeScript.ToString());
+            ChangeScript changeScript = new ChangeScript("v1.0", 5, file, Encoding.Default);
+            Assert.AreEqual("v1.0/abc.txt (5)", changeScript.ToString());
         }
     }
 }

@@ -27,6 +27,8 @@
 
         private string changeLogTableName;
 
+        private List<string> executedQueries;
+
         [SetUp]
         public void SetUp() 
         {
@@ -43,9 +45,11 @@
 
             this.syntax = new Mock<IDbmsSyntax>();
 
+            this.executedQueries = new List<string>();
             this.queryExecuter
-                .Setup(e => e.ExecuteQuery(It.IsAny<string>()))
-                .Returns(this.expectedResultSet.Object);
+                .Setup(e => e.ExecuteQuery(It.IsAny<string>(), It.IsAny<object[]>()))
+                .Returns(this.expectedResultSet.Object)
+                .Callback<string, object[]>((q, a) => this.executedQueries.Add(q));
 
             var checkForChangeLogDataReader = new Mock<IDataReader>();
             checkForChangeLogDataReader
@@ -115,13 +119,16 @@
         [Test]
         public void ShouldUpdateChangelogTable() 
         {
-            this.syntax.Setup(s => s.GenerateUser()).Returns("DBUSER");
-            this.syntax.Setup(s => s.GenerateTimestamp()).Returns("TIMESTAMP");
+            this.syntax.Setup(s => s.CurrentUser).Returns("DBUSER");
+            this.syntax.Setup(s => s.CurrentTimestamp).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
-            string expected = "INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES ('Scripts', @1, @2, TIMESTAMP, TIMESTAMP, DBUSER, @3, @4)";
+            string expected = @"INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5) 
+SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
 
-            this.queryExecuter.Verify(e => e.Execute(expected, this.script.ScriptNumber, this.script.FileName, (int)ScriptStatus.Success, "Script output"), Times.Once());
+            Assert.AreEqual(expected, this.executedQueries.FirstOrDefault(), "The query executed was incorrect.");
+
+            this.queryExecuter.Verify(e => e.ExecuteQuery(expected, this.script.Folder, this.script.ScriptNumber, this.script.FileName, (int)ScriptStatus.Success, "Script output"), Times.Once());
         }
 
         [Test]

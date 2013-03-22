@@ -1,14 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using Net.Sf.Dbdeploy.Appliers;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-using System.Text;
-
-namespace Net.Sf.Dbdeploy
+﻿namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Text;
+
+    using Net.Sf.Dbdeploy.Appliers;
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
+
     public class DbDeployer
     {
         public DbDeployer()

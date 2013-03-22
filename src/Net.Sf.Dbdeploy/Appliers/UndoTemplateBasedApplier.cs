@@ -1,8 +1,9 @@
-﻿using System.IO;
-using Net.Sf.Dbdeploy.Database;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.IO;
+
+    using Net.Sf.Dbdeploy.Database;
+
     public class UndoTemplateBasedApplier : TemplateBasedApplier
     {
         public UndoTemplateBasedApplier(

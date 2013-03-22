@@ -1,10 +1,25 @@
 namespace Net.Sf.Dbdeploy.Database
 {
+    /// <summary>
+    /// Interface for Database Management System syntax.
+    /// </summary>
     public interface IDbmsSyntax
     {
-        string GenerateTimestamp();
+        /// <summary>
+        /// Gets the syntax to get the current timestamp.
+        /// </summary>
+        /// <value>
+        /// The current timestamp syntax.
+        /// </value>
+        string CurrentTimestamp { get; }
 
-        string GenerateUser();
+        /// <summary>
+        /// Gets the syntax to get the current user.
+        /// </summary>
+        /// <value>
+        /// The current user syntax.
+        /// </value>
+        string CurrentUser { get; }
 
         /// <summary>
         /// Gets the Change Log Table create script.

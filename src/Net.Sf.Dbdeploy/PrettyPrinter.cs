@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     public class PrettyPrinter
     {
@@ -13,7 +12,7 @@ namespace Net.Sf.Dbdeploy
             var changeList = changes.ToList();
             if (!changeList.Any())
             {
-                return "(none)";
+                return "  (none)";
             }
 
             StringBuilder builder = new StringBuilder();
@@ -71,7 +70,7 @@ namespace Net.Sf.Dbdeploy
                 builder.AppendLine();
             }
 
-            builder.AppendFormat("{0}: ", folder);
+            builder.AppendFormat("  {0}\t", folder);
         }
 
         private void AppendRange(StringBuilder builder, int lastRangeStart, int lastNumber, bool isFirst)

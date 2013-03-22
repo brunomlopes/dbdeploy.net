@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Net.Sf.Dbdeploy.Exceptions
+﻿namespace Net.Sf.Dbdeploy.Exceptions
 {
+    using System;
+
     public class UsageException : DbDeployException
     {
         public UsageException(string message) 

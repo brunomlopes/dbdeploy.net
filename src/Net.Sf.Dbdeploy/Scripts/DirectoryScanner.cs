@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Net.Sf.Dbdeploy.Exceptions;
-using System.Text;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
-    using System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
+    using Net.Sf.Dbdeploy.Exceptions;
 
     public class DirectoryScanner
     {

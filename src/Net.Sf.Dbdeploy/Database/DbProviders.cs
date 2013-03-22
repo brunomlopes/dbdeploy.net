@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Xml.Serialization;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+    using System.Globalization;
+    using System.Xml.Serialization;
+
     [XmlRoot("providers")]
     public class DbProviders
     {

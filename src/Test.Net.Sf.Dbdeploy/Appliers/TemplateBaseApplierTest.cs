@@ -1,11 +1,13 @@
-﻿using System;
-using System.IO;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-using NUnit.Framework;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System;
+    using System.IO;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class TemplateBaseApplierTest
     {

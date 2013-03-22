@@ -1,6 +1,5 @@
 namespace Net.Sf.Dbdeploy
 {
-    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -79,7 +78,7 @@ namespace Net.Sf.Dbdeploy
         {
             if (lastChangeToApply != null)
             {
-                Info("Only applying changes up and including change script " + lastChangeToApply);
+                Info("\nOnly applying changes up to and including change script '{0}'.\n", lastChangeToApply);
             }
 
             // If force update is not set, than if there are any previous script runs that failed it should stop.
@@ -105,15 +104,21 @@ namespace Net.Sf.Dbdeploy
 
                 this.undoApplier.Apply(toUndoApply);
             }
+
+            if (toApply.Any())
+            {
+                Info("All scripts applied successfully.");
+            }
         }
 
         /// <summary>
         /// Writes out the specified info message.
         /// </summary>
         /// <param name="text">The text for the message.</param>
-        private static void Info(string text)
+        /// <param name="args">The args to format into the message.</param>
+        private static void Info(string text, params object[] args)
         {
-            infoWriter.WriteLine(text);
+            infoWriter.WriteLine(text, args);
         }
 
         /// <summary>
@@ -126,13 +131,14 @@ namespace Net.Sf.Dbdeploy
             var failedScript = applied.FirstOrDefault(a => a.Status == ScriptStatus.Failure);
             if (failedScript != null)
             {
-                throw new PriorFailedScriptException(string.Format(CultureInfo.InvariantCulture, @"
+                const string FailedMessage = @"
 The script '{0}' failed to complete on a previous run. 
 You must update the status to Resolved (2), or force updates.
 
 Ouput from the previous run
 ----------------------------------------------------------
-{1}", failedScript, failedScript.Output));
+{1}";
+                throw new PriorFailedScriptException(string.Format(CultureInfo.InvariantCulture, FailedMessage, failedScript, failedScript.Output));
             }
         }
 
@@ -144,9 +150,9 @@ Ouput from the previous run
         /// <param name="toApply">To apply.</param>
         private void LogStatus(IEnumerable<ChangeScript> scripts, IEnumerable<ChangeEntry> applied, IEnumerable<ChangeScript> toApply)
         {
-            Info("Changes currently applied to database:\n  " + this.prettyPrinter.Format(applied));
-            Info("Scripts available:\n  " + this.prettyPrinter.Format(scripts));
-            Info("To be applied:\n  " + this.prettyPrinter.Format(toApply));
+            Info("Changes currently applied to database:\n" + this.prettyPrinter.Format(applied));
+            Info("Scripts available:\n" + this.prettyPrinter.Format(scripts));
+            Info("To be applied:\n" + this.prettyPrinter.Format(toApply));
             Info(string.Empty);
         }
 
@@ -157,18 +163,53 @@ Ouput from the previous run
         /// <param name="scripts">The scripts.</param>
         /// <param name="applied">The applied changes.</param>
         /// <returns>List of changes to apply.</returns>
-        private IList<ChangeScript> IdentifyChangesToApply(UniqueChange lastChangeToApply, IEnumerable<ChangeScript> scripts, IEnumerable<ChangeEntry> applied)
+        private IList<ChangeScript> IdentifyChangesToApply(UniqueChange lastChangeToApply, IEnumerable<ChangeScript> scripts, IList<ChangeEntry> applied)
         {
-            // Re-run any scripts marked as resolved.
-            var changes = scripts.Where(s => applied.All(a => !string.Equals(a.UniqueKey, s.UniqueKey, StringComparison.InvariantCultureIgnoreCase)));
+            var changes = new List<ChangeScript>();
 
-            // Only apply up to last change if specified.
-            if (lastChangeToApply != null)
+            // Re-run any scripts that have not been run, or are failed or resolved.
+            // The check to exit on previous failure is done before this call.
+            foreach (var script in scripts)
             {
-                changes = changes.Where(s => s.CompareTo(lastChangeToApply) <= 0);
+                // If script has not been run yet, add it to the list.
+                bool applyScript = false;
+                var changeEntry = applied.FirstOrDefault(a => a.CompareTo(script) == 0);
+                if (changeEntry == null)
+                {
+                    applyScript = true;
+                }
+                else
+                {
+                    // If the script has already been run check if it should be run again.
+                    if (changeEntry.Status != ScriptStatus.Success)
+                    {
+                        // Assign the ID so the record can be updated.
+                        script.ChangeId = changeEntry.ChangeId;
+                        applyScript = true;
+                    }
+                }
+
+                if (applyScript)
+                {
+                    // Just add script if there is no cap specified.
+                    if (lastChangeToApply == null)
+                    {
+                        changes.Add(script);
+                    }
+                    else if (script.CompareTo(lastChangeToApply) <= 0)
+                    {
+                        // Script is less than last change to apply.
+                        changes.Add(script);
+                    }
+                    else
+                    {
+                        // Stop adding scripts as last change to apply has been met.
+                        break;
+                    }
+                }
             }
 
-            return changes.ToList();
+            return changes;
         }
     }
 }

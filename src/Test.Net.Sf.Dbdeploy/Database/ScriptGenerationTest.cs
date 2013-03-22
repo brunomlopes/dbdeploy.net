@@ -65,7 +65,19 @@
 
             controller.ProcessChangeScripts(null);
 
-            Assert.AreEqual(this.ReadExpectedFileContents(this.GetExpectedFilename(syntaxName)), writer.ToString());
+            var actual = writer.ToString();
+
+            try
+            {
+                Assert.AreEqual(this.ReadExpectedFileContents(this.GetExpectedFilename(syntaxName)), actual);
+            }
+            catch (Exception)
+            {
+                // Output actual template on failure.
+                Console.WriteLine("\n\nActual Template ({0}):", syntaxName);
+                Console.WriteLine(actual);
+                throw;
+            }
         }
 
         private String GetExpectedFilename(string dbSyntaxName) 
@@ -118,7 +130,7 @@
             {
             }
 
-            public override ICollection<ChangeEntry> GetAppliedChanges()
+            public override IList<ChangeEntry> GetAppliedChanges()
             {
                 return new List<ChangeEntry>();
             }

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using Net.Sf.Dbdeploy.Configuration;
-
-namespace Dbdeploy.Powershell
+﻿namespace Dbdeploy.Powershell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Linq;
+    using System.Xml.XPath;
+
+    using Net.Sf.Dbdeploy.Configuration;
+
     public class XmlConfiguration : IConfiguration
     {
         private Dictionary<string, string> keys;

@@ -1,20 +1,38 @@
 namespace Net.Sf.Dbdeploy.Database
 {
+    /// <summary>
+    /// Syntax for Microsoft SQL Sever.
+    /// </summary>
     public class MsSqlDbmsSyntax : DbmsSyntax
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsSqlDbmsSyntax" /> class.
+        /// </summary>
         public MsSqlDbmsSyntax()
             : base("mssql")
         {
         }
 
-        public override string GenerateTimestamp()
+        /// <summary>
+        /// Gets the syntax to get the current timestamp.
+        /// </summary>
+        /// <value>
+        /// The current timestamp syntax.
+        /// </value>
+        public override string CurrentTimestamp
         {
-            return "getdate()";
+            get { return "getdate()"; }
         }
 
-        public override string GenerateUser()
+        /// <summary>
+        /// Gets the syntax to get the current user.
+        /// </summary>
+        /// <value>
+        /// The current user syntax.
+        /// </value>
+        public override string CurrentUser
         {
-            return "suser_name()";
+            get { return "user_name()"; }
         }
     }
 }

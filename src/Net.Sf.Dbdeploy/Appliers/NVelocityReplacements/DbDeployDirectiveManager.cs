@@ -1,8 +1,9 @@
-using System;
-using NVelocity.Runtime.Directive;
-
 namespace Net.Sf.Dbdeploy.Appliers.NVelocityReplacements
 {
+    using System;
+
+    using NVelocity.Runtime.Directive;
+
     public class DbDeployDirectiveManager : DirectiveManager
     {
         public override void Register(string directiveTypeName)

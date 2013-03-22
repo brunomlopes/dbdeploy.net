@@ -1,6 +1,5 @@
 namespace Net.Sf.Dbdeploy.Scripts
 {
-    using System;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -19,6 +18,14 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// The SQL file encoding.
         /// </summary>
         private readonly Encoding encoding;
+
+        /// <summary>
+        /// Gets or sets the change ID if this script has already been run once in the database.
+        /// </summary>
+        /// <value>
+        /// The change ID.
+        /// </value>
+        public int ChangeId { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeScript" /> class.
@@ -100,7 +107,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", this.Folder, this.FileName);
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.FileName, this.ScriptNumber);
         }
 
         /// <summary>

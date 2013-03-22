@@ -21,6 +21,6 @@
         /// Gets the applied changes to the database.
         /// </summary>
         /// <returns>List of changes applied.</returns>
-        ICollection<ChangeEntry> GetAppliedChanges();
+        IList<ChangeEntry> GetAppliedChanges();
     }
 }

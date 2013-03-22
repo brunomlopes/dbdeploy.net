@@ -57,7 +57,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// </summary>
         /// <returns>List of applied changes.</returns>
         /// <exception cref="SchemaVersionTrackingException">Could not retrieve change log from database because:  + e.Message</exception>
-        public virtual ICollection<ChangeEntry> GetAppliedChanges()
+        public virtual IList<ChangeEntry> GetAppliedChanges()
         {
             this.VerifyChangeLogTableExists(this.AutoCreateChangeLogTable);
 
@@ -93,27 +93,6 @@ namespace Net.Sf.Dbdeploy.Database
                 throw new SchemaVersionTrackingException(
                     "Could not retrieve change log from database because: " + e.Message, e);
             }            
-        }
-
-        /// <summary>
-        /// Gets the value from the <see cref="IDataReader"/> to the specified type if it is not DBNull.
-        /// </summary>
-        /// <typeparam name="T">Type of value to retrieve.</typeparam>
-        /// <param name="reader">The reader.</param>
-        /// <param name="name">The name of the column.</param>
-        /// <returns>Value if not null; otherwise default.</returns>
-        private static T GetValue<T>(IDataReader reader, string name)
-        {
-            var value = default(T);
-
-            // Handle DBNull values.
-            var columnValue = reader[name];
-            if (columnValue != DBNull.Value)
-            {
-                value = (T)columnValue;
-            }
-
-            return value;
         }
 
         /// <summary>
@@ -164,29 +143,70 @@ WHERE TABLE_NAME = @1", this.changeLogTableName))
         /// <param name="status">The status.</param>
         /// <param name="output">The output of the script.</param>
         /// <exception cref="SchemaVersionTrackingException">Could not update change log because:  + e.Message</exception>
-        public virtual void RecordScriptStatus(ChangeScript script, ScriptStatus status, string output)
+        public virtual void RecordScriptStatus(ChangeScript script, ScriptStatus status, string output = null)
         {
             try
             {
-                string sql = string.Format(
-                    CultureInfo.InvariantCulture,
-                    "INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES (@1, @2, @3, {1}, {1}, {2}, @4, @5)", 
-                    this.changeLogTableName,
-                    this.syntax.GenerateTimestamp(),
-                    this.syntax.GenerateUser());
+                // Insert or update based on if there is a change ID.
+                // Update complete date for all but started.
+                var completeDateValue = status != ScriptStatus.Started ? this.syntax.CurrentTimestamp : "NULL";
+                if (script.ChangeId == 0)
+                {
+                    var sql = string.Format(
+                        CultureInfo.InvariantCulture,
+@"INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) 
+SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
+                        this.changeLogTableName,
+                        this.syntax.CurrentTimestamp,
+                        completeDateValue,
+                        this.syntax.CurrentUser);
 
-                this.queryExecuter.Execute(
-                        sql,
-                        script.Folder,
-                        script.ScriptNumber,
-                        script.FileName,
-                        (int)status,
-                        output);
+                    // Execute insert and set change id so it can be updated.
+                    using (var reader = this.queryExecuter.ExecuteQuery(sql, script.Folder, script.ScriptNumber, script.FileName, (int)status, output ?? string.Empty))
+                    {
+                        reader.Read();
+                        script.ChangeId = reader.GetInt32(0);
+                    }
+                }
+                else
+                {
+                    // Update existing entry.
+                    var sql = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "UPDATE {0} SET Folder = @1, ScriptNumber = @2, FileName = @3, {1}CompleteDate = {2}, AppliedBy = {3}, Status = @4, Output = @5 WHERE ChangeId = @6",
+                        this.changeLogTableName,
+                        status == ScriptStatus.Started ? string.Format(CultureInfo.InvariantCulture, "StartDate = {0}, ", this.syntax.CurrentTimestamp) : string.Empty,
+                        completeDateValue,
+                        this.syntax.CurrentUser);
+
+                    this.queryExecuter.Execute(sql, script.Folder, script.ScriptNumber, script.FileName, (int)status, output ?? string.Empty, script.ChangeId);
+                }
             }
             catch (DbException e)
             {
                 throw new SchemaVersionTrackingException("Could not update change log because: " + e.Message, e);
             }
+        }
+
+        /// <summary>
+        /// Gets the value from the <see cref="IDataReader"/> to the specified type if it is not DBNull.
+        /// </summary>
+        /// <typeparam name="T">Type of value to retrieve.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="name">The name of the column.</param>
+        /// <returns>Value if not null; otherwise default.</returns>
+        private static T GetValue<T>(IDataReader reader, string name)
+        {
+            var value = default(T);
+
+            // Handle DBNull values.
+            var columnValue = reader[name];
+            if (columnValue != DBNull.Value)
+            {
+                value = (T)columnValue;
+            }
+
+            return value;
         }
 
         /// <summary>

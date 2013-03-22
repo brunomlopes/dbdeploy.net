@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Net.Sf.Dbdeploy
+﻿namespace Net.Sf.Dbdeploy
 {
+    using System;
     using System.Globalization;
 
     /// <summary>
@@ -118,6 +117,17 @@ namespace Net.Sf.Dbdeploy
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", this.Folder, this.ScriptNumber);
         }
     }
 }

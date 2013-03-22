@@ -2,10 +2,14 @@
 
 -- START CHANGE SCRIPT ${script}
 
+INSERT INTO ${changeLogTableName} (Folder, ScriptNumber, FileName, StartDate, AppliedBy, Status, Output)
+ VALUES ('${script.Folder}', ${script.ScriptNumber}, '${script.FileName}', CURRENT_TIMESTAMP, USER(), 1, '')$!{separator}${delimiter}
+
 ${script.getContent()}
 
-INSERT INTO ${changeLogTableName} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output)
- VALUES ('${script.Folder}', ${script.ScriptNumber}, '${script.FileName}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER(), 1, '')$!{separator}${delimiter}
+UPDATE ${changeLogTableName} 
+SET CompleteDate = getdate(), Status = 1, Output = '' 
+WHERE Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber$!{separator}${delimiter}
 
 COMMIT$!{separator}${delimiter}
 

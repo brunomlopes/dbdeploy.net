@@ -1,11 +1,11 @@
-using System;
-using System.IO;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Serialization;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Xml;
+    using System.Xml.Serialization;
+
     public class DbProviderFile
     {
         public const string ProviderFilename = @"dbproviders.xml";

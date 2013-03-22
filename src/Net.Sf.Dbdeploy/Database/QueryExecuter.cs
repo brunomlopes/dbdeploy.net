@@ -1,10 +1,8 @@
-﻿using System;
-using System.Data;
-using System.Text;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
-    using System.Data.SqlClient;
+    using System;
+    using System.Data;
+    using System.Text;
 
     public class QueryExecuter
     {

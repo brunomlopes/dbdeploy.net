@@ -1,34 +1,44 @@
 ﻿
--- START CHANGE SCRIPT Scripts/001_change.sql
+-- START CHANGE SCRIPT v1.0/001_change.sql (1)
+
+INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, AppliedBy, Status, Output)
+ VALUES ('v1.0', 1,'001_change.sql', getdate(), user_name(), 3, '')
+GO
 
 BEGIN TRANSACTION
 GO
 
 -- contents of change script 1
 
-INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output)
- VALUES ('Scripts', 1,'001_change.sql', getdate(), getdate(), user_name(), 1, '')
+UPDATE ChangeLog 
+SET CompleteDate = getdate(), Status = 1, Output = '' 
+WHERE Folder = 'v1.0' AND ScriptNumber = 1
 GO
 
 COMMIT
 GO
 
--- END CHANGE SCRIPT Scripts/001_change.sql
+-- END CHANGE SCRIPT v1.0/001_change.sql (1)
 
 
--- START CHANGE SCRIPT Scripts/002_change.sql
+-- START CHANGE SCRIPT v1.0/002_change.sql (2)
+
+INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, AppliedBy, Status, Output)
+ VALUES ('v1.0', 2,'002_change.sql', getdate(), user_name(), 3, '')
+GO
 
 BEGIN TRANSACTION
 GO
 
 -- contents of change script 2
 
-INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output)
- VALUES ('Scripts', 2,'002_change.sql', getdate(), getdate(), user_name(), 1, '')
+UPDATE ChangeLog 
+SET CompleteDate = getdate(), Status = 1, Output = '' 
+WHERE Folder = 'v1.0' AND ScriptNumber = 2
 GO
 
 COMMIT
 GO
 
--- END CHANGE SCRIPT Scripts/002_change.sql
+-- END CHANGE SCRIPT v1.0/002_change.sql (2)
 

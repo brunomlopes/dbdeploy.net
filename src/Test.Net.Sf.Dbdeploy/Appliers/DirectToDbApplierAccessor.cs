@@ -1,10 +1,10 @@
-﻿using System.IO;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Scripts;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.IO;
     using System.Text;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Scripts;
 
     internal class DirectToDbApplierAccessor : DirectToDbApplier
     {

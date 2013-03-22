@@ -59,7 +59,7 @@
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", this.Folder, this.FileName);
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.FileName, ScriptNumber);
         }
     }
 }

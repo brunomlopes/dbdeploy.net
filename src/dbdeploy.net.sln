@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{210BF4ED-AD49-4C1F-9521-C912B410608C}"
 	ProjectSection(SolutionItems) = preProject
+		CustomDictionary.xml = CustomDictionary.xml
 		dbproviders.xml = dbproviders.xml
 		Settings.StyleCop = Settings.StyleCop
 	EndProjectSection

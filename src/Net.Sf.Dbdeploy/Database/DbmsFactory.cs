@@ -1,9 +1,9 @@
-using System;
-using System.Data;
-using System.Reflection;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+    using System.Data;
+    using System.Reflection;
+
     public class DbmsFactory
     {
         private readonly string dbms;

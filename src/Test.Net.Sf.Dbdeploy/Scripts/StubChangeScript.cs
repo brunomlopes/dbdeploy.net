@@ -5,7 +5,7 @@
         private readonly string changeContents;
 
         public StubChangeScript(int changeNumber, string fileName, string changeContents)
-            : base("Scripts", changeNumber, fileName)
+            : base("v1.0", changeNumber, fileName)
         {
             this.changeContents = changeContents;
         }
