@@ -121,7 +121,7 @@
     <Compile Include="Appliers\SqlCmdApplierTest.cs" />
     <Compile Include="Appliers\DirectToDbApplierAccessor.cs" />
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
-    <Compile Include="Console\ParserTest.cs" />
+    <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
     <Compile Include="UniqueChangeTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
@@ -144,7 +144,7 @@
     <Compile Include="Scripts\DirectoryScannerTest.cs" />
     <Compile Include="Scripts\FilenameParserTest.cs" />
     <Compile Include="Scripts\StubChangeScript.cs" />
-    <Compile Include="TextXmlConfiguration.cs" />
+    <Compile Include="Configuration\DbDeployConfigurationManagerTest.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)dbproviders.xml" "$(TargetDir)"</PostBuildEvent>
@@ -173,6 +173,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Mocks\DbDeploy.config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Mocks\Failures\1.SQLCMD Add Customer Table.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

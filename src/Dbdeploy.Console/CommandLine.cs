@@ -10,40 +10,23 @@ namespace Net.Sf.Dbdeploy
     {
         public static void Main(string[] args)
         {
-            var dbDeploy = new DbDeployer
-            {
-                InfoWriter = Console.Out,
-                ScriptDirectory = new DirectoryInfo("."),
-            };
-
-            try 
-            {
-                IConfiguration config = new ConfigurationFile();
-
-                dbDeploy.Dbms = config.DbType;
-                dbDeploy.ConnectionString = config.DbConnectionString;
-                dbDeploy.ChangeLogTableName = config.TableName;
-            }
-            catch (System.Configuration.ConfigurationException)
-            {
-                // ignore
-            }
-
-            var parser = new Parser();
             var exitCode = 0;
 
             try
             {
                 // Read arguments from command line
-                parser.Parse(args, dbDeploy);
-
-                dbDeploy.Go();
+                var deploymentsConfig = OptionsManager.ParseOptions(args);
+                var deployer = new DbDeployer();
+                foreach (var config in deploymentsConfig.Deployments)
+                {
+                    deployer.Execute(config, Console.Out);
+                }
             }
             catch (UsageException ex)
             {
                 Console.Error.WriteLine("ERROR: " + ex.Message);
                 
-                parser.PrintUsage();
+                OptionsManager.PrintUsage();
             }
             catch (DbDeployException ex)
             {

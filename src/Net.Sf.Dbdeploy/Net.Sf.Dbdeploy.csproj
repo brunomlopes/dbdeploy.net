@@ -79,20 +79,25 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Appliers\NVelocityReplacements\DbDeployAssemblyResourceLoader.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployDirectiveManager.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployResourceManager.cs" />
     <Compile Include="Appliers\SqlCmdApplier.cs" />
+    <Compile Include="Configuration\DbDeployConfig.cs" />
+    <Compile Include="Configuration\DbDeployConfigurationManager.cs" />
+    <Compile Include="Configuration\DbDeployDefaults.cs" />
+    <Compile Include="Configuration\DbDeploymentsConfig.cs" />
+    <Compile Include="Configuration\IDbDeployConfigurationManager.cs" />
+    <Compile Include="Configuration\Parser.cs" />
     <Compile Include="Database\ChangeEntry.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
     <Compile Include="Database\SqlCmd\SqlCmdExecutor.cs" />
     <Compile Include="Appliers\TemplateBasedApplier.cs" />
     <Compile Include="Appliers\UndoTemplateBasedApplier.cs" />
-    <Compile Include="Configuration\ConfigurationFile.cs" />
-    <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Database\DatabaseProvider.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManager.cs" />

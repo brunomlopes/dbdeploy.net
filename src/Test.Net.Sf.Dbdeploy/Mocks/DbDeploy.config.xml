@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Multiple deployments can be executed. -->
+<config>
+  <dbdeployments>
+    <!-- Test all configuration values. -->
+    <dbdeploy 
+        dbms="mysql" 
+        connectionString="Server=.\;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01"
+        scriptDirectory="C:\Database\Scripts\Versions"
+        outputFile="C:\Database\Scripts\Output\dbdeploy.sql"
+        changeLogTableName="InstallLog"
+        autoCreateChangeLogTable="false"
+        forceUpdate="true"
+        useSqlCmd="true"
+        lastChangeToApply="v1.1/4"
+        encoding="UTF-32"
+        templateDirectory="C:\Database\Templates"
+        delimiter=";"
+        delimiterType="row"
+        lineEnding="LF"
+        />
+
+     <!-- Test just specific values, more typical -->
+    <dbdeploy
+        connectionString="Server=.\SQLEXPRESS;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01"
+        scriptDirectory="C:\Database\Scripts\Versioning"
+        useSqlCmd="true"
+        />
+  </dbdeployments>
+</config>
