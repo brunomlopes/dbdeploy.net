@@ -1,8 +1,8 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
-
-namespace Dbdeploy.Powershell
+﻿namespace Dbdeploy.Powershell
 {
+    using System.Text;
+    using System.Text.RegularExpressions;
+
     public class DescriptionPrettyPrinter
     {
         private readonly Regex numberRegex = new Regex("(?<number>[0-9]+)[-_ ](?<rest>.+)");

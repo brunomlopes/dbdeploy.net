@@ -1,63 +1,44 @@
-using System;
-using System.IO;
-using Net.Sf.Dbdeploy.Configuration;
-using Net.Sf.Dbdeploy.Exceptions;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class CommandLine
     {
         public static void Main(string[] args)
         {
-            var dbDeploy = new Dbdeploy.DbDeployer
-            {
-                InfoWriter = Console.Out,
-                ScriptDirectory = new DirectoryInfo("."),
-            };
-
-            try 
-            {
-                IConfiguration config = new ConfigurationFile();
-
-                dbDeploy.Dbms = config.DbType;
-                dbDeploy.ConnectionString = config.DbConnectionString;
-                dbDeploy.ChangeLogTableName = config.TableName;
-            }
-            catch (System.Configuration.ConfigurationException)
-            {
-                // ignore
-            }
-
-            var parser = new Parser();
+            var exitCode = 0;
 
             try
             {
                 // Read arguments from command line
-                parser.Parse(args, dbDeploy);
-
-                dbDeploy.Go();
+                var deploymentsConfig = OptionsManager.ParseOptions(args);
+                var deployer = new DbDeployer();
+                foreach (var config in deploymentsConfig.Deployments)
+                {
+                    deployer.Execute(config, Console.Out);
+                }
             }
             catch (UsageException ex)
             {
                 Console.Error.WriteLine("ERROR: " + ex.Message);
                 
-                parser.PrintUsage();
+                OptionsManager.PrintUsage();
             }
             catch (DbDeployException ex)
             {
                 Console.Error.WriteLine(ex.Message);
-
-                Environment.Exit(1);
+                exitCode = 1;
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine("Failed to apply changes: " + ex.Message);
                 Console.Error.WriteLine(ex.StackTrace);
-
-                Environment.Exit(2);
+                exitCode = 2;
             }
 
-            Environment.Exit(0);
+            Environment.Exit(exitCode);
         }
     }
 }

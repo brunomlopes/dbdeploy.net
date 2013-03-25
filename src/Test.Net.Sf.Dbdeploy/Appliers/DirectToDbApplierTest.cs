@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using Moq;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-using NUnit.Framework;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Text;
+
+    using Moq;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
+
+    using NUnit.Framework;
+
     class DirectToDbApplierTest
     {
         private Mock<QueryExecuter> queryExecuter;
@@ -29,7 +32,7 @@ namespace Net.Sf.Dbdeploy.Appliers
 
             this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
             
-            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty");
+            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty", false);
 
             this.splitter = new Mock<QueryStatementSplitter>();
 
@@ -45,10 +48,11 @@ namespace Net.Sf.Dbdeploy.Appliers
         {
             this.splitter.Setup(s => s.Split("split; content")).Returns(new List<string> { "split", "content" });
 
-            this.applier.ApplyChangeScript(new StubChangeScript(1, "script", "split; content"));
+            var output = new StringBuilder();
+            this.applier.ApplyChangeScript(new StubChangeScript(1, "script", "split; content"), output);
 
-            this.queryExecuter.Verify(e => e.Execute("split"));
-            this.queryExecuter.Verify(e => e.Execute("content"));
+            this.queryExecuter.Verify(e => e.Execute("split", It.IsAny<StringBuilder>()));
+            this.queryExecuter.Verify(e => e.Execute("content", It.IsAny<StringBuilder>()));
         }
 
         [Test]
@@ -58,11 +62,12 @@ namespace Net.Sf.Dbdeploy.Appliers
                 
             ChangeScript script = new StubChangeScript(1, "script", "split; content");
             
-            this.queryExecuter.Setup(e => e.Execute("split")).Throws(new DummyDbException());
+            this.queryExecuter.Setup(e => e.Execute("split", It.IsAny<StringBuilder>())).Throws(new DummyDbException());
 
             try 
             {
-                this.applier.ApplyChangeScript(script);
+                var output = new StringBuilder();
+                this.applier.ApplyChangeScript(script, output);
                         
                 Assert.Fail("exception expected");
             }
@@ -76,13 +81,23 @@ namespace Net.Sf.Dbdeploy.Appliers
         }
 
         [Test]
-        public void ShouldInsertToSchemaVersionTable() 
+        public void ShouldRecordSuccessInSchemaVersionTable() 
         {
-            ChangeScript changeScript = new ChangeScript(1, "script.sql");
+            ChangeScript changeScript = new ChangeScript("Scripts", 1, "script.sql");
 
-            this.applier.InsertToSchemaVersionTable(changeScript);
+            this.applier.RecordScriptStatus(changeScript, ScriptStatus.Success, "Script completed");
 
-            this.schemaVersionManager.Verify(s => s.RecordScriptApplied(changeScript));
+            this.schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript, ScriptStatus.Success, "Script completed"));
+        }
+
+        [Test]
+        public void ShouldRecordFailureInSchemaVersionTable()
+        {
+            ChangeScript changeScript = new ChangeScript("Scripts", 1, "script.sql");
+
+            this.applier.RecordScriptStatus(changeScript, ScriptStatus.Failure, "Script failed");
+
+            this.schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript, ScriptStatus.Failure, "Script failed"));
         }
 
         [Test]

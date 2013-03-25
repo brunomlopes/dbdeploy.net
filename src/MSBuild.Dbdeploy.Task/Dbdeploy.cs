@@ -1,88 +1,101 @@
-using System;
-using System.IO;
-using Microsoft.Build.Framework;
-using Net.Sf.Dbdeploy;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-
 namespace MSBuild.Dbdeploy.Task
 {
+    using System;
+    using System.IO;
+
+    using Microsoft.Build.Framework;
+
+    using Net.Sf.Dbdeploy;
+    using Net.Sf.Dbdeploy.Configuration;
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class Dbdeploy : ITask
     {
-        private readonly DbDeployer dbDeploy;
+        private readonly DbDeployConfig config;
                         
         public Dbdeploy()
         {
-            this.dbDeploy = new DbDeployer();
-
-            this.dbDeploy.InfoWriter = Console.Out;
+            this.config = new DbDeployConfig();
         }
 
         [Required]
         public string DbType
         {
-            set { this.dbDeploy.Dbms = value; }
+            set { this.config.Dbms = value; }
         }
 
         [Required]
         public string DbConnection
         {
-            set { this.dbDeploy.ConnectionString = value; }
+            set { this.config.ConnectionString = value; }
         }
 
         [Required]
         public string Dir
         {
-            get { return this.dbDeploy.ScriptDirectory.FullName; }
-            set { this.dbDeploy.ScriptDirectory = new DirectoryInfo(value); }
+            get { return this.config.ScriptDirectory.FullName; }
+            set { this.config.ScriptDirectory = new DirectoryInfo(value); }
         }
 
         public string OutputFile
         {
-            get { return this.dbDeploy.OutputFile.FullName; }
-            set { this.dbDeploy.OutputFile = new FileInfo(value); }
+            get { return this.config.OutputFile.FullName; }
+            set { this.config.OutputFile = new FileInfo(value); }
         }
 
         public string Encoding
         {
-            get { return this.dbDeploy.Encoding.EncodingName; }
-            set { this.dbDeploy.Encoding = new OutputFileEncoding(value).AsEncoding(); }
+            get { return this.config.Encoding.EncodingName; }
+            set { this.config.Encoding = new OutputFileEncoding(value).AsEncoding(); }
         }
 
         public string UndoOutputFile
         {
-            get { return this.dbDeploy.UndoOutputFile.FullName; }
-            set { this.dbDeploy.UndoOutputFile = new FileInfo(value); }
+            get { return this.config.UndoOutputFile.FullName; }
+            set { this.config.UndoOutputFile = new FileInfo(value); }
         }
 
         public string TemplateDir
         {
-            get { return this.dbDeploy.TemplateDir.FullName; }
-            set { this.dbDeploy.TemplateDir = new DirectoryInfo(value); }
+            get { return this.config.TemplateDirectory.FullName; }
+            set { this.config.TemplateDirectory = new DirectoryInfo(value); }
         }
 
-        public int LastChangeToApply
+        public string LastChangeToApply
         {
-            get { return this.dbDeploy.LastChangeToApply ?? -1; }
-            set { this.dbDeploy.LastChangeToApply = value < 0 ? default(int?) : value; }
+            get { return this.config.LastChangeToApply != null ? this.config.LastChangeToApply.ToString() : string.Empty; }
+            set { this.config.LastChangeToApply = string.IsNullOrWhiteSpace(value) ? null : new UniqueChange(value); }
         }
 
         public string TableName
         {
-            get { return this.dbDeploy.ChangeLogTableName; }
-            set { this.dbDeploy.ChangeLogTableName = value; }
+            get { return this.config.ChangeLogTableName; }
+            set { this.config.ChangeLogTableName = value; }
+        }
+
+        public bool AutoCreateChangeLogTable
+        {
+            get { return this.config.AutoCreateChangeLogTable; }
+            set { this.config.AutoCreateChangeLogTable = value; }
+        }
+
+        public bool UseSqlCmd
+        {
+            get { return this.config.UseSqlCmd; }
+            set { this.config.UseSqlCmd = value; }
         }
 
         public string Delimiter
         {
-            get { return this.dbDeploy.Delimiter; }
-            set { this.dbDeploy.Delimiter = value; }
+            get { return this.config.Delimiter; }
+            set { this.config.Delimiter = value; }
         }
 
         public string DelimiterType
         {
-            get { return this.dbDeploy.DelimiterType.GetType().Name; }
-            set { this.dbDeploy.DelimiterType = DelimiterTypeFactory.Create(value); }
+            get { return this.config.DelimiterType.GetType().Name; }
+            set { this.config.DelimiterType = DelimiterTypeFactory.Create(value); }
         }
 
         public IBuildEngine BuildEngine { get; set; }
@@ -93,7 +106,8 @@ namespace MSBuild.Dbdeploy.Task
         {
             try
             {
-                this.dbDeploy.Go();
+                var deployer = new DbDeployer();
+                deployer.Execute(this.config, Console.Out);
 
                 return true;
             }
@@ -131,7 +145,7 @@ namespace MSBuild.Dbdeploy.Task
                 + Environment.NewLine + "\t\toutputfile=\"[OUTPUT SCRIPT PATH + NAME]\""
                 + Environment.NewLine + "\t\tlastChangeToApply=\"[NUMBER OF THE LAST SCRIPT TO APPLY]\""
                 + Environment.NewLine + "\t\tundoOutputfile=\"[UNDO SCRIPT PATH + NAME]\""
-                + Environment.NewLine + "\t\tchangeLogTableName=\"[CHANGE LOG TABLE NAME - default changelog]\""
+                + Environment.NewLine + "\t\tchangeLogTableName=\"[CHANGE LOG TABLE NAME - default ChangeLog]\""
                 + Environment.NewLine + "\t\tdelimiter=\"[STATEMENT DELIMITER - default ;]\""
                 + Environment.NewLine + "\t\tdelimitertype=\"[STATEMENT DELIMITER TYPE - row or normal, default normal]\""
                 + Environment.NewLine + "\t/>"

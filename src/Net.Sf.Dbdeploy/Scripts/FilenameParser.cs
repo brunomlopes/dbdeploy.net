@@ -1,9 +1,9 @@
-using System;
-using System.Text.RegularExpressions;
-using Net.Sf.Dbdeploy.Exceptions;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
+    using System.Text.RegularExpressions;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class FilenameParser
     {
         private readonly Regex pattern;
@@ -13,7 +13,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             this.pattern = new Regex(@"^(\d+)", RegexOptions.Compiled);
         }
 
-        public int ExtractIdFromFilename(string filename)
+        public int ExtractScriptNumberFromFilename(string filename)
         {
             Match match = this.pattern.Match(filename);
             

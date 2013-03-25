@@ -1,15 +1,38 @@
 namespace Net.Sf.Dbdeploy.Database
 {
+    /// <summary>
+    /// Syntax for MySQL.
+    /// </summary>
     public class MySqlDbmsSyntax : DbmsSyntax
     {
-        public override string GenerateTimestamp()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MySqlDbmsSyntax" /> class.
+        /// </summary>
+        public MySqlDbmsSyntax()
+            : base("mysql")
         {
-            return "CURRENT_TIMESTAMP";
         }
 
-        public override string GenerateUser()
+        /// <summary>
+        /// Gets the get timestamp.
+        /// </summary>
+        /// <value>
+        /// The get timestamp.
+        /// </value>
+        public override string CurrentTimestamp
         {
-            return "USER()";
+            get { return "CURRENT_TIMESTAMP"; }
+        }
+
+        /// <summary>
+        /// Gets the syntax to get the current user.
+        /// </summary>
+        /// <value>
+        /// The current user syntax.
+        /// </value>
+        public override string CurrentUser 
+        { 
+            get { return "USER()"; }
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Collections.Generic;
+    using System.Text;
+
     public class QueryStatementSplitter
     {
         private string delimiter = ";";

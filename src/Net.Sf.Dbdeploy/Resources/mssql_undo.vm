@@ -7,7 +7,7 @@ GO
 
 $script.GetUndoContent()
 
-DELETE FROM $changeLogTableName WHERE change_number = $script.getId()
+DELETE FROM $changeLogTableName WHERE ScriptNumber = Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber
 GO
 
 COMMIT

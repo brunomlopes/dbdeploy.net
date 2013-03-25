@@ -1,9 +1,15 @@
-CREATE TABLE changelog (
-  change_number BIGINT NOT NULL,
-  complete_dt TIMESTAMP NULL,
-  applied_by VARCHAR(100) NOT NULL,
-  description VARCHAR(500) NOT NULL
+CREATE TABLE dbo.ChangeLog (
+	ChangeId INT NOT NULL AUTO_INCREMENT,
+	Folder VARCHAR(256) NOT NULL,
+	ScriptNumber SMALLINT NOT NULL,
+	ScriptName VARCHAR(512) NOT NULL,
+	StartDate DATETIME NOT NULL,
+	CompleteDate DATETIME NULL,
+	AppliedBy VARCHAR(128) NOT NULL,
+	ScriptStatus TINYINT NOT NULL,
+	ScriptOutput TEXT NOT NULL
 );
 
-ALTER TABLE changelog ADD CONSTRAINT Pkchangelog PRIMARY KEY (change_number)
-;
+ALTER TABLE dbo.ChangeLog ADD CONSTRAINT PK_ChangeLog PRIMARY KEY (ChangeId);
+
+ALTER TABLE dbo.ChangeLog ADD UNIQUE INDEX(Folder, ScriptNumber);

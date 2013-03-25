@@ -1,9 +1,10 @@
-using System;
-using System.Text;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.Text;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class OutputFileEncodingTest
     {

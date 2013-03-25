@@ -1,17 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using Net.Sf.Dbdeploy.Exceptions;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Globalization;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public abstract class AbstractDatabaseSchemaVersionManagerTest
     {
-        public const string TableName = "changelog";
+        public const string TableName = "ChangeLog";
 
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
+
+        private IDbmsSyntax syntax;
 
         [SetUp]
         protected void SetUp()
@@ -19,23 +23,24 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(Dbms, ConnectionString);
             var executer = new QueryExecuter(factory);
 
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), TableName);
+            this.syntax = factory.CreateDbmsSyntax();
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName, false);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
         {
-            EnsureTableDoesNotExist();
+            this.EnsureTableDoesNotExist();
             CreateTable();
             InsertRowIntoTable(5);
 
-            List<int> appliedChangeNumbers = new List<int>(databaseSchemaVersion.GetAppliedChanges());
-            Assert.AreEqual(1, appliedChangeNumbers.Count);
-            Assert.Contains(5, appliedChangeNumbers);
+            var appliedChanges = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
+            Assert.AreEqual(1, appliedChanges.Count);
+            Assert.AreEqual("Scripts/5", appliedChanges[0].UniqueKey);
         }
 
         public virtual void TestThrowsWhenDatabaseTableDoesNotExist()
         {
-            EnsureTableDoesNotExist();
+            this.EnsureTableDoesNotExist();
 
             try
             {
@@ -61,20 +66,50 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
+        /// <summary>
+        /// Tests that <see cref="DatabaseSchemaVersionManager" /> will create the change log table when specified.
+        /// </summary>
+        public virtual void TestShouldCreateChangeLogTableWhenDoesNotExist()
+        {
+            this.databaseSchemaVersion.AutoCreateChangeLogTable = true;
+
+            this.EnsureTableDoesNotExist();
+
+            // Table should be created when attempted now; if table does not exist.
+            databaseSchemaVersion.GetAppliedChanges();
+
+            this.AssertTableExists("ChangeLog");
+        }
+
+        /// <summary>
+        /// Asserts the table exists.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        public void AssertTableExists(string tableName)
+        {
+            var schema = this.ExecuteScalar<string>(this.syntax.TableExists(tableName));
+
+            Assert.IsNotEmpty(schema, string.Format("{0} table was not created.", tableName));
+        }
+
         public virtual void TestShouldReturnEmptySetWhenTableHasNoRows()
         {
-            EnsureTableDoesNotExist();
+            this.EnsureTableDoesNotExist();
             CreateTable();
 
             Assert.AreEqual(0, databaseSchemaVersion.GetAppliedChanges().Count);
         }
 
-        protected virtual void EnsureTableDoesNotExist()
+        /// <summary>
+        /// Ensures the table does not exist.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        protected virtual void EnsureTableDoesNotExist(string tableName)
         {
             ExecuteSql("DROP TABLE " + TableName);
         }
 
-        protected void ExecuteSql(String sql)
+        protected void ExecuteSql(string sql)
         {
             using (IDbConnection connection = GetConnection())
             {
@@ -85,12 +120,47 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
+        /// <summary>
+        /// Executes a query returning a scalar value.
+        /// </summary>
+        /// <typeparam name="T">Scalar value to be returned.</typeparam>
+        /// <param name="sql">The SQL.</param>
+        /// <returns>Scalar value from query.</returns>
+        protected T ExecuteScalar<T>(string sql, params object[] args)
+        {
+            T result = default(T);
+            using (IDbConnection connection = GetConnection())
+            {
+                connection.Open();
+                IDbCommand command = connection.CreateCommand();
+                command.CommandText = string.Format(CultureInfo.InvariantCulture, sql, args);
+                result = (T)command.ExecuteScalar();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creats the change log table.
+        /// </summary>
+        protected void CreateTable()
+        {
+            this.databaseSchemaVersion.VerifyChangeLogTableExists(true);            
+        }
+
+        /// <summary>
+        /// Ensures the change log table does not exist.
+        /// </summary>
+        public void EnsureTableDoesNotExist()
+        {
+            this.EnsureTableDoesNotExist(TableName);
+        }
+
         protected abstract string ConnectionString { get; }
-        protected abstract string DeltaSet { get; }
+        protected abstract string Folder { get; }
         protected abstract string[] ChangelogTableDoesNotExistMessages { get; }
         protected abstract string Dbms { get; }
         protected abstract IDbConnection GetConnection();
-        protected abstract void CreateTable();
         protected abstract void InsertRowIntoTable(int i);
     }
 }

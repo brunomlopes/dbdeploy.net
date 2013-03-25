@@ -1,7 +1,7 @@
-using System;
-
 namespace Net.Sf.Dbdeploy.Exceptions
 {
+    using System;
+
     public class SchemaVersionTrackingException : DbDeployException
     {
         public SchemaVersionTrackingException(string message, Exception inner) 

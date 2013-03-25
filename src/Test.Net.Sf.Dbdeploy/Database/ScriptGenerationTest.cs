@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Net.Sf.Dbdeploy.Appliers;
-using Net.Sf.Dbdeploy.Scripts;
-using NUnit.Framework;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using Net.Sf.Dbdeploy.Appliers;
+    using Net.Sf.Dbdeploy.Scripts;
+    using NUnit.Framework;
+
     [TestFixture]
     public class ScriptGenerationTest
     {
@@ -60,12 +60,24 @@ namespace Net.Sf.Dbdeploy.Database
 
             StubSchemaManager schemaManager = new StubSchemaManager(factory.CreateDbmsSyntax());
 
-            IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "changelog", ";", new NormalDelimiter(), templateDirectory);
+            IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "ChangeLog", ";", new NormalDelimiter(), templateDirectory);
             Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, System.Console.Out);
 
             controller.ProcessChangeScripts(null);
 
-            Assert.AreEqual(this.ReadExpectedFileContents(this.GetExpectedFilename(syntaxName)), writer.ToString());
+            var actual = writer.ToString();
+
+            try
+            {
+                Assert.AreEqual(this.ReadExpectedFileContents(this.GetExpectedFilename(syntaxName)), actual);
+            }
+            catch (Exception)
+            {
+                // Output actual template on failure.
+                Console.WriteLine("\n\nActual Template ({0}):", syntaxName);
+                Console.WriteLine(actual);
+                throw;
+            }
         }
 
         private String GetExpectedFilename(string dbSyntaxName) 
@@ -113,13 +125,14 @@ namespace Net.Sf.Dbdeploy.Database
 
         private class StubSchemaManager : DatabaseSchemaVersionManager 
         {
-            public StubSchemaManager(IDbmsSyntax syntax) : base(null, syntax, "changelog")
+            public StubSchemaManager(IDbmsSyntax syntax)
+                : base(null, syntax, "ChangeLog", true)
             {
             }
 
-            public override ICollection<int> GetAppliedChanges()
+            public override IList<ChangeEntry> GetAppliedChanges()
             {
-                return new List<int>();
+                return new List<ChangeEntry>();
             }
         }
     }

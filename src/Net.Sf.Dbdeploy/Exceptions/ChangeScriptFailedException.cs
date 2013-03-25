@@ -1,9 +1,10 @@
-﻿using System;
-using System.Data.Common;
-using Net.Sf.Dbdeploy.Scripts;
-
-namespace Net.Sf.Dbdeploy.Exceptions
+﻿namespace Net.Sf.Dbdeploy.Exceptions
 {
+    using System;
+    using System.Data.Common;
+
+    using Net.Sf.Dbdeploy.Scripts;
+
     public class ChangeScriptFailedException : DbDeployException
     {
         private readonly ChangeScript script;

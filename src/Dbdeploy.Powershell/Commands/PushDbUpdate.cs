@@ -4,6 +4,8 @@ using Net.Sf.Dbdeploy;
 
 namespace Dbdeploy.Powershell.Commands
 {
+    using Net.Sf.Dbdeploy.Configuration;
+
     [Cmdlet(VerbsCommon.Push, "DbUpdate")]
     public class PushDbUpdate: DbUpdateBase
     {
@@ -11,16 +13,16 @@ namespace Dbdeploy.Powershell.Commands
         {
             base.ProcessRecord();
 
-            var dbDeploy = new DbDeployer
+            var config = new DbDeployConfig
             {
-                InfoWriter = new LambdaTextWriter(WriteVerbose),
                 Dbms = DatabaseType,
                 ConnectionString = ConnectionString,
                 ChangeLogTableName = TableName,
                 ScriptDirectory = new DirectoryInfo(deltasDirectory),
             };
 
-            dbDeploy.Go();
+            var deployer = new DbDeployer();
+            deployer.Execute(config, new LambdaTextWriter(WriteVerbose));
         }
     }
 }

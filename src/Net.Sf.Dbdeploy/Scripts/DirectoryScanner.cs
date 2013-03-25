@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Net.Sf.Dbdeploy.Exceptions;
-using System.Text;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+
     public class DirectoryScanner
     {
         private readonly FilenameParser filenameParser;
@@ -29,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             try
             {
-                this.infoTextWriter.WriteLine("Reading change scripts from directory " + directory.FullName + "...");
+                this.infoTextWriter.WriteLine("Reading change scripts from directory '" + directory.FullName + "'...");
             }
             catch (IOException)
             {
@@ -38,7 +39,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             List<ChangeScript> scripts = new List<ChangeScript>();
 
-            foreach (FileInfo file in directory.GetFiles())
+            foreach (FileInfo file in directory.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 if ((file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
                     continue;
@@ -47,9 +48,9 @@ namespace Net.Sf.Dbdeploy.Scripts
 
                 try
                 {
-                    int id = this.filenameParser.ExtractIdFromFilename(filename);
+                    int scriptNumber = this.filenameParser.ExtractScriptNumberFromFilename(filename);
 
-                    scripts.Add(new ChangeScript(id, file, this.encoding));
+                    scripts.Add(new ChangeScript(file.Directory.Name, scriptNumber, file, this.encoding));
                 }
                 catch (UnrecognisedFilenameException)
                 {

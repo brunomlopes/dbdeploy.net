@@ -2,13 +2,18 @@
 
 -- START CHANGE SCRIPT $script
 
+INSERT INTO ${changeLogTableName} (Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)
+ VALUES ('$script.Folder', $script.ScriptNumber,'$script.ScriptName', getdate(), user_name(), 3, '')
+GO
+
 BEGIN TRANSACTION
 GO
 
 $script.getContent()
 
-INSERT INTO ${changeLogTableName} (change_number, complete_dt, applied_by, description)
- VALUES ($script.getId(), getdate(), user_name(), '$script.getDescription()')
+UPDATE ${changeLogTableName} 
+SET CompleteDate = getdate(), ScriptStatus = 1, ScriptOutput = '' 
+WHERE Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber
 GO
 
 COMMIT

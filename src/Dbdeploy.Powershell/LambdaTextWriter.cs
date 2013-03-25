@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Text;
-
-namespace Dbdeploy.Powershell
+﻿namespace Dbdeploy.Powershell
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
     public class LambdaTextWriter : TextWriter
     {
         private readonly Action<string> _writer;

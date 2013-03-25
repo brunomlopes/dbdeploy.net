@@ -1,8 +1,9 @@
-﻿using Dbdeploy.Powershell;
-using NUnit.Framework;
-
-namespace Net.Sf.Dbdeploy
+﻿namespace Net.Sf.Dbdeploy
 {
+    using global::Dbdeploy.Powershell;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class DescriptionPrettyPrinterTest
     {

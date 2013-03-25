@@ -1,79 +1,127 @@
-using System;
-using System.IO;
-using System.Text;
-
 namespace Net.Sf.Dbdeploy.Scripts
 {
-    public class ChangeScript : IComparable
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+
+    /// <summary>
+    /// Represents a SQL script to be executed.
+    /// </summary>
+    public class ChangeScript : UniqueChange
     {
+        /// <summary>
+        /// The undo token to search for to find script to pull out as undoing the current changes.
+        /// </summary>
         private const string UndoToken = "--//@UNDO";
 
-        private readonly int id;
-
-        private readonly FileInfo file;
-        
-        private readonly String description;
-
+        /// <summary>
+        /// The SQL file encoding.
+        /// </summary>
         private readonly Encoding encoding;
 
-        public ChangeScript(int id) 
-            : this(id, "test")
+        /// <summary>
+        /// Gets or sets the change ID if this script has already been run once in the database.
+        /// </summary>
+        /// <value>
+        /// The change ID.
+        /// </value>
+        public int ChangeId { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChangeScript" /> class.
+        /// </summary>
+        /// <param name="folder">The version folder.</param>
+        /// <param name="scriptNumber">The script number.</param>
+        public ChangeScript(string folder, int scriptNumber) 
+            : this(folder, scriptNumber, "test")
         {
         }
 
-        public ChangeScript(int id, FileInfo file, Encoding encoding)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChangeScript" /> class.
+        /// </summary>
+        /// <param name="folder">The version folder.</param>
+        /// <param name="scriptNumber">The script number.</param>
+        /// <param name="fileInfo">The file.</param>
+        /// <param name="encoding">The encoding.</param>
+        public ChangeScript(string folder, int scriptNumber, FileInfo fileInfo, Encoding encoding)
+            : base(folder, scriptNumber)
         {
-            this.id = id;
-            this.file = file;
-            this.description = file.Name;
+            this.FileInfo = fileInfo;
+            this.ScriptName = fileInfo.Name;
             this.encoding = encoding;
         }
 
-        public ChangeScript(int id, String description)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChangeScript" /> class.
+        /// </summary>
+        /// <param name="folder">The version folder.</param>
+        /// <param name="scriptNumber">The script number.</param>
+        /// <param name="fileName">Name of the file.</param>
+        public ChangeScript(string folder, int scriptNumber, string fileName)
+            : base(folder, scriptNumber)
         {
-            this.id = id;
-            this.file = null;
-            this.description = description;
+            this.FileInfo = null;
+            this.ScriptName = fileName;
         }
 
-        public FileInfo GetFile()
-        {
-            return this.file;
-        }
+        /// <summary>
+        /// Gets or sets the file info for the script.
+        /// </summary>
+        /// <value>
+        /// The file info.
+        /// </value>
+        public FileInfo FileInfo { get; protected set; }
 
-        public int GetId()
-        {
-            return this.id;
-        }
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
+        /// <value>
+        /// The name of the file.
+        /// </value>
+        public string ScriptName { get; protected set; }
 
-        public String GetDescription()
-        {
-            return this.description;
-        }
-
-        public int CompareTo(object obj)
-        {
-            ChangeScript other = (ChangeScript)obj;
-            return this.id.CompareTo(other.id);
-        }
-
+        /// <summary>
+        /// Gets the SQL file update content.
+        /// </summary>
+        /// <returns>File content.</returns>
         public virtual string GetContent()
         {
-            return this.GetFileContents(undo: false);
+            return this.GetFileContents();
         }
 
+        /// <summary>
+        /// Gets the SQL file undo content.
+        /// </summary>
+        /// <returns>Undo file content.</returns>
         public virtual string GetUndoContent()
         {
             return this.GetFileContents(undo: true);
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.ScriptName, this.ScriptNumber);
+        }
+
+        /// <summary>
+        /// Gets the file contents.
+        /// </summary>
+        /// <param name="undo">if set to <c>true</c> the undo content will be gathered; otherwise standard update content will be gathered.</param>
+        /// <returns>File contents.</returns>
         private string GetFileContents(bool undo = false)
         {
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
             bool foundUndo = false;
 
-            using (var input = new StreamReader(this.file.FullName, this.encoding))
+            using (var input = new StreamReader(this.FileInfo.FullName, this.encoding))
             {
                 string str;
                 while ((str = input.ReadLine()) != null)
@@ -93,11 +141,6 @@ namespace Net.Sf.Dbdeploy.Scripts
             }
 
             return result.ToString();
-        }
-
-        public override string ToString()
-        {
-            return "#" + this.id + ": " + this.description;
         }
     }
 }

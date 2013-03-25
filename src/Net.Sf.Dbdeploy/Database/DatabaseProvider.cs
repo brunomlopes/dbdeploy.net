@@ -1,7 +1,7 @@
-using System.Xml.Serialization;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Xml.Serialization;
+
     public class DatabaseProvider
     {
         private string nameField;

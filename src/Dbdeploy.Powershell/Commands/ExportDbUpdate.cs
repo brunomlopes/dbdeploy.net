@@ -4,6 +4,8 @@ using Net.Sf.Dbdeploy;
 
 namespace Dbdeploy.Powershell.Commands
 {
+    using Net.Sf.Dbdeploy.Configuration;
+
     [Cmdlet(VerbsData.Export, "DbUpdate")]
     public class ExportDbUpdate : DbUpdateBase
     {
@@ -28,23 +30,25 @@ namespace Dbdeploy.Powershell.Commands
                 return;
             }
 
-            var dbDeploy = new DbDeployer
-            {
-                InfoWriter = new LambdaTextWriter(WriteVerbose),
-                Dbms = this.DatabaseType,
-                ConnectionString = this.ConnectionString,
-                ChangeLogTableName = this.TableName,
-                ScriptDirectory = new DirectoryInfo(this.deltasDirectory),
-            };
-
-            dbDeploy.OutputFile = new FileInfo(this.ToAbsolutePath(OutputFile));
+            var config = new DbDeployConfig
+                             {
+                                 Dbms = this.DatabaseType,
+                                 ConnectionString = this.ConnectionString,
+                                 ChangeLogTableName = this.TableName,
+                                 ScriptDirectory = new DirectoryInfo(this.deltasDirectory),
+                                 AutoCreateChangeLogTable = this.AutoCreateChangeLogTable,
+                                 ForceUpdate = this.ForceUpdate,
+                                 UseSqlCmd = this.UseSqlCmd,
+                                 OutputFile = new FileInfo(this.ToAbsolutePath(this.OutputFile))
+                             };
 
             if (!string.IsNullOrEmpty(this.UndoOutputFile))
             {
-                dbDeploy.OutputFile = new FileInfo(this.ToAbsolutePath(UndoOutputFile));
+                config.OutputFile = new FileInfo(this.ToAbsolutePath(UndoOutputFile));
             }
 
-            dbDeploy.Go();
+            var deployer = new DbDeployer();
+            deployer.Execute(config, new LambdaTextWriter(WriteVerbose));
         }
     }
 }
