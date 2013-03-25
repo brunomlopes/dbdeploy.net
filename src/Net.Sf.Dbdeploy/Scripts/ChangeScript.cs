@@ -48,7 +48,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             : base(folder, scriptNumber)
         {
             this.FileInfo = fileInfo;
-            this.FileName = fileInfo.Name;
+            this.ScriptName = fileInfo.Name;
             this.encoding = encoding;
         }
 
@@ -62,7 +62,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             : base(folder, scriptNumber)
         {
             this.FileInfo = null;
-            this.FileName = fileName;
+            this.ScriptName = fileName;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// <value>
         /// The name of the file.
         /// </value>
-        public string FileName { get; protected set; }
+        public string ScriptName { get; protected set; }
 
         /// <summary>
         /// Gets the SQL file update content.
@@ -107,7 +107,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.FileName, this.ScriptNumber);
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.ScriptName, this.ScriptNumber);
         }
 
         /// <summary>

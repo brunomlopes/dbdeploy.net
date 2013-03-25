@@ -169,12 +169,12 @@ The table that is automatically created for change tracking has the following sc
 ChangeId     | INT          | Auto-incrementing unique ID for each change entry
 Folder       | VARCHAR(256) | Versioned folder name (Example: v1.0).
 ScriptNumber | SMALLINT     | Squential script number within folder.
-FileName     | VARCHAR(512) | File name including extension.
+ScriptName   | VARCHAR(512) | File name including extension.
 StartDate    | DATETIME     | Date and time script started.
 CompleteDate | DATETIME     | Date and time script ended even if it failed.
 AppliedBy    | VARCHAR(128) | User account that ran the script.
-Status       | TINYINT      | 0 = Failure, 1 = Success, 2 = Problem Resolved, 3 = Started
-Output       | VARCHAR(MAX) | Full output of the script execution.
+ScriptStatus | TINYINT      | 0 = Failure, 1 = Success, 2 = Problem Resolved, 3 = Started
+ScriptOutput | VARCHAR(MAX) | Full output of the script execution.
 
 # XML Configured Runs
 

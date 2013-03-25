@@ -33,7 +33,7 @@
         /// <value>
         /// The name of the file.
         /// </value>
-        public string FileName { get; set; }
+        public string ScriptName { get; set; }
 
         /// <summary>
         /// Gets or sets the status.
@@ -59,7 +59,7 @@
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.FileName, ScriptNumber);
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.ScriptName, ScriptNumber);
         }
     }
 }

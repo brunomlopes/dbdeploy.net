@@ -79,21 +79,21 @@ WHERE TABLE_NAME = '{0}'", t));
                                      new ChangeEntry("Alpha", 5)
                                          {
                                              ChangeId = 1,
-                                             FileName = "05.test.sql",
+                                             ScriptName = "05.test.sql",
                                              Status = ScriptStatus.Success,
                                              Output = "Complete"
                                          }, 
                                      new ChangeEntry("Alpha", 9)
                                          {
                                              ChangeId = 2,
-                                             FileName = "09.test.sql",
+                                             ScriptName = "09.test.sql",
                                              Status = ScriptStatus.ProblemResolved,
                                              Output = "Fixed"
                                          }, 
                                      new ChangeEntry("Alpha", 12)
                                          {
                                              ChangeId = 3,
-                                             FileName = "12.test.sql",
+                                             ScriptName = "12.test.sql",
                                              Status = ScriptStatus.Failure,
                                              Output = "Failed"
                                          }, 
@@ -109,9 +109,9 @@ WHERE TABLE_NAME = '{0}'", t));
             this.expectedResultSet.Setup(rs => rs["Folder"]).Returns(() => getEnumerator.Current.Folder);
             this.expectedResultSet.Setup(rs => rs["ScriptNumber"]).Returns(() => (short)getEnumerator.Current.ScriptNumber);
             this.expectedResultSet.Setup(rs => rs["ChangeId"]).Returns(() => getEnumerator.Current.ChangeId);
-            this.expectedResultSet.Setup(rs => rs["FileName"]).Returns(() => getEnumerator.Current.FileName);
-            this.expectedResultSet.Setup(rs => rs["Status"]).Returns(() => (byte)getEnumerator.Current.Status);
-            this.expectedResultSet.Setup(rs => rs["Output"]).Returns(() => getEnumerator.Current.Output);
+            this.expectedResultSet.Setup(rs => rs["ScriptName"]).Returns(() => getEnumerator.Current.ScriptName);
+            this.expectedResultSet.Setup(rs => rs["ScriptStatus"]).Returns(() => (byte)getEnumerator.Current.Status);
+            this.expectedResultSet.Setup(rs => rs["ScriptOutput"]).Returns(() => getEnumerator.Current.Output);
 
             var changes = this.schemaVersionManager.GetAppliedChanges().ToList();
         
@@ -129,12 +129,12 @@ WHERE TABLE_NAME = '{0}'", t));
             this.syntax.Setup(s => s.CurrentTimestamp).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
-            string expected = @"INSERT INTO ChangeLog (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5) 
+            string expected = @"INSERT INTO ChangeLog (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5) 
 SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
 
             Assert.AreEqual(expected, this.executedQueries.FirstOrDefault(), "The query executed was incorrect.");
 
-            this.queryExecuter.Verify(e => e.ExecuteQuery(expected, this.script.Folder, this.script.ScriptNumber, this.script.FileName, (int)ScriptStatus.Success, "Script output"), Times.Once());
+            this.queryExecuter.Verify(e => e.ExecuteQuery(expected, this.script.Folder, this.script.ScriptNumber, this.script.ScriptName, (int)ScriptStatus.Success, "Script output"), Times.Once());
         }
 
         [Test]
@@ -156,7 +156,7 @@ SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
 
             schemaVersionManagerWithDifferentTableName.GetAppliedChanges();
 
-            this.queryExecuter.Verify(e => e.ExecuteQuery(It.Is<string>(s => s.StartsWith("SELECT ChangeId, Folder, ScriptNumber, FileName, Status, Output FROM user_specified_changelog"))));
+            this.queryExecuter.Verify(e => e.ExecuteQuery(It.Is<string>(s => s.StartsWith("SELECT ChangeId, Folder, ScriptNumber, ScriptName, ScriptStatus, ScriptOutput FROM user_specified_changelog"))));
         }
 
         [Test]
@@ -180,9 +180,9 @@ SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
             Assert.AreEqual(expected.Folder, retrieved.Folder, "Folder does not match.");
             Assert.AreEqual(expected.ScriptNumber, retrieved.ScriptNumber, "ScriptNumber does not match.");
             Assert.AreEqual(expected.ChangeId, retrieved.ChangeId, "ChangeId does not match.");
-            Assert.AreEqual(expected.FileName, retrieved.FileName, "FileName does not match.");
-            Assert.AreEqual(expected.Status, retrieved.Status, "Status does not match.");
-            Assert.AreEqual(expected.Output, retrieved.Output, "Output does not match.");
+            Assert.AreEqual(expected.ScriptName, retrieved.ScriptName, "ScriptName does not match.");
+            Assert.AreEqual(expected.Status, retrieved.Status, "ScriptStatus does not match.");
+            Assert.AreEqual(expected.Output, retrieved.Output, "ScriptOutput does not match.");
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// <param name="fileName">Name of the file.</param>
         private static void VerifyChangeScript(IEnumerable<ChangeScript> changeScripts, string folder, int scriptNumber, string fileName)
         {
-            var script = changeScripts.FirstOrDefault(c => c.FileName == fileName);
+            var script = changeScripts.FirstOrDefault(c => c.ScriptName == fileName);
             Assert.IsNotNull(script, "'{0}' script was not found.", fileName);
             Assert.IsNotNull(script.FileInfo, "FileInfo should not be null for '{0}'.", fileName);
             Assert.AreEqual(fileName, script.FileInfo.Name, "FileInfo was incorrect for '{0}'.", fileName);

@@ -123,9 +123,9 @@ END",
         protected override void InsertRowIntoTable(int i)
         {
             this.ExecuteSql("INSERT INTO " + TableName
-                       + " (Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, FileName, Status) VALUES ( "
+                       + " (Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput) VALUES ( "
                        + "'" + FOLDER + "', " + i
-                       + ", getdate(), getdate(), user_name(), 'Unit test', 1)");
+                       + ", getdate(), getdate(), user_name(), 'Unit test', 1, '')");
         }
     }
 }

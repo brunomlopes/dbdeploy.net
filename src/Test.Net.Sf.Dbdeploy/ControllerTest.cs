@@ -93,8 +93,8 @@ namespace Net.Sf.Dbdeploy
                 .Setup(p => p.GetAppliedChanges())
                 .Returns(new List<ChangeEntry>
                         {
-                            new ChangeEntry("1.0", 1) { FileName = "1.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 2) { FileName = "2.test.sql", Status = ScriptStatus.Failure }
+                            new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
+                            new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Failure }
                         });
 
             // Execute controller.
@@ -112,8 +112,8 @@ namespace Net.Sf.Dbdeploy
                 .Setup(p => p.GetAppliedChanges())
                 .Returns(new List<ChangeEntry>
                         {
-                            new ChangeEntry("1.0", 1) { FileName = "1.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 2) { FileName = "2.test.sql", Status = ScriptStatus.Success }
+                            new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
+                            new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Success }
                         });
 
             // Execute controller.
@@ -134,9 +134,9 @@ namespace Net.Sf.Dbdeploy
                 .Setup(p => p.GetAppliedChanges())
                 .Returns(new List<ChangeEntry>
                         {
-                            new ChangeEntry("1.0", 1) { FileName = "1.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 2) { FileName = "2.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 3) { FileName = "3.test.sql", Status = ScriptStatus.ProblemResolved }
+                            new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
+                            new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Success },
+                            new ChangeEntry("1.0", 3) { ScriptName = "3.test.sql", Status = ScriptStatus.ProblemResolved }
                         });
 
             // Execute controller.
@@ -157,9 +157,9 @@ namespace Net.Sf.Dbdeploy
                 .Setup(p => p.GetAppliedChanges())
                 .Returns(new List<ChangeEntry>
                         {
-                            new ChangeEntry("1.0", 1) { FileName = "1.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 2) { FileName = "2.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 3) { FileName = "3.test.sql", Status = ScriptStatus.Failure }
+                            new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
+                            new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Success },
+                            new ChangeEntry("1.0", 3) { ScriptName = "3.test.sql", Status = ScriptStatus.Failure }
                         });
 
             // Execute controller with force update set to true.
@@ -180,8 +180,8 @@ namespace Net.Sf.Dbdeploy
                 .Setup(p => p.GetAppliedChanges())
                 .Returns(new List<ChangeEntry>
                         {
-                            new ChangeEntry("1.0", 1) { FileName = "1.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 2) { FileName = "2.test.sql", Status = ScriptStatus.Success }
+                            new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
+                            new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Success }
                         });
 
             // Execute controller with force update set to true.

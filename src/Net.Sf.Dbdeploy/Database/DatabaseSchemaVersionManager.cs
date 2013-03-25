@@ -65,7 +65,7 @@ namespace Net.Sf.Dbdeploy.Database
             try
             {
                 // Find all changes that are not resolved.
-                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ChangeId, Folder, ScriptNumber, FileName, Status, Output FROM {0}", this.changeLogTableName);
+                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ChangeId, Folder, ScriptNumber, ScriptName, ScriptStatus, ScriptOutput FROM {0}", this.changeLogTableName);
                 
                 using (var reader = this.queryExecuter.ExecuteQuery(sql))
                 {
@@ -75,9 +75,9 @@ namespace Net.Sf.Dbdeploy.Database
                         var scriptNumber = GetValue<short>(reader, "ScriptNumber");
                         var changeEntry = new ChangeEntry(folder, scriptNumber);
                         changeEntry.ChangeId = GetValue<int>(reader, "ChangeId");
-                        changeEntry.FileName = GetValue<string>(reader, "FileName");
-                        changeEntry.Status = (ScriptStatus)GetValue<byte>(reader, "Status");
-                        changeEntry.Output = GetValue<string>(reader, "Output");
+                        changeEntry.ScriptName = GetValue<string>(reader, "ScriptName");
+                        changeEntry.Status = (ScriptStatus)GetValue<byte>(reader, "ScriptStatus");
+                        changeEntry.Output = GetValue<string>(reader, "ScriptOutput");
 
                         changes.Add(changeEntry);
                     }
@@ -151,7 +151,7 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     var sql = string.Format(
                         CultureInfo.InvariantCulture,
-@"INSERT INTO {0} (Folder, ScriptNumber, FileName, StartDate, CompleteDate, AppliedBy, Status, Output) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) 
+@"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) 
 SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
                         this.changeLogTableName,
                         this.syntax.CurrentTimestamp,
@@ -159,7 +159,7 @@ SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
                         this.syntax.CurrentUser);
 
                     // Execute insert and set change id so it can be updated.
-                    using (var reader = this.queryExecuter.ExecuteQuery(sql, script.Folder, script.ScriptNumber, script.FileName, (int)status, output ?? string.Empty))
+                    using (var reader = this.queryExecuter.ExecuteQuery(sql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output ?? string.Empty))
                     {
                         reader.Read();
                         script.ChangeId = reader.GetInt32(0);
@@ -170,13 +170,13 @@ SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
                     // Update existing entry.
                     var sql = string.Format(
                         CultureInfo.InvariantCulture,
-                        "UPDATE {0} SET Folder = @1, ScriptNumber = @2, FileName = @3, {1}CompleteDate = {2}, AppliedBy = {3}, Status = @4, Output = @5 WHERE ChangeId = @6",
+                        "UPDATE {0} SET Folder = @1, ScriptNumber = @2, ScriptName = @3, {1}CompleteDate = {2}, AppliedBy = {3}, ScriptStatus = @4, ScriptOutput = @5 WHERE ChangeId = @6",
                         this.changeLogTableName,
                         status == ScriptStatus.Started ? string.Format(CultureInfo.InvariantCulture, "StartDate = {0}, ", this.syntax.CurrentTimestamp) : string.Empty,
                         completeDateValue,
                         this.syntax.CurrentUser);
 
-                    this.queryExecuter.Execute(sql, script.Folder, script.ScriptNumber, script.FileName, (int)status, output ?? string.Empty, script.ChangeId);
+                    this.queryExecuter.Execute(sql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output ?? string.Empty, script.ChangeId);
                 }
             }
             catch (DbException e)

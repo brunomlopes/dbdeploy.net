@@ -2,12 +2,12 @@ CREATE TABLE $(QualifiedTableName) (
 	ChangeId INT NOT NULL AUTO_INCREMENT,
 	Folder VARCHAR(256) NOT NULL,
 	ScriptNumber SMALLINT NOT NULL,
-	FileName VARCHAR(512) NOT NULL,
+	ScriptName VARCHAR(512) NOT NULL,
 	StartDate DATETIME NOT NULL,
 	CompleteDate DATETIME NULL,
 	AppliedBy VARCHAR(128) NOT NULL,
-	Status TINYINT NOT NULL,
-	Output TEXT NULL
+	ScriptStatus TINYINT NOT NULL,
+	ScriptOutput TEXT NOT NULL
 );
 
 ALTER TABLE $(QualifiedTableName) ADD CONSTRAINT PK_$(TableName) PRIMARY KEY (ChangeId);

@@ -37,7 +37,7 @@ namespace Dbdeploy.Powershell.Commands
                 .Select(script => new
                     {
                         Id = script.ScriptNumber,
-                        Description = descriptionPrettyPrinter.Format(script.FileName),
+                        Description = descriptionPrettyPrinter.Format(script.ScriptName),
                         File = script.FileInfo
                     });
 

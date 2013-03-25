@@ -84,7 +84,7 @@
                         success = sqlCmdExecutor.ExecuteFile(script.FileInfo, output);
                         if (!success)
                         {
-                            throw new DbDeployException(string.Format(CultureInfo.InvariantCulture, "Script '{0}' failed.", script.FileName)); 
+                            throw new DbDeployException(string.Format(CultureInfo.InvariantCulture, "Script '{0}' failed.", script)); 
                         }
                     }
                     finally 
