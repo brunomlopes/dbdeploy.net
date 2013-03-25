@@ -36,7 +36,24 @@ dbdeploy.exe --connectionstring="Server=.\SQL2012;Database=DBDEPLOY;Trusted_Conn
 
 The `scriptdirectory` is the location on the file system where a set of numbered scripts to run are located.
 
-## Example Output
+### Script Directory Structure
+
+The recommended structure for scripts is a folder that contains multiple sub-folders by application versions number.  Then inside of these folder are scripts prefixed with a number that represents the order they should be applied. An example is shown below:
+
+<pre>
+Scripts/
+    v1.0/
+        001.Initial Schema Creation.sql	
+        002.Add Customer Table.sql
+        003.Add Geographic Data.sql
+    v1.2/
+        001.Add Product Table.sql	
+        002.Add Stock Column to Product Table.sql
+</pre>
+
+The versioned folder system supports up to the standard four numbers in .NET (Example: 1.0.0.0).  All scripts will be executed by version order then script number order.
+
+### Example Output
 
 <pre>
 ==========================================================
@@ -84,7 +101,7 @@ Done adding customers
 All scripts applied successfully.
 </pre>
 
-## All Command Options
+### All Command Options
 <pre>
   -d, --dbms=VALUE           DBMS type ('mssql', 'mysql' or 'ora')
   -c, --connectionstring=VALUE
@@ -142,23 +159,6 @@ Unable to create object 'Customer'.
 
 The table already exists.
 </pre>
-
-## Script Directory Structure
-
-The recommended structure for scripts is a folder that contains multiple sub-folders by application versions number.  Then inside of these folder are scripts prefixed with a number that represents the order they should be applied. An example is shown below:
-
-<pre>
-Scripts/
-    v1.0/
-        001.Initial Schema Creation.sql	
-        002.Add Customer Table.sql
-        003.Add Geographic Data.sql
-    v1.2/
-        001.Add Product Table.sql	
-        002.Add Stock Column to Product Table.sql
-</pre>
-
-The versioned folder system supports up to the standard four numbers in .NET (Example: 1.0.0.0).  All scripts will be executed by version order then script number order.
 
 # Change Log Table
 
@@ -221,9 +221,7 @@ The XML file can contain multiple runs and change sets as shown below:
 
 Any path specified can be absolute, or relative to the location of the configuration file.
 
-# Additional Info
-
-## What About SSDT?
+# What About SSDT?
 
 Using SQL Server Developer Tools is still highly valuable with dbdeploy.NET.  It can be used to generate the change scripts in the following way:
 
@@ -237,6 +235,6 @@ Using SQL Server Developer Tools is still highly valuable with dbdeploy.NET.  It
 8. Check in the database project and the change scripts together.
 9. Now the next developer can get latest and make their changes.
 
-## Port
+# Additional Info
 
 dbdeploy.NET was originally ported from [dbdeploy](http://code.google.com/p/dbdeploy/).
