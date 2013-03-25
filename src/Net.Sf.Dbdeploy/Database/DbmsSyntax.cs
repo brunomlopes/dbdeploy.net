@@ -1,5 +1,6 @@
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.Globalization;
     using System.IO;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -91,6 +92,35 @@ namespace Net.Sf.Dbdeploy.Database
             }
 
             return info;
+        }
+
+        /// <summary>
+        /// Gets the syntax for checking if a table exists.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns>SQL for checking if a table exists.</returns>
+        public virtual string TableExists(string tableName)
+        {
+            // Use correct syntax for with and without schema.
+            string syntax;
+            var tableInfo = this.GetTableInfo(tableName);
+            if (!string.IsNullOrWhiteSpace(tableInfo.Schema))
+            {
+                syntax = string.Format(CultureInfo.InvariantCulture,
+@"SELECT table_schema 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = '{0}' 
+AND  TABLE_NAME = '{1}'", tableInfo.Schema, tableInfo.TableName);
+            }
+            else
+            {
+                syntax = string.Format(CultureInfo.InvariantCulture,
+@"SELECT table_schema 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_NAME = '{0}'", tableName);
+            }
+
+            return syntax;
         }
 
         /// <summary>

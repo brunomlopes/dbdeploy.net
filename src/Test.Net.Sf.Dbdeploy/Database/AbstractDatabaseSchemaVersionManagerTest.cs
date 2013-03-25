@@ -15,13 +15,16 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
 
+        private IDbmsSyntax syntax;
+
         [SetUp]
         protected void SetUp()
         {
             var factory = new DbmsFactory(Dbms, ConnectionString);
             var executer = new QueryExecuter(factory);
 
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), TableName, false);
+            this.syntax = factory.CreateDbmsSyntax();
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName, false);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
@@ -84,10 +87,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="tableName">Name of the table.</param>
         public void AssertTableExists(string tableName)
         {
-            var schema = this.ExecuteScalar<string>(string.Format(@"
-SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = '{0}'", tableName));
+            var schema = this.ExecuteScalar<string>(this.syntax.TableExists(tableName));
 
             Assert.IsNotEmpty(schema, string.Format("{0} table was not created.", tableName));
         }

@@ -1,9 +1,7 @@
 namespace Net.Sf.Dbdeploy
 {
     using System;
-    using System.IO;
 
-    using Net.Sf.Dbdeploy.Configuration;
     using Net.Sf.Dbdeploy.Exceptions;
 
     public class CommandLine

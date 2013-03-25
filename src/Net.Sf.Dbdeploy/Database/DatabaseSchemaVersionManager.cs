@@ -103,10 +103,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void VerifyChangeLogTableExists(bool autoCreate)
         {
             bool changeLogTableExists;
-            using (var reader = this.queryExecuter.ExecuteQuery(
-@"SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = @1", this.changeLogTableName))
+            using (var reader = this.queryExecuter.ExecuteQuery(this.syntax.TableExists(this.changeLogTableName)))
             {
                 changeLogTableExists = reader.Read();
             }

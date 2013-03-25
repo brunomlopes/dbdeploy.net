@@ -42,5 +42,12 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="tableName">Name of the table.</param>
         /// <returns>Table name and schema.</returns>
         TableInfo GetTableInfo(string tableName);
+
+        /// <summary>
+        /// Gets the syntax for checking if a table exists.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns>SQL for checking if a table exists.</returns>
+        string TableExists(string tableName);
     }
 }

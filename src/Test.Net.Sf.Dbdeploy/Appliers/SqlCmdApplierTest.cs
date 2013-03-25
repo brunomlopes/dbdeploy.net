@@ -109,10 +109,8 @@
         /// <param name="name">The name of the table.</param>
         private void AssertTableExists(string name)
         {
-            var schema = this.ExecuteScalar<string>(@"
-SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = '{0}'", name);
+            var syntax = new MsSqlDbmsSyntax();
+            var schema = this.ExecuteScalar<string>(syntax.TableExists(name));
 
             Assert.IsNotEmpty(schema, "'{0}' table was not created.", name);            
         }

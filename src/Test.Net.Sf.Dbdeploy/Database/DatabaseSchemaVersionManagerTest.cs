@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Globalization;
     using System.Linq;
 
     using Moq;
@@ -43,12 +44,13 @@
             this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
 
             this.syntax = new Mock<IDbmsSyntax>();
+            this.syntax.Setup(s => s.TableExists(It.IsAny<string>()))
+                .Returns<string>(t => string.Format(CultureInfo.InvariantCulture,
+@"SELECT table_schema 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_NAME = '{0}'", t));
 
             this.executedQueries = new List<string>();
-            this.queryExecuter
-                .Setup(e => e.ExecuteQuery(It.IsAny<string>(), It.IsAny<object[]>()))
-                .Returns(this.expectedResultSet.Object)
-                .Callback<string, object[]>((q, a) => this.executedQueries.Add(q));
 
             var checkForChangeLogDataReader = new Mock<IDataReader>();
             checkForChangeLogDataReader
@@ -56,8 +58,13 @@
                 .Returns(true);
 
             this.queryExecuter
-                .Setup(e => e.ExecuteQuery(It.Is<string>(v => v.Contains("INFORMATION_SCHEMA")), It.Is<string>(s => s.Equals(changeLogTableName))))
+                .Setup(e => e.ExecuteQuery(It.Is<string>(v => v.Contains("INFORMATION_SCHEMA"))))
                 .Returns(() => checkForChangeLogDataReader.Object);
+
+            this.queryExecuter
+                .Setup(e => e.ExecuteQuery(It.Is<string>(v => !v.Contains("INFORMATION_SCHEMA")), It.IsAny<object[]>()))
+                .Returns(this.expectedResultSet.Object)
+                .Callback<string, object[]>((q, a) => this.executedQueries.Add(q));
 
             this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName, true);
         }
