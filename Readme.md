@@ -223,4 +223,20 @@ Any path specified can be absolute, or relative to the location of the configura
 
 # Additional Info
 
+## What About SSDT?
+
+Using SQL Server Developer Tools is still highly valuable with dbdeploy.NET.  It can be used to generate the change scripts in the following way:
+
+1. Setup a SQL Server Database project.
+2. Pull latest from source control.
+3. Run dbdeploy.NET to make sure your database instance is up to the latest version.
+4. Make your changes in SQL Server Management Studio.
+5. Run a SQL Compare from your database project to your database instance.
+6. Save the script from the compare as your change script.
+7. Apply the changes from the SQL Compare to your database project.
+8. Check in the database project and the change scripts together.
+9. Now the next developer can get latest and make their changes.
+
+## Port
+
 dbdeploy.NET was originally ported from [dbdeploy](http://code.google.com/p/dbdeploy/).
