@@ -102,6 +102,7 @@
       <Word>mssql</Word>
       <Word>mysql</Word>
       <Word>ora</Word>
+      <Word>dbo</Word>
     </Recognized>
   </Words>
 </Dictionary>

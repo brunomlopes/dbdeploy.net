@@ -52,11 +52,15 @@ namespace Net.Sf.Dbdeploy.Database
 			return new OracleConnection(CONNECTION_STRING);
 		}
 
-		protected override void EnsureTableDoesNotExist()
+        /// <summary>
+        /// Ensures the table does not exist.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+		protected override void EnsureTableDoesNotExist(string tableName)
 		{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.Append("Begin");
-			commandBuilder.AppendFormat(" execute immediate 'DROP TABLE {0}';", TableName);
+			commandBuilder.AppendFormat(" execute immediate 'DROP TABLE {0}';", tableName);
 			commandBuilder.Append(" Exception when others then null;");
 			commandBuilder.Append(" End;");
 
@@ -66,7 +70,7 @@ namespace Net.Sf.Dbdeploy.Database
 		[Test]
 		public void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
 		{
-			EnsureTableDoesNotExist();
+			this.EnsureTableDoesNotExist();
 			CreateTable();
 			InsertRowIntoTable(3);
 			var changeNumbers = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());

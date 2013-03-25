@@ -34,5 +34,16 @@ namespace Net.Sf.Dbdeploy.Database
         {
             get { return "user_name()"; }
         }
+
+        /// <summary>
+        /// Gets the default schema for a table.
+        /// </summary>
+        /// <value>
+        /// Default schema.
+        /// </value>
+        public override string DefaultSchema
+        {
+            get { return "dbo"; }
+        }
     }
 }

@@ -41,31 +41,10 @@ namespace Net.Sf.Dbdeploy.Database
 			get { return DBMS; }
     	}
 
-    	protected override void EnsureTableDoesNotExist()
-        {
-            ExecuteSql(string.Format(
-                CultureInfo.InvariantCulture,
-				"IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[{0}]') AND type in (N'U')) DROP TABLE [{0}]", 
-                TableName));
-        }
-
-    	protected override IDbConnection GetConnection()
-    	{
-			return new SqlConnection(CONNECTION_STRING);
-    	}
-
-        protected override void InsertRowIntoTable(int i)
-        {
-			ExecuteSql("INSERT INTO " + TableName
-                       + " (Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, FileName, Status) VALUES ( "
-                       + "'" + FOLDER + "', " + i
-                       + ", getdate(), getdate(), user_name(), 'Unit test', 1)");
-        }
-
-    	[Test]
+        [Test]
     	public void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
     	{
-			EnsureTableDoesNotExist();
+			this.EnsureTableDoesNotExist();
 			CreateTable();
     		InsertRowIntoTable(3);
 			var changeNumbers = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
@@ -96,6 +75,57 @@ namespace Net.Sf.Dbdeploy.Database
         public override void TestShouldCreateChangeLogTableWhenDoesNotExist()
         {
             base.TestShouldCreateChangeLogTableWhenDoesNotExist();
+        }
+
+        /// <summary>
+        /// Tests that <see cref="DatabaseSchemaVersionManager" /> can create a change log table under a specified schema.
+        /// </summary>
+        [Test]
+        public void TestShouldHandleCreatingChangeLogTableWithSchema()
+        {
+            this.EnsureTableDoesNotExist("log.Installs");
+
+            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            var executer = new QueryExecuter(factory);
+            var databaseSchemaManager = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), "log.Installs", true);
+
+            // Table should be created when attempted now; if table does not exist.
+            databaseSchemaManager.GetAppliedChanges();
+
+            this.AssertTableExists("log.Installs");
+        }
+
+        /// <summary>
+        /// Ensures the table does not exist.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        protected override void EnsureTableDoesNotExist(string tableName)
+        {
+            var syntax = new MsSqlDbmsSyntax();
+            var tableInfo = syntax.GetTableInfo(tableName);
+            this.ExecuteSql(string.Format(
+                CultureInfo.InvariantCulture,
+@"IF (EXISTS (SELECT * 
+    FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_SCHEMA = '{0}' 
+    AND  TABLE_NAME = '{1}'))
+BEGIN
+    DROP Table {0}.{1}
+END", 
+                tableInfo.Schema, tableInfo.TableName));
+        }
+
+        protected override IDbConnection GetConnection()
+        {
+            return new SqlConnection(CONNECTION_STRING);
+        }
+
+        protected override void InsertRowIntoTable(int i)
+        {
+            this.ExecuteSql("INSERT INTO " + TableName
+                       + " (Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, FileName, Status) VALUES ( "
+                       + "'" + FOLDER + "', " + i
+                       + ", getdate(), getdate(), user_name(), 'Unit test', 1)");
         }
     }
 }

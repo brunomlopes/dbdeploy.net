@@ -2,6 +2,7 @@ namespace Net.Sf.Dbdeploy.Database
 {
     using System.IO;
     using System.Reflection;
+    using System.Text.RegularExpressions;
 
     using NVelocity.Exception;
 
@@ -11,9 +12,24 @@ namespace Net.Sf.Dbdeploy.Database
     public abstract class DbmsSyntax : IDbmsSyntax  
     {
         /// <summary>
-        /// The change log table token to replace in the script.
+        /// The Regex for removing the schema name from a table.
         /// </summary>
-        private const string ChangeLogTableToken = "TABLE_NAME";
+        public static readonly Regex SchemaRegex = new Regex(@"^(?<Schema>.*?)\.", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// The change log table token to replace in the script without any schema.
+        /// </summary>
+        private const string ChangeLogTableToken = "$(TableName)";
+
+        /// <summary>
+        /// The change log fully qualified table name token, including schema (dbo.ChangeLog).
+        /// </summary>
+        private const string ChangeLogQualifiedTableNameToken = "$(QualifiedTableName)";
+
+        /// <summary>
+        /// The change log schema name token to replace.
+        /// </summary>
+        private const string ChangeLogSchemaNameToken = "$(SchemaName)";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbmsSyntax" /> class.
@@ -22,6 +38,18 @@ namespace Net.Sf.Dbdeploy.Database
         protected DbmsSyntax(string dbms)
         {
             this.Dbms = dbms;
+        }
+
+        /// <summary>
+        /// Gets the default schema for a table.
+        /// </summary>
+        /// <value>Default schema.</value>
+        public virtual string DefaultSchema
+        {
+            get
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -44,6 +72,26 @@ namespace Net.Sf.Dbdeploy.Database
         /// The DBMS type (mssql, mysql, ora).
         /// </summary>
         public string Dbms { get; private set; }
+
+        /// <summary>
+        /// Gets the table name and schema.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns>Table name and schema.</returns>
+        public TableInfo GetTableInfo(string tableName)
+        {
+            var info = new TableInfo { TableName = tableName, Schema = this.DefaultSchema };
+
+            // Splite schema out if it is specified.
+            var match = SchemaRegex.Match(tableName);
+            if (match.Success)
+            {
+                info.Schema = match.Groups["Schema"].Value;
+                info.TableName = SchemaRegex.Replace(tableName, string.Empty);
+            }
+
+            return info;
+        }
 
         /// <summary>
         /// Gets the Change Log Table create script.
@@ -71,7 +119,12 @@ namespace Net.Sf.Dbdeploy.Database
                 }
             }
 
-            return script.Replace(ChangeLogTableToken, tableName);
+            var tableInfo = GetTableInfo(tableName);
+
+            return script
+                .Replace(ChangeLogQualifiedTableNameToken, tableName)
+                .Replace(ChangeLogTableToken, tableInfo.TableName)
+                .Replace(ChangeLogSchemaNameToken, tableInfo.Schema);
         }
     }
 }

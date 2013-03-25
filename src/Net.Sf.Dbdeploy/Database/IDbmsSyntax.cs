@@ -22,6 +22,12 @@ namespace Net.Sf.Dbdeploy.Database
         string CurrentUser { get; }
 
         /// <summary>
+        /// Gets the default schema for a table.
+        /// </summary>
+        /// <value>Default schema.</value>
+        string DefaultSchema { get; }
+
+        /// <summary>
         /// Gets the Change Log Table create script.
         /// </summary>
         /// <param name="tableName">Name of the change log table.</param>
@@ -29,5 +35,12 @@ namespace Net.Sf.Dbdeploy.Database
         /// Script to create a Change Log table for the current DBMS.
         /// </returns>
         string CreateChangeLogTable(string tableName);
+
+        /// <summary>
+        /// Gets the table name and schema.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns>Table name and schema.</returns>
+        TableInfo GetTableInfo(string tableName);
     }
 }

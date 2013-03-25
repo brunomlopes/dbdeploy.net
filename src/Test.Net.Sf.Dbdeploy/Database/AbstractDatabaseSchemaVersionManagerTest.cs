@@ -26,7 +26,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
         {
-            EnsureTableDoesNotExist();
+            this.EnsureTableDoesNotExist();
             CreateTable();
             InsertRowIntoTable(5);
 
@@ -37,7 +37,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual void TestThrowsWhenDatabaseTableDoesNotExist()
         {
-            EnsureTableDoesNotExist();
+            this.EnsureTableDoesNotExist();
 
             try
             {
@@ -75,23 +75,36 @@ namespace Net.Sf.Dbdeploy.Database
             // Table should be created when attempted now; if table does not exist.
             databaseSchemaVersion.GetAppliedChanges();
 
-            string schema = this.ExecuteScalar<string>(@"
+            this.AssertTableExists("ChangeLog");
+        }
+
+        /// <summary>
+        /// Asserts the table exists.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        public void AssertTableExists(string tableName)
+        {
+            var schema = this.ExecuteScalar<string>(string.Format(@"
 SELECT table_schema 
 FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = 'ChangeLog'");
+WHERE TABLE_NAME = '{0}'", tableName));
 
-            Assert.IsNotEmpty(schema, "ChangeLog table was not created.");
+            Assert.IsNotEmpty(schema, string.Format("{0} table was not created.", tableName));
         }
 
         public virtual void TestShouldReturnEmptySetWhenTableHasNoRows()
         {
-            EnsureTableDoesNotExist();
+            this.EnsureTableDoesNotExist();
             CreateTable();
 
             Assert.AreEqual(0, databaseSchemaVersion.GetAppliedChanges().Count);
         }
 
-        protected virtual void EnsureTableDoesNotExist()
+        /// <summary>
+        /// Ensures the table does not exist.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        protected virtual void EnsureTableDoesNotExist(string tableName)
         {
             ExecuteSql("DROP TABLE " + TableName);
         }
@@ -133,6 +146,14 @@ WHERE TABLE_NAME = 'ChangeLog'");
         protected void CreateTable()
         {
             this.databaseSchemaVersion.VerifyChangeLogTableExists(true);            
+        }
+
+        /// <summary>
+        /// Ensures the change log table does not exist.
+        /// </summary>
+        public void EnsureTableDoesNotExist()
+        {
+            this.EnsureTableDoesNotExist(TableName);
         }
 
         protected abstract string ConnectionString { get; }
