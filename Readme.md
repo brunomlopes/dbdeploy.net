@@ -61,17 +61,17 @@ dbdeploy.net 2.0.0.0
 Reading change scripts from directory 'C:\MyProject\Database\Scripts'...
 
 Changes currently applied to database:
-  2.0.0.0       1, 2
+  v2.0.0.0       1, 2
 Scripts available:
-  2.0.0.0       1..3
+  v2.0.0.0       1..3
   v2.0.10.0     1..3
 To be applied:
-  2.0.0.0       3
+  v2.0.0.0       3
   v2.0.10.0     1..3
 
 Applying change scripts...
 
-2.0.0.0/003.Add Sold Column.sql (3)
+v2.0.0.0/003.Add Sold Column.sql (3)
 ----------------------------------------------------------
 Adding nullable Sold Column
 
