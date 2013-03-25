@@ -118,6 +118,31 @@ All scripts applied successfully.
       --config=VALUE         configuration file to use for all settings.
 </pre>
 
+### Re-running with Failed Scripts
+
+When a script has failed to execute successfully, it will be tracked in the change log table with a status of 1 (Failure).  On subsequent runs, dbdeploy.NET will show an error, and the output from the previous run until one of the following is done:
+
+* `--forceupdate=true` is specified on the command parameters.
+* The failed change log entry is set to a status of 3 (Resolved) in the database.
+
+Example output when a run has failed is shown below:
+
+<pre>
+==========================================================
+dbdeploy.net 2.0.0.0
+Reading change scripts from directory 'C:\MyProject\Database\Scripts'...
+
+The script 'v2.0.10.0/001.Add Customer Table.sql (1)' failed to complete
+on a previous run.
+You must update the status to Resolved (2), or force updates.
+
+Ouput from the previous run
+----------------------------------------------------------
+Unable to create object 'Customer'.
+
+The table already exists.
+</pre>
+
 ## Script Directory Structure
 
 The recommended structure for scripts is a folder that contains multiple sub-folders by application versions number.  Then inside of these folder are scripts prefixed with a number that represents the order they should be applied. An example is shown below:
