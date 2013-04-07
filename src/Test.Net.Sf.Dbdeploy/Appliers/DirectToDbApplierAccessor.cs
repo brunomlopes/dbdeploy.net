@@ -1,9 +1,11 @@
-﻿using System.IO;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Scripts;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System.IO;
+    using System.Text;
+
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Scripts;
+
     internal class DirectToDbApplierAccessor : DirectToDbApplier
     {
         public DirectToDbApplierAccessor(
@@ -15,14 +17,14 @@ namespace Net.Sf.Dbdeploy.Appliers
         {
         }
         
-        public new void ApplyChangeScript(ChangeScript script)
+        public new void ApplyChangeScript(ChangeScript script, StringBuilder output)
         {
-            base.ApplyChangeScript(script);
+            base.ApplyChangeScript(script, output);
         }
 
-        public new void InsertToSchemaVersionTable(ChangeScript changeScript)
+        public new void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output)
         {
-            base.InsertToSchemaVersionTable(changeScript);
+            base.RecordScriptStatus(changeScript, status, output);
         }
     }
 }

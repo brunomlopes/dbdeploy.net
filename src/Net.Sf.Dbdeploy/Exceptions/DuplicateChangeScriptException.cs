@@ -1,7 +1,7 @@
-using System;
-
 namespace Net.Sf.Dbdeploy.Exceptions
 {
+    using System;
+
     public class DuplicateChangeScriptException : DbDeployException
     {
         public DuplicateChangeScriptException(string message, Exception inner) 

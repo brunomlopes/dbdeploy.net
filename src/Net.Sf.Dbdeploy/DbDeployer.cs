@@ -1,51 +1,25 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using Net.Sf.Dbdeploy.Appliers;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-using System.Text;
-
-namespace Net.Sf.Dbdeploy
+﻿namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Text;
+
+    using Net.Sf.Dbdeploy.Appliers;
+    using Net.Sf.Dbdeploy.Configuration;
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
+
+    /// <summary>
+    /// Main class for running database deployment.
+    /// </summary>
     public class DbDeployer
     {
-        public DbDeployer()
-        {
-            this.Encoding = Encoding.UTF8;
-            this.LineEnding = Database.LineEnding.Platform;
-            this.ChangeLogTableName = "changelog";
-            this.Delimiter = ";";
-            this.DelimiterType = new NormalDelimiter();
-        }
-        
-        public string Dbms { get; set; }
-
-        public string ConnectionString { get; set; }
-
-        public DirectoryInfo ScriptDirectory { get; set; }
-
-        public FileInfo OutputFile { get; set; }
-
-        public FileInfo UndoOutputFile { get; set; }
-
-        public Encoding Encoding { get; set; }
-
-        public string LineEnding { get; set; }
-
-        public int? LastChangeToApply { get; set; }
-
-        public string ChangeLogTableName { get; set; }
-
-        public string Delimiter { get; set; }
-
-        public IDelimiterType DelimiterType  { get; set; }
-
-        public DirectoryInfo TemplateDir { get; set; }
-
-        public TextWriter InfoWriter { get; set; }
-
+        /// <summary>
+        /// Generates the welcome string.
+        /// </summary>
+        /// <returns>Welcome message.</returns>
         public string GenerateWelcomeString()
         {
             Version version = Assembly.GetAssembly(this.GetType()).GetName().Version;
@@ -53,109 +27,148 @@ namespace Net.Sf.Dbdeploy
             return "dbdeploy.net " + version;
         }
 
-        public void Go()
+        /// <summary>
+        /// Executes the a database deployment with the specified config.
+        /// </summary>
+        /// <param name="config">The config.</param>
+        /// <param name="infoWriter">The info writer.</param>
+        /// <exception cref="System.InvalidOperationException">SQLCMD mode can only be applied against an mssql database.</exception>
+        public void Execute(DbDeployConfig config, TextWriter infoWriter)
         {
-            this.Validate();
+            this.Validate(config, infoWriter);
 
-            this.InfoWriter.WriteLine(this.GenerateWelcomeString());
-            
-            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            infoWriter.WriteLine();
+            infoWriter.WriteLine("==========================================================");
+            infoWriter.WriteLine(this.GenerateWelcomeString());
+
+            var factory = new DbmsFactory(config.Dbms, config.ConnectionString);
             
             var dbmsSyntax = factory.CreateDbmsSyntax();
 
-            QueryExecuter queryExecuter = new QueryExecuter(factory);
+            var queryExecuter = new QueryExecuter(factory);
 
-            var databaseSchemaVersionManager =
-                    new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, this.ChangeLogTableName);
+            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName, config.AutoCreateChangeLogTable);
 
-            var scanner = new DirectoryScanner(this.InfoWriter, this.Encoding);
+            var scanner = new DirectoryScanner(infoWriter, config.Encoding);
 
-            var changeScriptRepository =
-                    new ChangeScriptRepository(scanner.GetChangeScriptsForDirectory(this.ScriptDirectory));
+            var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScriptsForDirectory(config.ScriptDirectory));
 
             IChangeScriptApplier doScriptApplier;
             TextWriter doWriter = null;
+            QueryExecuter applierExecutor = null;
 
-            if (this.OutputFile != null) 
+            if (config.OutputFile != null) 
             {
-                doWriter = new StreamWriter(this.OutputFile.OpenWrite(), this.Encoding);
+                doWriter = new StreamWriter(config.OutputFile.OpenWrite(), config.Encoding);
 
                 doScriptApplier = new TemplateBasedApplier(
-                    doWriter, 
-                    this.Dbms, 
-                    this.ChangeLogTableName, 
-                    this.Delimiter, 
-                    this.DelimiterType, 
-                    this.TemplateDir);
-            } 
+                    doWriter,
+                    config.Dbms,
+                    config.ChangeLogTableName,
+                    config.Delimiter,
+                    config.DelimiterType,
+                    config.TemplateDirectory);
+            }
+            else if (config.UseSqlCmd)
+            {
+                // Verify database is MSSQL.
+                if (!string.Equals(config.Dbms, "mssql", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new InvalidOperationException("SQLCMD mode can only be applied against an mssql database.");
+                }
+
+                doScriptApplier = new SqlCmdApplier(config.ConnectionString, databaseSchemaVersionManager, infoWriter);
+            }
             else 
             {
-                QueryStatementSplitter splitter = new QueryStatementSplitter
+                var splitter = new QueryStatementSplitter
                 {
-                    Delimiter = this.Delimiter,
-                    DelimiterType = this.DelimiterType,
-                    LineEnding = this.LineEnding,
+                    Delimiter = config.Delimiter,
+                    DelimiterType = config.DelimiterType,
+                    LineEnding = config.LineEnding,
                 };
 
+                // Do not share query executor between schema manager and applier, since a failure in one will effect the other.
+                applierExecutor = new QueryExecuter(factory);
                 doScriptApplier = new DirectToDbApplier(
-                    queryExecuter, 
+                    applierExecutor, 
                     databaseSchemaVersionManager, 
                     splitter, 
-                    this.InfoWriter);
+                    infoWriter);
             }
 
             IChangeScriptApplier undoScriptApplier = null;
             TextWriter undoWriter = null;
 
-            if (this.UndoOutputFile != null) 
+            if (config.UndoOutputFile != null) 
             {
-                undoWriter = new StreamWriter(this.UndoOutputFile.OpenWrite(), this.Encoding);
+                undoWriter = new StreamWriter(config.UndoOutputFile.OpenWrite(), config.Encoding);
 
                 undoScriptApplier = new UndoTemplateBasedApplier(
-                    undoWriter, 
-                    this.Dbms, 
-                    this.ChangeLogTableName, 
-                    this.Delimiter, 
-                    this.DelimiterType, 
-                    this.TemplateDir);
+                    undoWriter,
+                    config.Dbms,
+                    config.ChangeLogTableName,
+                    config.Delimiter,
+                    config.DelimiterType,
+                    config.TemplateDirectory);
             }
 
             try
             {
-                Controller controller = new Controller(
+                var controller = new Controller(
                     changeScriptRepository, 
                     databaseSchemaVersionManager, 
                     doScriptApplier, 
                     undoScriptApplier, 
-                    this.InfoWriter);
+                    infoWriter);
 
-                controller.ProcessChangeScripts(this.LastChangeToApply);
+                controller.ProcessChangeScripts(config.LastChangeToApply, config.ForceUpdate);
 
                 queryExecuter.Close();
+
+                if (applierExecutor != null)
+                {
+                    applierExecutor.Close();
+                }
             }
             finally
             {
                 if (doWriter != null)
+                {
                     doWriter.Dispose();
+                }
 
                 if (undoWriter != null)
+                {
                     undoWriter.Dispose();
+                }
             }
         }
 
-        private void Validate() 
+        /// <summary>
+        /// Validates the specified config.
+        /// </summary>
+        /// <param name="config">The config.</param>
+        /// <param name="infoWriter">The info writer.</param>
+        /// <exception cref="UsageException">Script directory must point to a valid directory</exception>
+        private void Validate(DbDeployConfig config, TextWriter infoWriter)
         {
-            this.CheckForRequiredParameter(this.Dbms, "dbms");
-            this.CheckForRequiredParameter(this.ConnectionString, "connectionString");
-            this.CheckForRequiredParameter(this.ScriptDirectory, "dir");
-            this.CheckForRequiredParameter(this.InfoWriter, "infoWriter");
+            this.CheckForRequiredParameter(config.Dbms, "dbms");
+            this.CheckForRequiredParameter(config.ConnectionString, "connectionString");
+            this.CheckForRequiredParameter(config.ScriptDirectory, "dir");
+            this.CheckForRequiredParameter(infoWriter, "infoWriter");
 
-            if (this.ScriptDirectory == null || !this.ScriptDirectory.Exists) 
+            if (config.ScriptDirectory == null || !config.ScriptDirectory.Exists) 
             {
-                throw new UsageException("Script directory must point to a valid directory");
+                throw new UsageException(string.Format("The directory '{0}' does not exist.\nScript directory must point to a valid directory", config.ScriptDirectory));
             }
         }
 
+        /// <summary>
+        /// Checks for required parameter.
+        /// </summary>
+        /// <param name="parameterValue">The parameter value.</param>
+        /// <param name="parameterName">Name of the parameter.</param>
         private void CheckForRequiredParameter(string parameterValue, string parameterName) 
         {
             if (string.IsNullOrEmpty(parameterValue))
@@ -164,6 +177,11 @@ namespace Net.Sf.Dbdeploy
             }
         }
 
+        /// <summary>
+        /// Checks for required parameter.
+        /// </summary>
+        /// <param name="parameterValue">The parameter value.</param>
+        /// <param name="parameterName">Name of the parameter.</param>
         private void CheckForRequiredParameter(object parameterValue, string parameterName) 
         {
             if (parameterValue == null) 

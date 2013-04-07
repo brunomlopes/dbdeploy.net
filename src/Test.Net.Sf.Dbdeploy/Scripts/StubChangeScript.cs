@@ -4,8 +4,8 @@
     {
         private readonly string changeContents;
 
-        public StubChangeScript(int changeNumber, string description, string changeContents)
-            : base(changeNumber, description)
+        public StubChangeScript(int changeNumber, string fileName, string changeContents)
+            : base("v1.0", changeNumber, fileName)
         {
             this.changeContents = changeContents;
         }

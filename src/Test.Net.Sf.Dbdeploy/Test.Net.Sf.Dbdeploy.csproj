@@ -12,7 +12,7 @@
     <AssemblyName>Test.Net.Sf.Dbdeploy</AssemblyName>
     <StartupObject>
     </StartupObject>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -45,6 +45,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,6 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,6 +67,7 @@
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -115,12 +118,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Appliers\SqlCmdApplierTest.cs" />
     <Compile Include="Appliers\DirectToDbApplierAccessor.cs" />
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
-    <Compile Include="Console\ParserTest.cs" />
+    <Compile Include="Console\OptionsManagerTest.cs" />
+    <Compile Include="ControllerTest.cs" />
+    <Compile Include="UniqueChangeTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\QueryStatementSplitterTest.cs" />
     <Compile Include="Database\ScriptGenerationTest.cs" />
+    <Compile Include="Database\SqlCmd\ConnectionStringParserTest.cs" />
     <Compile Include="NullWriter.cs" />
     <Compile Include="Appliers\TemplateBaseApplierTest.cs" />
     <Compile Include="Database\AbstractDatabaseSchemaVersionManagerTest.cs" />
@@ -134,9 +141,10 @@
     <Compile Include="PrettyPrinterTest.cs" />
     <Compile Include="Scripts\ChangeScriptRepositoryTest.cs" />
     <Compile Include="Scripts\ChangeScriptTest.cs" />
+    <Compile Include="Scripts\DirectoryScannerTest.cs" />
     <Compile Include="Scripts\FilenameParserTest.cs" />
     <Compile Include="Scripts\StubChangeScript.cs" />
-    <Compile Include="TextXmlConfiguration.cs" />
+    <Compile Include="Configuration\DbDeployConfigurationManagerTest.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)dbproviders.xml" "$(TargetDir)"</PostBuildEvent>
@@ -165,6 +173,41 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Mocks\DbDeploy.MultipleChangeSets.config.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\DbDeploy.config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Mocks\Failures\1.SQLCMD Add Customer Table.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Failures\2.SQLCMD Add Non-Existent Table Data.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Failures\3.SQLCMD Add Customer Data.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\2.0.0.0\8.Create Product Table.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\2.0.0.0\09.Add Product Data.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\2.0.0.0\10.Add Sold Column.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\v2.0.10.0\1.SQLCMD Add Customer Table.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\v2.0.10.0\2.SQLCMD Add Email Column Table.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Versioned\v2.0.10.0\3.SQLCMD Add Customer Data.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Database\ora_expected.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -174,6 +217,9 @@
     <Content Include="Resources\Database\mssql_expected.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mocks\Versioned\R1\" />
   </ItemGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

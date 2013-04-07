@@ -1,57 +1,92 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Globalization;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Common;
+    using System.Globalization;
+
+    using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
+
+    /// <summary>
+    /// Manages updating the change log table in the database, and retrieving applied changes.
+    /// </summary>
     public class DatabaseSchemaVersionManager : IAppliedChangesProvider
     {
+        /// <summary>
+        /// The query executer for getting and updating the change log table.
+        /// </summary>
         private readonly QueryExecuter queryExecuter;
 
+        /// <summary>
+        /// The change log table name.
+        /// </summary>
         private readonly string changeLogTableName;
 
+        /// <summary>
+        /// The syntax for the current Database Management System.
+        /// </summary>
         private readonly IDbmsSyntax syntax;
 
-        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, IDbmsSyntax syntax, string changeLogTableName)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseSchemaVersionManager" /> class.
+        /// </summary>
+        /// <param name="queryExecuter">The query executer.</param>
+        /// <param name="syntax">The syntax.</param>
+        /// <param name="changeLogTableName">Name of the change log table.</param>
+        /// <param name="autoCreateChangeLogTable">if set to <c>true</c> the change log table will automatically be created.</param>
+        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, IDbmsSyntax syntax, string changeLogTableName, bool autoCreateChangeLogTable)
         {
             this.syntax = syntax;
             this.queryExecuter = queryExecuter;
             this.changeLogTableName = changeLogTableName;
+            this.AutoCreateChangeLogTable = autoCreateChangeLogTable;
         }
 
-    	public virtual ICollection<int> GetAppliedChanges()
-    	{
-    	    using (IDataReader reader = queryExecuter.ExecuteQuery(@"
-SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = @1", changeLogTableName))
-            {
-                if(!reader.Read())
-                {
-                    throw new ChangelogTableDoesNotExistException(string.Format("No table found with name '{0}'.", changeLogTableName));
-                }
-            }
+        /// <summary>
+        /// Gets or sets a value indicating whether the change log table should be created if it does not exist.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if auto create change log table; otherwise, <c>false</c>.
+        /// </value>
+        public bool AutoCreateChangeLogTable { get; set; }
 
-            List<int> changeNumbers = new List<int>();
+        /// <summary>
+        /// Gets the applied changes from the database..
+        /// </summary>
+        /// <returns>List of applied changes.</returns>
+        /// <exception cref="SchemaVersionTrackingException">Could not retrieve change log from database because:  + e.Message</exception>
+        public virtual IList<ChangeEntry> GetAppliedChanges()
+        {
+            this.VerifyChangeLogTableExists(this.AutoCreateChangeLogTable);
+
+            var changes = new List<ChangeEntry>();
             try
             {
-                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT change_number FROM {0} ORDER BY change_number", this.changeLogTableName);
+                // Find all changes that are not resolved.
+                string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ChangeId, Folder, ScriptNumber, ScriptName, ScriptStatus, ScriptOutput FROM {0}", this.changeLogTableName);
                 
-                using (IDataReader reader = this.queryExecuter.ExecuteQuery(sql))
+                using (var reader = this.queryExecuter.ExecuteQuery(sql))
                 {
                     while (reader.Read())
                     {
-                        int changeNumber = Int32.Parse(reader.GetValue(0).ToString());
+                        var folder = GetValue<string>(reader, "Folder");
+                        var scriptNumber = GetValue<short>(reader, "ScriptNumber");
+                        var changeEntry = new ChangeEntry(folder, scriptNumber);
+                        changeEntry.ChangeId = GetValue<int>(reader, "ChangeId");
+                        changeEntry.ScriptName = GetValue<string>(reader, "ScriptName");
+                        changeEntry.Status = (ScriptStatus)GetValue<byte>(reader, "ScriptStatus");
+                        changeEntry.Output = GetValue<string>(reader, "ScriptOutput");
 
-						changeNumbers.Add(changeNumber);
+                        changes.Add(changeEntry);
                     }
                 }
 
-                return changeNumbers;
+                // Make sure everything is in correct ordering.
+                changes.Sort();
+
+                return changes;
             }
             catch (DbException e)
             {
@@ -60,31 +95,125 @@ WHERE TABLE_NAME = @1", changeLogTableName))
             }            
         }
 
-        public virtual string GetChangelogDeleteSql(ChangeScript script)
+        /// <summary>
+        /// Verifies the change log table exists.
+        /// </summary>
+        /// <param name="autoCreate">if set to <c>true</c> the table will be created if it does not exist.</param>
+        /// <exception cref="ChangelogTableDoesNotExistException">Thrown when the change log table is not found.</exception>
+        public void VerifyChangeLogTableExists(bool autoCreate)
         {
-            return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE change_number = {1}", this.changeLogTableName, script.GetId());
+            bool changeLogTableExists;
+            using (var reader = this.queryExecuter.ExecuteQuery(this.syntax.TableExists(this.changeLogTableName)))
+            {
+                changeLogTableExists = reader.Read();
+            }
+
+            // Create the change log table if it does not exist.
+            if (!changeLogTableExists)
+            {
+                if (autoCreate)
+                {
+                    this.CreateChangeLogTable();
+                }
+                else
+                {
+                    // If change log table does not exist and is not going to be created automatically, throw an exception.
+                    throw new ChangelogTableDoesNotExistException(string.Format("No table found with name '{0}'.", this.changeLogTableName));
+                }
+            }
         }
 
-        public virtual void RecordScriptApplied(ChangeScript script)
+        /// <summary>
+        /// Gets the SQL to delete a change log entry.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <returns>SQL to delete the change log entry.</returns>
+        public virtual string GetChangelogDeleteSql(ChangeScript script)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "DELETE FROM {0} WHERE Folder = '{1}' AND ScriptNumber = {2}", this.changeLogTableName, script.Folder, script.ScriptNumber);
+        }
+
+        /// <summary>
+        /// Records the script status.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <param name="status">The status.</param>
+        /// <param name="output">The output of the script.</param>
+        /// <exception cref="SchemaVersionTrackingException">Could not update change log because:  + e.Message</exception>
+        public virtual void RecordScriptStatus(ChangeScript script, ScriptStatus status, string output = null)
         {
             try
             {
-                string sql = string.Format(
-                    CultureInfo.InvariantCulture,
-                    "INSERT INTO {0} (change_number, complete_dt, applied_by, description) VALUES (@1, {1}, {2}, @2)", 
-                    this.changeLogTableName,
-                    this.syntax.GenerateTimestamp(),
-                    this.syntax.GenerateUser());
+                // Insert or update based on if there is a change ID.
+                // Update complete date for all but started.
+                var completeDateValue = status != ScriptStatus.Started ? this.syntax.CurrentTimestamp : "NULL";
+                if (script.ChangeId == 0)
+                {
+                    var sql = string.Format(
+                        CultureInfo.InvariantCulture,
+@"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) 
+SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
+                        this.changeLogTableName,
+                        this.syntax.CurrentTimestamp,
+                        completeDateValue,
+                        this.syntax.CurrentUser);
 
-                this.queryExecuter.Execute(
-                        sql,
-                        script.GetId(),
-                        script.GetDescription());
+                    // Execute insert and set change id so it can be updated.
+                    using (var reader = this.queryExecuter.ExecuteQuery(sql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output ?? string.Empty))
+                    {
+                        reader.Read();
+                        script.ChangeId = reader.GetInt32(0);
+                    }
+                }
+                else
+                {
+                    // Update existing entry.
+                    var sql = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "UPDATE {0} SET Folder = @1, ScriptNumber = @2, ScriptName = @3, {1}CompleteDate = {2}, AppliedBy = {3}, ScriptStatus = @4, ScriptOutput = @5 WHERE ChangeId = @6",
+                        this.changeLogTableName,
+                        status == ScriptStatus.Started ? string.Format(CultureInfo.InvariantCulture, "StartDate = {0}, ", this.syntax.CurrentTimestamp) : string.Empty,
+                        completeDateValue,
+                        this.syntax.CurrentUser);
+
+                    this.queryExecuter.Execute(sql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output ?? string.Empty, script.ChangeId);
+                }
             }
             catch (DbException e)
             {
                 throw new SchemaVersionTrackingException("Could not update change log because: " + e.Message, e);
             }
+        }
+
+        /// <summary>
+        /// Gets the value from the <see cref="IDataReader"/> to the specified type if it is not DBNull.
+        /// </summary>
+        /// <typeparam name="T">Type of value to retrieve.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="name">The name of the column.</param>
+        /// <returns>Value if not null; otherwise default.</returns>
+        private static T GetValue<T>(IDataReader reader, string name)
+        {
+            var value = default(T);
+
+            // Handle DBNull values.
+            var columnValue = reader[name];
+            if (columnValue != DBNull.Value)
+            {
+                value = (T)columnValue;
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Creates the change log table in the database.
+        /// </summary>
+        private void CreateChangeLogTable()
+        {
+            // Get table creation script from embeded file.
+            string script = this.syntax.CreateChangeLogTable(this.changeLogTableName);
+            this.queryExecuter.Execute(script);
         }
     }
 }

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Multiple deployments can be executed. -->
+<config>
+  <dbdeployments>
+    <dbdeploy
+        connectionString="Server=.\SQLEXPRESS;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01"
+        scriptDirectory="Versioned\2.0.0.0"
+        changeLogTableName="dbo.ChangeLog"
+        useSqlCmd="true"
+        />
+    <dbdeploy
+        connectionString="Server=.\SQLEXPRESS;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01"
+        scriptDirectory="Versioned\v2.0.10.0"
+        changeLogTableName="log.ChangeLog"
+        useSqlCmd="true"
+        />
+    <dbdeploy
+        connectionString="Server=.\SQLEXPRESS;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01"
+        scriptDirectory="Versioned\R1"
+        changeLogTableName="dbo.VersionLog"
+        useSqlCmd="true"
+        />
+  </dbdeployments>
+</config>

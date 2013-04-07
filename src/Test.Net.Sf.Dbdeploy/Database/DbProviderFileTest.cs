@@ -1,8 +1,8 @@
-using System.IO;
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System.IO;
+    using NUnit.Framework;
+
     [TestFixture]
     public class DbProviderFileTest
     {

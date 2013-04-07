@@ -1,8 +1,8 @@
-using System;
-using System.Text;
-
 namespace Net.Sf.Dbdeploy
 {
+    using System;
+    using System.Text;
+
     public class OutputFileEncoding
     {
         private readonly string encoding;

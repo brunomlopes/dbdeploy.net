@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Commons.Collections;
-using Net.Sf.Dbdeploy.Appliers.NVelocityReplacements;
-using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Exceptions;
-using Net.Sf.Dbdeploy.Scripts;
-using NVelocity;
-using NVelocity.App;
-using NVelocity.Exception;
-
-namespace Net.Sf.Dbdeploy.Appliers
+﻿namespace Net.Sf.Dbdeploy.Appliers
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Reflection;
+
+    using Commons.Collections;
+
+    using Net.Sf.Dbdeploy.Appliers.NVelocityReplacements;
+    using Net.Sf.Dbdeploy.Database;
+    using Net.Sf.Dbdeploy.Exceptions;
+    using Net.Sf.Dbdeploy.Scripts;
+
+    using NVelocity;
+    using NVelocity.App;
+    using NVelocity.Exception;
+
     public class TemplateBasedApplier : IChangeScriptApplier
     {
         private readonly TextWriter writer;

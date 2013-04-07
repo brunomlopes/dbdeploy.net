@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class QueryStatementSplitterTest
     {

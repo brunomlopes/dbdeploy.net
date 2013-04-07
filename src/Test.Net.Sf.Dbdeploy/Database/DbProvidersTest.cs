@@ -1,7 +1,7 @@
-using NUnit.Framework;
-
 namespace Net.Sf.Dbdeploy.Database
 {
+    using NUnit.Framework;
+
     [TestFixture]
     public class DbProvidersTest
     {

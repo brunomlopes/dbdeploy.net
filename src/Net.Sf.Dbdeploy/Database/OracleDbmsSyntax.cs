@@ -1,15 +1,38 @@
 namespace Net.Sf.Dbdeploy.Database
 {
+    /// <summary>
+    /// Oracle syntax.
+    /// </summary>
     public class OracleDbmsSyntax : DbmsSyntax
     {
-        public override string GenerateTimestamp()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OracleDbmsSyntax" /> class.
+        /// </summary>
+        public OracleDbmsSyntax()
+            : base("ora")
         {
-            return "CURRENT_TIMESTAMP";
         }
 
-        public override string GenerateUser()
+        /// <summary>
+        /// Gets the get timestamp.
+        /// </summary>
+        /// <value>
+        /// The get timestamp.
+        /// </value>
+        public override string CurrentTimestamp
         {
-            return "USER";
+            get { return "CURRENT_TIMESTAMP"; }
+        }
+
+        /// <summary>
+        /// Gets the syntax to get the current user.
+        /// </summary>
+        /// <value>
+        /// The current user syntax.
+        /// </value>
+        public override string CurrentUser
+        {
+            get { return "USER"; }
         }
     }
 }

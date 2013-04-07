@@ -12,7 +12,7 @@
     <AssemblyName>Net.Sf.Dbdeploy</AssemblyName>
     <StartupObject>
     </StartupObject>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -34,6 +34,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,6 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,8 +67,10 @@
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NVelocity">
       <HintPath>..\packages\NVelocity.1.0.3\lib\NVelocity.dll</HintPath>
     </Reference>
@@ -73,16 +78,26 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Appliers\NVelocityReplacements\DbDeployAssemblyResourceLoader.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployDirectiveManager.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployResourceManager.cs" />
+    <Compile Include="Appliers\SqlCmdApplier.cs" />
+    <Compile Include="Configuration\DbDeployConfig.cs" />
+    <Compile Include="Configuration\DbDeployConfigurationManager.cs" />
+    <Compile Include="Configuration\DbDeployDefaults.cs" />
+    <Compile Include="Configuration\DbDeploymentsConfig.cs" />
+    <Compile Include="Configuration\IDbDeployConfigurationManager.cs" />
+    <Compile Include="Configuration\Parser.cs" />
+    <Compile Include="Database\ChangeEntry.cs" />
+    <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
+    <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
+    <Compile Include="Database\SqlCmd\SqlCmdExecutor.cs" />
     <Compile Include="Appliers\TemplateBasedApplier.cs" />
     <Compile Include="Appliers\UndoTemplateBasedApplier.cs" />
-    <Compile Include="Configuration\ConfigurationFile.cs" />
-    <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Database\DatabaseProvider.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManager.cs" />
@@ -105,12 +120,15 @@
       <DependentUpon>IDelimiterType.cs</DependentUpon>
     </Compile>
     <Compile Include="Appliers\DirectToDbApplier.cs" />
+    <Compile Include="Database\TableInfo.cs" />
+    <Compile Include="UniqueChange.cs" />
     <Compile Include="DbDeployer.cs" />
     <Compile Include="Database\DelimiterTypeFactory.cs">
       <DependentUpon>IDelimiterType.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\ChangelogTableDoesNotExistException.cs" />
     <Compile Include="Exceptions\ChangeScriptFailedException.cs" />
+    <Compile Include="Exceptions\PriorFailedScriptException.cs" />
     <Compile Include="Exceptions\DbDeployException.cs" />
     <Compile Include="Exceptions\DuplicateChangeScriptException.cs" />
     <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />
@@ -126,6 +144,7 @@
     <Compile Include="Scripts\ChangeScriptRepository.cs" />
     <Compile Include="Scripts\DirectoryScanner.cs" />
     <Compile Include="Scripts\FilenameParser.cs" />
+    <Compile Include="Scripts\ScriptStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -164,10 +183,29 @@
     <EmbeddedResource Include="Resources\ora_undo.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SQLCMD.rll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\dbproviders.xml">
       <Link>Database\dbproviders.xml</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SQLCMD.EXE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CreateSchemaVersionTable.mssql.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CreateSchemaVersionTable.mysql.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CreateSchemaVersionTable.ora.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

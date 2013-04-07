@@ -1,7 +1,7 @@
-using System;
-
 namespace Net.Sf.Dbdeploy.Exceptions
 {
+    using System;
+
     public class UnrecognisedFilenameException : DbDeployException
     {
         public UnrecognisedFilenameException(string message, Exception inner) 
