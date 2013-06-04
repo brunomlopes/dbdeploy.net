@@ -11,6 +11,10 @@ Manages the deployment of numbered change scripts in versioned folders to a SQL,
 * Supports XML configuration for multiple change sets.
 * Supports separate schema name for change log table (example: dbo2.ChangeLog).
 
+# Downloads
+
+Latest binary (2.0.0) available at https://bintray.com/brunomlopes/generic/dbdeploy.NET/2.0.0/files
+
 # Usage
 
 dbdeploy.NET integrates with the following platforms:
