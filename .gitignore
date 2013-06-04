@@ -37,3 +37,4 @@ _ReSharper*/
 /db/DBDEPLOY.mdf
 /db/DBDEPLOY_log.ldf
 /dist
+!/src/Net.Sf.Dbdeploy/Resources/*
