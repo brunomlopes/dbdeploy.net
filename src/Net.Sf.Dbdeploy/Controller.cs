@@ -135,7 +135,7 @@ namespace Net.Sf.Dbdeploy
 The script '{0}' failed to complete on a previous run. 
 You must update the status to Resolved (2), or force updates.
 
-Ouput from the previous run
+Output from the previous run
 ----------------------------------------------------------
 {1}";
                 throw new PriorFailedScriptException(string.Format(CultureInfo.InvariantCulture, FailedMessage, failedScript, failedScript.Output));
