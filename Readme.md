@@ -13,7 +13,7 @@ Manages the deployment of numbered change scripts in versioned folders to a SQL,
 
 # Downloads
 
-Latest binary (2.0.0) available at https://bintray.com/brunomlopes/generic/dbdeploy.NET/2.0.0/files
+Latest binaries available at https://bintray.com/brunomlopes/generic/dbdeploy.NET
 
 # Usage
 
