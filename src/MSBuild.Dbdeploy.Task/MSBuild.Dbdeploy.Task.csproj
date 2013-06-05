@@ -68,6 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionVersionAssemblyInfo.cs">
+      <Link>Properties\SolutionVersionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Dbdeploy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -82,6 +82,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionVersionAssemblyInfo.cs">
+      <Link>Properties\SolutionVersionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Appliers\NVelocityReplacements\DbDeployAssemblyResourceLoader.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployDirectiveManager.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployResourceManager.cs" />
