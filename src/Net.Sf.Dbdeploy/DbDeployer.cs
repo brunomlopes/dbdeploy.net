@@ -77,7 +77,12 @@
                     throw new InvalidOperationException("SQLCMD mode can only be applied against an mssql database.");
                 }
 
-                doScriptApplier = new SqlCmdApplier(config.ConnectionString, databaseSchemaVersionManager, infoWriter);
+                doScriptApplier = new SqlCmdApplier(
+                    config.ConnectionString,
+                    databaseSchemaVersionManager,
+                    dbmsSyntax,
+                    config.ChangeLogTableName,
+                    infoWriter);
             }
             else 
             {
