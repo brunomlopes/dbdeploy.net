@@ -5,7 +5,8 @@ namespace Net.Sf.Dbdeploy.Database
     using System.Data;
     using System.Data.SqlClient;
     using System.Globalization;
-
+    using Net.Sf.Dbdeploy.Appliers;
+    using Net.Sf.Dbdeploy.Scripts;
     using NUnit.Framework;
 
     [Category("MSSQL"), Category("DbIntegration")]
@@ -60,9 +61,9 @@ namespace Net.Sf.Dbdeploy.Database
         }
 
         [Test]
-        public override void TestThrowsWhenDatabaseTableDoesNotExist()
+        public override void TestReturnsNoAppliedChangesWhenDatabaseTableDoesNotExist()
         {
-            base.TestThrowsWhenDatabaseTableDoesNotExist();
+            base.TestReturnsNoAppliedChangesWhenDatabaseTableDoesNotExist();
         }
 
         [Test]
@@ -72,9 +73,9 @@ namespace Net.Sf.Dbdeploy.Database
         }
 
         [Test]
-        public override void TestShouldCreateChangeLogTableWhenDoesNotExist()
+        public override void TestShouldCreateChangeLogTableWhenToldToDoSo()
         {
-            base.TestShouldCreateChangeLogTableWhenDoesNotExist();
+            base.TestShouldCreateChangeLogTableWhenToldToDoSo();
         }
 
         /// <summary>
@@ -87,10 +88,12 @@ namespace Net.Sf.Dbdeploy.Database
 
             var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
             var executer = new QueryExecuter(factory);
-            var databaseSchemaManager = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), "log.Installs", true);
+            var databaseSchemaManager = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), "log.Installs");
 
-            // Table should be created when attempted now; if table does not exist.
-            databaseSchemaManager.GetAppliedChanges();
+            var applier = new DirectToDbApplier(executer, databaseSchemaManager, new QueryStatementSplitter(),
+                factory.CreateDbmsSyntax(), "log.Installs", new NullWriter());
+            
+            applier.Apply(new ChangeScript[] {}, createChangeLogTable: true);
 
             this.AssertTableExists("log.Installs");
         }

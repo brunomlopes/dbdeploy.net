@@ -85,11 +85,11 @@ namespace Net.Sf.Dbdeploy.Database
 			base.TestCanRetrieveSchemaVersionFromDatabase();
 		}
 
-		[Test]
-		public override void TestThrowsWhenDatabaseTableDoesNotExist()
-		{
-			base.TestThrowsWhenDatabaseTableDoesNotExist();
-		}
+        [Test]
+        public override void TestReturnsNoAppliedChangesWhenDatabaseTableDoesNotExist()
+        {
+            base.TestReturnsNoAppliedChangesWhenDatabaseTableDoesNotExist();
+        }
 
 		[Test]
 		public override void TestShouldReturnEmptySetWhenTableHasNoRows()
@@ -98,9 +98,9 @@ namespace Net.Sf.Dbdeploy.Database
 		}
 
         [Test]
-        public override void TestShouldCreateChangeLogTableWhenDoesNotExist()
+        public override void TestShouldCreateChangeLogTableWhenToldToDoSo()
         {
-            base.TestShouldCreateChangeLogTableWhenDoesNotExist();
+            base.TestShouldCreateChangeLogTableWhenToldToDoSo();
         }
 	}
 }

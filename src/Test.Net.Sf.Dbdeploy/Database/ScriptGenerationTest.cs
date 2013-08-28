@@ -57,11 +57,13 @@
             ChangeScriptRepository changeScriptRepository = new ChangeScriptRepository(changeScripts);
 
             var factory = new DbmsFactory(syntaxName, string.Empty);
+            var dbmsSyntax = factory.CreateDbmsSyntax();
 
-            StubSchemaManager schemaManager = new StubSchemaManager(factory.CreateDbmsSyntax());
+            var createChangeLogTable = false;
+            StubSchemaManager schemaManager = new StubSchemaManager(dbmsSyntax, createChangeLogTable);
 
-            IChangeScriptApplier applier = new TemplateBasedApplier(writer, syntaxName, "ChangeLog", ";", new NormalDelimiter(), templateDirectory);
-            Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, System.Console.Out);
+            IChangeScriptApplier applier = new TemplateBasedApplier(writer, dbmsSyntax, "ChangeLog", ";", new NormalDelimiter(), templateDirectory);
+            Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, createChangeLogTable, System.Console.Out);
 
             controller.ProcessChangeScripts(null);
 
@@ -125,9 +127,17 @@
 
         private class StubSchemaManager : DatabaseSchemaVersionManager 
         {
-            public StubSchemaManager(IDbmsSyntax syntax)
-                : base(null, syntax, "ChangeLog", true)
+            private readonly bool changeLogTableExists;
+
+            public StubSchemaManager(IDbmsSyntax syntax, bool changeLogTableExists)
+                : base(null, syntax, "ChangeLog")
             {
+                this.changeLogTableExists = changeLogTableExists;
+            }
+
+            public override bool ChangeLogTableExists()
+            {
+                return !changeLogTableExists;
             }
 
             public override IList<ChangeEntry> GetAppliedChanges()

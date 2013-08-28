@@ -36,21 +36,12 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="syntax">The syntax.</param>
         /// <param name="changeLogTableName">Name of the change log table.</param>
         /// <param name="autoCreateChangeLogTable">if set to <c>true</c> the change log table will automatically be created.</param>
-        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, IDbmsSyntax syntax, string changeLogTableName, bool autoCreateChangeLogTable)
+        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, IDbmsSyntax syntax, string changeLogTableName)
         {
             this.syntax = syntax;
             this.queryExecuter = queryExecuter;
             this.changeLogTableName = changeLogTableName;
-            this.AutoCreateChangeLogTable = autoCreateChangeLogTable;
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the change log table should be created if it does not exist.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if auto create change log table; otherwise, <c>false</c>.
-        /// </value>
-        public bool AutoCreateChangeLogTable { get; set; }
 
         /// <summary>
         /// Gets the applied changes from the database..
@@ -59,7 +50,10 @@ namespace Net.Sf.Dbdeploy.Database
         /// <exception cref="SchemaVersionTrackingException">Could not retrieve change log from database because:  + e.Message</exception>
         public virtual IList<ChangeEntry> GetAppliedChanges()
         {
-            this.VerifyChangeLogTableExists(this.AutoCreateChangeLogTable);
+            if (!this.ChangeLogTableExists())
+            {
+                return new List<ChangeEntry>();
+            }
 
             var changes = new List<ChangeEntry>();
             try
@@ -98,28 +92,12 @@ namespace Net.Sf.Dbdeploy.Database
         /// <summary>
         /// Verifies the change log table exists.
         /// </summary>
-        /// <param name="autoCreate">if set to <c>true</c> the table will be created if it does not exist.</param>
         /// <exception cref="ChangelogTableDoesNotExistException">Thrown when the change log table is not found.</exception>
-        public void VerifyChangeLogTableExists(bool autoCreate)
+        public virtual bool ChangeLogTableExists()
         {
-            bool changeLogTableExists;
             using (var reader = this.queryExecuter.ExecuteQuery(this.syntax.TableExists(this.changeLogTableName)))
             {
-                changeLogTableExists = reader.Read();
-            }
-
-            // Create the change log table if it does not exist.
-            if (!changeLogTableExists)
-            {
-                if (autoCreate)
-                {
-                    this.CreateChangeLogTable();
-                }
-                else
-                {
-                    // If change log table does not exist and is not going to be created automatically, throw an exception.
-                    throw new ChangelogTableDoesNotExistException(string.Format("No table found with name '{0}'.", this.changeLogTableName));
-                }
+                return reader.Read();
             }
         }
 
@@ -209,10 +187,10 @@ SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
         /// <summary>
         /// Creates the change log table in the database.
         /// </summary>
-        private void CreateChangeLogTable()
+        public void CreateChangeLogTable()
         {
             // Get table creation script from embeded file.
-            string script = this.syntax.CreateChangeLogTable(this.changeLogTableName);
+            string script = this.syntax.CreateChangeLogTableSqlScript(this.changeLogTableName);
             this.queryExecuter.Execute(script);
         }
     }

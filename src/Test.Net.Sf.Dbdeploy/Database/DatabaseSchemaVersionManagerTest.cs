@@ -66,7 +66,7 @@ WHERE TABLE_NAME = '{0}'", t));
                 .Returns(this.expectedResultSet.Object)
                 .Callback<string, object[]>((q, a) => this.executedQueries.Add(q));
 
-            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName, true);
+            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
         }
 
         [Test]
@@ -152,7 +152,7 @@ SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
             changeLogTableName = "user_specified_changelog";
 
             var schemaVersionManagerWithDifferentTableName =
-                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName, true);
+                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
 
             schemaVersionManagerWithDifferentTableName.GetAppliedChanges();
 
@@ -163,7 +163,7 @@ SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
         public void ShouldGenerateSqlStringContainingSpecifiedChangelogTableNameOnDelete() 
         {
             var schemaVersionManagerWithDifferentTableName =
-                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "user_specified_changelog", true);
+                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "user_specified_changelog");
 
             string updateSql = schemaVersionManagerWithDifferentTableName.GetChangelogDeleteSql(this.script);
 

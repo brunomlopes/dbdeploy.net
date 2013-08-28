@@ -64,12 +64,19 @@
         /// Applies the specified change scripts.
         /// </summary>
         /// <param name="changeScripts">The change scripts.</param>
-        public void Apply(IEnumerable<ChangeScript> changeScripts)
+        /// <param name="createChangeLogTable">Whether the change log table script should also be generated at the top</param>
+        public void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable)
         {
-            this.infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
-
             using (var sqlCmdExecutor = new SqlCmdExecutor(this.connectionString))
             {
+                if (createChangeLogTable)
+                {
+                    throw new NotImplementedException("Didn't get to here yet.");
+                    this.infoTextWriter.WriteLine("Creating change log table");
+                }
+
+                this.infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
+
                 foreach (var script in changeScripts)
                 {
                     this.schemaVersionManager.RecordScriptStatus(script, ScriptStatus.Started);

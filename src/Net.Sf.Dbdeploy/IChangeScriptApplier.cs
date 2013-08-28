@@ -6,6 +6,6 @@ namespace Net.Sf.Dbdeploy
 
     public interface IChangeScriptApplier
     {
-        void Apply(IEnumerable<ChangeScript> changeScripts);
+        void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable);
     }
 }

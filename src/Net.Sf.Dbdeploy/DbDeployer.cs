@@ -47,7 +47,7 @@
 
             var queryExecuter = new QueryExecuter(factory);
 
-            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName, config.AutoCreateChangeLogTable);
+            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
 
             var scanner = new DirectoryScanner(infoWriter, config.Encoding);
 
@@ -63,7 +63,7 @@
 
                 doScriptApplier = new TemplateBasedApplier(
                     doWriter,
-                    config.Dbms,
+                    dbmsSyntax,
                     config.ChangeLogTableName,
                     config.Delimiter,
                     config.DelimiterType,
@@ -94,6 +94,8 @@
                     applierExecutor, 
                     databaseSchemaVersionManager, 
                     splitter, 
+                    dbmsSyntax, 
+                    config.ChangeLogTableName,
                     infoWriter);
             }
 
@@ -106,7 +108,7 @@
 
                 undoScriptApplier = new UndoTemplateBasedApplier(
                     undoWriter,
-                    config.Dbms,
+                    dbmsSyntax,
                     config.ChangeLogTableName,
                     config.Delimiter,
                     config.DelimiterType,
@@ -120,6 +122,7 @@
                     databaseSchemaVersionManager, 
                     doScriptApplier, 
                     undoScriptApplier, 
+                    config.AutoCreateChangeLogTable,
                     infoWriter);
 
                 controller.ProcessChangeScripts(config.LastChangeToApply, config.ForceUpdate);

@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <returns>
         /// Script to create a Change Log table for the current DBMS.
         /// </returns>
-        string CreateChangeLogTable(string tableName);
+        string CreateChangeLogTableSqlScript(string tableName);
 
         /// <summary>
         /// Gets the table name and schema.
@@ -49,5 +49,12 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="tableName">Name of the table.</param>
         /// <returns>SQL for checking if a table exists.</returns>
         string TableExists(string tableName);
+
+        /// <summary>
+        /// Returns the template file name, used by a template applier, for the current syntax
+        /// </summary>
+        /// <param name="templateQualifier">Template qualifier, like apply or undo</param>
+        /// <returns>Template filename, including extention</returns>
+        string GetTemplateFileNameFor(string templateQualifier);
     }
 }
