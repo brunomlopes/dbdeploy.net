@@ -3,6 +3,7 @@ namespace Net.Sf.Dbdeploy.Database
     using System.Collections.Generic;
     using System.Data;
     using System.Globalization;
+    using System.Linq;
 
     using Net.Sf.Dbdeploy.Exceptions;
 
@@ -24,7 +25,7 @@ namespace Net.Sf.Dbdeploy.Database
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName, false);
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()
@@ -36,6 +37,13 @@ namespace Net.Sf.Dbdeploy.Database
             var appliedChanges = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
             Assert.AreEqual(1, appliedChanges.Count);
             Assert.AreEqual("Scripts/5", appliedChanges[0].UniqueKey);
+        }
+
+        public virtual void TestReturnsNoAppliedChangesWhenDatabaseTableDoesNotExist()
+        {
+            this.EnsureTableDoesNotExist();
+
+            Assert.IsEmpty(databaseSchemaVersion.GetAppliedChanges().ToArray());
         }
 
         public virtual void TestThrowsWhenDatabaseTableDoesNotExist()
@@ -69,14 +77,12 @@ namespace Net.Sf.Dbdeploy.Database
         /// <summary>
         /// Tests that <see cref="DatabaseSchemaVersionManager" /> will create the change log table when specified.
         /// </summary>
-        public virtual void TestShouldCreateChangeLogTableWhenDoesNotExist()
+        public virtual void TestShouldCreateChangeLogTableWhenToldToDoSo()
         {
-            this.databaseSchemaVersion.AutoCreateChangeLogTable = true;
-
             this.EnsureTableDoesNotExist();
 
-            // Table should be created when attempted now; if table does not exist.
-            databaseSchemaVersion.GetAppliedChanges();
+            // Create change log table
+            databaseSchemaVersion.CreateChangeLogTable();
 
             this.AssertTableExists("ChangeLog");
         }
@@ -89,6 +95,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             var schema = this.ExecuteScalar<string>(this.syntax.TableExists(tableName));
 
+            Assert.IsNotNull(schema, string.Format("{0} table was not created.", tableName));
             Assert.IsNotEmpty(schema, string.Format("{0} table was not created.", tableName));
         }
 
@@ -145,7 +152,10 @@ namespace Net.Sf.Dbdeploy.Database
         /// </summary>
         protected void CreateTable()
         {
-            this.databaseSchemaVersion.VerifyChangeLogTableExists(true);            
+            if (!this.databaseSchemaVersion.ChangeLogTableExists())
+            {
+                this.databaseSchemaVersion.CreateChangeLogTable();
+            };
         }
 
         /// <summary>

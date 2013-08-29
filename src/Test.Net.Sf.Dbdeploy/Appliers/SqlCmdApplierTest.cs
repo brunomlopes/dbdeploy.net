@@ -52,17 +52,15 @@
         {
             var dbmsFactory = new DbmsFactory(Dbms, ConnectionString);
             var queryExecuter = new QueryExecuter(dbmsFactory);
+            var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
-            var schemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsFactory.CreateDbmsSyntax(), ChangeLogTableName, true);
-            this.sqlCmdApplier = new SqlCmdApplier(ConnectionString, schemaVersionManager, System.Console.Out);
+            var schemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, ChangeLogTableName);
+            this.sqlCmdApplier = new SqlCmdApplier(ConnectionString, schemaVersionManager, dbmsSyntax, ChangeLogTableName, System.Console.Out);
             this.directoryScanner = new DirectoryScanner(System.Console.Out, Encoding.UTF8);
 
             // Remove any existing changelog and customers test table.
             this.EnsureTableDoesNotExist(ChangeLogTableName);
             this.EnsureTableDoesNotExist("Customer");
-
-            // Create the change log table.
-            schemaVersionManager.VerifyChangeLogTableExists(true);
         }
 
         /// <summary>
@@ -72,7 +70,7 @@
         public void ShouldApplySqlCmdModeScripts()
         {
             var changeScripts = this.directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Versioned\v2.0.10.0"));
-            this.sqlCmdApplier.Apply(changeScripts);
+            this.sqlCmdApplier.Apply(changeScripts, true);
 
             this.AssertTableExists(ChangeLogTableName);
             this.AssertTableExists("Customer");
@@ -92,7 +90,7 @@
 
             try
             {
-                this.sqlCmdApplier.Apply(changeScripts);
+                this.sqlCmdApplier.Apply(changeScripts, true);
                 Assert.Fail("Apply did not thrown and error.");
             }
             catch (DbDeployException)

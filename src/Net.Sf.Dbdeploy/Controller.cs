@@ -39,6 +39,8 @@ namespace Net.Sf.Dbdeploy
         /// </summary>
         private readonly IChangeScriptApplier undoApplier;
 
+        private readonly bool createChangeLogTable;
+
         /// <summary>
         /// The printer for handling the output of the script changes.
         /// </summary>
@@ -51,16 +53,19 @@ namespace Net.Sf.Dbdeploy
         /// <param name="appliedChangesProvider">The applied changes provider.</param>
         /// <param name="doApplier">The do applier.</param>
         /// <param name="undoApplier">The undo applier.</param>
+        /// <param name="createChangeLogTable">Whether the change log table should be created or not.</param>
         /// <param name="infoTextWriter">The info text writer.</param>
         public Controller(
             IAvailableChangeScriptsProvider availableChangeScriptsProvider,
             IAppliedChangesProvider appliedChangesProvider,
             IChangeScriptApplier doApplier,
             IChangeScriptApplier undoApplier,
+            bool createChangeLogTable,
             TextWriter infoTextWriter)
         {
             this.doApplier = doApplier;
             this.undoApplier = undoApplier;
+            this.createChangeLogTable = createChangeLogTable;
 
             this.appliedChangesProvider = appliedChangesProvider;
 
@@ -80,9 +85,10 @@ namespace Net.Sf.Dbdeploy
             {
                 Info("\nOnly applying changes up to and including change script '{0}'.\n", lastChangeToApply);
             }
+            
+            var applied = this.appliedChangesProvider.GetAppliedChanges();
 
             // If force update is not set, than if there are any previous script runs that failed it should stop.
-            var applied = this.appliedChangesProvider.GetAppliedChanges();
             if (!forceUpdate)
             {
                 this.CheckForFailedScripts(applied);
@@ -93,7 +99,8 @@ namespace Net.Sf.Dbdeploy
 
             this.LogStatus(scripts, applied, toApply);
 
-            this.doApplier.Apply(toApply);
+            var includeChangeLogTable = this.createChangeLogTable && !this.appliedChangesProvider.ChangeLogTableExists();
+            this.doApplier.Apply(toApply, includeChangeLogTable);
 
             if (this.undoApplier != null)
             {
@@ -102,7 +109,7 @@ namespace Net.Sf.Dbdeploy
                 var toUndoApply = new List<ChangeScript>(toApply);
                 toUndoApply.Reverse();
 
-                this.undoApplier.Apply(toUndoApply);
+                this.undoApplier.Apply(toUndoApply, false);
             }
 
             if (toApply.Any())

@@ -1,6 +1,7 @@
 ﻿namespace Net.Sf.Dbdeploy.Database.SqlCmd
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -101,6 +102,26 @@
 
             return success;
         }
+
+        public bool ExecuteString(string script, StringBuilder output)
+        {
+            var file = Path.GetFileNameWithoutExtension(Path.GetTempFileName()) + ".sql";
+            var path = GetResourceFilePath(file);
+
+            try
+            {
+                File.WriteAllText(path, script, Encoding.UTF8);
+                return ExecuteFile(new FileInfo(path), output);
+            }
+            finally
+            {
+                if(File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

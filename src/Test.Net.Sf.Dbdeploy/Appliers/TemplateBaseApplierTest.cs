@@ -6,6 +6,7 @@
     using Net.Sf.Dbdeploy.Database;
     using Net.Sf.Dbdeploy.Exceptions;
 
+    using Moq;
     using NUnit.Framework;
 
     [TestFixture]
@@ -15,11 +16,15 @@
         public void ShouldThrowUsageExceptionWhenTemplateNotFound() 
         {
             var templateDirectory = new DirectoryInfo(".");
-            TemplateBasedApplier applier = new TemplateBasedApplier(new NullWriter(), "some_complete_rubbish", null, ";", new NormalDelimiter(), templateDirectory);
+            var mockDbmsSyntax = new Mock<IDbmsSyntax>();
+            mockDbmsSyntax.Setup(d => d.GetTemplateFileNameFor("apply"))
+                .Returns("some_complete_rubbish_apply.vm");
+
+            TemplateBasedApplier applier = new TemplateBasedApplier(new NullWriter(), mockDbmsSyntax.Object, null, ";", new NormalDelimiter(), templateDirectory);
                 
             try
             {
-                applier.Apply(null);
+                applier.Apply(null, false);
                         
                 Assert.Fail("expected exception");
             } 

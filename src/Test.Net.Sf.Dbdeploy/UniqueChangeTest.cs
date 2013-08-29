@@ -76,7 +76,7 @@ namespace Net.Sf.Dbdeploy
         /// </summary>
         /// <param name="changeEntries">The change entries.</param>
         /// <param name="uniqueKeys">The unique keys.</param>
-        private void AssertSequence(IReadOnlyList<UniqueChange> changeEntries, params string[] uniqueKeys)
+        private void AssertSequence(IList<UniqueChange> changeEntries, params string[] uniqueKeys)
         {
             for (int i = 0; i < uniqueKeys.Length; i++)
             {

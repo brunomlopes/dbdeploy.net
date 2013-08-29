@@ -12,8 +12,10 @@
             QueryExecuter queryExecuter, 
             DatabaseSchemaVersionManager schemaVersionManager, 
             QueryStatementSplitter splitter, 
-            TextWriter infoTextWriter) 
-            : base(queryExecuter, schemaVersionManager, splitter, infoTextWriter)
+            IDbmsSyntax dbmsSyntax,
+            string changeLogTableName,
+            TextWriter infoTextWriter)
+            : base(queryExecuter, schemaVersionManager, splitter, dbmsSyntax, changeLogTableName, infoTextWriter)
         {
         }
         

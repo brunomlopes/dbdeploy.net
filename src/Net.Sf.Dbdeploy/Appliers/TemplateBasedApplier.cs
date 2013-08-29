@@ -22,7 +22,7 @@
     {
         private readonly TextWriter writer;
 
-        private readonly string syntax;
+        private readonly IDbmsSyntax syntax;
 
         private readonly string changeLogTableName;
 
@@ -34,7 +34,7 @@
 
         public TemplateBasedApplier(
             TextWriter writer,
-            string syntax,
+            IDbmsSyntax syntax,
             string changeLogTableName,
             string delimiter,
             IDelimiterType delimiterType,
@@ -56,9 +56,9 @@
             this.templateDirectory = templateDirectory;
         }
 
-        public void  Apply(IEnumerable<ChangeScript> changeScripts)
+        public void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable)
         {
-            string filename = string.Format(CultureInfo.InvariantCulture, "{0}_{1}.vm", this.syntax, this.GetTemplateQualifier());
+            string filename = this.syntax.GetTemplateFileNameFor(this.GetTemplateQualifier());
 
             var model = new Hashtable();
             
@@ -89,6 +89,11 @@
                 else
                 {
                     props.SetProperty("file.resource.loader.path", this.templateDirectory.FullName);
+                }
+
+                if (createChangeLogTable)
+                {
+                    this.writer.Write(this.syntax.CreateChangeLogTableSqlScript(this.changeLogTableName));
                 }
 
                 var templateEngine = new VelocityEngine(props);

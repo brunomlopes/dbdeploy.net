@@ -123,6 +123,11 @@ WHERE TABLE_NAME = '{0}'", tableName);
             return syntax;
         }
 
+        public string GetTemplateFileNameFor(string templateQualifier)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}_{1}.vm", this.Dbms, templateQualifier);
+        }
+
         /// <summary>
         /// Gets the Change Log Table create script.
         /// </summary>
@@ -130,7 +135,7 @@ WHERE TABLE_NAME = '{0}'", tableName);
         /// <returns>
         /// Script to create a Change Log table for the current DBMS.
         /// </returns>
-        public string CreateChangeLogTable(string tableName)
+        public string CreateChangeLogTableSqlScript(string tableName)
         {
             string script;
 

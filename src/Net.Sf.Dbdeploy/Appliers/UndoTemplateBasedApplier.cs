@@ -8,7 +8,7 @@
     {
         public UndoTemplateBasedApplier(
             TextWriter writer,
-            string syntax,
+            IDbmsSyntax syntax,
             string changeLogTableName,
             string delimiter,
             IDelimiterType delimiterType,

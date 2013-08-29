@@ -31,8 +31,8 @@
             factory.Setup(f => f.CreateDbmsSyntax()).Returns(syntax);
 
             this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
-            
-            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty", false);
+
+            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty");
 
             this.splitter = new Mock<QueryStatementSplitter>();
 
@@ -40,6 +40,8 @@
                 this.queryExecuter.Object,
                 this.schemaVersionManager.Object,
                 this.splitter.Object,
+                syntax, 
+                "ChangeLog",
                 System.Console.Out);
         }
 
@@ -110,7 +112,7 @@
 
             this.splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new [] { s });
 
-            this.applier.Apply(scripts);
+            this.applier.Apply(scripts, false);
 
             this.queryExecuter.Verify(e => e.BeginTransaction(), Times.Once());
             this.queryExecuter.Verify(e => e.CommitTransaction(), Times.Once());

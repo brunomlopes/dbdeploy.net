@@ -19,12 +19,18 @@
 
         private readonly QueryStatementSplitter splitter;
 
+        private readonly IDbmsSyntax dbmsSyntax;
+
+        private readonly string changeLogTableName;
+
         private readonly TextWriter infoTextWriter;
 
         public DirectToDbApplier(
             QueryExecuter queryExecuter,
             DatabaseSchemaVersionManager schemaVersionManager,
             QueryStatementSplitter splitter,
+            IDbmsSyntax dbmsSyntax,
+            string changeLogTableName,
             TextWriter infoTextWriter)
         {
             if (queryExecuter == null)
@@ -42,11 +48,19 @@
             this.queryExecuter = queryExecuter;
             this.schemaVersionManager = schemaVersionManager;
             this.splitter = splitter;
+            this.dbmsSyntax = dbmsSyntax;
+            this.changeLogTableName = changeLogTableName;
             this.infoTextWriter = infoTextWriter;
         }
 
-        public void Apply(IEnumerable<ChangeScript> changeScripts)
+        public void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable)
         {
+            if (createChangeLogTable)
+            {
+                this.infoTextWriter.WriteLine("Creating change log table");
+                this.queryExecuter.Execute(this.dbmsSyntax.CreateChangeLogTableSqlScript(this.changeLogTableName));
+            }
+
             this.infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
 
             foreach (var script in changeScripts)

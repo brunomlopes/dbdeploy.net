@@ -72,13 +72,13 @@ namespace Net.Sf.Dbdeploy
             this.runScripts = new List<ChangeScript>();
             this.doApplier = new Mock<IChangeScriptApplier>();
             this.doApplier
-                .Setup(a => a.Apply(It.IsAny<IEnumerable<ChangeScript>>()))
-                .Callback<IEnumerable<ChangeScript>>(l => this.runScripts = l.ToList());
+                .Setup(a => a.Apply(It.IsAny<IEnumerable<ChangeScript>>(), false))
+                .Callback<IEnumerable<ChangeScript>, bool>((l,b) => this.runScripts = l.ToList());
 
             this.appliedChangesProvider = new Mock<IAppliedChangesProvider>();
             var undoApplier = new Mock<IChangeScriptApplier>();
             this.output = new StringBuilder();
-            this.controller = new Controller(this.availableChangeScriptsProvider.Object, this.appliedChangesProvider.Object, this.doApplier.Object, undoApplier.Object, new StringWriter(this.output));
+            this.controller = new Controller(this.availableChangeScriptsProvider.Object, this.appliedChangesProvider.Object, this.doApplier.Object, undoApplier.Object, false, new StringWriter(this.output));
         }
 
         /// <summary>
