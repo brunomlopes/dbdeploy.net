@@ -9,7 +9,7 @@ namespace Dbdeploy.Powershell.Commands
     [Cmdlet(VerbsData.Export, "DbUpdate")]
     public class ExportDbUpdate : DbUpdateBase
     {
-        [Parameter]
+        [Parameter(Mandatory = true)]
         public string OutputFile { get; set; }
 
         [Parameter]
