@@ -97,6 +97,17 @@ namespace Net.Sf.Dbdeploy.Database
 
             Assert.IsNotNull(schema, string.Format("{0} table was not created.", tableName));
             Assert.IsNotEmpty(schema, string.Format("{0} table was not created.", tableName));
+        } 
+        
+        /// <summary>
+        /// Asserts that the table does not exist
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        public void AssertTableDoesNotExist(string tableName)
+        {
+            var schema = this.ExecuteScalar<string>(this.syntax.TableExists(tableName));
+
+            Assert.IsNull(schema, string.Format("{0} table was created.", tableName));
         }
 
         public virtual void TestShouldReturnEmptySetWhenTableHasNoRows()

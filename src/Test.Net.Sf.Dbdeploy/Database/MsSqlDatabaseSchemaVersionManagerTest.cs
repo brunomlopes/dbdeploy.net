@@ -1,11 +1,18 @@
 namespace Net.Sf.Dbdeploy.Database
 {
+    using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Data;
     using System.Data.SqlClient;
     using System.Globalization;
+    using System.IO;
+    using System.Text;
+    using global::Dbdeploy.Powershell;
     using Net.Sf.Dbdeploy.Appliers;
+    using Net.Sf.Dbdeploy.Configuration;
+    using Net.Sf.Dbdeploy.Database.SqlCmd;
+    using Net.Sf.Dbdeploy.Exceptions;
     using Net.Sf.Dbdeploy.Scripts;
     using NUnit.Framework;
 
@@ -53,6 +60,41 @@ namespace Net.Sf.Dbdeploy.Database
 			Assert.AreEqual(1, changeNumbers.Count);
 			Assert.AreEqual("Scripts/3", changeNumbers[0].UniqueKey);
 		}
+
+
+        [Test]
+        public void TestDoesNotRunSecondScriptIfFirstScriptFails()
+        {
+            this.EnsureTableDoesNotExist("TableWeWillUse");
+            this.EnsureTableDoesNotExist(TableName);
+
+            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            var dbmsSyntax = factory.CreateDbmsSyntax();
+
+            var output = new StringBuilder();
+            
+            var applier = new TemplateBasedApplier(
+                new StringWriter(output),
+                dbmsSyntax,
+                TableName,
+                ";",
+                DbDeployDefaults.DelimiterType,
+                DbDeployDefaults.TemplateDirectory);
+
+            applier.Apply(new ChangeScript[]
+            {
+                new StubChangeScript(1, "1.test.sql", "INSERT INTO TableWeWillUse VALUES (1);"), 
+                new StubChangeScript(2, "2.test.sql", "CREATE TABLE dbo.TableWeWillUse (Id int NULL);"), 
+            }, createChangeLogTable: true);
+
+            using (var sqlExecuter = new SqlCmdExecutor(this.ConnectionString))
+            {
+                var cmdOutput = new StringBuilder();
+                sqlExecuter.ExecuteString(output.ToString(), cmdOutput);
+            }
+            this.AssertTableDoesNotExist("TableWeWillUse");
+        }
+
 
         [Test]
         public override void TestCanRetrieveSchemaVersionFromDatabase()
