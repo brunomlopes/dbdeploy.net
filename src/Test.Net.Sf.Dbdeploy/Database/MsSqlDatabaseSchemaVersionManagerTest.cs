@@ -19,7 +19,7 @@ namespace Net.Sf.Dbdeploy.Database
     [Category("MSSQL"), Category("DbIntegration")]
     public class MsSqlDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
-        private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["ConnString"];
+        private static string _connectionString;
         private const string FOLDER = "Scripts";
 
         private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new [] 
@@ -31,7 +31,15 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string ConnectionString
         {
-            get { return CONNECTION_STRING; }
+            get
+            {
+                if (_connectionString == null)
+                {
+                    _connectionString = ConfigurationManager.AppSettings["ConnString-" + Environment.MachineName]
+                                        ?? ConfigurationManager.AppSettings["ConnString"];
+                }
+                return _connectionString;
+            }
         }
 
         protected override string Folder
@@ -162,7 +170,7 @@ END",
 
         protected override IDbConnection GetConnection()
         {
-            return new SqlConnection(CONNECTION_STRING);
+            return new SqlConnection(_connectionString);
         }
 
         protected override void InsertRowIntoTable(int i)

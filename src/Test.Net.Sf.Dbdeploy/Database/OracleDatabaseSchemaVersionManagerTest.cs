@@ -1,3 +1,5 @@
+using System;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System.Collections.Generic;
@@ -10,7 +12,7 @@ namespace Net.Sf.Dbdeploy.Database
 	[Category("Oracle"), Category("DbIntegration")]
 	public class OracleDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
 	{
-		private static readonly string CONNECTION_STRING = ConfigurationManager.AppSettings["OracleConnString"];
+		private static string _connectionString;
 		private const string FOLDER = "Scripts";
 		private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new []
 		{ 
@@ -20,7 +22,16 @@ namespace Net.Sf.Dbdeploy.Database
 
 		protected override string ConnectionString
 		{
-			get { return CONNECTION_STRING; }
+		    get
+		    {
+                if (_connectionString == null)
+                {
+                    _connectionString = ConfigurationManager.AppSettings["OracleConnString-" + Environment.MachineName]
+                                        ?? ConfigurationManager.AppSettings["OracleConnString"];
+                }
+                
+                return _connectionString;
+		    }
 		}
 
 		protected override string Folder
@@ -49,7 +60,7 @@ namespace Net.Sf.Dbdeploy.Database
 
 		protected override IDbConnection GetConnection()
 		{
-			return new OracleConnection(CONNECTION_STRING);
+			return new OracleConnection(_connectionString);
 		}
 
         /// <summary>
