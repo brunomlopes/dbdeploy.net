@@ -39,10 +39,6 @@
         /// </summary>
         private SqlCmdApplier sqlCmdApplier;
 
-        /// <summary>
-        /// The directory scanner for finding script files.
-        /// </summary>
-        private DirectoryScanner directoryScanner;
 
         /// <summary>
         /// Sets up the dependencies before each test.
@@ -56,7 +52,7 @@
 
             var schemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, ChangeLogTableName);
             this.sqlCmdApplier = new SqlCmdApplier(ConnectionString, schemaVersionManager, dbmsSyntax, ChangeLogTableName, System.Console.Out);
-            this.directoryScanner = new DirectoryScanner(System.Console.Out, Encoding.UTF8);
+            
 
             // Remove any existing changelog and customers test table.
             this.EnsureTableDoesNotExist(ChangeLogTableName);
@@ -69,7 +65,9 @@
         [Test]
         public void ShouldApplySqlCmdModeScripts()
         {
-            var changeScripts = this.directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Versioned\v2.0.10.0"));
+            var directoryScanner = new DirectoryScanner(System.Console.Out, Encoding.UTF8, new DirectoryInfo(@"Mocks\Versioned\v2.0.10.0"));
+
+            var changeScripts = directoryScanner.GetChangeScripts();
             this.sqlCmdApplier.Apply(changeScripts, true);
 
             this.AssertTableExists(ChangeLogTableName);
@@ -85,8 +83,11 @@
         [Test]
         public void ShouldThrowExceptionOnScriptFailure()
         {
+            var directoryScanner = new DirectoryScanner(System.Console.Out, Encoding.UTF8,
+                                                        new DirectoryInfo(@"Mocks\Failures"));
+
             // Duplicate the first script to cause a failure.
-            var changeScripts = this.directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Failures"));
+            var changeScripts = directoryScanner.GetChangeScripts();
 
             try
             {

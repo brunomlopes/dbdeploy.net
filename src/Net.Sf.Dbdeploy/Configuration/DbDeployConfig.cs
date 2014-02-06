@@ -1,4 +1,7 @@
-﻿namespace Net.Sf.Dbdeploy.Configuration
+﻿using System.Collections.Generic;
+using System.Reflection;
+
+namespace Net.Sf.Dbdeploy.Configuration
 {
     using System.IO;
     using System.Text;
@@ -33,6 +36,14 @@
         /// The script directory.
         /// </value>
         public DirectoryInfo ScriptDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the assemblies to read all change scripts resource files from.
+        /// </summary>
+        /// <value>
+        /// The assembly containing embbeded scripts.
+        /// </value>
+        public IList<Assembly> ScriptAssemblies { get; set; }
 
         /// <summary>
         /// Gets or sets the output file to render the combined change scripts to.

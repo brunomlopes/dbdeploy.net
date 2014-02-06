@@ -49,9 +49,11 @@
 
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
 
-            var scanner = new DirectoryScanner(infoWriter, config.Encoding);
+            var directoryScanner = new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory);
+            var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssemblies);
+            var scanner = new AllScriptScanner(directoryScanner, assemblyScanner);
 
-            var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScriptsForDirectory(config.ScriptDirectory));
+            var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScripts());
 
             IChangeScriptApplier doScriptApplier;
             TextWriter doWriter = null;

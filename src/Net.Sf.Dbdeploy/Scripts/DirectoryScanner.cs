@@ -7,23 +7,25 @@ namespace Net.Sf.Dbdeploy.Scripts
 
     using Net.Sf.Dbdeploy.Exceptions;
 
-    public class DirectoryScanner
+    public class DirectoryScanner : IScriptScanner
     {
         private readonly FilenameParser filenameParser;
 
         private readonly TextWriter infoTextWriter;
 
         private readonly Encoding encoding;
+        private readonly DirectoryInfo directory;
 
-        public DirectoryScanner(TextWriter infoTextWriter, Encoding encoding)
+        public DirectoryScanner(TextWriter infoTextWriter, Encoding encoding, DirectoryInfo directory)
         {
             this.filenameParser = new FilenameParser();
             
             this.infoTextWriter = infoTextWriter;
             this.encoding = encoding;
+            this.directory = directory;
         }
 
-        public List<ChangeScript> GetChangeScriptsForDirectory(DirectoryInfo directory)
+        public List<ChangeScript> GetChangeScripts()
         {
             if (directory == null)
                 throw new ArgumentNullException("directory");

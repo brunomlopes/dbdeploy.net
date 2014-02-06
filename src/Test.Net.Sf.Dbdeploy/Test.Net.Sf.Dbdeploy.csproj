@@ -124,6 +124,8 @@
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
+    <Compile Include="Scripts\AllScriptScannerTest.cs" />
+    <Compile Include="Scripts\AssemblyScannerTest.cs" />
     <Compile Include="UniqueChangeTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\QueryStatementSplitterTest.cs" />
@@ -182,6 +184,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Mocks\Embedded\2.0.0.0\09.Add Product Data.sql" />
+    <EmbeddedResource Include="Mocks\Embedded\2.0.0.0\10.Add Sold Column.sql" />
+    <EmbeddedResource Include="Mocks\Embedded\2.0.0.0\8.Create Product Table.sql" />
+    <EmbeddedResource Include="Mocks\Embedded\v2.0.10.0\1.SQLCMD Add Customer Table.sql" />
+    <EmbeddedResource Include="Mocks\Embedded\v2.0.10.0\2.SQLCMD Add Email Column Table.sql" />
+    <EmbeddedResource Include="Mocks\Embedded\v2.0.10.0\3.SQLCMD Add Customer Data.sql" />
     <Content Include="Mocks\Failures\1.SQLCMD Add Customer Table.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

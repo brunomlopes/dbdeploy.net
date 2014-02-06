@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Scripts.EmbeddedResources;
+
 namespace Net.Sf.Dbdeploy.Scripts
 {
     using System.Globalization;
@@ -55,6 +57,20 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeScript" /> class.
         /// </summary>
+        /// <param name="fileInfo">The embbeded file.</param>
+        /// <param name="scriptNumber">The script number.</param>
+        /// <param name="encoding">The encoding.</param>
+        public ChangeScript(EmbeddedFileInfo fileInfo, int scriptNumber, Encoding encoding)
+            : base(fileInfo.Folder, scriptNumber)
+        {
+            this.EmbeddedFileInfo = fileInfo;
+            this.ScriptName = fileInfo.FileName;
+            this.encoding = encoding;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChangeScript" /> class.
+        /// </summary>
         /// <param name="folder">The version folder.</param>
         /// <param name="scriptNumber">The script number.</param>
         /// <param name="fileName">Name of the file.</param>
@@ -72,6 +88,14 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// The file info.
         /// </value>
         public FileInfo FileInfo { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the embbeded file info for the script.
+        /// </summary>
+        /// <value>
+        /// The embbeded file info.
+        /// </value>
+        public EmbeddedFileInfo EmbeddedFileInfo { get; protected set; }
 
         /// <summary>
         /// Gets or sets the name of the file.
@@ -121,7 +145,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             bool foundUndo = false;
 
-            using (var input = new StreamReader(this.FileInfo.FullName, this.encoding))
+            using (var input = GetFileStreamReader())
             {
                 string str;
                 while ((str = input.ReadLine()) != null)
@@ -141,6 +165,14 @@ namespace Net.Sf.Dbdeploy.Scripts
             }
 
             return result.ToString();
+        }
+
+        private StreamReader GetFileStreamReader()
+        {
+            if (EmbeddedFileInfo != null)
+                return new StreamReader(EmbeddedFileInfo.Assembly.GetManifestResourceStream(EmbeddedFileInfo.ResourceName));
+
+            return new StreamReader(this.FileInfo.FullName, this.encoding);
         }
     }
 }

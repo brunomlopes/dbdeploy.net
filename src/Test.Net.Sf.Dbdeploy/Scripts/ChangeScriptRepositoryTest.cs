@@ -62,7 +62,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             //StringWriter writer = new StringWriter();
             //DirectoryScanner directoryScanner = new DirectoryScanner(writer, Encoding.UTF8);
 
-            //List<ChangeScript> changeScripts = directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"));
+            //List<ChangeScript> changeScripts = directoryScanner.GetChangeScripts(new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"));
 
             //Assert.IsNotNull(changeScripts, "Change scripts should not be null.");
             //Assert.Greater(changeScripts.Count, 0, "No change scripts where found.");

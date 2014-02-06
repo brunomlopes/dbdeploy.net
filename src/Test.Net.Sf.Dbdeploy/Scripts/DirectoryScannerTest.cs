@@ -20,9 +20,9 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void CanReadFilesFromSubDirectories()
         {
             var writer = new StringWriter();
-            var directoryScanner = new DirectoryScanner(writer, Encoding.UTF8);
+            var directoryScanner = new DirectoryScanner(writer, Encoding.UTF8, new DirectoryInfo(@"Mocks\Versioned"));
             
-            List<ChangeScript> changeScripts = directoryScanner.GetChangeScriptsForDirectory(new DirectoryInfo(@"Mocks\Versioned"));
+            List<ChangeScript> changeScripts = directoryScanner.GetChangeScripts();
             
             Assert.IsNotNull(changeScripts, "Change scripts should not be null.");
             Assert.Greater(changeScripts.Count, 0, "No change scripts where found.");

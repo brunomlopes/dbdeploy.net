@@ -124,6 +124,10 @@
     </Compile>
     <Compile Include="Appliers\DirectToDbApplier.cs" />
     <Compile Include="Database\TableInfo.cs" />
+    <Compile Include="Scripts\AllScriptScanner.cs" />
+    <Compile Include="Scripts\AssemblyScanner.cs" />
+    <Compile Include="Scripts\EmbeddedResources\EmbeddedFileInfo.cs" />
+    <Compile Include="Scripts\IScriptScanner.cs" />
     <Compile Include="UniqueChange.cs" />
     <Compile Include="DbDeployer.cs" />
     <Compile Include="Database\DelimiterTypeFactory.cs">

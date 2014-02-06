@@ -17,8 +17,8 @@ namespace Dbdeploy.Powershell.Commands
 
             var infoTextWriter = new LambdaTextWriter(WriteVerbose);
 
-            List<ChangeScript> allChangeScripts = new DirectoryScanner(infoTextWriter, Encoding.UTF8)
-                .GetChangeScriptsForDirectory(new DirectoryInfo(this.deltasDirectory));
+            List<ChangeScript> allChangeScripts = new DirectoryScanner(infoTextWriter, Encoding.UTF8, new DirectoryInfo(this.deltasDirectory))
+                .GetChangeScripts();
             
             var repository = new ChangeScriptRepository(allChangeScripts);
             var changeScripts = repository.GetAvailableChangeScripts();
