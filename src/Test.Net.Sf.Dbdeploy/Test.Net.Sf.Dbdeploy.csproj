@@ -117,6 +117,10 @@
       <Project>{A7A5B171-0A90-4652-A6F1-D4E1A480ACBE}</Project>
       <Name>Net.Sf.Dbdeploy</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Test.Net.Sf.DbDeploy.EmbeddedScripts\Test.Net.Sf.DbDeploy.EmbeddedScripts.csproj">
+      <Project>{914E375C-D23A-401B-9975-4A7E552EB30D}</Project>
+      <Name>Test.Net.Sf.DbDeploy.EmbeddedScripts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Appliers\SqlCmdApplierTest.cs" />
@@ -124,6 +128,7 @@
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
+    <Compile Include="DbDeployerTest.cs" />
     <Compile Include="Scripts\AllScriptScannerTest.cs" />
     <Compile Include="Scripts\AssemblyScannerTest.cs" />
     <Compile Include="UniqueChangeTest.cs" />
@@ -148,6 +153,7 @@
     <Compile Include="Scripts\FilenameParserTest.cs" />
     <Compile Include="Scripts\StubChangeScript.cs" />
     <Compile Include="Configuration\DbDeployConfigurationManagerTest.cs" />
+    <Compile Include="Utils\DatabaseTestBase.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)dbproviders.xml" "$(TargetDir)"</PostBuildEvent>
@@ -184,12 +190,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="Mocks\Embedded\2.0.0.0\09.Add Product Data.sql" />
-    <EmbeddedResource Include="Mocks\Embedded\2.0.0.0\10.Add Sold Column.sql" />
-    <EmbeddedResource Include="Mocks\Embedded\2.0.0.0\8.Create Product Table.sql" />
-    <EmbeddedResource Include="Mocks\Embedded\v2.0.10.0\1.SQLCMD Add Customer Table.sql" />
-    <EmbeddedResource Include="Mocks\Embedded\v2.0.10.0\2.SQLCMD Add Email Column Table.sql" />
-    <EmbeddedResource Include="Mocks\Embedded\v2.0.10.0\3.SQLCMD Add Customer Data.sql" />
     <Content Include="Mocks\Failures\1.SQLCMD Add Customer Table.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -43,7 +43,7 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// <value>
         /// The assembly containing embbeded scripts.
         /// </value>
-        public IList<Assembly> ScriptAssemblies { get; set; }
+        public IEnumerable<Assembly> ScriptAssemblies { get; set; }
 
         /// <summary>
         /// Gets or sets the output file to render the combined change scripts to.

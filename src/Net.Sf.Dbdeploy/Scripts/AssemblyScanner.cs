@@ -15,9 +15,9 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         private readonly TextWriter infoTextWriter;
         private readonly Encoding encoding;
-        private readonly IList<Assembly> assemblies;
+        private readonly IEnumerable<Assembly> assemblies;
 
-        public AssemblyScanner(TextWriter writer, Encoding encoding, IList<Assembly> assemblies)
+        public AssemblyScanner(TextWriter writer, Encoding encoding, IEnumerable<Assembly> assemblies)
         {
             filenameParser = new FilenameParser();
 
@@ -28,7 +28,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         public List<ChangeScript> GetChangeScripts()
         {
-            if(assemblies == null || assemblies.Count == 0)
+            if(assemblies == null || !assemblies.Any())
                 return EmptyList();
 
             var changeScripts = new List<ChangeScript>();

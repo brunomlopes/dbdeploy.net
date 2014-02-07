@@ -28,7 +28,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         public List<ChangeScript> GetChangeScripts()
         {
             if (directory == null)
-                throw new ArgumentNullException("directory");
+                return new List<ChangeScript>();
 
             try
             {
