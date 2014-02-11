@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,19 +18,16 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void CanReadFilesFromAssembly()
         {
             var writer = new StringWriter();
-            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, new List<Assembly> { Assembly.GetAssembly(GetType())});
+            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, new List<Assembly> { AssemblieWithEmbeddedScripts() });
 
             var changeScripts = assemblyScanner.GetChangeScripts();
             
             Assert.IsNotNull(changeScripts, "Change scripts should not be null.");
             Assert.Greater(changeScripts.Count, 0, "No change scripts where found.");
 
-            VerifyChangeScript(changeScripts, "2.0.0.0", 8, "8.Create Product Table.sql");
-            VerifyChangeScript(changeScripts, "2.0.0.0", 9, "09.Add Product Data.sql");
-            VerifyChangeScript(changeScripts, "2.0.0.0", 10, "10.Add Sold Column.sql");
-            VerifyChangeScript(changeScripts, "v2.0.10.0", 1, "1.SQLCMD Add Customer Table.sql");
-            VerifyChangeScript(changeScripts, "v2.0.10.0", 2, "2.SQLCMD Add Email Column Table.sql");
-            VerifyChangeScript(changeScripts, "v2.0.10.0", 3, "3.SQLCMD Add Customer Data.sql");
+            VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
+            VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
+            VerifyChangeScript(changeScripts, "2.3.0.0", 10, "10.Add Age Column.sql");
         }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             Assert.AreEqual(scriptNumber, script.ScriptNumber, "ScriptNumber was incorrect for '{0}'.", fileName);
 
             var embeddedFileInfo = script.EmbeddedFileInfo;
-            Assert.AreEqual(embeddedFileInfo.Assembly, TestAssembly(), "EmbeddedFileInfo.Assembly was incorrect for '{0}'.", fileName);
+            Assert.AreEqual(embeddedFileInfo.Assembly, AssemblieWithEmbeddedScripts(), "EmbeddedFileInfo.Assembly was incorrect for '{0}'.", fileName);
             Assert.IsNotNull(embeddedFileInfo, "EmbeddedFileInfo should not be null for '{0}'.", fileName);
             Assert.AreEqual(embeddedFileInfo.FileName, fileName, "EmbeddedFileInfo.FileName was incorrect for '{0}'.", fileName);
             Assert.AreEqual(embeddedFileInfo.Folder, folder, "EmbeddedFileInfo.Folder was incorrect for '{0}'.", fileName);
@@ -56,12 +54,15 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         private string ResourceNameForScript(string fileName)
         {
-            return TestAssembly().GetManifestResourceNames().First(r => r.EndsWith(fileName));
+            return AssemblieWithEmbeddedScripts()
+                .GetManifestResourceNames()
+                .First(r => r.EndsWith(fileName));
         }
 
-        private Assembly TestAssembly()
+        private Assembly AssemblieWithEmbeddedScripts()
         {
-            return Assembly.GetAssembly(GetType());
+            var fileInfo = new FileInfo("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
+            return Assembly.LoadFile(fileInfo.FullName);
         }
     }
 }

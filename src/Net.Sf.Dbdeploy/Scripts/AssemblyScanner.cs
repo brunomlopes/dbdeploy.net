@@ -62,7 +62,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
                 try
                 {
-                    folder = folder.Replace("_", string.Empty);
+                    folder = folder.Replace("._", ".");
                     int scriptNumber = filenameParser.ExtractScriptNumberFromFilename(fileName);
 
                     var embeddedFileInfo = new EmbeddedFileInfo
@@ -84,7 +84,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             var builder = new StringBuilder();
 
-            var matchCollection = Regex.Matches(resourceScript, @"(([v]\d+\.)+|(_\d+\.)+)");
+            var matchCollection = Regex.Matches(resourceScript, @"([v]?)(\d+[.][_])+(\d+)([^.]*)");
             foreach (var match in matchCollection)
             {
                 builder.Append(match);
