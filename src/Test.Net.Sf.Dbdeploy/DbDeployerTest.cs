@@ -39,7 +39,7 @@ namespace Net.Sf.Dbdeploy
                         Dbms = "mssql",
                         Delimiter = "GO",
                         ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
-                        ScriptAssemblies = new List<Assembly> { AssemblieWithEmbeddedScripts() },
+                        ScriptAssembly = AssemblieWithEmbeddedScripts(),
                         DelimiterType = Parser.ParseDelimiterType("row"),
                         UseSqlCmd = false
                     };
@@ -63,7 +63,7 @@ namespace Net.Sf.Dbdeploy
                     Dbms = "mssql",
                     Delimiter = "GO",
                     ScriptDirectory = null,
-                    ScriptAssemblies = new List<Assembly> { AssemblieWithEmbeddedScripts() },
+                    ScriptAssembly = AssemblieWithEmbeddedScripts(),
                     DelimiterType = Parser.ParseDelimiterType("row"),
                     UseSqlCmd = false
                 };

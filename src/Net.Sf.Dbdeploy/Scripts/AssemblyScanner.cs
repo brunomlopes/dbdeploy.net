@@ -15,30 +15,24 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         private readonly TextWriter infoTextWriter;
         private readonly Encoding encoding;
-        private readonly IEnumerable<Assembly> assemblies;
+        private readonly Assembly assembly;
 
-        public AssemblyScanner(TextWriter writer, Encoding encoding, IEnumerable<Assembly> assemblies)
+        public AssemblyScanner(TextWriter writer, Encoding encoding, Assembly assembly)
         {
             filenameParser = new FilenameParser();
 
             infoTextWriter = writer;
             this.encoding = encoding;
-            this.assemblies = assemblies;
+            this.assembly = assembly;
         }
 
         public List<ChangeScript> GetChangeScripts()
         {
-            if(assemblies == null || !assemblies.Any())
+            if(assembly == null)
                 return EmptyList();
-
-            var changeScripts = new List<ChangeScript>();
-            foreach (var assembly in assemblies)
-            {
-                var assemblyScripts = GetChangeScriptsFromAssembly(assembly);  
-                changeScripts.AddRange(assemblyScripts);
-            }
-
-            return changeScripts;
+            
+            var assemblyScripts = GetChangeScriptsFromAssembly(assembly);  
+            return new List<ChangeScript>(assemblyScripts);
         }
 
         private IEnumerable<ChangeScript> GetChangeScriptsFromAssembly(Assembly assembly)

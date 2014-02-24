@@ -52,7 +52,7 @@ namespace Net.Sf.Dbdeploy
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
 
             var directoryScanner = new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory);
-            var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssemblies);
+            var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly);
             var scanner = new AllScriptScanner(directoryScanner, assemblyScanner);
 
             var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScripts());
@@ -169,7 +169,7 @@ namespace Net.Sf.Dbdeploy
             this.CheckForRequiredParameter(config.ConnectionString, "connectionString");
             this.CheckForRequiredParameter(infoWriter, "infoWriter");
 
-            if (config.ScriptAssemblies != null && !config.ScriptAssemblies.Any())
+            if (config.ScriptAssembly == null)
             {
                 this.CheckForRequiredParameter(config.ScriptDirectory, "dir");
             }

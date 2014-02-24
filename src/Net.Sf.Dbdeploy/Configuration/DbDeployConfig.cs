@@ -38,12 +38,12 @@ namespace Net.Sf.Dbdeploy.Configuration
         public DirectoryInfo ScriptDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets the assemblies to read all change scripts resource files from.
+        /// Gets or sets the assembly to read all change scripts resource files from.
         /// </summary>
         /// <value>
         /// The assembly containing embbeded scripts.
         /// </value>
-        public IEnumerable<Assembly> ScriptAssemblies { get; set; }
+        public Assembly ScriptAssembly { get; set; }
 
         /// <summary>
         /// Gets or sets the output file to render the combined change scripts to.

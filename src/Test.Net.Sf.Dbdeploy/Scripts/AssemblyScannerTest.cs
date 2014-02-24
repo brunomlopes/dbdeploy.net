@@ -18,7 +18,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void CanReadFilesFromAssembly()
         {
             var writer = new StringWriter();
-            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, new List<Assembly> { AssemblieWithEmbeddedScripts() });
+            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, AssemblieWithEmbeddedScripts());
 
             var changeScripts = assemblyScanner.GetChangeScripts();
             
