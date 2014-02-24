@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Net.Sf.Dbdeploy.Configuration
@@ -43,7 +44,22 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// <value>
         /// The assembly containing embbeded scripts.
         /// </value>
+        /// <remarks>
+        /// This is a optional parameter.
+        /// </remarks>
         public Assembly ScriptAssembly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter function to filter the embbeded resources found in a assembly.
+        /// This property is used in conjunction ScriptAssembly property.
+        /// </summary>
+        /// <value>
+        /// The filter function.
+        /// </value>
+        /// <remarks>
+        /// This is a optional parameter.
+        /// </remarks>
+        public Func<string, bool> AssemblyResourceNameFilter { get; set; }
 
         /// <summary>
         /// Gets or sets the output file to render the combined change scripts to.

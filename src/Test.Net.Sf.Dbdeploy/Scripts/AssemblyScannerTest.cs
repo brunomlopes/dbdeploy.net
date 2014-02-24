@@ -12,7 +12,7 @@ namespace Net.Sf.Dbdeploy.Scripts
     public class AssemblyScannerTest
     {
         /// <summary>
-        /// Tests if <see cref="AssemblyScanner"/> can read files from the specified assemblies.
+        /// Tests if <see cref="AssemblyScanner"/> can read files from the specified assembly.
         /// </summary>
         [Test]
         public void CanReadFilesFromAssembly()
@@ -28,6 +28,25 @@ namespace Net.Sf.Dbdeploy.Scripts
             VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
             VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
             VerifyChangeScript(changeScripts, "2.3.0.0", 10, "10.Add Age Column.sql");
+        }
+
+        /// <summary>
+        /// Tests if <see cref="AssemblyScanner"/> apllies the filter function on the resource names from scripts found.
+        /// </summary>
+        [Test]
+        public void AFilterCanBeAppliedToFilterTheResourceNamesOfFoundScripts()
+        {
+            var writer = new StringWriter();
+            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, AssemblieWithEmbeddedScripts(), r => !r.EndsWith("10.Add Age Column.sql"));
+
+            var changeScripts = assemblyScanner.GetChangeScripts();
+
+            Assert.IsNotNull(changeScripts, "Change scripts should not be null.");
+            Assert.Greater(changeScripts.Count, 0, "No change scripts where found.");
+
+            VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
+            VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
+            VerifyScriptNotInTheList(changeScripts, "10.Add Age Column.sql");
         }
 
         /// <summary>
@@ -50,6 +69,12 @@ namespace Net.Sf.Dbdeploy.Scripts
             Assert.AreEqual(embeddedFileInfo.FileName, fileName, "EmbeddedFileInfo.FileName was incorrect for '{0}'.", fileName);
             Assert.AreEqual(embeddedFileInfo.Folder, folder, "EmbeddedFileInfo.Folder was incorrect for '{0}'.", fileName);
             Assert.AreEqual(embeddedFileInfo.ResourceName, ResourceNameForScript(fileName), "EmbeddedFileInfo.ResourceName was incorrect for '{0}'.", fileName);
+        }
+
+        private void VerifyScriptNotInTheList(IEnumerable<ChangeScript> changeScripts, string fileName)
+        {
+            var scriptFound = changeScripts.Any(c => c.ScriptName == fileName);
+            Assert.IsFalse(scriptFound, "Script {0} should not be in the list");
         }
 
         private string ResourceNameForScript(string fileName)

@@ -52,7 +52,7 @@ namespace Net.Sf.Dbdeploy
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
 
             var directoryScanner = new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory);
-            var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly);
+            var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly, config.AssemblyResourceNameFilter);
             var scanner = new AllScriptScanner(directoryScanner, assemblyScanner);
 
             var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScripts());

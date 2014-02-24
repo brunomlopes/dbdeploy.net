@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,14 +17,16 @@ namespace Net.Sf.Dbdeploy.Scripts
         private readonly TextWriter infoTextWriter;
         private readonly Encoding encoding;
         private readonly Assembly assembly;
+        private readonly Func<string, bool> resourceNameFilter;
 
-        public AssemblyScanner(TextWriter writer, Encoding encoding, Assembly assembly)
+        public AssemblyScanner(TextWriter writer, Encoding encoding, Assembly assembly, Func<string, bool> resourceNameFilter = null)
         {
             filenameParser = new FilenameParser();
 
             infoTextWriter = writer;
             this.encoding = encoding;
             this.assembly = assembly;
+            this.resourceNameFilter = resourceNameFilter;
         }
 
         public List<ChangeScript> GetChangeScripts()
@@ -48,7 +51,10 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             var scripts = new List<ChangeScript>();
 
-            var resourceScripts = assembly.GetManifestResourceNames().Where(f => f.EndsWith(".sql"));
+            var resourceScripts = assembly.GetManifestResourceNames().Where(resourceName => resourceName.EndsWith(".sql"));
+            if (resourceNameFilter != null)
+                resourceScripts = resourceScripts.Where(resourceName => resourceNameFilter(resourceName));
+
             foreach (var resourceScript in resourceScripts)
             {
                 string folder = ExtractFolderNameWithUnderlines(resourceScript);
