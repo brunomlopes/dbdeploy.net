@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Scripts;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     /// <summary>
@@ -56,5 +58,18 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="templateQualifier">Template qualifier, like apply or undo</param>
         /// <returns>Template filename, including extention</returns>
         string GetTemplateFileNameFor(string templateQualifier);
+
+        /// <summary>
+        /// Call the specified create insert script, used by a template applier, for the current syntax
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="folder"></param>
+        /// <param name="scriptNumber"></param>
+        /// <param name="scriptName"></param>
+        /// <param name="completeDate"></param>
+        /// <param name="scriptStatus"></param>
+        /// <param name="scriptOutput"></param>
+        /// <returns>Insert script according with template file</returns>
+        string CreateInsertChangeLogTableSqlScript(string tableName, string folder, int scriptNumber, string scriptName, string completeDate, int scriptStatus, string scriptOutput);
     }
 }
