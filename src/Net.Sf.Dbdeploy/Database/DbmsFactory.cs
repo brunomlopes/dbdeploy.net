@@ -7,16 +7,15 @@ namespace Net.Sf.Dbdeploy.Database
     public class DbmsFactory
     {
         private readonly string dbms;
-
         private readonly string connectionString;
-
         private readonly DbProviders providers;
+        private readonly string oracleDllPath;
 
-        public DbmsFactory(string dbms, string connectionString)
+        public DbmsFactory(string dbms, string connectionString, string oracleDllPath = null)
         {
             this.dbms = dbms;
             this.connectionString = connectionString;
-
+            this.oracleDllPath = oracleDllPath;
             this.providers = new DbProviderFile().LoadProviders();
         }
 
@@ -37,12 +36,17 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual IDbConnection CreateConnection()
         {
-            DatabaseProvider provider = this.providers.GetProvider(dbms);
 
-            Assembly assembly = Assembly.Load(provider.AssemblyName);
-            Type type = assembly.GetType(provider.ConnectionClass);
+            string assemblyFullNameOracleDllPath = null;
+            if (oracleDllPath != null)
+            {
+                assemblyFullNameOracleDllPath = AssemblyName.GetAssemblyName(oracleDllPath).FullName;
+            }
 
-            return (IDbConnection)Activator.CreateInstance(type, this.connectionString);
+            var provider = providers.GetProvider(dbms);
+            var assembly = Assembly.Load(assemblyFullNameOracleDllPath ?? provider.AssemblyName);
+            var type = assembly.GetType(assemblyFullNameOracleDllPath != null ? "Oracle.DataAccess.Client.OracleConnection" : provider.ConnectionClass);
+            return (IDbConnection)Activator.CreateInstance(type, connectionString);
         }
     }
 }

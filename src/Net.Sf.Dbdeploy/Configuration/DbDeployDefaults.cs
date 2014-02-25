@@ -79,5 +79,10 @@
         /// The line ending default value.
         /// </summary>
         public static readonly string LineEnding = Database.LineEnding.Platform;
+
+        /// <summary>
+        /// The personal Oracle Dll path connection
+        /// </summary>
+        public static readonly string OracleDllPath = null;
     }
 }

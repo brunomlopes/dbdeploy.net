@@ -128,6 +128,7 @@
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
+    <Compile Include="Database\DbmsFactoryTest.cs" />
     <Compile Include="DbDeployerTest.cs" />
     <Compile Include="Scripts\AllScriptScannerTest.cs" />
     <Compile Include="Scripts\AssemblyScannerTest.cs" />
@@ -199,6 +200,18 @@
     <Content Include="Mocks\Failures\3.SQLCMD Add Customer Data.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Mocks\Fixtures\OracleDllConnection\10.2.0.100\Oracle.DataAccess.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mocks\Fixtures\OracleDllConnection\4.112.2.0\Oracle.DataAccess.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mocks\Fixtures\OracleDllConnection\System.Data.OracleClient.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mocks\Fixtures\OracleDllConnection\AnyDll.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Mocks\Versioned\2.0.0.0\8.Create Product Table.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
