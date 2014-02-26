@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="Appliers\DirectToDbApplier.cs" />
     <Compile Include="Database\TableInfo.cs" />
+    <Compile Include="Exceptions\ScriptFailedException.cs" />
     <Compile Include="Scripts\AllScriptScanner.cs" />
     <Compile Include="Scripts\AssemblyScanner.cs" />
     <Compile Include="Scripts\EmbeddedResources\EmbeddedFileInfo.cs" />
