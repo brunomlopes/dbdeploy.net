@@ -38,7 +38,7 @@
 
             var connection = new Mock<IDbConnection>();
 
-            var factory = new Mock<DbmsFactory>("mssql", string.Empty);
+            var factory = new Mock<DbmsFactory>("mssql", string.Empty, null);
             factory.Setup(f => f.CreateConnection()).Returns(connection.Object);
         
             this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
@@ -78,21 +78,21 @@ WHERE TABLE_NAME = '{0}'", t));
                                  {
                                      new ChangeEntry("Alpha", 5)
                                          {
-                                             ChangeId = 1,
+                                             ChangeId = "1",
                                              ScriptName = "05.test.sql",
                                              Status = ScriptStatus.Success,
                                              Output = "Complete"
                                          }, 
                                      new ChangeEntry("Alpha", 9)
                                          {
-                                             ChangeId = 2,
+                                             ChangeId = "2",
                                              ScriptName = "09.test.sql",
                                              Status = ScriptStatus.ProblemResolved,
                                              Output = "Fixed"
                                          }, 
                                      new ChangeEntry("Alpha", 12)
                                          {
-                                             ChangeId = 3,
+                                             ChangeId = "3",
                                              ScriptName = "12.test.sql",
                                              Status = ScriptStatus.Failure,
                                              Output = "Failed"
@@ -110,7 +110,7 @@ WHERE TABLE_NAME = '{0}'", t));
             this.expectedResultSet.Setup(rs => rs["ScriptNumber"]).Returns(() => (short)getEnumerator.Current.ScriptNumber);
             this.expectedResultSet.Setup(rs => rs["ChangeId"]).Returns(() => getEnumerator.Current.ChangeId);
             this.expectedResultSet.Setup(rs => rs["ScriptName"]).Returns(() => getEnumerator.Current.ScriptName);
-            this.expectedResultSet.Setup(rs => rs["ScriptStatus"]).Returns(() => (byte)getEnumerator.Current.Status);
+            this.expectedResultSet.Setup(rs => rs["ScriptStatus"]).Returns(() => (short)getEnumerator.Current.Status);
             this.expectedResultSet.Setup(rs => rs["ScriptOutput"]).Returns(() => getEnumerator.Current.Output);
 
             var changes = this.schemaVersionManager.GetAppliedChanges().ToList();
@@ -129,8 +129,7 @@ WHERE TABLE_NAME = '{0}'", t));
             this.syntax.Setup(s => s.CurrentTimestamp).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
-            string expected = @"INSERT INTO ChangeLog (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5) 
-SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
+            string expected = "INSERT INTO ChangeLog (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5)";
 
             Assert.AreEqual(expected, this.executedQueries.FirstOrDefault(), "The query executed was incorrect.");
 

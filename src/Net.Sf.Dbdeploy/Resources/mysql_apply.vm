@@ -2,8 +2,8 @@
 
 -- START CHANGE SCRIPT ${script}
 
-INSERT INTO ${changeLogTableName} (Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)
- VALUES ('${script.Folder}', ${script.ScriptNumber}, '${script.ScriptName}', CURRENT_TIMESTAMP, USER(), 1, '')$!{separator}${delimiter}
+INSERT INTO ${changeLogTableName} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)
+ VALUES (UUID(), '${script.Folder}', ${script.ScriptNumber}, '${script.ScriptName}', CURRENT_TIMESTAMP, USER(), 1, '')$!{separator}${delimiter}
 
 ${script.getContent()}
 
