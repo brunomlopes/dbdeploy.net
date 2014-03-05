@@ -82,7 +82,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.EnsureTableDoesNotExist();
 
             // Create change log table
-            databaseSchemaVersion.CreateChangeLogTable();
+            CreateTable();
 
             this.AssertTableExists("ChangeLog");
         }
@@ -165,7 +165,9 @@ namespace Net.Sf.Dbdeploy.Database
         {
             if (!this.databaseSchemaVersion.ChangeLogTableExists())
             {
-                this.databaseSchemaVersion.CreateChangeLogTable();
+                var script = this.syntax.CreateChangeLogTableSqlScript(TableName);
+                script = script.Replace(";", string.Empty);
+                ExecuteSql(script);
             };
         }
 
