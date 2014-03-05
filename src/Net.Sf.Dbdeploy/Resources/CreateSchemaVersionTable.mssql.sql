@@ -11,7 +11,7 @@ CREATE TABLE $(QualifiedTableName) (
 	StartDate DATETIME NOT NULL,
 	CompleteDate DATETIME NULL,
 	AppliedBy VARCHAR(128) NOT NULL,
-	ScriptStatus SMALLINT NOT NULL,
+	ScriptStatus TINYINT NOT NULL,
 	ScriptOutput VARCHAR(max) NULL,
  CONSTRAINT PK_$(TableName) PRIMARY KEY CLUSTERED 
 (

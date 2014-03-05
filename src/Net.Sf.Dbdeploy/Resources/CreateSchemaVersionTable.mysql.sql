@@ -9,5 +9,4 @@ CREATE TABLE $(QualifiedTableName) (
 	ScriptStatus TINYINT NOT NULL,
 	ScriptOutput TEXT NULL,
 	PRIMARY KEY PK_$(TableName) (ChangeId),
-	UNIQUE KEY (Folder, ScriptNumber)
-);
+	UNIQUE KEY (Folder, ScriptNumber));

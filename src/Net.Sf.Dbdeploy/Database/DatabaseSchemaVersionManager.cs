@@ -59,17 +59,17 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 // Find all changes that are not resolved.
                 string sql = string.Format(CultureInfo.InvariantCulture, "SELECT ChangeId, Folder, ScriptNumber, ScriptName, ScriptStatus, ScriptOutput FROM {0}", this.changeLogTableName);
-                
+
                 using (var reader = this.queryExecuter.ExecuteQuery(sql))
                 {
                     while (reader.Read())
                     {
                         var folder = GetValue<string>(reader, "Folder");
-                        var scriptNumber = GetValue<short>(reader, "ScriptNumber");
+                        var scriptNumber = GetShort(reader, "ScriptNumber");
                         var changeEntry = new ChangeEntry(folder, scriptNumber);
                         changeEntry.ChangeId = GetValue<string>(reader, "ChangeId");
                         changeEntry.ScriptName = GetValue<string>(reader, "ScriptName");
-                        changeEntry.Status = (ScriptStatus)GetValue<short>(reader, "ScriptStatus");
+                        changeEntry.Status = (ScriptStatus)GetByte(reader, "ScriptStatus");
                         changeEntry.Output = GetValue<string>(reader, "ScriptOutput");
 
                         changes.Add(changeEntry);
@@ -121,16 +121,16 @@ namespace Net.Sf.Dbdeploy.Database
         {
             try
             {
-                output = string.IsNullOrEmpty(output) ? "NULL" : "'" +  output + "'";
+                output = string.IsNullOrEmpty(output) ? "NULL" : "'" + output + "'";
                 var completeDateValue = status != ScriptStatus.Started ? this.syntax.CurrentTimestamp : "NULL";
 
                 if (string.IsNullOrWhiteSpace(script.ChangeId))
                 {
-                    var sqlInsert = syntax.CreateInsertChangeLogTableSqlScript(changeLogTableName, 
-                                                                               script.Folder, 
+                    var sqlInsert = syntax.CreateInsertChangeLogTableSqlScript(changeLogTableName,
+                                                                               script.Folder,
                                                                                script.ScriptNumber,
-                                                                               script.ScriptName, 
-                                                                               completeDateValue, 
+                                                                               script.ScriptName,
+                                                                               completeDateValue,
                                                                                (int)status,
                                                                                output);
 
@@ -175,7 +175,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="reader">The reader.</param>
         /// <param name="name">The name of the column.</param>
         /// <returns>Value if not null; otherwise default.</returns>
-        private static T GetValue<T>(IDataReader reader, string name)
+        private T GetValue<T>(IDataReader reader, string name)
         {
             var value = default(T);
 
@@ -186,6 +186,28 @@ namespace Net.Sf.Dbdeploy.Database
                 value = (T)columnValue;
             }
             return value;
+        }
+
+        private short GetShort(IDataReader reader, string name)
+        {
+            // Handle DBNull values.
+            var columnValue = reader[name];
+            if (columnValue != DBNull.Value)
+            {
+                return Convert.ToInt16(columnValue);
+            }
+            return 0;
+        }
+
+        private short GetByte(IDataReader reader, string name)
+        {
+            // Handle DBNull values.
+            var columnValue = reader[name];
+            if (columnValue != DBNull.Value)
+            {
+                return Convert.ToByte(columnValue);
+            }
+            return 0;
         }
 
         /// <summary>

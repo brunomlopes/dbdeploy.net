@@ -1,7 +1,7 @@
 CREATE TABLE $(QualifiedTableName) (
 	ChangeId VARCHAR2(64) NOT NULL, 
 	Folder VARCHAR2(256) NOT NULL, 
-	ScriptNumber NUMBER(3) NOT NULL, 
+	ScriptNumber NUMBER(2) NOT NULL, 
 	ScriptName VARCHAR2(512) NOT NULL, 
 	StartDate TIMESTAMP NOT NULL, 
 	CompleteDate TIMESTAMP NULL, 
@@ -9,5 +9,4 @@ CREATE TABLE $(QualifiedTableName) (
 	ScriptStatus NUMBER(1) NOT NULL,
 	ScriptOutput CLOB NULL,
 	CONSTRAINT PK_$(TableName) PRIMARY KEY (ChangeId),
-	CONSTRAINT UK_$(TableName) UNIQUE (Folder, ScriptNumber))
-;
+	CONSTRAINT UK_$(TableName) UNIQUE (Folder, ScriptNumber));
