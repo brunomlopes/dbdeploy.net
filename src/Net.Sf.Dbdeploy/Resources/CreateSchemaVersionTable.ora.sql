@@ -9,4 +9,4 @@ CREATE TABLE $(QualifiedTableName) (
 	ScriptStatus NUMBER(1) NOT NULL,
 	ScriptOutput CLOB NULL,
 	CONSTRAINT PK_$(TableName) PRIMARY KEY (ChangeId),
-	CONSTRAINT UK_$(TableName) UNIQUE (Folder, ScriptNumber));
+	CONSTRAINT UK_$(TableName) UNIQUE (Folder, ScriptNumber))
