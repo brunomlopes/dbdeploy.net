@@ -87,7 +87,7 @@ namespace Net.Sf.Dbdeploy.Database
 			var changeNumbers = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
 
 			Assert.AreEqual(1, changeNumbers.Count);
-			Assert.AreEqual(3, changeNumbers[0]);
+			Assert.AreEqual(3, changeNumbers[0].ScriptNumber);
 		}
 
 		[Test]

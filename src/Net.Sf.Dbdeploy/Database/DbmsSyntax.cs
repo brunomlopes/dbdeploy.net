@@ -160,6 +160,7 @@ namespace Net.Sf.Dbdeploy.Database
                 .Replace(ChangeLogSchemaNameToken, tableInfo.Schema);
         }
 
+        //TODO: Criar um método de teste para garantir que o replace é feito corretamente
         public string CreateInsertChangeLogTableSqlScript(string tableName, 
                                                           string folder, 
                                                           int scriptNumber, 
