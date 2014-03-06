@@ -11,13 +11,17 @@ namespace Net.Sf.Dbdeploy.Database
     class DbmsFactoryTest
     {
         private const string OracleConnectionStringTns = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=DBDEPLOY;Password=DBDEPLOY;";
-        private string oracleDllPathVersion4, oracleDllPathVersion10, anyDll, otherOracleDllConnection;
-        private const string Dbms = "ora";
+        private const string MySqlConnectionString = "Server=localhost; Database=dbdeploy; Uid=dbdeploy; Pwd=dbdeploy;";
+        private string oracleDllPathVersion4, oracleDllPathVersion10, anyDll, otherOracleDllConnection, mySqlDllPath;
+        private const string DbmsOracle = "ora";
+        private const string DbmsMySql = "mysql";
         private const string OracleDllName = "Oracle.DataAccess.dll";
+        private const string MySqlDllName = "MySql.Data.dll";
 
         [SetUp]
         public void SetUp()
         {
+            mySqlDllPath = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\MySqlDllConnection\\" + MySqlDllName;
             oracleDllPathVersion4 = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\OracleDllConnection\\4.112.2.0\\" + OracleDllName;
             oracleDllPathVersion10 = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\OracleDllConnection\\10.2.0.100\\" + OracleDllName;
             anyDll = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\OracleDllConnection\\AnyDll.dll";
@@ -25,9 +29,19 @@ namespace Net.Sf.Dbdeploy.Database
         }
 
         [Test]
-        public void GivenAnEntryWithoutOracleDllPathShouldGetDefaultConfigOnDbdeploy()
+        [ExpectedException("System.IO.FileNotFoundException")]
+        public void GivenAnEntryWithoutMySqlDllConnectionShouldThrowsException()
         {
-            var factory = new DbmsFactory(Dbms, OracleConnectionStringTns);
+            var factory = new DbmsFactory(DbmsMySql, MySqlConnectionString);
+            var connection = OpenConnection(factory);
+            Assert.AreEqual(ConnectionState.Open, connection.State);
+            CloseConnection(connection);
+        }
+
+        [Test]
+        public void GivenAnEntryWithMySqlDllConnectionShouldOpenedSuccessful()
+        {
+            var factory = new DbmsFactory(DbmsMySql, MySqlConnectionString, mySqlDllPath);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
             CloseConnection(connection);
@@ -35,18 +49,18 @@ namespace Net.Sf.Dbdeploy.Database
 
         [Test]
         [ExpectedException("System.BadImageFormatException")]
-        public void GivenAnEntryWhereDllIsNotValid()
+        public void GivenAnEntryWhereDllIsNotValidOracle()
         {
-            var factory = new DbmsFactory(Dbms, OracleConnectionStringTns, anyDll);
+            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, anyDll);
             var connection = OpenConnection(factory);
             CloseConnection(connection);
         }
 
         [Test]
         [ExpectedException("System.ArgumentNullException")]
-        public void GivenAnEntryWhereDllIsNotValid2()
+        public void GivenAnEntryWhereDllIsNotValid2Oracle()
         {
-            var factory = new DbmsFactory(Dbms, OracleConnectionStringTns, otherOracleDllConnection);
+            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, otherOracleDllConnection);
             var connection = OpenConnection(factory);
             CloseConnection(connection);
         }
@@ -54,7 +68,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GivenAnEntryWhereConnectionIsSucceededWithOracleDllPath()
         {
-            var factory = new DbmsFactory(Dbms, OracleConnectionStringTns, oracleDllPathVersion4);
+            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllPathVersion4);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
             CloseConnection(connection);
@@ -62,17 +76,17 @@ namespace Net.Sf.Dbdeploy.Database
 
         [Test]
         [ExpectedException("System.Reflection.TargetInvocationException")]
-        public void GivenAnEntryWhereAnExceptionIsExpectedBecauseDllIsWrong()
+        public void GivenAnEntryWhereAnExceptionIsExpectedBecauseDllIsWrongOracle()
         {
-            var factory = new DbmsFactory(Dbms, OracleConnectionStringTns, oracleDllPathVersion10);
+            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllPathVersion10);
             var connection = OpenConnection(factory);
             CloseConnection(connection);
         }
 
         [Test]
-        public void ShouldExecuteSqlCommandSuccessful()
+        public void ShouldExecuteSqlCommandSuccessfulOracle()
         {
-            var factory = new DbmsFactory(Dbms, OracleConnectionStringTns, oracleDllPathVersion4);
+            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllPathVersion4);
             var connection = OpenConnection(factory);
             var command = connection.CreateCommand();
             command.CommandText = "Select Sysdate From Dual";
@@ -83,9 +97,9 @@ namespace Net.Sf.Dbdeploy.Database
 
         [Test]
         [ExpectedException("Oracle.DataAccess.Client.OracleException")]
-        public void ShouldExecuteSqlCommandFailed()
+        public void ShouldExecuteSqlCommandFailedOracle()
         {
-            var factory = new DbmsFactory(Dbms, OracleConnectionStringTns, oracleDllPathVersion4);
+            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllPathVersion4);
             var connection = OpenConnection(factory);
             var command = connection.CreateCommand();
             command.CommandText = "Select * From ANY_TABLE";

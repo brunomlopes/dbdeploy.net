@@ -212,18 +212,21 @@
     <Content Include="Mocks\Failures\3.SQLCMD Add Customer Data.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Mocks\Fixtures\OracleDllConnection\10.2.0.100\Oracle.DataAccess.dll">
+    <Content Include="Mocks\Fixtures\OracleDllConnection\10.2.0.100\Oracle.DataAccess.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Mocks\Fixtures\OracleDllConnection\4.112.2.0\Oracle.DataAccess.dll">
+    </Content>
+    <Content Include="Mocks\Fixtures\OracleDllConnection\4.112.2.0\Oracle.DataAccess.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Mocks\Fixtures\OracleDllConnection\System.Data.OracleClient.dll">
+    </Content>
+    <Content Include="Mocks\Fixtures\OracleDllConnection\System.Data.OracleClient.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Mocks\Fixtures\OracleDllConnection\AnyDll.dll">
+    </Content>
+    <Content Include="Mocks\Fixtures\OracleDllConnection\AnyDll.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
+    <Content Include="Mocks\Fixtures\MySqlDllConnection\MySql.Data.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Mocks\Versioned\2.0.0.0\8.Create Product Table.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -8,15 +8,16 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private readonly string dbms;
         private readonly string connectionString;
-        private readonly DbProviders providers;
-        private readonly string oracleDllPath;
+        private readonly DatabaseProvider provider;
+        private readonly string dllPathConnection;
+        //private const string OracleConnectionClass = "Oracle.DataAccess.Client.OracleConnection";
 
-        public DbmsFactory(string dbms, string connectionString, string oracleDllPath = null)
+        public DbmsFactory(string dbms, string connectionString, string dllPathConnection = null)
         {
             this.dbms = dbms;
             this.connectionString = connectionString;
-            this.oracleDllPath = oracleDllPath;
-            this.providers = new DbProviderFile().LoadProviders();
+            this.dllPathConnection = dllPathConnection;
+            this.provider = new DbProviderFile().LoadProviders().GetProvider(dbms);
         }
 
         public virtual IDbmsSyntax CreateDbmsSyntax()
@@ -36,17 +37,23 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual IDbConnection CreateConnection()
         {
-
-            string assemblyFullNameOracleDllPath = null;
-            if (oracleDllPath != null)
+            string assemblyFullNameDllPath = null;
+            if (dllPathConnection != null)
             {
-                assemblyFullNameOracleDllPath = AssemblyName.GetAssemblyName(oracleDllPath).FullName;
+                assemblyFullNameDllPath = AssemblyName.GetAssemblyName(dllPathConnection).FullName;
             }
 
-            var provider = providers.GetProvider(dbms);
-            var assembly = Assembly.Load(assemblyFullNameOracleDllPath ?? provider.AssemblyName);
-            var type = assembly.GetType(assemblyFullNameOracleDllPath != null ? "Oracle.DataAccess.Client.OracleConnection" : provider.ConnectionClass);
+            var assembly = Assembly.Load(assemblyFullNameDllPath ?? provider.AssemblyName);
+            var type = assembly.GetType(provider.ConnectionClass);
             return (IDbConnection)Activator.CreateInstance(type, connectionString);
         }
+
+        //private string GetConnectionClass()
+        //{
+        //    if (dbms == "ora")
+        //        return "Oracle.DataAccess.Client.OracleConnection";
+
+        //    return provider.ConnectionClass;
+        //}
     }
 }
