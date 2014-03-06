@@ -43,7 +43,7 @@ namespace Net.Sf.Dbdeploy
             infoWriter.WriteLine("==========================================================");
             infoWriter.WriteLine(this.GenerateWelcomeString());
 
-            var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.OracleDllPath);
+            var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.DllPathConnector);
             
             var dbmsSyntax = factory.CreateDbmsSyntax();
 

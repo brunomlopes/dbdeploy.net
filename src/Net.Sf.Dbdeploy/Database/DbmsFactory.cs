@@ -10,7 +10,6 @@ namespace Net.Sf.Dbdeploy.Database
         private readonly string connectionString;
         private readonly DatabaseProvider provider;
         private readonly string dllPathConnection;
-        //private const string OracleConnectionClass = "Oracle.DataAccess.Client.OracleConnection";
 
         public DbmsFactory(string dbms, string connectionString, string dllPathConnection = null)
         {
@@ -44,16 +43,16 @@ namespace Net.Sf.Dbdeploy.Database
             }
 
             var assembly = Assembly.Load(assemblyFullNameDllPath ?? provider.AssemblyName);
-            var type = assembly.GetType(provider.ConnectionClass);
+            var type = assembly.GetType(assemblyFullNameDllPath != null ? GetCustomConnectionClass() : provider.ConnectionClass);
             return (IDbConnection)Activator.CreateInstance(type, connectionString);
         }
 
-        //private string GetConnectionClass()
-        //{
-        //    if (dbms == "ora")
-        //        return "Oracle.DataAccess.Client.OracleConnection";
+        private string GetCustomConnectionClass()
+        {
+            if (dbms == "ora")
+                return "Oracle.DataAccess.Client.OracleConnection";
 
-        //    return provider.ConnectionClass;
-        //}
+            return provider.ConnectionClass;
+        }
     }
 }

@@ -62,13 +62,13 @@ namespace Net.Sf.Dbdeploy.Configuration
         public Func<string, bool> AssemblyResourceNameFilter { get; set; }
 
         /// <summary>
-        /// Get or Sets path file DLL connector on Oracle Database
+        /// Get or Sets path custom file DLL connector
         /// <remarks>If this is not set, DbDeploy will get config from dbproviders.xml file</remarks>
         /// </summary>
         /// <value>
-        /// Path to a specific DLL connector for Oracle Database
+        /// Path to a specific DLL for custom connector
         /// </value>
-        public string OracleDllPath { get; set; }
+        public string DllPathConnector { get; set; }
 
         /// <summary>
         /// Gets or sets the output file to render the combined change scripts to.
@@ -190,7 +190,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             this.Delimiter = DbDeployDefaults.Delimiter;
             this.DelimiterType = DbDeployDefaults.DelimiterType;
             this.LineEnding = DbDeployDefaults.LineEnding;
-            this.OracleDllPath = DbDeployDefaults.OracleDllPath;
+            this.DllPathConnector = DbDeployDefaults.OracleDllPath;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Net.Sf.Dbdeploy.Database
         private string descriptionField;
         private string assemblyNameField;
         private string connectionClassField;
+        private string connectionClassCustomField;
 
         /// <remarks/>
         [XmlAttribute("name")]
