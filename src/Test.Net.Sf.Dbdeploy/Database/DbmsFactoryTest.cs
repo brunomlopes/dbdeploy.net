@@ -48,6 +48,30 @@ namespace Net.Sf.Dbdeploy.Database
         }
 
         [Test]
+        public void ShouldExecuteSqlCommandSuccessfulMySql()
+        {
+            var factory = new DbmsFactory(DbmsMySql, MySqlConnectionString, mySqlDllPath);
+            var connection = OpenConnection(factory);
+            var command = connection.CreateCommand();
+            command.CommandText = "Select CURRENT_TIMESTAMP From Dual;";
+            //command.CommandText = "SELECT * FROM ChangeLog";//-- This commad works if table exist
+            command.ExecuteNonQuery();
+            CloseConnection(connection);
+        }
+
+        [Test]
+        [ExpectedException("MySql.Data.MySqlClient.MySqlException")]
+        public void ShouldExecuteSqlCommandFailedMySql()
+        {
+            var factory = new DbmsFactory(DbmsMySql, MySqlConnectionString, mySqlDllPath);
+            var connection = OpenConnection(factory);
+            var command = connection.CreateCommand();
+            command.CommandText = "Select * From ANY_TABLE";
+            command.ExecuteNonQuery();
+            CloseConnection(connection);
+        }
+
+        [Test]
         [ExpectedException("System.BadImageFormatException")]
         public void GivenAnEntryWhereDllIsNotValidOracle()
         {
