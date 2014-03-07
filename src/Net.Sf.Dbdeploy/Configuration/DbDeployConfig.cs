@@ -190,7 +190,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             this.Delimiter = DbDeployDefaults.Delimiter;
             this.DelimiterType = DbDeployDefaults.DelimiterType;
             this.LineEnding = DbDeployDefaults.LineEnding;
-            this.DllPathConnector = DbDeployDefaults.OracleDllPath;
+            this.DllPathConnector = DbDeployDefaults.DllPathConnector;
         }
     }
 }

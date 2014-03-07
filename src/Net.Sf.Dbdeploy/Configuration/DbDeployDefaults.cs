@@ -83,6 +83,6 @@
         /// <summary>
         /// The personal Oracle Dll path connection
         /// </summary>
-        public static readonly string OracleDllPath = null;
+        public static readonly string DllPathConnector = null;
     }
 }
