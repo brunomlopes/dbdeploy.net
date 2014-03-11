@@ -141,6 +141,7 @@
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
     <Compile Include="Database\DbmsFactoryTest.cs" />
+    <Compile Include="Database\MySqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="DbDeployerTest.cs" />
     <Compile Include="Scripts\AllScriptScannerTest.cs" />
     <Compile Include="Scripts\AssemblyScannerTest.cs" />
