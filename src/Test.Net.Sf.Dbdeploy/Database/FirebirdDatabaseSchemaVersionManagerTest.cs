@@ -10,19 +10,18 @@ using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    [Category("MySQL"), Category("DbIntegration")]
-    class MySqlDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
+    class FirebirdDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private string connectionString;
-        private const string DBMS = "mysql";
+        private const string DBMS = "firebird";
         private const string FOLDER = "Scripts";
-        private readonly string mySqlDataDll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "MySqlDllConnection", "MySql.Data.dll");
+        private readonly string firebirdSqlDataFirebirdClient = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "FirebirdDllConnection", "FirebirdSql.Data.FirebirdClient.dll");
         private IDbmsSyntax syntax;
 
         [SetUp]
         protected override void SetUp()
         {
-            var factory = new DbmsFactory(Dbms, ConnectionString, mySqlDataDll);
+            var factory = new DbmsFactory(Dbms, ConnectionString, firebirdSqlDataFirebirdClient);
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
@@ -35,8 +34,8 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 if (connectionString == null)
                 {
-                    connectionString = ConfigurationManager.AppSettings["MySqlConnString-" + Environment.MachineName]
-                                        ?? ConfigurationManager.AppSettings["MySqlConnString"];
+                    connectionString = ConfigurationManager.AppSettings["FirebirdConnString-" + Environment.MachineName]
+                                        ?? ConfigurationManager.AppSettings["FirebirdConnString"];
                 }
                 return connectionString;
             }
@@ -101,15 +100,14 @@ namespace Net.Sf.Dbdeploy.Database
             if (!this.databaseSchemaVersion.ChangeLogTableExists())
             {
                 var script = this.syntax.CreateChangeLogTableSqlScript(TableName);
-                script = script.Replace(";", string.Empty);
                 ExecuteSql(script);
             };
         }
 
         protected override IDbConnection GetConnection()
         {
-            var assembly = Assembly.Load(AssemblyName.GetAssemblyName(mySqlDataDll).FullName);
-            var type = assembly.GetType("MySql.Data.MySqlClient.MySqlConnection");
+            var assembly = Assembly.Load(AssemblyName.GetAssemblyName(firebirdSqlDataFirebirdClient).FullName);
+            var type = assembly.GetType("FirebirdSql.Data.FirebirdClient.FbConnection");
             return (IDbConnection)Activator.CreateInstance(type, ConnectionString);
         }
 
@@ -117,8 +115,8 @@ namespace Net.Sf.Dbdeploy.Database
         {
             var commandBuilder = new StringBuilder();
             commandBuilder.AppendFormat("INSERT INTO {0}", TableName);
-            commandBuilder.Append("(ChangeId, ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput)");
-            commandBuilder.AppendFormat(" VALUES (UUID(), {0}, '{1}', CURRENT_DATE, CURRENT_DATE, USER(), 'Unit test', 1, '')", i, FOLDER);
+            commandBuilder.Append("(ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput)");
+            commandBuilder.AppendFormat(" VALUES ({0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_USER, 'Unit test', 1, '')", i, FOLDER);
             ExecuteSql(commandBuilder.ToString());
         }
     }

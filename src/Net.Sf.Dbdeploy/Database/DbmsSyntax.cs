@@ -64,6 +64,14 @@ namespace Net.Sf.Dbdeploy.Database
         public abstract string CurrentTimestamp { get; }
 
         /// <summary>
+        /// Gets the query to create a Generator (Only firebird 1.5 version)
+        /// </summary>
+        /// <value>
+        /// The script to create a Generator
+        /// </value>
+        protected abstract string GetQueryCreateGenerator();
+
+        /// <summary>
         /// Gets the syntax to get the current user.
         /// </summary>
         /// <value>
@@ -160,7 +168,6 @@ namespace Net.Sf.Dbdeploy.Database
                 .Replace(ChangeLogSchemaNameToken, tableInfo.Schema);
         }
 
-        //TODO: Criar um método de teste para garantir que o replace é feito corretamente
         public string CreateInsertChangeLogTableSqlScript(string tableName, 
                                                           string folder, 
                                                           int scriptNumber, 

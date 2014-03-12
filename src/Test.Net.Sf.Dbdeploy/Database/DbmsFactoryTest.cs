@@ -12,15 +12,19 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private const string OracleConnectionStringTns = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=DBDEPLOY;Password=DBDEPLOY;";
         private const string MySqlConnectionString = "Server=localhost; Database=dbdeploy; Uid=dbdeploy; Pwd=dbdeploy;";
-        private string oracleDllPathVersion4, oracleDllPathVersion10, anyDll, otherOracleDllConnection, mySqlDllPath;
+        private const string FirebirdConnectionString = "User=SYSDBA;Password=masterkey;Database=C:\\DBDEPLOY.fdb;DataSource=localhost;Port=3050;";
+        private string oracleDllPathVersion4, oracleDllPathVersion10, anyDll, otherOracleDllConnection, mySqlDllPath, firebirdDllPath;
         private const string DbmsOracle = "ora";
         private const string DbmsMySql = "mysql";
+        private const string DbmsFirebird = "firebird";
         private const string OracleDllName = "Oracle.DataAccess.dll";
         private const string MySqlDllName = "MySql.Data.dll";
+        private const string FirebirdDllName = "FirebirdSql.Data.FirebirdClient.dll";
 
         [SetUp]
         public void SetUp()
         {
+            firebirdDllPath = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\FirebirdDllConnection\\" + FirebirdDllName;
             mySqlDllPath = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\MySqlDllConnection\\" + MySqlDllName;
             oracleDllPathVersion4 = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\OracleDllConnection\\4.112.2.0\\" + OracleDllName;
             oracleDllPathVersion10 = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\OracleDllConnection\\10.2.0.100\\" + OracleDllName;

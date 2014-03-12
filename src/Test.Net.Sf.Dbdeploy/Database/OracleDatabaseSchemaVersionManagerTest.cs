@@ -14,10 +14,6 @@ namespace Net.Sf.Dbdeploy.Database
 	{
 		private static string _connectionString;
 		private const string FOLDER = "Scripts";
-		private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new []
-		{ 
-            "No table found with name 'ChangeLog'.",
-		};
 		private const string DBMS = "ora";
 
 		protected override string ConnectionString
@@ -37,11 +33,6 @@ namespace Net.Sf.Dbdeploy.Database
 		protected override string Folder
 		{
 			get { return FOLDER; }
-		}
-
-		protected override string[] ChangelogTableDoesNotExistMessages
-		{
-			get { return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES; }
 		}
 
 		protected override string Dbms

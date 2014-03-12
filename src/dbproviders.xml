@@ -1,9 +1,9 @@
 <providers>
   <provider
-      name="mssql"
-      description="Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0"
-      assemblyName="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
-      connectionClass="System.Data.SqlClient.SqlConnection"
+    name="mssql"
+    description="Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0"
+    assemblyName="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+    connectionClass="System.Data.SqlClient.SqlConnection"
     />
   <provider
     name="ora"
@@ -16,5 +16,11 @@
     description="MySQL, MySQL provider 1.0.7.30072"
     assemblyName="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d" 
     connectionClass="MySql.Data.MySqlClient.MySqlConnection"
+  />
+  <provider
+    name="firebird"
+    description="Firebird, Firebird provider 4.1.0.0"
+    assemblyName="FirebirdSql.Data.FirebirdClient, Version=4.1.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c"
+    connectionClass="FirebirdSql.Data.FirebirdClient.FbConnection"
   />
 </providers>
