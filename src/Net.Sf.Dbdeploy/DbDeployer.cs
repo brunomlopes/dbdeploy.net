@@ -46,10 +46,14 @@ namespace Net.Sf.Dbdeploy
             var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.DllPathConnector);
             
             var dbmsSyntax = factory.CreateDbmsSyntax();
+            var parameterReaderSyntax = factory.CreateParameterSyntax();
 
             var queryExecuter = new QueryExecuter(factory);
 
-            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
+            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, 
+                                                                                dbmsSyntax, 
+                                                                                config.ChangeLogTableName, 
+                                                                                parameterReaderSyntax);
 
             var directoryScanner = new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory);
             var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly, config.AssemblyResourceNameFilter);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Net.Sf.Dbdeploy.Database.Reader;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -26,6 +27,7 @@ namespace Net.Sf.Dbdeploy.Database
         private Mock<IDataReader> expectedResultSet;
         private Mock<QueryExecuter> queryExecuter;
         private Mock<IDbmsSyntax> syntax;
+        private Mock<IParameterReader> parameterReader;
 
         private string changeLogTableName;
 
@@ -52,6 +54,8 @@ namespace Net.Sf.Dbdeploy.Database
 FROM INFORMATION_SCHEMA.TABLES 
 WHERE TABLE_NAME = '{0}'", t));
 
+            parameterReader = new Mock<IParameterReader>();
+
             this.executedQueries = new List<string>();
 
             var checkForChangeLogDataReader = new Mock<IDataReader>();
@@ -68,7 +72,7 @@ WHERE TABLE_NAME = '{0}'", t));
                 .Returns(this.expectedResultSet.Object)
                 .Callback<string, object[]>((query, args) => this.executedQueries.Add(query));
 
-            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
+            this.schemaVersionManager = new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName, parameterReader.Object);
         }
 
         [Test]
@@ -127,17 +131,15 @@ WHERE TABLE_NAME = '{0}'", t));
         [Test]
         public void ShouldUpdateChangelogTable() 
         {
-            const string insertCommand = "INSERT INTO ChangeLog (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES ('ABC123', 'a directory', 3, '003-script.sql', GETDATE(), GETDATE(), 'sa', 1, null)";
-
-            this.syntax.Setup(s => s.CreateInsertChangeLogTableSqlScript(
-                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<int>(), It.IsAny<string>()))
-                .Returns(insertCommand);
-
-            queryExecuter.Setup(q => q.Execute(insertCommand)).Verifiable();
+            this.syntax.Setup(s => s.CurrentUser).Returns("DBUSER");
+            this.syntax.Setup(s => s.CurrentTimestamp).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
-            queryExecuter.Verify();
+            string expected = "INSERT INTO ChangeLog (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5)";
+
+            Assert.AreEqual(expected, this.executedQueries.FirstOrDefault(), "The query executed was incorrect.");
+
+            this.queryExecuter.Verify(e => e.ExecuteQuery(expected, this.script.Folder, this.script.ScriptNumber, this.script.ScriptName, (int)ScriptStatus.Success, "Script output"), Times.Once());
         }
 
         [Test]
@@ -155,7 +157,7 @@ WHERE TABLE_NAME = '{0}'", t));
             changeLogTableName = "user_specified_changelog";
 
             var schemaVersionManagerWithDifferentTableName =
-                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName);
+                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, changeLogTableName, parameterReader.Object);
 
             schemaVersionManagerWithDifferentTableName.GetAppliedChanges();
 
@@ -166,7 +168,7 @@ WHERE TABLE_NAME = '{0}'", t));
         public void ShouldGenerateSqlStringContainingSpecifiedChangelogTableNameOnDelete() 
         {
             var schemaVersionManagerWithDifferentTableName =
-                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "user_specified_changelog");
+                new DatabaseSchemaVersionManager(this.queryExecuter.Object, this.syntax.Object, "user_specified_changelog", parameterReader.Object);
 
             string updateSql = schemaVersionManagerWithDifferentTableName.GetChangelogDeleteSql(this.script);
 

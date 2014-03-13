@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Appliers
+﻿using Net.Sf.Dbdeploy.Database.Reader;
+
+namespace Net.Sf.Dbdeploy.Appliers
 {
     using System.Collections.Generic;
     using System.Data;
@@ -24,15 +26,17 @@
         public void SetUp()
         {
             IDbmsSyntax syntax = null;
+            IParameterReader parameterReader = null;
             QueryExecuter nullExecuter = null;
 
             var factory = new Mock<DbmsFactory>("mssql", string.Empty, null);
             factory.Setup(f => f.CreateConnection()).Returns(new Mock<IDbConnection>().Object);
             factory.Setup(f => f.CreateDbmsSyntax()).Returns(syntax);
+            factory.Setup(f => f.CreateParameterSyntax()).Returns(parameterReader);
 
             this.queryExecuter = new Mock<QueryExecuter>(factory.Object);
 
-            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty");
+            this.schemaVersionManager = new Mock<DatabaseSchemaVersionManager>(nullExecuter, syntax, "empty", parameterReader);
 
             this.splitter = new Mock<QueryStatementSplitter>();
 

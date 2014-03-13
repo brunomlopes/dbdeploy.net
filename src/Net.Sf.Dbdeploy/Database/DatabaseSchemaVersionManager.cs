@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Database.Reader;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System;
@@ -30,16 +32,26 @@ namespace Net.Sf.Dbdeploy.Database
         private readonly IDbmsSyntax syntax;
 
         /// <summary>
+        /// The specific data reader for each dbms.
+        /// </summary>
+        private readonly IParameterReader parameterReader;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseSchemaVersionManager" /> class.
         /// </summary>
         /// <param name="queryExecuter">The query executer.</param>
         /// <param name="syntax">The syntax.</param>
         /// <param name="changeLogTableName">Name of the change log table.</param>
-        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, IDbmsSyntax syntax, string changeLogTableName)
+        /// <param name="parameterReader"></param>
+        public DatabaseSchemaVersionManager(QueryExecuter queryExecuter, 
+                                            IDbmsSyntax syntax, 
+                                            string changeLogTableName, 
+                                            IParameterReader parameterReader)
         {
             this.syntax = syntax;
             this.queryExecuter = queryExecuter;
             this.changeLogTableName = changeLogTableName;
+            this.parameterReader = parameterReader;
         }
 
         /// <summary>
@@ -64,13 +76,13 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     while (reader.Read())
                     {
-                        var folder = GetValue<string>(reader, "Folder");
-                        var scriptNumber = GetShort(reader, "ScriptNumber");
+                        var folder = parameterReader.GetString(reader, "Folder");
+                        var scriptNumber = parameterReader.GetShort(reader, "ScriptNumber");
                         var changeEntry = new ChangeEntry(folder, scriptNumber);
-                        changeEntry.ChangeId = GetValue<string>(reader, "ChangeId");
-                        changeEntry.ScriptName = GetValue<string>(reader, "ScriptName");
-                        changeEntry.Status = (ScriptStatus)GetByte(reader, "ScriptStatus");
-                        changeEntry.Output = GetValue<string>(reader, "ScriptOutput");
+                        changeEntry.ChangeId = parameterReader.GetString(reader, "ChangeId");
+                        changeEntry.ScriptName = parameterReader.GetString(reader, "ScriptName");
+                        changeEntry.Status = (ScriptStatus)parameterReader.GetByte(reader, "ScriptStatus");
+                        changeEntry.Output = parameterReader.GetLongValueString(reader, "ScriptOutput");
 
                         changes.Add(changeEntry);
                     }
@@ -126,13 +138,17 @@ namespace Net.Sf.Dbdeploy.Database
 
                 if (string.IsNullOrWhiteSpace(script.ChangeId))
                 {
-                    var sqlInsert = syntax.CreateInsertChangeLogTableSqlScript(changeLogTableName,
-                                                                               script.Folder,
-                                                                               script.ScriptNumber,
-                                                                               script.ScriptName,
-                                                                               completeDateValue,
-                                                                               (int)status,
-                                                                               output);
+                    //var sqlInsert = syntax.CreateInsertChangeLogTableSqlScript(changeLogTableName,
+                    //                                                           script.Folder,
+                    //                                                           script.ScriptNumber,
+                    //                                                           script.ScriptName,
+                    //                                                           completeDateValue,
+                    //                                                           (int)status,
+                    //                                                           output);
+
+                    var sqlInsert = string.Format("Insert Into {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) " +
+                                                        "Values ('{1}', '{2}', {3}, '{4}', {5}, {6}, {7}, {8}, '{9}')", 
+                                                        changeLogTableName, Guid.NewGuid(), script.Folder, script.ScriptNumber, script.ScriptName, syntax.CurrentTimestamp, completeDateValue, syntax.CurrentUser, (int)status, output);
 
                     this.queryExecuter.Execute(sqlInsert);
 
@@ -168,47 +184,47 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        /// <summary>
-        /// Gets the value from the <see cref="IDataReader"/> to the specified type if it is not DBNull.
-        /// </summary>
-        /// <typeparam name="T">Type of value to retrieve.</typeparam>
-        /// <param name="reader">The reader.</param>
-        /// <param name="name">The name of the column.</param>
-        /// <returns>Value if not null; otherwise default.</returns>
-        private T GetValue<T>(IDataReader reader, string name)
-        {
-            var value = default(T);
+        ///// <summary>
+        ///// Gets the value from the <see cref="IDataReader"/> to the specified type if it is not DBNull.
+        ///// </summary>
+        ///// <typeparam name="T">Type of value to retrieve.</typeparam>
+        ///// <param name="reader">The reader.</param>
+        ///// <param name="name">The name of the column.</param>
+        ///// <returns>Value if not null; otherwise default.</returns>
+        //private T GetValue<T>(IDataReader reader, string name)
+        //{
+        //    var value = default(T);
 
-            // Handle DBNull values.
-            var columnValue = reader[name];
-            if (columnValue != DBNull.Value)
-            {
-                value = (T)columnValue;
-            }
-            return value;
-        }
+        //    // Handle DBNull values.
+        //    var columnValue = reader[name];
+        //    if (columnValue != DBNull.Value)
+        //    {
+        //        value = (T)columnValue;
+        //    }
+        //    return value;
+        //}
 
-        private short GetShort(IDataReader reader, string name)
-        {
-            // Handle DBNull values.
-            var columnValue = reader[name];
-            if (columnValue != DBNull.Value)
-            {
-                return Convert.ToInt16(columnValue);
-            }
-            return 0;
-        }
+        //private short GetShort(IDataReader reader, string name)
+        //{
+        //    // Handle DBNull values.
+        //    var columnValue = reader[name];
+        //    if (columnValue != DBNull.Value)
+        //    {
+        //        return Convert.ToInt16(columnValue);
+        //    }
+        //    return 0;
+        //}
 
-        private short GetByte(IDataReader reader, string name)
-        {
-            // Handle DBNull values.
-            var columnValue = reader[name];
-            if (columnValue != DBNull.Value)
-            {
-                return Convert.ToByte(columnValue);
-            }
-            return 0;
-        }
+        //private short GetByte(IDataReader reader, string name)
+        //{
+        //    // Handle DBNull values.
+        //    var columnValue = reader[name];
+        //    if (columnValue != DBNull.Value)
+        //    {
+        //        return Convert.ToByte(columnValue);
+        //    }
+        //    return 0;
+        //}
 
         /// <summary>
         /// Creates the change log table in the database.

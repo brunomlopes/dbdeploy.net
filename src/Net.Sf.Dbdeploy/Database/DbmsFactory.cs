@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Database.Reader;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System;
@@ -34,6 +36,15 @@ namespace Net.Sf.Dbdeploy.Database
                 default:
                     throw new ArgumentException("Supported dbms: ora, mssql, mysql, firebird");
             }
+        }
+
+        public IParameterReader CreateParameterSyntax()
+        {
+            if (dbms == "firebird")
+            {
+                return new FirebirdParameterReader();
+            }
+            return new DefaultParameterReader();
         }
 
         public virtual IDbConnection CreateConnection()

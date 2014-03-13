@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Database
+﻿using Net.Sf.Dbdeploy.Database.Reader;
+
+namespace Net.Sf.Dbdeploy.Database
 {
     using System;
     using System.Collections.Generic;
@@ -58,9 +60,10 @@
 
             var factory = new DbmsFactory(syntaxName, string.Empty);
             var dbmsSyntax = factory.CreateDbmsSyntax();
+            var parameterReader = factory.CreateParameterSyntax();
 
             var createChangeLogTable = false;
-            StubSchemaManager schemaManager = new StubSchemaManager(dbmsSyntax, createChangeLogTable);
+            StubSchemaManager schemaManager = new StubSchemaManager(dbmsSyntax, createChangeLogTable, parameterReader);
 
             IChangeScriptApplier applier = new TemplateBasedApplier(writer, dbmsSyntax, "ChangeLog", ";", new NormalDelimiter(), templateDirectory);
             Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, createChangeLogTable, System.Console.Out);
@@ -129,8 +132,8 @@
         {
             private readonly bool changeLogTableExists;
 
-            public StubSchemaManager(IDbmsSyntax syntax, bool changeLogTableExists)
-                : base(null, syntax, "ChangeLog")
+            public StubSchemaManager(IDbmsSyntax syntax, bool changeLogTableExists, IParameterReader reader)
+                : base(null, syntax, "ChangeLog", reader)
             {
                 this.changeLogTableExists = changeLogTableExists;
             }

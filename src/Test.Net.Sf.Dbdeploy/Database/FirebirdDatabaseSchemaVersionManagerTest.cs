@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
+using Net.Sf.Dbdeploy.Database.Reader;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -17,6 +18,7 @@ namespace Net.Sf.Dbdeploy.Database
         private const string FOLDER = "Scripts";
         private readonly string firebirdSqlDataFirebirdClient = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "FirebirdDllConnection", "FirebirdSql.Data.FirebirdClient.dll");
         private IDbmsSyntax syntax;
+        private IParameterReader parameterReader;
 
         [SetUp]
         protected override void SetUp()
@@ -25,7 +27,9 @@ namespace Net.Sf.Dbdeploy.Database
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName);
+            parameterReader = factory.CreateParameterSyntax();
+
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName, parameterReader);
         }
 
         protected override string ConnectionString
@@ -115,8 +119,8 @@ namespace Net.Sf.Dbdeploy.Database
         {
             var commandBuilder = new StringBuilder();
             commandBuilder.AppendFormat("INSERT INTO {0}", TableName);
-            commandBuilder.Append("(ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput)");
-            commandBuilder.AppendFormat(" VALUES ({0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_USER, 'Unit test', 1, '')", i, FOLDER);
+            commandBuilder.Append("(ChangeId, ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput)");
+            commandBuilder.AppendFormat(" VALUES ('{0}', {1}, '{2}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_USER, 'Unit test', 1, 'Any')", Guid.NewGuid(), i, FOLDER);
             ExecuteSql(commandBuilder.ToString());
         }
     }

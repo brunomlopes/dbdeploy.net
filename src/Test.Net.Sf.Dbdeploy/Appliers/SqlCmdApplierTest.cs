@@ -46,8 +46,9 @@ namespace Net.Sf.Dbdeploy.Appliers
             var dbmsFactory = new DbmsFactory(Dbms, ConnectionString);
             var queryExecuter = new QueryExecuter(dbmsFactory);
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
+            var parameterReader = dbmsFactory.CreateParameterSyntax();
 
-            var schemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, ChangeLogTableName);
+            var schemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, ChangeLogTableName, parameterReader);
             this.sqlCmdApplier = new SqlCmdApplier(ConnectionString, schemaVersionManager, dbmsSyntax, ChangeLogTableName, System.Console.Out);
             
 

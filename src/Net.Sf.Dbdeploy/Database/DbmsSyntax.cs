@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
 using Net.Sf.Dbdeploy.Scripts;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -6,6 +9,7 @@ namespace Net.Sf.Dbdeploy.Database
     using System.IO;
     using System.Reflection;
     using System.Text.RegularExpressions;
+    using System.Collections;
 
     using NVelocity.Exception;
 
@@ -62,14 +66,6 @@ namespace Net.Sf.Dbdeploy.Database
         /// The current timestamp syntax.
         /// </value>
         public abstract string CurrentTimestamp { get; }
-
-        /// <summary>
-        /// Gets the query to create a Generator (Only firebird 1.5 version)
-        /// </summary>
-        /// <value>
-        /// The script to create a Generator
-        /// </value>
-        protected abstract string GetQueryCreateGenerator();
 
         /// <summary>
         /// Gets the syntax to get the current user.
