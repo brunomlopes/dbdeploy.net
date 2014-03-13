@@ -18,9 +18,9 @@
     connectionClass="MySql.Data.MySqlClient.MySqlConnection"
   />
   <provider
-    name="firebird"
-    description="Firebird, Firebird provider 4.1.0.0"
-    assemblyName="FirebirdSql.Data.FirebirdClient, Version=4.1.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c"
-    connectionClass="FirebirdSql.Data.FirebirdClient.FbConnection"
+  name="firebird"
+  description="Firebird, Firebird provider 4.1.0.0"
+  assemblyName="FirebirdSql.Data.FirebirdClient, Version=4.1.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c"
+  connectionClass="FirebirdSql.Data.FirebirdClient.FbConnection"
   />
 </providers>
