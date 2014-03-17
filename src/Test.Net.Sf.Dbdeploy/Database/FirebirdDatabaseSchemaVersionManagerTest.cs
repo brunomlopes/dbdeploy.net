@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
-using Net.Sf.Dbdeploy.Database.Reader;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -18,7 +17,6 @@ namespace Net.Sf.Dbdeploy.Database
         private const string FOLDER = "Scripts";
         private readonly string firebirdSqlDataFirebirdClient = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "FirebirdDllConnection", "FirebirdSql.Data.FirebirdClient.dll");
         private IDbmsSyntax syntax;
-        private IParameterReader parameterReader;
 
         [SetUp]
         protected override void SetUp()
@@ -27,9 +25,8 @@ namespace Net.Sf.Dbdeploy.Database
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
-            parameterReader = factory.CreateParameterSyntax();
 
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName, parameterReader);
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName);
         }
 
         protected override string ConnectionString

@@ -7,6 +7,6 @@ CREATE TABLE $(QualifiedTableName) (
 	CompleteDate TIMESTAMP,
 	AppliedBy VARCHAR(64) NOT NULL,
 	ScriptStatus SMALLINT NOT NULL,
-	ScriptOutput BLOB,
+	ScriptOutput BLOB SUB_TYPE TEXT,
 	CONSTRAINT PK_$(TableName) PRIMARY KEY (ChangeId),
 	CONSTRAINT UK_$(TableName) UNIQUE (Folder, ScriptNumber));

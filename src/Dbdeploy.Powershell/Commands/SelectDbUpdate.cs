@@ -26,7 +26,7 @@ namespace Dbdeploy.Powershell.Commands
             DbmsFactory factory = new DbmsFactory(this.DatabaseType, this.ConnectionString);
             var queryExecuter = new QueryExecuter(factory);
 
-            var schemaManager = new DatabaseSchemaVersionManager(queryExecuter, factory.CreateDbmsSyntax(), this.TableName ,factory.CreateParameterSyntax());
+            var schemaManager = new DatabaseSchemaVersionManager(queryExecuter, factory.CreateDbmsSyntax(), this.TableName);
 
             var appliedChanges = schemaManager.GetAppliedChanges();
             var notAppliedChangeScripts = changeScripts.Where(c => appliedChanges.All(a => a.ScriptNumber != c.ScriptNumber));

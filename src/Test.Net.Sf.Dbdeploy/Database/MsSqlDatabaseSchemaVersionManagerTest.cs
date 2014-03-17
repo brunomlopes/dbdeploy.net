@@ -127,7 +127,7 @@ namespace Net.Sf.Dbdeploy.Database
 
             var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
             var executer = new QueryExecuter(factory);
-            var databaseSchemaManager = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), "log.Installs", factory.CreateParameterSyntax());
+            var databaseSchemaManager = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), "log.Installs");
 
             var applier = new DirectToDbApplier(executer, databaseSchemaManager, new QueryStatementSplitter(),
                 factory.CreateDbmsSyntax(), "log.Installs", new NullWriter());

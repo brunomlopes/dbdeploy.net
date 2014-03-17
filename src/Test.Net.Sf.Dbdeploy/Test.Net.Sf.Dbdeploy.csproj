@@ -150,8 +150,6 @@
     <Compile Include="Database\DbmsFactoryOracleTest.cs" />
     <Compile Include="Database\FirebirdDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\MySqlDatabaseSchemaVersionManagerTest.cs" />
-    <Compile Include="Database\Reader\DefaultParameterReaderTest.cs" />
-    <Compile Include="Database\Reader\FirebirdParameterReaderTest.cs" />
     <Compile Include="DbDeployerTest.cs" />
     <Compile Include="Scripts\AllScriptScannerTest.cs" />
     <Compile Include="Scripts\AssemblyScannerTest.cs" />

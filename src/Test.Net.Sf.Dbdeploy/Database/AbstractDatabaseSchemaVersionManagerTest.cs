@@ -1,5 +1,4 @@
 using System;
-using Net.Sf.Dbdeploy.Database.Reader;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -18,7 +17,6 @@ namespace Net.Sf.Dbdeploy.Database
         public const string TableName = "ChangeLog";
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
         private IDbmsSyntax syntax;
-        private IParameterReader parameterReader;
         private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new[] 
         {
             "No table found with name 'ChangeLog'.",
@@ -31,8 +29,7 @@ namespace Net.Sf.Dbdeploy.Database
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
-            parameterReader = factory.CreateParameterSyntax();
-            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName, parameterReader);
+            databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName);
         }
 
         public virtual void TestCanRetrieveSchemaVersionFromDatabase()

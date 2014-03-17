@@ -112,9 +112,6 @@
     <Compile Include="Configuration\Parser.cs" />
     <Compile Include="Database\ChangeEntry.cs" />
     <Compile Include="Database\FirebirdDbmsSyntax.cs" />
-    <Compile Include="Database\Reader\DefaultParameterReader.cs" />
-    <Compile Include="Database\Reader\FirebirdParameterReader.cs" />
-    <Compile Include="Database\Reader\IParameterReader.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
     <Compile Include="Database\SqlCmd\SqlCmdExecutor.cs" />
