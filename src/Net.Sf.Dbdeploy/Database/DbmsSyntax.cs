@@ -164,50 +164,50 @@ namespace Net.Sf.Dbdeploy.Database
                 .Replace(ChangeLogSchemaNameToken, tableInfo.Schema);
         }
 
-        public string CreateInsertChangeLogTableSqlScript(string tableName, 
-                                                          string folder, 
-                                                          int scriptNumber, 
-                                                          string scriptName,
-                                                          string completeDate,
-                                                          int scriptStatus,
-                                                          string scriptOutput)
-        {
-            const string changeLogFolderToken = "$(Folder)";
-            const string changeLogScriptNumberToken = "$(ScriptNumber)";
-            const string changeLogScriptNameToken = "$(ScriptName)";
-            const string changeLogStartDateToken = "$(StartDate)";
-            const string changeLogCompleteDateToken = "$(CompleteDate)";
-            const string changeLogUserToken = "$(UserChange)";
-            const string changeLogScriptStatus = "$(ScriptStatus)";
-            const string changeLogOutputToken = "$(OutputScript)";
+        //public string CreateInsertChangeLogTableSqlScript(string tableName, 
+        //                                                  string folder, 
+        //                                                  int scriptNumber, 
+        //                                                  string scriptName,
+        //                                                  string completeDate,
+        //                                                  int scriptStatus,
+        //                                                  string scriptOutput)
+        //{
+        //    const string changeLogFolderToken = "$(Folder)";
+        //    const string changeLogScriptNumberToken = "$(ScriptNumber)";
+        //    const string changeLogScriptNameToken = "$(ScriptName)";
+        //    const string changeLogStartDateToken = "$(StartDate)";
+        //    const string changeLogCompleteDateToken = "$(CompleteDate)";
+        //    const string changeLogUserToken = "$(UserChange)";
+        //    const string changeLogScriptStatus = "$(ScriptStatus)";
+        //    const string changeLogOutputToken = "$(OutputScript)";
 
-            string script;
+        //    string script;
 
-            var assembly = Assembly.GetExecutingAssembly();
-            string resourceName = string.Format("Net.Sf.Dbdeploy.Resources.InsertChangeLogTable.{0}.sql", this.Dbms);
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                if (stream == null)
-                {
-                    throw new ResourceNotFoundException(string.Format("The required resource '{0}' was not found in the assembly.", resourceName));
-                }
+        //    var assembly = Assembly.GetExecutingAssembly();
+        //    string resourceName = string.Format("Net.Sf.Dbdeploy.Resources.InsertChangeLogTable.{0}.sql", this.Dbms);
+        //    using (var stream = assembly.GetManifestResourceStream(resourceName))
+        //    {
+        //        if (stream == null)
+        //        {
+        //            throw new ResourceNotFoundException(string.Format("The required resource '{0}' was not found in the assembly.", resourceName));
+        //        }
 
-                using (var reader = new StreamReader(stream))
-                {
-                    script = reader.ReadToEnd();
-                }
-            }
+        //        using (var reader = new StreamReader(stream))
+        //        {
+        //            script = reader.ReadToEnd();
+        //        }
+        //    }
 
-            return script
-                .Replace(ChangeLogQualifiedTableNameToken, tableName)
-                .Replace(changeLogFolderToken, "'" + folder + "'")
-                .Replace(changeLogScriptNumberToken, scriptNumber.ToString())
-                .Replace(changeLogScriptNameToken, "'" + scriptName + "'")
-                .Replace(changeLogStartDateToken, CurrentTimestamp)
-                .Replace(changeLogCompleteDateToken, completeDate)
-                .Replace(changeLogUserToken, CurrentUser)
-                .Replace(changeLogScriptStatus, scriptStatus.ToString())
-                .Replace(changeLogOutputToken, scriptOutput);
-        }
+        //    return script
+        //        .Replace(ChangeLogQualifiedTableNameToken, tableName)
+        //        .Replace(changeLogFolderToken, "'" + folder + "'")
+        //        .Replace(changeLogScriptNumberToken, scriptNumber.ToString())
+        //        .Replace(changeLogScriptNameToken, "'" + scriptName + "'")
+        //        .Replace(changeLogStartDateToken, CurrentTimestamp)
+        //        .Replace(changeLogCompleteDateToken, completeDate)
+        //        .Replace(changeLogUserToken, CurrentUser)
+        //        .Replace(changeLogScriptStatus, scriptStatus.ToString())
+        //        .Replace(changeLogOutputToken, scriptOutput);
+        //}
     }
 }

@@ -251,6 +251,9 @@
     <Content Include="Mocks\Versioned\v2.0.10.0\3.SQLCMD Add Customer Data.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Database\firebird_expected.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Database\ora_expected.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

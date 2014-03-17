@@ -154,10 +154,9 @@ namespace Net.Sf.Dbdeploy.Database
 //                        completeDateValue,
 //                        this.syntax.CurrentUser);
 
-                    var sql = string.Format(
+                    var sqlInsert = string.Format(
                     CultureInfo.InvariantCulture,
-                    @"INSERT INTO {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES ('{1}', '{2}', {3}, '{4}', {5}, {6}, {7}, {8}, '{9}') 
-SELECT ChangeId FROM {0} WHERE Folder = '{2}' and ScriptNumber = {3}",
+                    @"INSERT INTO {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES ('{1}', '{2}', {3}, '{4}', {5}, {6}, {7}, {8}, '{9}')",
                     this.changeLogTableName,
                     Guid.NewGuid(),
                     script.Folder,
@@ -169,7 +168,12 @@ SELECT ChangeId FROM {0} WHERE Folder = '{2}' and ScriptNumber = {3}",
                     (int)status,
                     output);
 
-                    using (var reader = this.queryExecuter.ExecuteQuery(sql))
+                    queryExecuter.Execute(sqlInsert);
+
+                    var sqlSelect = string.Format("SELECT ChangeId FROM {0} WHERE Folder = '{1}' and ScriptNumber = {2}", 
+                        changeLogTableName, script.Folder, script.ScriptNumber);
+
+                    using (var reader = this.queryExecuter.ExecuteQuery(sqlSelect))
                     {
                         reader.Read();
                         script.ChangeId = (reader.GetString(0));
