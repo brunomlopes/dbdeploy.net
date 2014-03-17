@@ -46,7 +46,6 @@ namespace Net.Sf.Dbdeploy
             var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.DllPathConnector);
             
             var dbmsSyntax = factory.CreateDbmsSyntax();
-            //var parameterReaderSyntax = factory.CreateParameterSyntax();
 
             var queryExecuter = new QueryExecuter(factory);
 

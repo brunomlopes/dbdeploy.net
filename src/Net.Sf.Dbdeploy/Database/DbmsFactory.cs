@@ -36,15 +36,6 @@ namespace Net.Sf.Dbdeploy.Database
             }
         }
 
-        //public IParameterReader CreateParameterSyntax()
-        //{
-        //    if (dbms == "firebird")
-        //    {
-        //        return new FirebirdParameterReader();
-        //    }
-        //    return new DefaultParameterReader();
-        //}
-
         public virtual IDbConnection CreateConnection()
         {
             string assemblyFullNameDllPath = null;
