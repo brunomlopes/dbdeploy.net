@@ -108,7 +108,7 @@ namespace Net.Sf.Dbdeploy
                     s => config.OutputFile = new FileInfo(StripQuotes(s)))
 
                 .Add(
-                    "a|assembly=",
+                    "an|assembly=",
                     "script assembly fullname",
                     s => config.ScriptAssembly = Assembly.LoadFile(StripQuotes(s)))
                     
