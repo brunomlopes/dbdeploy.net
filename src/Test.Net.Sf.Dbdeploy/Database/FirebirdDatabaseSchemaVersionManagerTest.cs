@@ -13,6 +13,7 @@ namespace Net.Sf.Dbdeploy.Database
     class FirebirdDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private string connectionString;
+        private readonly string firebirdConnectionString = string.Format("User=SYSDBA;Password=masterkey;Database={0};DataSource=localhost;Port=3050;", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "DatabaseFirebird", "DBDEPLOY15.FDB"));
         private const string DBMS = "firebird";
         private const string FOLDER = "Scripts";
         private readonly string firebirdSqlDataFirebirdClient = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "FirebirdDllConnection", "FirebirdSql.Data.FirebirdClient.dll");
@@ -21,7 +22,7 @@ namespace Net.Sf.Dbdeploy.Database
         [SetUp]
         protected override void SetUp()
         {
-            var factory = new DbmsFactory(Dbms, ConnectionString, firebirdSqlDataFirebirdClient);
+            var factory = new DbmsFactory(Dbms, firebirdConnectionString, firebirdSqlDataFirebirdClient);
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
@@ -109,7 +110,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             var assembly = Assembly.Load(AssemblyName.GetAssemblyName(firebirdSqlDataFirebirdClient).FullName);
             var type = assembly.GetType("FirebirdSql.Data.FirebirdClient.FbConnection");
-            return (IDbConnection)Activator.CreateInstance(type, ConnectionString);
+            return (IDbConnection)Activator.CreateInstance(type, firebirdConnectionString);
         }
 
         protected override void InsertRowIntoTable(int i)
