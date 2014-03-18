@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy
+﻿using System.Reflection;
+
+namespace Net.Sf.Dbdeploy
 {
     using System;
     using System.Collections.Generic;
@@ -105,6 +107,16 @@
                     "output file",
                     s => config.OutputFile = new FileInfo(StripQuotes(s)))
 
+                .Add(
+                    "a|assembly=",
+                    "script assembly fullname",
+                    s => config.ScriptAssembly = Assembly.LoadFile(StripQuotes(s)))
+                    
+                .Add(
+                    "fbn|filterbyname=",
+                    "filter assembly resource by name",
+                    s => config.AssemblyResourceNameFilter = resourceName => resourceName.Contains(StripQuotes(s)))
+                    
                 .Add(
                     "t|changelogtablename=",
                     "name of change log table to use (default: ChangeLog)",
