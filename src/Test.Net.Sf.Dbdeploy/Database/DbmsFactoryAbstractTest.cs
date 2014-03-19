@@ -23,7 +23,8 @@ namespace Net.Sf.Dbdeploy.Database
             return connection;
         }
 
-        protected void CloseConnection()
+        [TearDown]
+        public void CloseConnection()
         {
             connection.Close();
         }

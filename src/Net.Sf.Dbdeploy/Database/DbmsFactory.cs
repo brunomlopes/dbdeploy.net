@@ -38,23 +38,9 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual IDbConnection CreateConnection()
         {
-            string assemblyFullNameDllPath = null;
-            if (dllPathConnection != null)
-            {
-                assemblyFullNameDllPath = AssemblyName.GetAssemblyName(dllPathConnection).FullName;
-            }
-
-            var assembly = Assembly.Load(assemblyFullNameDllPath ?? provider.AssemblyName);
-            var type = assembly.GetType(assemblyFullNameDllPath != null ? GetCustomConnectionClass() : provider.ConnectionClass);
+            var assembly = dllPathConnection != null ? Assembly.LoadFrom(dllPathConnection) : Assembly.Load(provider.AssemblyName);
+            var type = assembly.GetType(provider.ConnectionClass);
             return (IDbConnection)Activator.CreateInstance(type, connectionString);
-        }
-
-        private string GetCustomConnectionClass()
-        {
-            if (dbms == "ora")
-                return "Oracle.DataAccess.Client.OracleConnection";
-
-            return provider.ConnectionClass;
         }
     }
 }

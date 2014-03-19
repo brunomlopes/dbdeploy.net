@@ -21,7 +21,6 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
-            CloseConnection();
         }
 
         [Test]
@@ -30,7 +29,6 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllConnection);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
-            CloseConnection();
         }
 
         [Test]
@@ -40,7 +38,6 @@ namespace Net.Sf.Dbdeploy.Database
             OpenConnection(factory);
             const string query = "Select Sysdate From Dual";
             ExecuteNonQuery(query);
-            CloseConnection();
         }
 
         [Test]
@@ -51,7 +48,6 @@ namespace Net.Sf.Dbdeploy.Database
             OpenConnection(factory);
             const string query = "Select * from ANY_TABLE";
             ExecuteNonQuery(query);
-            CloseConnection();
         }
     }
 }
