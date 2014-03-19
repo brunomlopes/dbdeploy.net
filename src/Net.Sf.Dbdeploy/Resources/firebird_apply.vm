@@ -11,8 +11,6 @@ UPDATE ${changeLogTableName}
 SET CompleteDate = CURRENT_DATE, ScriptStatus = 1, ScriptOutput = '' 
 WHERE Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber$!{separator}${delimiter}
 
-COMMIT$!{separator}${delimiter}
-
 -- END CHANGE SCRIPT ${script}
 
 #end
