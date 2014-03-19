@@ -110,7 +110,11 @@ namespace Net.Sf.Dbdeploy
                 .Add(
                     "an|assembly=",
                     "script assembly fullname",
-                    s => config.ScriptAssembly = Assembly.LoadFile(StripQuotes(s)))
+                    s =>
+                        {
+                            var assemblyName = AssemblyName.GetAssemblyName(StripQuotes(s));
+                            config.ScriptAssembly = Assembly.Load(assemblyName);
+                        })
                     
                 .Add(
                     "fbn|filterbyname=",
