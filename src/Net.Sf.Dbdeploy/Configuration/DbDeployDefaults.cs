@@ -1,4 +1,7 @@
-﻿namespace Net.Sf.Dbdeploy.Configuration
+﻿using System;
+using System.Reflection;
+
+namespace Net.Sf.Dbdeploy.Configuration
 {
     using System.IO;
     using System.Text;
@@ -79,5 +82,12 @@
         /// The line ending default value.
         /// </summary>
         public static readonly string LineEnding = Database.LineEnding.Platform;
+
+        /// <summary>
+        /// Embedded script assembly default value.
+        /// </summary>
+        public static Assembly ScriptAssembly = null;
+
+        public static Func<string, bool> AssemblyResourceNameFilter = value => true;
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Net.Sf.Dbdeploy.Configuration
+﻿using System;
+using System.Reflection;
+
+namespace Net.Sf.Dbdeploy.Configuration
 {
     using Net.Sf.Dbdeploy.Database;
 
@@ -47,6 +50,17 @@
                 case "PLATFORM":
                     return LineEnding.Platform;
             }
+        }
+
+        public static Assembly ParseAssembly(string value)
+        {
+            var assemblyName = AssemblyName.GetAssemblyName(value);
+            return Assembly.Load(assemblyName);
+        }
+
+        public static Func<string, bool> ParseAssemblyFilterByName(string value)
+        {
+            return resourceName => resourceName.Contains(value);
         }
     }
 }

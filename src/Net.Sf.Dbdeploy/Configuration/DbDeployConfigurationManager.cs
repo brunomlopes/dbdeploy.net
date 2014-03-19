@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Configuration
+﻿using System.Reflection;
+
+namespace Net.Sf.Dbdeploy.Configuration
 {
     using System;
     using System.IO;
@@ -68,6 +70,9 @@
             config.Delimiter = GetAttribute(element, "delimiter", DbDeployDefaults.Delimiter);
             config.DelimiterType = GetAttribute(element, "delimiterType", DbDeployDefaults.DelimiterType, Parser.ParseDelimiterType);
             config.LineEnding = GetAttribute(element, "lineEnding", DbDeployDefaults.LineEnding, Parser.ParseLineEnding);
+
+            config.ScriptAssembly = GetAttribute(element, "assembly", DbDeployDefaults.ScriptAssembly, Parser.ParseAssembly);
+            config.AssemblyResourceNameFilter = GetAttribute(element, "assemblyFilterByName", DbDeployDefaults.AssemblyResourceNameFilter, Parser.ParseAssemblyFilterByName);
 
             return config;
         }

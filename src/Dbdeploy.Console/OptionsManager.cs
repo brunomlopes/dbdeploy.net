@@ -110,16 +110,12 @@ namespace Net.Sf.Dbdeploy
                 .Add(
                     "an|assembly=",
                     "script assembly fullname",
-                    s =>
-                        {
-                            var assemblyName = AssemblyName.GetAssemblyName(StripQuotes(s));
-                            config.ScriptAssembly = Assembly.Load(assemblyName);
-                        })
+                    s => config.ScriptAssembly = Parser.ParseAssembly(StripQuotes(s)))
                     
                 .Add(
                     "fbn|filterbyname=",
                     "filter assembly resource by name",
-                    s => config.AssemblyResourceNameFilter = resourceName => resourceName.Contains(StripQuotes(s)))
+                    s => config.AssemblyResourceNameFilter = Parser.ParseAssemblyFilterByName(StripQuotes(s)))
                     
                 .Add(
                     "t|changelogtablename=",
