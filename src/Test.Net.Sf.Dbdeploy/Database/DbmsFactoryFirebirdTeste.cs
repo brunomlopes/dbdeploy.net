@@ -10,7 +10,7 @@ namespace Net.Sf.Dbdeploy.Database
 {
     class DbmsFactoryFirebirdTeste : DbmsFactoryAbstractTest
     {
-        private readonly string firebirdConnectionString = string.Format("User=SYSDBA;Password=masterkey;Database={0};DataSource=localhost;Port=3050;", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "DatabaseFirebird", "DBDEPLOY15.FDB"));
+        private readonly string firebirdConnectionString = string.Format("User=SYSDBA;Password=masterkey;Database={0};DataSource=localhost;Port=3050;", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "DatabaseFirebird", "DBDEPLOY.FDB"));
         private const string DbmsFirebird = "firebird";
         private const string FirebirdDllName = "FirebirdSql.Data.FirebirdClient.dll";
         private readonly string firebirdDllPath = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\FirebirdDllConnection\\" + FirebirdDllName;

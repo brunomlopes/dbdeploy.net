@@ -184,7 +184,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Mocks\Fixtures\DatabaseFirebird\DBDEPLOY15.FDB">
+    <None Include="Mocks\Fixtures\DatabaseFirebird\DBDEPLOY.FDB">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
