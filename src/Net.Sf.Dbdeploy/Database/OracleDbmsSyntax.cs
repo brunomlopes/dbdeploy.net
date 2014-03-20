@@ -34,5 +34,10 @@ namespace Net.Sf.Dbdeploy.Database
         {
             get { return "USER"; }
         }
+
+        protected override string GetQueryTableExists(TableInfo tableInfo)
+        {
+            return string.Format("SELECT * FROM USER_TABLES WHERE TABLE_NAME = '{0}'", tableInfo.TableName.ToUpper());
+        }
     }
 }

@@ -176,7 +176,7 @@ END",
         protected override void InsertRowIntoTable(int i)
         {
             this.ExecuteSql("INSERT INTO " + TableName
-                       + " (Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput) VALUES ( "
+                       + " (ChangeId, Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput) VALUES (newid(), "
                        + "'" + FOLDER + "', " + i
                        + ", getdate(), getdate(), user_name(), 'Unit test', 1, '')");
         }

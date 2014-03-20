@@ -121,7 +121,6 @@
             using (IDbCommand command = this.CreateCommand())
             {
                 command.CommandText = sql;
-
                 command.ExecuteNonQuery();
             }
         }

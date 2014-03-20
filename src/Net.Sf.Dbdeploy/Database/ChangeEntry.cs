@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Database
+﻿using System;
+
+namespace Net.Sf.Dbdeploy.Database
 {
     using System.Globalization;
 
@@ -25,7 +27,7 @@
         /// <value>
         /// The change ID.
         /// </value>
-        public int ChangeId { get; set; }
+        public string ChangeId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the file.

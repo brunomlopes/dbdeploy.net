@@ -4,7 +4,7 @@ EXEC ('CREATE SCHEMA $(SchemaName) AUTHORIZATION dbo')
 END
 
 CREATE TABLE $(QualifiedTableName) (
-	ChangeId INT IDENTITY(1,1) NOT NULL,
+	ChangeId VARCHAR(64) NOT NULL,
 	Folder VARCHAR(256) NOT NULL,
 	ScriptNumber SMALLINT NOT NULL,
 	ScriptName VARCHAR(512) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE $(QualifiedTableName) (
 	CompleteDate DATETIME NULL,
 	AppliedBy VARCHAR(128) NOT NULL,
 	ScriptStatus TINYINT NOT NULL,
-	ScriptOutput VARCHAR(max) NOT NULL,
+	ScriptOutput VARCHAR(max) NULL,
  CONSTRAINT PK_$(TableName) PRIMARY KEY CLUSTERED 
 (
 	ChangeId ASC

@@ -62,6 +62,15 @@ namespace Net.Sf.Dbdeploy.Configuration
         public Func<string, bool> AssemblyResourceNameFilter { get; set; }
 
         /// <summary>
+        /// Get or Sets path custom file DLL connector
+        /// <remarks>If this is not set, DbDeploy will get config from dbproviders.xml file</remarks>
+        /// </summary>
+        /// <value>
+        /// Path to a specific DLL for custom connector
+        /// </value>
+        public string DllPathConnector { get; set; }
+
+        /// <summary>
         /// Gets or sets the output file to render the combined change scripts to.
         /// </summary>
         /// <remarks>If this is not set, DbDeploy will run against the database directly.</remarks>
@@ -181,6 +190,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             this.Delimiter = DbDeployDefaults.Delimiter;
             this.DelimiterType = DbDeployDefaults.DelimiterType;
             this.LineEnding = DbDeployDefaults.LineEnding;
+            this.DllPathConnector = DbDeployDefaults.DllPathConnector;
         }
     }
 }

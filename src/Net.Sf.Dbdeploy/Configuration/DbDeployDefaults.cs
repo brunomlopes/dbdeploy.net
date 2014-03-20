@@ -89,5 +89,10 @@ namespace Net.Sf.Dbdeploy.Configuration
         public static Assembly ScriptAssembly = null;
 
         public static Func<string, bool> AssemblyResourceNameFilter = value => true;
+        
+         /// <summary>
+        /// The personal Oracle Dll path connection
+        /// </summary>
+        public static readonly string DllPathConnector = null;
     }
 }

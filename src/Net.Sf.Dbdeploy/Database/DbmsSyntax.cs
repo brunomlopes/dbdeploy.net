@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Scripts;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System.Globalization;
@@ -10,7 +12,7 @@ namespace Net.Sf.Dbdeploy.Database
     /// <summary>
     /// The Database Management System syntax.
     /// </summary>
-    public abstract class DbmsSyntax : IDbmsSyntax  
+    public abstract class DbmsSyntax : IDbmsSyntax
     {
         /// <summary>
         /// The Regex for removing the schema name from a table.
@@ -101,27 +103,23 @@ namespace Net.Sf.Dbdeploy.Database
         /// <returns>SQL for checking if a table exists.</returns>
         public virtual string TableExists(string tableName)
         {
-            // Use correct syntax for with and without schema.
-            string syntax;
             var tableInfo = this.GetTableInfo(tableName);
+            return GetQueryTableExists(tableInfo);
+        }
+
+        protected virtual string GetQueryTableExists(TableInfo tableInfo)
+        {
+
+            string syntax = string.Format(CultureInfo.InvariantCulture,
+            @"SELECT table_schema 
+            FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_NAME = '{0}'", tableInfo.TableName);
             if (!string.IsNullOrWhiteSpace(tableInfo.Schema))
-            {
-                syntax = string.Format(CultureInfo.InvariantCulture,
-@"SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_SCHEMA = '{0}' 
-AND  TABLE_NAME = '{1}'", tableInfo.Schema, tableInfo.TableName);
-            }
-            else
-            {
-                syntax = string.Format(CultureInfo.InvariantCulture,
-@"SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = '{0}'", tableName);
-            }
+                syntax += string.Format(" AND TABLE_SCHEMA = '{0}'", tableInfo.Schema);
 
             return syntax;
         }
+
 
         public string GetTemplateFileNameFor(string templateQualifier)
         {
@@ -145,7 +143,7 @@ WHERE TABLE_NAME = '{0}'", tableName);
             {
                 if (stream == null)
                 {
-                    throw new ResourceNotFoundException(string.Format("The required resource '{0}' was not found in the assembly.", resourceName));    
+                    throw new ResourceNotFoundException(string.Format("The required resource '{0}' was not found in the assembly.", resourceName));
                 }
 
                 using (var reader = new StreamReader(stream))
@@ -160,6 +158,53 @@ WHERE TABLE_NAME = '{0}'", tableName);
                 .Replace(ChangeLogQualifiedTableNameToken, tableName)
                 .Replace(ChangeLogTableToken, tableInfo.TableName)
                 .Replace(ChangeLogSchemaNameToken, tableInfo.Schema);
+        }
+
+        //TODO: Criar um método de teste para garantir que o replace é feito corretamente
+        public string CreateInsertChangeLogTableSqlScript(string tableName, 
+                                                          string folder, 
+                                                          int scriptNumber, 
+                                                          string scriptName,
+                                                          string completeDate,
+                                                          int scriptStatus,
+                                                          string scriptOutput)
+        {
+            const string changeLogFolderToken = "$(Folder)";
+            const string changeLogScriptNumberToken = "$(ScriptNumber)";
+            const string changeLogScriptNameToken = "$(ScriptName)";
+            const string changeLogStartDateToken = "$(StartDate)";
+            const string changeLogCompleteDateToken = "$(CompleteDate)";
+            const string changeLogUserToken = "$(UserChange)";
+            const string changeLogScriptStatus = "$(ScriptStatus)";
+            const string changeLogOutputToken = "$(OutputScript)";
+
+            string script;
+
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourceName = string.Format("Net.Sf.Dbdeploy.Resources.InsertChangeLogTable.{0}.sql", this.Dbms);
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new ResourceNotFoundException(string.Format("The required resource '{0}' was not found in the assembly.", resourceName));
+                }
+
+                using (var reader = new StreamReader(stream))
+                {
+                    script = reader.ReadToEnd();
+                }
+            }
+
+            return script
+                .Replace(ChangeLogQualifiedTableNameToken, tableName)
+                .Replace(changeLogFolderToken, "'" + folder + "'")
+                .Replace(changeLogScriptNumberToken, scriptNumber.ToString())
+                .Replace(changeLogScriptNameToken, "'" + scriptName + "'")
+                .Replace(changeLogStartDateToken, CurrentTimestamp)
+                .Replace(changeLogCompleteDateToken, completeDate)
+                .Replace(changeLogUserToken, CurrentUser)
+                .Replace(changeLogScriptStatus, scriptStatus.ToString())
+                .Replace(changeLogOutputToken, scriptOutput);
         }
     }
 }

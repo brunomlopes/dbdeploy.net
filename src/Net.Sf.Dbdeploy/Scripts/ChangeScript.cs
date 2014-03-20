@@ -1,3 +1,4 @@
+using System;
 using Net.Sf.Dbdeploy.Scripts.EmbeddedResources;
 
 namespace Net.Sf.Dbdeploy.Scripts
@@ -27,7 +28,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// <value>
         /// The change ID.
         /// </value>
-        public int ChangeId { get; set; }
+        public string ChangeId { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeScript" /> class.

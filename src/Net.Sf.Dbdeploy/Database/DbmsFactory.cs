@@ -7,17 +7,16 @@ namespace Net.Sf.Dbdeploy.Database
     public class DbmsFactory
     {
         private readonly string dbms;
-
         private readonly string connectionString;
+        private readonly DatabaseProvider provider;
+        private readonly string dllPathConnection;
 
-        private readonly DbProviders providers;
-
-        public DbmsFactory(string dbms, string connectionString)
+        public DbmsFactory(string dbms, string connectionString, string dllPathConnection = null)
         {
             this.dbms = dbms;
             this.connectionString = connectionString;
-
-            this.providers = new DbProviderFile().LoadProviders();
+            this.dllPathConnection = dllPathConnection;
+            this.provider = new DbProviderFile().LoadProviders().GetProvider(dbms);
         }
 
         public virtual IDbmsSyntax CreateDbmsSyntax()
@@ -37,12 +36,23 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual IDbConnection CreateConnection()
         {
-            DatabaseProvider provider = this.providers.GetProvider(dbms);
+            string assemblyFullNameDllPath = null;
+            if (dllPathConnection != null)
+            {
+                assemblyFullNameDllPath = AssemblyName.GetAssemblyName(dllPathConnection).FullName;
+            }
 
-            Assembly assembly = Assembly.Load(provider.AssemblyName);
-            Type type = assembly.GetType(provider.ConnectionClass);
+            var assembly = Assembly.Load(assemblyFullNameDllPath ?? provider.AssemblyName);
+            var type = assembly.GetType(assemblyFullNameDllPath != null ? GetCustomConnectionClass() : provider.ConnectionClass);
+            return (IDbConnection)Activator.CreateInstance(type, connectionString);
+        }
 
-            return (IDbConnection)Activator.CreateInstance(type, this.connectionString);
+        private string GetCustomConnectionClass()
+        {
+            if (dbms == "ora")
+                return "Oracle.DataAccess.Client.OracleConnection";
+
+            return provider.ConnectionClass;
         }
     }
 }

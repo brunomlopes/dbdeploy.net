@@ -26,7 +26,7 @@
             IDbmsSyntax syntax = null;
             QueryExecuter nullExecuter = null;
 
-            var factory = new Mock<DbmsFactory>("mssql", string.Empty);
+            var factory = new Mock<DbmsFactory>("mssql", string.Empty, null);
             factory.Setup(f => f.CreateConnection()).Returns(new Mock<IDbConnection>().Object);
             factory.Setup(f => f.CreateDbmsSyntax()).Returns(syntax);
 

@@ -58,7 +58,8 @@
             if (createChangeLogTable)
             {
                 this.infoTextWriter.WriteLine("Creating change log table");
-                this.queryExecuter.Execute(this.dbmsSyntax.CreateChangeLogTableSqlScript(this.changeLogTableName));
+                var script = this.dbmsSyntax.CreateChangeLogTableSqlScript(this.changeLogTableName);
+                this.ApplyChangeScript(script);
             }
 
             this.infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
@@ -133,6 +134,32 @@
                     }
                 }
             }
+        }
+
+        protected void ApplyChangeScript(string script)
+        {
+            ICollection<string> statements = this.splitter.Split(script);
+            int i = 0;
+
+            foreach (var statement in statements)
+            {
+                try
+                {
+                    if (statements.Count > 1)
+                    {
+                        this.infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
+                    }
+
+                    this.queryExecuter.Execute(statement);
+
+                    i++;
+                }
+                catch (DbException e)
+                {
+                    throw new ScriptFailedException(e, script, i + 1, statement);
+                }
+            }
+            
         }
 
         /// <summary>

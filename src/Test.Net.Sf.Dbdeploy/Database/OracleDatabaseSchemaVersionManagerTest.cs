@@ -53,8 +53,8 @@ namespace Net.Sf.Dbdeploy.Database
 		{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.AppendFormat("INSERT INTO {0}", TableName);
-            commandBuilder.Append("(ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput)");
-			commandBuilder.AppendFormat(" VALUES ({0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER, 'Unit test', 1, '')", i, FOLDER);
+            commandBuilder.Append("(ChangeId, ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput)");
+            commandBuilder.AppendFormat(" VALUES (SYS_GUID(), {0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER, 'Unit test', 1, '')", i, FOLDER);
 			ExecuteSql(commandBuilder.ToString());
 		}
 
@@ -87,7 +87,7 @@ namespace Net.Sf.Dbdeploy.Database
 			var changeNumbers = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
 
 			Assert.AreEqual(1, changeNumbers.Count);
-			Assert.AreEqual(3, changeNumbers[0]);
+			Assert.AreEqual(3, changeNumbers[0].ScriptNumber);
 		}
 
 		[Test]

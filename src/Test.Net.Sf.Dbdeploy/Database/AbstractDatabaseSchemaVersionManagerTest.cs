@@ -1,3 +1,5 @@
+using System;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System.Collections.Generic;
@@ -19,7 +21,7 @@ namespace Net.Sf.Dbdeploy.Database
         private IDbmsSyntax syntax;
 
         [SetUp]
-        protected void SetUp()
+        protected virtual void SetUp()
         {
             var factory = new DbmsFactory(Dbms, ConnectionString);
             var executer = new QueryExecuter(factory);
@@ -82,7 +84,7 @@ namespace Net.Sf.Dbdeploy.Database
             this.EnsureTableDoesNotExist();
 
             // Create change log table
-            databaseSchemaVersion.CreateChangeLogTable();
+            CreateTable();
 
             this.AssertTableExists("ChangeLog");
         }
@@ -91,7 +93,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// Asserts the table exists.
         /// </summary>
         /// <param name="tableName">Name of the table.</param>
-        public void AssertTableExists(string tableName)
+        public virtual void AssertTableExists(string tableName)
         {
             var schema = this.ExecuteScalar<string>(this.syntax.TableExists(tableName));
 
@@ -131,10 +133,14 @@ namespace Net.Sf.Dbdeploy.Database
         {
             using (IDbConnection connection = GetConnection())
             {
-                connection.Open();
-                IDbCommand command = connection.CreateCommand();
-                command.CommandText = sql;
-                command.ExecuteNonQuery();
+                try
+                {
+                    connection.Open();
+                    IDbCommand command = connection.CreateCommand();
+                    command.CommandText = sql;
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception) {}
             }
         }
 
@@ -161,11 +167,13 @@ namespace Net.Sf.Dbdeploy.Database
         /// <summary>
         /// Creats the change log table.
         /// </summary>
-        protected void CreateTable()
+        protected virtual void CreateTable()
         {
             if (!this.databaseSchemaVersion.ChangeLogTableExists())
             {
-                this.databaseSchemaVersion.CreateChangeLogTable();
+                var script = this.syntax.CreateChangeLogTableSqlScript(TableName);
+                script = script.Replace(";", string.Empty);
+                ExecuteSql(script);
             };
         }
 
