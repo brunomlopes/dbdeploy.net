@@ -129,31 +129,6 @@ namespace Net.Sf.Dbdeploy.Database
 
                 if (string.IsNullOrWhiteSpace(script.ChangeId))
                 {
-                    //var sqlInsert = syntax.CreateInsertChangeLogTableSqlScript(changeLogTableName,
-                    //                                                           script.Folder,
-                    //                                                           script.ScriptNumber,
-                    //                                                           script.ScriptName,
-                    //                                                           completeDateValue,
-                    //                                                           (int)status,
-                    //                                                           output);
-
-                    //var sql = string.Format(
-                    //    CultureInfo.InvariantCulture,
-                    //    @"INSERT INTO {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, @4, {1}, {2}, {3}, @5, @6)",
-                    //    this.changeLogTableName,
-                    //    this.syntax.CurrentTimestamp,
-                    //    completeDateValue,
-                    //    this.syntax.CurrentUser);
-
-//                    var sql = string.Format(
-//                        CultureInfo.InvariantCulture,
-//                        @"INSERT INTO {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, @4, {1}, {2}, {3}, @5, @6) 
-//SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
-//                        this.changeLogTableName,
-//                        this.syntax.CurrentTimestamp,
-//                        completeDateValue,
-//                        this.syntax.CurrentUser);
-
                     var sqlInsert = string.Format(
                     CultureInfo.InvariantCulture,
                     @"INSERT INTO {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES ('{1}', '{2}', {3}, '{4}', {5}, {6}, {7}, {8}, '{9}')",
@@ -178,21 +153,6 @@ namespace Net.Sf.Dbdeploy.Database
                         reader.Read();
                         script.ChangeId = (reader.GetString(0));
                     }
-
-                    //var sqlInsert = string.Format("Insert Into {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) " +
-                    //                                    "Values ('{1}', '{2}', {3}, '{4}', {5}, {6}, {7}, {8}, '{9}')",
-                    //                                    changeLogTableName, Guid.NewGuid(), script.Folder, script.ScriptNumber, script.ScriptName, syntax.CurrentTimestamp, completeDateValue, syntax.CurrentUser, (int)status, output);
-
-                    //this.queryExecuter.Execute(sqlInsert);
-
-                    //var sqlSelect = string.Format("SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2", changeLogTableName);
-
-
-                    //using (var reader = this.queryExecuter.ExecuteQuery(sqlSelect, script.Folder, script.ScriptNumber))
-                    //{
-                    //    reader.Read();
-                    //    script.ChangeId = (reader.GetString(0));
-                    //}
                 }
                 else
                 {
