@@ -49,7 +49,9 @@ namespace Net.Sf.Dbdeploy
 
             var queryExecuter = new QueryExecuter(factory);
 
-            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
+            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, 
+                                                                                dbmsSyntax, 
+                                                                                config.ChangeLogTableName);
 
             var directoryScanner = new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory);
             var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly, config.AssemblyResourceNameFilter);

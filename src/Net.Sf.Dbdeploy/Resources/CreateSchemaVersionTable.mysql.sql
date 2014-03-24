@@ -1,6 +1,6 @@
 CREATE TABLE $(QualifiedTableName) (
 	ChangeId VARCHAR(64) NOT NULL,
-	Folder VARCHAR(128) NOT NULL,
+	Folder VARCHAR(20) NOT NULL,
 	ScriptNumber SMALLINT NOT NULL,
 	ScriptName VARCHAR(256) NOT NULL,
 	StartDate DATETIME NOT NULL,

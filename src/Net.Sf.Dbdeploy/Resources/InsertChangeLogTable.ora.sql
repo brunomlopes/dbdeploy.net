@@ -1,2 +1,0 @@
-INSERT INTO $(QualifiedTableName) (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput)
- VALUES (SYS_GUID(), $(Folder), $(ScriptNumber), $(ScriptName), $(StartDate), $(CompleteDate), $(UserChange), $(ScriptStatus), $(OutputScript))

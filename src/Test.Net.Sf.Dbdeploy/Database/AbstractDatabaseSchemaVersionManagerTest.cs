@@ -15,10 +15,12 @@ namespace Net.Sf.Dbdeploy.Database
     public abstract class AbstractDatabaseSchemaVersionManagerTest
     {
         public const string TableName = "ChangeLog";
-
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
-
         private IDbmsSyntax syntax;
+        private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new[] 
+        {
+            "No table found with name 'ChangeLog'.",
+        };
 
         [SetUp]
         protected virtual void SetUp()
@@ -62,13 +64,13 @@ namespace Net.Sf.Dbdeploy.Database
                 // Allow exception messages in different languages.
                 // Kind of complicated, but with this way you see [expected] vs. [actual] on test failure.
 
-                string expected = ChangelogTableDoesNotExistMessages[0];
+                string expected = ChangelogTableDoesNotExistMessages()[0];
 
-                for (int i = 0; i < ChangelogTableDoesNotExistMessages.Length; i++)
+                for (int i = 0; i < ChangelogTableDoesNotExistMessages().Length; i++)
                 {
-                    if (ChangelogTableDoesNotExistMessages[i].Equals(ex.Message))
+                    if (ChangelogTableDoesNotExistMessages()[i].Equals(ex.Message))
                     {
-                        expected = ChangelogTableDoesNotExistMessages[i];
+                        expected = ChangelogTableDoesNotExistMessages()[i];
                     }
                 }
 
@@ -99,8 +101,8 @@ namespace Net.Sf.Dbdeploy.Database
 
             Assert.IsNotNull(schema, string.Format("{0} table was not created.", tableName));
             Assert.IsNotEmpty(schema, string.Format("{0} table was not created.", tableName));
-        } 
-        
+        }
+
         /// <summary>
         /// Asserts that the table does not exist
         /// </summary>
@@ -140,7 +142,10 @@ namespace Net.Sf.Dbdeploy.Database
                     command.CommandText = sql;
                     command.ExecuteNonQuery();
                 }
-                catch (Exception) {}
+                catch (Exception e)
+                {
+                    
+                }
             }
         }
 
@@ -185,9 +190,13 @@ namespace Net.Sf.Dbdeploy.Database
             this.EnsureTableDoesNotExist(TableName);
         }
 
+        protected string[] ChangelogTableDoesNotExistMessages()
+        {
+            return CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES;
+        }
+
         protected abstract string ConnectionString { get; }
         protected abstract string Folder { get; }
-        protected abstract string[] ChangelogTableDoesNotExistMessages { get; }
         protected abstract string Dbms { get; }
         protected abstract IDbConnection GetConnection();
         protected abstract void InsertRowIntoTable(int i);

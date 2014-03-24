@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
 using Net.Sf.Dbdeploy.Scripts;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -6,6 +9,7 @@ namespace Net.Sf.Dbdeploy.Database
     using System.IO;
     using System.Reflection;
     using System.Text.RegularExpressions;
+    using System.Collections;
 
     using NVelocity.Exception;
 
@@ -158,53 +162,6 @@ namespace Net.Sf.Dbdeploy.Database
                 .Replace(ChangeLogQualifiedTableNameToken, tableName)
                 .Replace(ChangeLogTableToken, tableInfo.TableName)
                 .Replace(ChangeLogSchemaNameToken, tableInfo.Schema);
-        }
-
-        //TODO: Criar um método de teste para garantir que o replace é feito corretamente
-        public string CreateInsertChangeLogTableSqlScript(string tableName, 
-                                                          string folder, 
-                                                          int scriptNumber, 
-                                                          string scriptName,
-                                                          string completeDate,
-                                                          int scriptStatus,
-                                                          string scriptOutput)
-        {
-            const string changeLogFolderToken = "$(Folder)";
-            const string changeLogScriptNumberToken = "$(ScriptNumber)";
-            const string changeLogScriptNameToken = "$(ScriptName)";
-            const string changeLogStartDateToken = "$(StartDate)";
-            const string changeLogCompleteDateToken = "$(CompleteDate)";
-            const string changeLogUserToken = "$(UserChange)";
-            const string changeLogScriptStatus = "$(ScriptStatus)";
-            const string changeLogOutputToken = "$(OutputScript)";
-
-            string script;
-
-            var assembly = Assembly.GetExecutingAssembly();
-            string resourceName = string.Format("Net.Sf.Dbdeploy.Resources.InsertChangeLogTable.{0}.sql", this.Dbms);
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                if (stream == null)
-                {
-                    throw new ResourceNotFoundException(string.Format("The required resource '{0}' was not found in the assembly.", resourceName));
-                }
-
-                using (var reader = new StreamReader(stream))
-                {
-                    script = reader.ReadToEnd();
-                }
-            }
-
-            return script
-                .Replace(ChangeLogQualifiedTableNameToken, tableName)
-                .Replace(changeLogFolderToken, "'" + folder + "'")
-                .Replace(changeLogScriptNumberToken, scriptNumber.ToString())
-                .Replace(changeLogScriptNameToken, "'" + scriptName + "'")
-                .Replace(changeLogStartDateToken, CurrentTimestamp)
-                .Replace(changeLogCompleteDateToken, completeDate)
-                .Replace(changeLogUserToken, CurrentUser)
-                .Replace(changeLogScriptStatus, scriptStatus.ToString())
-                .Replace(changeLogOutputToken, scriptOutput);
         }
     }
 }

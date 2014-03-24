@@ -3,7 +3,7 @@
 -- START CHANGE SCRIPT $script
 
 INSERT INTO ${changeLogTableName} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)
- VALUES (NEWID(), '$script.Folder', $script.ScriptNumber,'$script.ScriptName', getdate(), user_name(), 3, '')
+ VALUES ('$script.Guid', '$script.Folder', $script.ScriptNumber,'$script.ScriptName', getdate(), user_name(), 3, '')
 GO
 
 BEGIN TRANSACTION

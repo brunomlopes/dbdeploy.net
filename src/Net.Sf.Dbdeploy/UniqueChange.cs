@@ -52,6 +52,14 @@
         }
 
         /// <summary>
+        /// Get the new Guid value for Primary Key constraint
+        /// </summary>
+        public string Guid
+        {
+            get { return System.Guid.NewGuid().ToString(); }
+        }
+
+        /// <summary>
         /// Gets the folder that contained the script executed (part of unique key).
         /// </summary>
         /// <value>

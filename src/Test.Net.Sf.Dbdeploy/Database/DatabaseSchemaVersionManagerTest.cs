@@ -127,17 +127,15 @@ WHERE TABLE_NAME = '{0}'", t));
         [Test]
         public void ShouldUpdateChangelogTable() 
         {
-            const string insertCommand = "INSERT INTO ChangeLog (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES ('ABC123', 'a directory', 3, '003-script.sql', GETDATE(), GETDATE(), 'sa', 1, null)";
-
-            this.syntax.Setup(s => s.CreateInsertChangeLogTableSqlScript(
-                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<int>(), It.IsAny<string>()))
-                .Returns(insertCommand);
-
-            queryExecuter.Setup(q => q.Execute(insertCommand)).Verifiable();
+            this.syntax.Setup(s => s.CurrentUser).Returns("DBUSER");
+            this.syntax.Setup(s => s.CurrentTimestamp).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
-            queryExecuter.Verify();
+            const string expected = "SELECT ChangeId FROM ChangeLog";
+
+            var query = executedQueries.FirstOrDefault();
+
+            Assert.IsTrue(query != null && query.Contains(expected), "The query executed was incorrect.");
         }
 
         [Test]

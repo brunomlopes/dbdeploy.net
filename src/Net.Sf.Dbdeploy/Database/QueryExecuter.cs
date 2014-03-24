@@ -53,25 +53,22 @@
             // Capture output to string builder specified.
             this.currentOutput = output;
 
-            using (IDbCommand command = this.CreateCommand())
+            IDbCommand command = this.CreateCommand();
+            command.CommandText = sql;
+
+            if (parameters != null)
             {
-                command.CommandText = sql;
-
-                if (parameters != null)
+                for (int i = 0; i < parameters.Length; i++)
                 {
-                    for (int i = 0; i < parameters.Length; i++)
-                    {
-                        IDbDataParameter parameterObject = command.CreateParameter();
+                    IDbDataParameter parameterObject = command.CreateParameter();
 
-                        parameterObject.ParameterName = (i + 1).ToString();
-                        parameterObject.Value = parameters[i];
+                    parameterObject.ParameterName = (i + 1).ToString();
+                    parameterObject.Value = parameters[i];
 
-                        command.Parameters.Add(parameterObject);
-                    }
+                    command.Parameters.Add(parameterObject);
                 }
-
-                return command.ExecuteReader();
             }
+            return command.ExecuteReader();
         }
 
         /// <summary>
@@ -111,7 +108,6 @@
                         command.Parameters.Add(parameterObject);
                     }
                 }
-
                 command.ExecuteNonQuery();
             }
         }

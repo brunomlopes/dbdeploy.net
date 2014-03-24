@@ -29,30 +29,18 @@ namespace Net.Sf.Dbdeploy.Database
                     return new MsSqlDbmsSyntax();
                 case "mysql":
                     return new MySqlDbmsSyntax();
+                case "firebird":
+                    return new FirebirdDbmsSyntax();
                 default:
-                    throw new ArgumentException("Supported dbms: ora, mssql, mysql");
+                    throw new ArgumentException("Supported dbms: ora, mssql, mysql, firebird");
             }
         }
 
         public virtual IDbConnection CreateConnection()
         {
-            string assemblyFullNameDllPath = null;
-            if (dllPathConnection != null)
-            {
-                assemblyFullNameDllPath = AssemblyName.GetAssemblyName(dllPathConnection).FullName;
-            }
-
-            var assembly = Assembly.Load(assemblyFullNameDllPath ?? provider.AssemblyName);
-            var type = assembly.GetType(assemblyFullNameDllPath != null ? GetCustomConnectionClass() : provider.ConnectionClass);
+            var assembly = dllPathConnection != null ? Assembly.LoadFrom(dllPathConnection) : Assembly.Load(provider.AssemblyName);
+            var type = assembly.GetType(provider.ConnectionClass);
             return (IDbConnection)Activator.CreateInstance(type, connectionString);
-        }
-
-        private string GetCustomConnectionClass()
-        {
-            if (dbms == "ora")
-                return "Oracle.DataAccess.Client.OracleConnection";
-
-            return provider.ConnectionClass;
         }
     }
 }
