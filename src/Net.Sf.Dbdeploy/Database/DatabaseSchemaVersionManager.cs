@@ -124,7 +124,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             try
             {
-                output = string.IsNullOrEmpty(output) ? "NULL" : "'" + output + "'";
+                output = string.IsNullOrEmpty(output) ? " " : RemoveInvalidCharacters(output);
                 var completeDateValue = status != ScriptStatus.Started ? this.syntax.CurrentTimestamp : "NULL";
 
                 if (string.IsNullOrWhiteSpace(script.ChangeId))
@@ -145,8 +145,7 @@ namespace Net.Sf.Dbdeploy.Database
 
                     queryExecuter.Execute(sqlInsert);
 
-                    var sqlSelect = string.Format("SELECT ChangeId FROM {0} WHERE Folder = '{1}' and ScriptNumber = {2}", 
-                        changeLogTableName, script.Folder, script.ScriptNumber);
+                    var sqlSelect = string.Format("SELECT ChangeId FROM {0} WHERE Folder = '{1}' and ScriptNumber = {2}", changeLogTableName, script.Folder, script.ScriptNumber);
 
                     using (var reader = this.queryExecuter.ExecuteQuery(sqlSelect))
                     {
@@ -158,7 +157,7 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     var sql = string.Format(
                         CultureInfo.InvariantCulture,
-                        "UPDATE {0} SET Folder = '{1}', ScriptNumber = {2}, ScriptName = '{3}', {4}CompleteDate = {5}, AppliedBy = {6}, ScriptStatus = {7}, ScriptOutput = {8} WHERE ChangeId = '{9}'",
+                        "UPDATE {0} SET Folder = '{1}', ScriptNumber = {2}, ScriptName = '{3}', {4}CompleteDate = {5}, AppliedBy = {6}, ScriptStatus = {7}, ScriptOutput = '{8}' WHERE ChangeId = '{9}'",
                         this.changeLogTableName,
                         script.Folder,
                         script.ScriptNumber,
@@ -171,12 +170,27 @@ namespace Net.Sf.Dbdeploy.Database
                         script.ChangeId);
 
                     this.queryExecuter.Execute(sql);
+
+                    //var sql = string.Format(
+                    //    CultureInfo.InvariantCulture,
+                    //    "UPDATE {0} SET Folder = '@1', ScriptNumber = @2, ScriptName = '@3', {1}CompleteDate = {2}, AppliedBy = {3}, ScriptStatus = @4, ScriptOutput = @5 WHERE ChangeId = '@6'",
+                    //    this.changeLogTableName,
+                    //    status == ScriptStatus.Started ? string.Format(CultureInfo.InvariantCulture, "StartDate = {0}, ", this.syntax.CurrentTimestamp) : string.Empty,
+                    //    completeDateValue,
+                    //    this.syntax.CurrentUser);
+
+                    //this.queryExecuter.Execute(sql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output, script.ChangeId);
                 }
             }
             catch (DbException e)
             {
                 throw new SchemaVersionTrackingException("Could not update change log because: " + e.Message, e);
             }
+        }
+
+        private string RemoveInvalidCharacters(string output)
+        {
+            return output.Replace("'", string.Empty);
         }
 
         /// <summary>

@@ -131,15 +131,11 @@ WHERE TABLE_NAME = '{0}'", t));
             this.syntax.Setup(s => s.CurrentTimestamp).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
-            const string expected = @"INSERT INTO ChangeLog (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, @4, TIMESTAMP, TIMESTAMP, DBUSER, @5, @6) 
-SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
+            const string expected = "SELECT ChangeId FROM ChangeLog";
 
             var query = executedQueries.FirstOrDefault();
 
-            //Assert.AreEqual(expected, this.executedQueries.FirstOrDefault(), "The query executed was incorrect.");
-            Assert.IsTrue(query.Contains("INSERT INTO ChangeLog") && query.Contains("SELECT ChangeId FROM ChangeLog"), "The query executed was incorrect.");
-
-            this.queryExecuter.Verify(e => e.ExecuteQuery(expected, this.script.Folder, this.script.ScriptNumber, this.script.ScriptName, (int)ScriptStatus.Success, "Script output"), Times.Once);
+            Assert.IsTrue(query != null && query.Contains(expected), "The query executed was incorrect.");
         }
 
         [Test]
