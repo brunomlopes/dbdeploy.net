@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System;

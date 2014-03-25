@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    class DbmsFactoryFirebirdTeste : DbmsFactoryAbstractTest
+    class DbmsFactoryFirebirdTest : DbmsFactoryAbstractTest
     {
         private readonly string firebirdConnectionString = string.Format("User=SYSDBA;Password=masterkey;Database={0};DataSource=localhost;Port=3050;", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "DatabaseFirebird", "DBDEPLOY.FDB"));
         private const string DbmsFirebird = "firebird";
@@ -21,7 +21,6 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(DbmsFirebird, firebirdConnectionString);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
-            CloseConnection();
         }
 
         [Test]
@@ -30,7 +29,6 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(DbmsFirebird, firebirdConnectionString, firebirdDllPath);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
-            CloseConnection();
         }
 
         [Test]
@@ -40,7 +38,6 @@ namespace Net.Sf.Dbdeploy.Database
             OpenConnection(factory);
             const string query = "SELECT * FROM rdb$relation_fields";
             ExecuteNonQuery(query);
-            CloseConnection();
         }
 
         [Test]
@@ -51,7 +48,6 @@ namespace Net.Sf.Dbdeploy.Database
             OpenConnection(factory);
             const string query = "SELECT * FROM ANY_TABLE";
             ExecuteNonQuery(query);
-            CloseConnection();
         }
     }
 }

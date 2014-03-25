@@ -145,9 +145,10 @@
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
     <Compile Include="Database\DbmsFactoryAbstractTest.cs" />
-    <Compile Include="Database\DbmsFactoryFirebirdTeste.cs" />
+    <Compile Include="Database\DbmsFactoryFirebirdTest.cs" />
     <Compile Include="Database\DbmsFactoryMySqlTest.cs" />
     <Compile Include="Database\DbmsFactoryOracleTest.cs" />
+    <Compile Include="Database\DbmsFactoryPostgresTest.cs" />
     <Compile Include="Database\FirebirdDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\MySqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="DbDeployerTest.cs" />
@@ -234,6 +235,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mocks\Fixtures\MySqlDllConnection\MySql.Data.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Fixtures\PostgresDllConnection\Mono.Security.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Fixtures\PostgresDllConnection\Npgsql.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mocks\Versioned\2.0.0.0\8.Create Product Table.sql">

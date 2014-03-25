@@ -10,7 +10,7 @@ namespace Net.Sf.Dbdeploy.Database
     /// </summary>
     class DbmsFactoryOracleTest : DbmsFactoryAbstractTest
     {
-        private const string OracleConnectionStringTns = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=DBDEPLOY;Password=DBDEPLOY;";
+        private const string OracleConnectionStringTns = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=dbdeploy;Password=dbdeploy;";
         private readonly string oracleDllConnection = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\OracleDllConnection\\" + OracleDllName;
         private const string DbmsOracle = "ora";
         private const string OracleDllName = "Oracle.DataAccess.dll";

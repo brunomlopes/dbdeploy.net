@@ -4,7 +4,7 @@
     description="Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0"
     assemblyName="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
     connectionClass="System.Data.SqlClient.SqlConnection"
-    />
+  />
   <provider
     name="ora"
     description="Oracle .NET connection provider"
@@ -18,9 +18,15 @@
     connectionClass="MySql.Data.MySqlClient.MySqlConnection"
   />
   <provider
-  name="firebird"
-  description="Firebird, Firebird provider 4.1.0.0"
-  assemblyName="FirebirdSql.Data.FirebirdClient, Version=4.1.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c"
-  connectionClass="FirebirdSql.Data.FirebirdClient.FbConnection"
+    name="firebird"
+    description="Firebird, Firebird provider 4.1.0.0"
+    assemblyName="FirebirdSql.Data.FirebirdClient, Version=4.1.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c"
+    connectionClass="FirebirdSql.Data.FirebirdClient.FbConnection"
+  />
+  <provider
+    name="postgres"
+    description="Postgres, Postgres provider Npgsql open source project 2.1.0-rc1"
+    assemblyName="Npgsql, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"
+    connectionClass="Npgsql.NpgsqlConnection"
   />
 </providers>

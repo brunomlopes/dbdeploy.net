@@ -21,7 +21,6 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(DbmsMySql, MySqlConnectionString);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
-            CloseConnection();
         }
 
         [Test]
@@ -30,7 +29,6 @@ namespace Net.Sf.Dbdeploy.Database
             var factory = new DbmsFactory(DbmsMySql, MySqlConnectionString, mySqlDllPath);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
-            CloseConnection();
         }
 
         [Test]
@@ -40,7 +38,6 @@ namespace Net.Sf.Dbdeploy.Database
             OpenConnection(factory);
             const string query = "Select CURRENT_TIMESTAMP From Dual;";
             ExecuteNonQuery(query);
-            CloseConnection();
         }
 
         [Test]
@@ -51,7 +48,6 @@ namespace Net.Sf.Dbdeploy.Database
             OpenConnection(factory);
             const string query = "Select ANY_TABLE From Dual;";
             ExecuteNonQuery(query);
-            CloseConnection();
         }
     }
 }

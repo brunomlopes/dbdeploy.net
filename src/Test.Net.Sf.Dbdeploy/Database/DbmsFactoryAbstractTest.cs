@@ -26,7 +26,8 @@ namespace Net.Sf.Dbdeploy.Database
         [TearDown]
         public void CloseConnection()
         {
-            connection.Close();
+            if (connection != null)
+                connection.Close();
         }
 
         protected void ExecuteNonQuery(string query)
