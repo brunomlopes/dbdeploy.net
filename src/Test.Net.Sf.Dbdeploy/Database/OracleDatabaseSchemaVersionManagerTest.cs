@@ -45,7 +45,7 @@ namespace Net.Sf.Dbdeploy.Database
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.AppendFormat("INSERT INTO {0}", TableName);
             commandBuilder.Append("(ChangeId, ScriptNumber, Folder, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput)");
-            commandBuilder.AppendFormat(" VALUES (SYS_GUID(), {0}, '{1}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER, 'Unit test', 1, '')", i, FOLDER);
+            commandBuilder.AppendFormat(" VALUES ('{0}', {1}, '{2}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, USER, 'Unit test', 1, '')", Guid.NewGuid(), i, FOLDER);
 			ExecuteSql(commandBuilder.ToString());
 		}
 
@@ -70,7 +70,7 @@ namespace Net.Sf.Dbdeploy.Database
 		}
 
 		[Test]
-		public void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
+        public override void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
 		{
 			this.EnsureTableDoesNotExist();
 			CreateTable();

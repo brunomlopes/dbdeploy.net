@@ -117,7 +117,7 @@ namespace Net.Sf.Dbdeploy.Database
             string syntax = string.Format(CultureInfo.InvariantCulture,
             @"SELECT table_schema 
             FROM INFORMATION_SCHEMA.TABLES 
-            WHERE TABLE_NAME = '{0}'", tableInfo.TableName);
+            WHERE TABLE_NAME = '{0}'", tableInfo.TableName.ToLower());
             if (!string.IsNullOrWhiteSpace(tableInfo.Schema))
                 syntax += string.Format(" AND TABLE_SCHEMA = '{0}'", tableInfo.Schema);
 

@@ -33,8 +33,10 @@ namespace Net.Sf.Dbdeploy.Database
                     return new MySqlDbmsSyntax();
                 case "firebird":
                     return new FirebirdDbmsSyntax();
+                case "postgres":
+                    return new PostgresDbmsSyntax();
                 default:
-                    throw new ArgumentException("Supported dbms: ora, mssql, mysql, firebird");
+                    throw new ArgumentException("Supported dbms: ora, mssql, mysql, firebird, postgres");
             }
         }
 

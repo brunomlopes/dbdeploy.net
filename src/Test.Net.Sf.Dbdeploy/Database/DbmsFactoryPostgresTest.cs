@@ -14,7 +14,6 @@ namespace Net.Sf.Dbdeploy.Database
         private const string DbmsPostgres = "postgres";
         private const string PostgresDllName = "Npgsql.dll";
         private readonly string postGresDllPath = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\PostgresDllConnection\\" + PostgresDllName;
-        private readonly string monoDll = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\PostgresDllConnection\\" + "Mono.Security.dll";
 
         [Test]
         [ExpectedException("System.IO.FileNotFoundException")]

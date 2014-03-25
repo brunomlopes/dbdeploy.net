@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using FluentAssertions;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -15,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird" }) 
+            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgres" }) 
             {
                 try 
                 {
@@ -33,7 +34,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesLoadingTemplatesFromResourcesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird" }) 
+            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgres" })
             {
                 try 
                 {
@@ -52,6 +53,15 @@ namespace Net.Sf.Dbdeploy.Database
         {
             StringWriter writer = new StringWriter();
             var listReplaces = new List<string>() { "$script.Guid", "$script.Folder", "$script.ScriptNumber", "$script.ScriptName" };
+            var listExpecteds = new List<string>()
+                {
+                    "START CHANGE SCRIPT v1.0/001_change.sql",
+                    "END CHANGE SCRIPT v1.0/001_change.sql",
+                    "START CHANGE SCRIPT v1.0/002_change.sql",
+                    "END CHANGE SCRIPT v1.0/002_change.sql",
+                    "INSERT INTO ChangeLog (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)",
+                    "UPDATE ChangeLog"
+                };
 
             ChangeScript changeOne = new StubChangeScript(1, "001_change.sql", "-- contents of change script 1");
             ChangeScript changeTwo = new StubChangeScript(2, "002_change.sql", "-- contents of change script 2");
@@ -74,13 +84,17 @@ namespace Net.Sf.Dbdeploy.Database
 
             try
             {
+                var expected = ReadExpectedFileContents(GetExpectedFilename(syntaxName));
+                foreach (var currentExpected in listExpecteds)
+                {
+                    expected.Should().Contain(currentExpected, string.Format("The expected script does not contain {0}", currentExpected));
+                }
+
                 foreach (var replace in listReplaces)
                 {
                     if (actual.Contains(replace)) 
                         Assert.Fail(string.Format("A regex from template does not were replaced. \n\rRegex: {0} ", replace));
                 }
-                //Assert.AreEqual(this.ReadExpectedFileContents(this.GetExpectedFilename(syntaxName)), actual);
-                
             }
             catch (Exception)
             {

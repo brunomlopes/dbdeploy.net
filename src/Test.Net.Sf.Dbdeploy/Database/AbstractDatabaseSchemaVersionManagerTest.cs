@@ -200,5 +200,6 @@ namespace Net.Sf.Dbdeploy.Database
         protected abstract string Dbms { get; }
         protected abstract IDbConnection GetConnection();
         protected abstract void InsertRowIntoTable(int i);
+        public abstract void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted();
     }
 }

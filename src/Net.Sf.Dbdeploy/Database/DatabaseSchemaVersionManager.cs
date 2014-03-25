@@ -170,16 +170,6 @@ namespace Net.Sf.Dbdeploy.Database
                         script.ChangeId);
 
                     this.queryExecuter.Execute(sql);
-
-                    //var sql = string.Format(
-                    //    CultureInfo.InvariantCulture,
-                    //    "UPDATE {0} SET Folder = '@1', ScriptNumber = @2, ScriptName = '@3', {1}CompleteDate = {2}, AppliedBy = {3}, ScriptStatus = @4, ScriptOutput = @5 WHERE ChangeId = '@6'",
-                    //    this.changeLogTableName,
-                    //    status == ScriptStatus.Started ? string.Format(CultureInfo.InvariantCulture, "StartDate = {0}, ", this.syntax.CurrentTimestamp) : string.Empty,
-                    //    completeDateValue,
-                    //    this.syntax.CurrentUser);
-
-                    //this.queryExecuter.Execute(sql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output, script.ChangeId);
                 }
             }
             catch (DbException e)

@@ -54,7 +54,7 @@ namespace Net.Sf.Dbdeploy.Database
         }
 
         [Test]
-        public void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
+        public override void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
         {
             this.EnsureTableDoesNotExist();
             CreateTable();
