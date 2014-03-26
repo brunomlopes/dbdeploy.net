@@ -5,6 +5,8 @@
 INSERT INTO ${changeLogTableName} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)
  VALUES ('$script.Guid', '$script.Folder', $script.ScriptNumber, '$script.ScriptName', CURRENT_TIMESTAMP, USER, 3, ' ')${separator}${delimiter}
 
+START TRANSACTION${separator}${delimiter}
+
 ${script.getContent()}
 
 UPDATE ${changeLogTableName} 

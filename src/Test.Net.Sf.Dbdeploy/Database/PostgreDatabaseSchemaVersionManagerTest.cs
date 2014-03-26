@@ -11,18 +11,18 @@ using NUnit.Framework;
 namespace Net.Sf.Dbdeploy.Database
 {
     [Category("Postgres"), Category("DbIntegration")]
-    class PostgresDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
+    class PostgreDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private string connectionString;
-        private const string DBMS = "postgres";
+        private const string DBMS = "postgre";
         private const string FOLDER = "Scripts";
-        private readonly string postGresDataDll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "PostgresDllConnection", "Npgsql.dll");
+        private readonly string postGreDataDll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "PostgreDllConnection", "Npgsql.dll");
         private IDbmsSyntax syntax;
 
         [SetUp]
         protected override void SetUp()
         {
-            var factory = new DbmsFactory(Dbms, ConnectionString, postGresDataDll);
+            var factory = new DbmsFactory(Dbms, ConnectionString, postGreDataDll);
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
@@ -35,8 +35,8 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 if (connectionString == null)
                 {
-                    connectionString = ConfigurationManager.AppSettings["PostgresConnString-" + Environment.MachineName]
-                                        ?? ConfigurationManager.AppSettings["PostgresConnString"];
+                    connectionString = ConfigurationManager.AppSettings["PostgreConnString-" + Environment.MachineName]
+                                        ?? ConfigurationManager.AppSettings["PostgreConnString"];
                 }
                 return connectionString;
             }
@@ -108,7 +108,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override IDbConnection GetConnection()
         {
-            var assembly = Assembly.LoadFrom(postGresDataDll);
+            var assembly = Assembly.LoadFrom(postGreDataDll);
             var type = assembly.GetType("Npgsql.NpgsqlConnection");
             return (IDbConnection)Activator.CreateInstance(type, ConnectionString);
         }

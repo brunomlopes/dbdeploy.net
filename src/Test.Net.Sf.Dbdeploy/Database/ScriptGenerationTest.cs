@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgres" }) 
+            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgre" }) 
             {
                 try 
                 {
@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesLoadingTemplatesFromResourcesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgres" })
+            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgre" })
             {
                 try 
                 {

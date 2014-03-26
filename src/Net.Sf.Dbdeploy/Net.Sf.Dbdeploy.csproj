@@ -112,7 +112,7 @@
     <Compile Include="Configuration\Parser.cs" />
     <Compile Include="Database\ChangeEntry.cs" />
     <Compile Include="Database\FirebirdDbmsSyntax.cs" />
-    <Compile Include="Database\PostgresDbmsSyntax.cs" />
+    <Compile Include="Database\PostgreDbmsSyntax.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
     <Compile Include="Database\SqlCmd\SqlCmdExecutor.cs" />

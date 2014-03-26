@@ -27,7 +27,7 @@
             throw new NotImplementedException(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    "No provider for type '{0}' implemented." + Environment.NewLine + "Supported dbms: ora, mssql, mysql, firebird, postgres", 
+                    "No provider for type '{0}' implemented." + Environment.NewLine + "Supported dbms: ora, mssql, mysql, firebird, postgre", 
                     dbmsType));
         }
     }

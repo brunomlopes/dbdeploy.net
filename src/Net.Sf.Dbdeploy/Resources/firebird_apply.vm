@@ -3,7 +3,7 @@
 -- START CHANGE SCRIPT ${script}
 
 INSERT INTO ${changeLogTableName} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)
- VALUES ('$script.Guid', '$script.Folder', $script.ScriptNumber, '$script.ScriptName', CURRENT_DATE, current_user, 1, '')$!{separator}${delimiter}
+ VALUES ('$script.Guid', '$script.Folder', $script.ScriptNumber, '$script.ScriptName', CURRENT_DATE, current_user, 3, '')$!{separator}${delimiter}
 
 ${script.getContent()}
 

@@ -1,11 +1,11 @@
 namespace Net.Sf.Dbdeploy.Database
 {
-    public class PostgresDbmsSyntax : DbmsSyntax
+    public class PostgreDbmsSyntax : DbmsSyntax
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostgresDbmsSyntax" /> class.
+        /// Initializes a new instance of the <see cref="PostgreDbmsSyntax" /> class.
         /// </summary>
-        public PostgresDbmsSyntax() : base("postgres")
+        public PostgreDbmsSyntax() : base("postgres")
         {}
 
         /// <summary>
