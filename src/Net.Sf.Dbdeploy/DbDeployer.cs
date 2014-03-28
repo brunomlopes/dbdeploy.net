@@ -47,7 +47,7 @@ namespace Net.Sf.Dbdeploy
             var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.DllPathConnector);
             
             var dbmsSyntax = factory.CreateDbmsSyntax();
-            dbmsSyntax.SetDefaultDatabaseName(ConnectionStringParser.Parse(config.ConnectionString).Database);
+            dbmsSyntax.SetDefaultDatabaseName(config.Dbms != "ora" ? ConnectionStringParser.Parse(config.ConnectionString).Database : string.Empty);
 
             var queryExecuter = new QueryExecuter(factory);
 
