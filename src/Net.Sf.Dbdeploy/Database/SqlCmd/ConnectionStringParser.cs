@@ -24,13 +24,14 @@
                 var pair = entry.Split('=');
                 if (pair.Length == 2)
                 {
-                    var name = pair[0].ToLowerInvariant();
-                    var value = pair[1];
+                    var name = pair[0].ToLowerInvariant().Trim();
+                    var value = pair[1].Trim();
 
                     switch (name)
                     {
                         case "server":
                         case "data source":
+                        case "datasource":
                             info.Server = value;
                             break;
 
@@ -39,10 +40,13 @@
                             info.Database = value;
                             break;
 
+                        case "uid":
+                        case "user":
                         case "user id":
                             info.UserId = value;
                             break;
 
+                        case "pwd":
                         case "password":
                             info.Password = value;
                             break;

@@ -19,13 +19,15 @@ namespace Net.Sf.Dbdeploy.Scripts
             Assert.AreEqual(1, parser.ExtractScriptNumberFromFilename("1.foo.2.txt"));
         }
 
-        [Test, ExpectedException(typeof(UnrecognisedFilenameException), "Could not extract a change script number from filename: blah blah blah")]
+        [Test]
+        [ExpectedException(typeof(UnrecognisedFilenameException))]
         public void ThrowsWhenFilenameDoesNotStartWithANumber()
         {
             new FilenameParser().ExtractScriptNumberFromFilename("blah blah blah");
         }
 
-        [Test, ExpectedException(typeof(UnrecognisedFilenameException), "Could not extract a change script number from filename: foo.2.txt")]
+        [Test]
+        [ExpectedException(typeof(UnrecognisedFilenameException))]
         public void ThrowsWhenFilenameDoesNotStartWithANumberAndContainsANumber()
         {
             new FilenameParser().ExtractScriptNumberFromFilename("foo.2.txt");

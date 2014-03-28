@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
+using Net.Sf.Dbdeploy.Database.SqlCmd;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -26,6 +27,8 @@ namespace Net.Sf.Dbdeploy.Database
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
+            syntax.SetDefaultDatabaseName(ConnectionStringParser.Parse(ConnectionString).Database);
+
             databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName);
         }
 

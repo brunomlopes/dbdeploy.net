@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     /// <summary>
@@ -33,6 +35,27 @@ namespace Net.Sf.Dbdeploy.Database
         public override string CurrentUser 
         { 
             get { return "USER()"; }
+        }
+
+        /// <summary>
+        /// Set default database name MySQL specialization
+        /// </summary>
+        /// <param name="databaseName"></param>
+        public override void SetDefaultDatabaseName(string databaseName)
+        {
+            DatabaseName = databaseName;
+        }
+
+        protected override string GetQueryTableExists(TableInfo tableInfo)
+        {
+            string syntax = string.Format(CultureInfo.InvariantCulture,
+            @"SELECT table_schema 
+            FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_NAME = '{0}'", tableInfo.TableName.ToLower());
+            if (!string.IsNullOrEmpty(DatabaseName))
+                syntax += string.Format(" AND TABLE_SCHEMA = '{0}'", DatabaseName);
+
+            return syntax;
         }
     }
 }

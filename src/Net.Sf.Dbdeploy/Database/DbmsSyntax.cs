@@ -39,6 +39,11 @@ namespace Net.Sf.Dbdeploy.Database
         private const string ChangeLogSchemaNameToken = "$(SchemaName)";
 
         /// <summary>
+        /// Database name attribute
+        /// </summary>
+        protected string DatabaseName;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DbmsSyntax" /> class.
         /// </summary>
         /// <param name="dbms">The DBMS.</param>
@@ -48,15 +53,21 @@ namespace Net.Sf.Dbdeploy.Database
         }
 
         /// <summary>
+        /// Virtual method to set default database name
+        /// </summary>
+        /// <param name="databaseName"></param>
+        public virtual void SetDefaultDatabaseName(string databaseName)
+        {
+            DatabaseName = string.Empty;
+        }
+
+        /// <summary>
         /// Gets the default schema for a table.
         /// </summary>
         /// <value>Default schema.</value>
         public virtual string DefaultSchema
         {
-            get
-            {
-                return string.Empty;
-            }
+            get { return string.Empty; }
         }
 
         /// <summary>
@@ -113,7 +124,6 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected virtual string GetQueryTableExists(TableInfo tableInfo)
         {
-
             string syntax = string.Format(CultureInfo.InvariantCulture,
             @"SELECT table_schema 
             FROM INFORMATION_SCHEMA.TABLES 

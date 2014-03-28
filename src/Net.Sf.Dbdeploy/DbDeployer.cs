@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Net.Sf.Dbdeploy.Database.SqlCmd;
 
 namespace Net.Sf.Dbdeploy
 {
@@ -46,6 +47,7 @@ namespace Net.Sf.Dbdeploy
             var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.DllPathConnector);
             
             var dbmsSyntax = factory.CreateDbmsSyntax();
+            dbmsSyntax.SetDefaultDatabaseName(ConnectionStringParser.Parse(config.ConnectionString).Database);
 
             var queryExecuter = new QueryExecuter(factory);
 

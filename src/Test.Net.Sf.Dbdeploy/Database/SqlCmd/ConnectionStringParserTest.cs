@@ -51,5 +51,27 @@ namespace Net.Sf.Dbdeploy.Database.SqlCmd
             Assert.AreEqual("myPassword", connectionStringInfo.Password, "Password is incorrect.");
             Assert.IsFalse(connectionStringInfo.TrustedConnection, "TrustedConnection should not be set.");
         }
+
+        [Test]
+        public void ShouldParseDataBaseWithWitheSpace()
+        {
+            var connectionStringInfo = ConnectionStringParser.Parse(@"Server=localhost; Database=dbdeploy; Uid=dbdeploy; Pwd=dbdeploy;");
+            Assert.AreEqual(@"localhost", connectionStringInfo.Server, "Server name is incorrect.");
+            Assert.AreEqual("dbdeploy", connectionStringInfo.Database, "Database name is incorrect.");
+            Assert.AreEqual(@"dbdeploy", connectionStringInfo.UserId, "User ID is incorrect.");
+            Assert.AreEqual("dbdeploy", connectionStringInfo.Password, "Password is incorrect.");
+            Assert.IsFalse(connectionStringInfo.TrustedConnection, "TrustedConnection should not be set.");
+        }
+
+        [Test]
+        public void ShouldParseDataBaseWithSpecialConnectionString()
+        {
+            var connectionStringInfo = ConnectionStringParser.Parse(@"User=SYSDBA;Password=masterkey;Database=myDatabase;DataSource=localhost;Port=3050;");
+            Assert.AreEqual(@"localhost", connectionStringInfo.Server, "Server name is incorrect.");
+            Assert.AreEqual("myDatabase", connectionStringInfo.Database, "Database name is incorrect.");
+            Assert.AreEqual(@"SYSDBA", connectionStringInfo.UserId, "User ID is incorrect.");
+            Assert.AreEqual("masterkey", connectionStringInfo.Password, "Password is incorrect.");
+            Assert.IsFalse(connectionStringInfo.TrustedConnection, "TrustedConnection should not be set.");
+        }
     }
 }
