@@ -55,8 +55,8 @@ namespace Net.Sf.Dbdeploy.Database
         /// <summary>
         /// Virtual method to set default database name
         /// </summary>
-        /// <param name="databaseName"></param>
-        public virtual void SetDefaultDatabaseName(string databaseName)
+        /// <param name="connectionString"></param>
+        public virtual void SetDefaultDatabaseName(string connectionString)
         {
             DatabaseName = string.Empty;
         }

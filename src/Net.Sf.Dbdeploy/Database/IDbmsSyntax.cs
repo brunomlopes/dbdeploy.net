@@ -32,8 +32,8 @@ namespace Net.Sf.Dbdeploy.Database
         /// <summary>
         /// Set default database name method
         /// </summary>
-        /// <param name="databaseName"></param>
-        void SetDefaultDatabaseName(string databaseName);
+        /// <param name="connectionString"></param>
+        void SetDefaultDatabaseName(string connectionString);
 
         /// <summary>
         /// Gets the Change Log Table create script.

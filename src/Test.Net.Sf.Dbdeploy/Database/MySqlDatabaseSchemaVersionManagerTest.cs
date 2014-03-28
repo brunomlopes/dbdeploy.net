@@ -27,7 +27,7 @@ namespace Net.Sf.Dbdeploy.Database
             var executer = new QueryExecuter(factory);
 
             this.syntax = factory.CreateDbmsSyntax();
-            syntax.SetDefaultDatabaseName(ConnectionStringParser.Parse(ConnectionString).Database);
+            syntax.SetDefaultDatabaseName(connectionString);
 
             databaseSchemaVersion = new DatabaseSchemaVersionManager(executer, this.syntax, TableName);
         }

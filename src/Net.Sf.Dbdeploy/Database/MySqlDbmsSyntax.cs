@@ -1,4 +1,5 @@
 using System.Globalization;
+using Net.Sf.Dbdeploy.Database.SqlCmd;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -40,10 +41,10 @@ namespace Net.Sf.Dbdeploy.Database
         /// <summary>
         /// Set default database name MySQL specialization
         /// </summary>
-        /// <param name="databaseName"></param>
-        public override void SetDefaultDatabaseName(string databaseName)
+        /// <param name="connectionString"></param>
+        public override void SetDefaultDatabaseName(string connectionString)
         {
-            DatabaseName = databaseName;
+            DatabaseName = ConnectionStringParser.Parse(connectionString).Database;
         }
 
         protected override string GetQueryTableExists(TableInfo tableInfo)
