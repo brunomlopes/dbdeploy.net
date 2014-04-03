@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Net.Sf.Dbdeploy.Database.SqlCmd;
 
 namespace Net.Sf.Dbdeploy
@@ -55,9 +56,8 @@ namespace Net.Sf.Dbdeploy
                                                                                 dbmsSyntax, 
                                                                                 config.ChangeLogTableName);
 
-            var directoryScanner = new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory);
-            var assemblyScanner = new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly, config.AssemblyResourceNameFilter);
-            var scanner = new AllScriptScanner(directoryScanner, assemblyScanner);
+            var scriptScanners = GetScriptScanners(config, infoWriter);
+            var scanner = new AllScriptScanner(scriptScanners.ToArray());
 
             var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScripts());
 
@@ -159,6 +159,19 @@ namespace Net.Sf.Dbdeploy
                     undoWriter.Dispose();
                 }
             }
+        }
+
+        private IList<IScriptScanner> GetScriptScanners(DbDeployConfig config, TextWriter infoWriter)
+        {
+            var scanners = new List<IScriptScanner>();
+            scanners.Add(new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly, config.AssemblyResourceNameFilter));
+
+            if (config.AssemblyOnly)
+                return scanners;
+
+            scanners.Add(new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory));
+
+            return scanners;
         }
 
         /// <summary>

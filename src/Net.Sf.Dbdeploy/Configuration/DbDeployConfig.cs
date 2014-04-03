@@ -170,6 +170,8 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// </value>
         public string LineEnding { get; set; }
 
+        public bool AssemblyOnly { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DbDeployConfig" /> class.
         /// </summary>
@@ -191,6 +193,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             this.DelimiterType = DbDeployDefaults.DelimiterType;
             this.LineEnding = DbDeployDefaults.LineEnding;
             this.DllPathConnector = DbDeployDefaults.DllPathConnector;
+            this.AssemblyOnly = DbDeployDefaults.AssemblyOnly;
         }
     }
 }

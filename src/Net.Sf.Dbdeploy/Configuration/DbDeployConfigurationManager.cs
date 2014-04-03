@@ -73,6 +73,7 @@ namespace Net.Sf.Dbdeploy.Configuration
 
             config.ScriptAssembly = GetAttribute(element, "assembly", DbDeployDefaults.ScriptAssembly, Parser.ParseAssembly);
             config.AssemblyResourceNameFilter = GetAttribute(element, "assemblyFilterByName", DbDeployDefaults.AssemblyResourceNameFilter, Parser.ParseAssemblyFilterByName);
+            config.AssemblyOnly = GetAttribute(element, "assemblyOnly", DbDeployDefaults.AssemblyOnly, Parser.ParseAssemblyOnly);
 
             return config;
         }

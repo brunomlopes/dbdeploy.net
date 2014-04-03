@@ -89,7 +89,7 @@ namespace Net.Sf.Dbdeploy
             options
                 .Add(
                     "d|dbms=",
-                    "DBMS type ('mssql', 'mysql' or 'ora')",
+                    "DBMS type ('mssql', 'mysql', 'ora', 'firebird' or 'postgre')",
                     s => config.Dbms = s)
 
                 .Add(
@@ -116,6 +116,11 @@ namespace Net.Sf.Dbdeploy
                     "fbn|filterbyname=",
                     "filter assembly resource by name",
                     s => config.AssemblyResourceNameFilter = Parser.ParseAssemblyFilterByName(StripQuotes(s)))
+
+                .Add(
+                    "assemblyOnly=",
+                    "ignores scripts in directories",
+                    s => config.AssemblyOnly = Parser.ParseAssemblyOnly(StripQuotes(s)))
                     
                 .Add(
                     "t|changelogtablename=",

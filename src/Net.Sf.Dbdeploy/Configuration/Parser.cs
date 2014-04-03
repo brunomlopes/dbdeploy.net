@@ -62,5 +62,10 @@ namespace Net.Sf.Dbdeploy.Configuration
         {
             return resourceName => resourceName.Contains(value);
         }
+
+        public static bool ParseAssemblyOnly(string value)
+        {
+            return value.ToUpper() == bool.TrueString.ToUpper();
+        }
     }
 }

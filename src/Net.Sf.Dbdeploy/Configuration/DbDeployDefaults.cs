@@ -94,5 +94,10 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// The personal Oracle Dll path connection
         /// </summary>
         public static readonly string DllPathConnector = null;
+
+        /// <summary>
+        /// If true the directory scan for scripts will not be executed
+        /// </summary>
+        public static bool AssemblyOnly = false;
     }
 }
