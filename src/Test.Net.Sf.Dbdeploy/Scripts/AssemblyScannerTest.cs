@@ -18,7 +18,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void CanReadFilesFromAssembly()
         {
             var writer = new StringWriter();
-            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, AssemblieWithEmbeddedScripts());
+            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, AssemblyWithEmbeddedScripts());
 
             var changeScripts = assemblyScanner.GetChangeScripts();
             
@@ -27,7 +27,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
             VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
-            VerifyChangeScript(changeScripts, "Pre_2.3.0.0", 10, "10.Add Age Column.sql");
+            VerifyChangeScript(changeScripts, "2.3.0.0", 10, "10.Add Age Column.sql");
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         public void AFilterCanBeAppliedToFilterTheResourceNamesOfFoundScripts()
         {
             var writer = new StringWriter();
-            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, AssemblieWithEmbeddedScripts(), r => !r.EndsWith("10.Add Age Column.sql"));
+            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, AssemblyWithEmbeddedScripts(), r => !r.EndsWith("10.Add Age Column.sql"));
 
             var changeScripts = assemblyScanner.GetChangeScripts();
 
@@ -47,6 +47,21 @@ namespace Net.Sf.Dbdeploy.Scripts
             VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
             VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
             VerifyScriptNotInTheList(changeScripts, "10.Add Age Column.sql");
+        }
+
+        /// <summary>
+        /// Tests if <see cref="AssemblyScanner"/> apllies the filter function on the resource names from scripts found.
+        /// </summary>
+        [Test]
+        public void AFilterCanBeAppliedToFilterTheResourceNamesOfFoundScripts2()
+        {
+            var writer = new StringWriter();
+            var assemblyScanner = new AssemblyScanner(writer, Encoding.UTF8, AssemblyWithEmbeddedScripts(), r => r.Contains(".db.MsSql."));
+
+            var changeScripts = assemblyScanner.GetChangeScripts();
+
+            Assert.IsNotNull(changeScripts, "Change scripts should not be null.");
+            Assert.AreEqual(changeScripts.Count, 1, "Only one change script should have been found.");
         }
 
         /// <summary>
@@ -64,7 +79,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             Assert.AreEqual(scriptNumber, script.ScriptNumber, "ScriptNumber was incorrect for '{0}'.", fileName);
 
             var embeddedFileInfo = script.EmbeddedFileInfo;
-            Assert.AreEqual(embeddedFileInfo.Assembly, AssemblieWithEmbeddedScripts(), "EmbeddedFileInfo.Assembly was incorrect for '{0}'.", fileName);
+            Assert.AreEqual(embeddedFileInfo.Assembly, AssemblyWithEmbeddedScripts(), "EmbeddedFileInfo.Assembly was incorrect for '{0}'.", fileName);
             Assert.IsNotNull(embeddedFileInfo, "EmbeddedFileInfo should not be null for '{0}'.", fileName);
             Assert.AreEqual(embeddedFileInfo.FileName, fileName, "EmbeddedFileInfo.FileName was incorrect for '{0}'.", fileName);
             Assert.AreEqual(embeddedFileInfo.Folder, folder, "EmbeddedFileInfo.Folder was incorrect for '{0}'.", fileName);
@@ -79,12 +94,12 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         private string ResourceNameForScript(string fileName)
         {
-            return AssemblieWithEmbeddedScripts()
+            return AssemblyWithEmbeddedScripts()
                 .GetManifestResourceNames()
                 .First(r => r.EndsWith(fileName));
         }
 
-        private Assembly AssemblieWithEmbeddedScripts()
+        private Assembly AssemblyWithEmbeddedScripts()
         {
             var fileInfo = new FileInfo("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
             return Assembly.LoadFile(fileInfo.FullName);

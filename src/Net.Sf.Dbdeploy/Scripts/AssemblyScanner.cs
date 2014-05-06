@@ -52,8 +52,9 @@ namespace Net.Sf.Dbdeploy.Scripts
             var scripts = new List<ChangeScript>();
 
             var resourceScripts = assembly.GetManifestResourceNames().Where(resourceName => resourceName.EndsWith(".sql"));
+
             if (resourceNameFilter != null)
-                resourceScripts = resourceScripts.Where(resourceName => resourceNameFilter(resourceName));
+                resourceScripts = resourceScripts.Where(resourceName => resourceNameFilter.Invoke(resourceName));
 
             foreach (var resourceScript in resourceScripts)
             {
