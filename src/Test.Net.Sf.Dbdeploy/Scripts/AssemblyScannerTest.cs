@@ -27,7 +27,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
             VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
-            VerifyChangeScript(changeScripts, "2.3.0.0", 10, "10.Add Age Column.sql");
+            VerifyChangeScript(changeScripts, "Pre_2.3.0.0", 10, "10.Add Age Column.sql");
         }
 
         /// <summary>

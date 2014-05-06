@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedScripts\Versioned\2.2.0.0\09.Add Customer Data.sql" />
-    <EmbeddedResource Include="EmbeddedScripts\Versioned\2.3.0.0\10.Add Age Column.sql" />
+    <EmbeddedResource Include="EmbeddedScripts\Versioned\Pre_2.3.0.0\10.Add Age Column.sql" />
     <EmbeddedResource Include="EmbeddedScripts\Versioned\2.2.0.0\8.Create Customer Table.sql" />
   </ItemGroup>
   <ItemGroup>

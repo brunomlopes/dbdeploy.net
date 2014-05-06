@@ -84,13 +84,13 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             var builder = new StringBuilder();
 
-            var matchCollection = Regex.Matches(resourceScript, @"([v]?)(\d+[.][_])+(\d+)([^.]*)");
+            var matchCollection = Regex.Matches(resourceScript, @"([^.]*)(\d+[.][_])+(\d+)");
             foreach (var match in matchCollection)
             {
                 builder.Append(match);
             }
 
-            return builder.ToString().TrimEnd('.');
+            return builder.ToString().TrimStart('_').TrimEnd('.');
         }
 
         private static string ExtractFileName(string resourceScript, string folderResourceName)
