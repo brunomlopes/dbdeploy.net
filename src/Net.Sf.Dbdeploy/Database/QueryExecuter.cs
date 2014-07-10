@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Database
+﻿using System.Runtime.CompilerServices;
+
+namespace Net.Sf.Dbdeploy.Database
 {
     using System;
     using System.Data;
@@ -155,7 +157,9 @@
         /// <param name="args">The args.</param>
         public void InfoMessageEventHandler(object sender, EventArgs args)
         {
-            if (this.currentOutput != null)
+            var propertyInfo = args.GetType().GetProperty("Message");
+
+            if (this.currentOutput != null && propertyInfo != null)
             {
                 this.currentOutput.AppendLine(((dynamic)args).Message);
             }
