@@ -1,19 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Net.Sf.Dbdeploy.Database.SqlCmd;
 
 namespace Net.Sf.Dbdeploy
 {
     using System;
     using System.IO;
     using System.Reflection;
-    using System.Text;
-
-    using Net.Sf.Dbdeploy.Appliers;
-    using Net.Sf.Dbdeploy.Configuration;
-    using Net.Sf.Dbdeploy.Database;
-    using Net.Sf.Dbdeploy.Exceptions;
-    using Net.Sf.Dbdeploy.Scripts;
+    using Appliers;
+    using Configuration;
+    using Database;
+    using Exceptions;
+    using Scripts;
 
     /// <summary>
     /// Main class for running database deployment.

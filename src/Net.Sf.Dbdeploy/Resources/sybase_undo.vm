@@ -1,0 +1,18 @@
+#foreach($script in $scripts)
+
+-- START UNDO OF CHANGE SCRIPT ${script}
+
+BEGIN TRANSACTION
+GO
+
+${script.getUndoContent()}
+
+DELETE FROM ${changeLogTableName} WHERE Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber$!{separator}${delimiter}
+GO
+
+COMMIT
+GO
+
+-- END UNDO OF CHANGE SCRIPT ${script}
+
+#end

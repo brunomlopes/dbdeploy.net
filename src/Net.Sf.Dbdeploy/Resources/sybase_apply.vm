@@ -1,0 +1,24 @@
+#foreach($script in $scripts)
+
+-- START CHANGE SCRIPT ${script}
+
+INSERT INTO ${changeLogTableName} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, AppliedBy, ScriptStatus, ScriptOutput)
+ VALUES ('$script.Guid', '$script.Folder', $script.ScriptNumber, '$script.ScriptName', GETDATE(), user_name(), 3, '')$!{separator}${delimiter}
+GO
+
+BEGIN TRANSACTION
+GO
+
+${script.getContent()}
+
+UPDATE ${changeLogTableName} 
+SET CompleteDate = GETDATE(), ScriptStatus = 1, ScriptOutput = '' 
+WHERE Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber$!{separator}${delimiter}
+GO
+
+COMMIT
+GO
+
+-- END CHANGE SCRIPT ${script}
+
+#end
