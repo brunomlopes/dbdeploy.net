@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Net.Sf.Dbdeploy.Database
 {
     using System;
@@ -18,12 +16,12 @@ namespace Net.Sf.Dbdeploy.Database
             this.dbms = dbms;
             this.connectionString = connectionString;
             this.dllPathConnection = dllPathConnection;
-            this.provider = new DbProviderFile().LoadProviders().GetProvider(dbms);
+            provider = new DbProviderFile().LoadProviders().GetProvider(dbms);
         }
 
         public virtual IDbmsSyntax CreateDbmsSyntax()
         {
-            switch (this.dbms)
+            switch (dbms)
             {
                 case "ora":
                     return new OracleDbmsSyntax();
@@ -35,8 +33,10 @@ namespace Net.Sf.Dbdeploy.Database
                     return new FirebirdDbmsSyntax();
                 case "postgre":
                     return new PostgreDbmsSyntax();
+                case "sybase":
+                    return new SybaseDbmsSyntax();
                 default:
-                    throw new ArgumentException("Supported dbms: ora, mssql, mysql, firebird, postgre");
+                    throw new ArgumentException("Supported dbms: ora, mssql, mysql, firebird, postgre, sybase");
             }
         }
 

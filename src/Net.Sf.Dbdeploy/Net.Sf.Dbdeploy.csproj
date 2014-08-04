@@ -140,6 +140,7 @@
       <DependentUpon>IDelimiterType.cs</DependentUpon>
     </Compile>
     <Compile Include="Appliers\DirectToDbApplier.cs" />
+    <Compile Include="Database\SybaseDbmsSyntax.cs" />
     <Compile Include="Database\TableInfo.cs" />
     <Compile Include="Exceptions\ScriptFailedException.cs" />
     <Compile Include="Scripts\AllScriptScanner.cs" />

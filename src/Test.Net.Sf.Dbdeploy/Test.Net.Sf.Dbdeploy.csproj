@@ -149,6 +149,7 @@
     <Compile Include="Database\DbmsFactoryMySqlTest.cs" />
     <Compile Include="Database\DbmsFactoryOracleTest.cs" />
     <Compile Include="Database\DbmsFactoryPostgreTest.cs" />
+    <Compile Include="Database\DbmsFactorySybaseTest.cs" />
     <Compile Include="Database\FirebirdDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\MySqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\PostgreDatabaseSchemaVersionManagerTest.cs" />
@@ -187,6 +188,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Mocks\Fixtures\DatabaseFirebird\DBDEPLOY.FDB">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mocks\Fixtures\DatabaseSybase\dbdeploy.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -241,6 +245,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mocks\Fixtures\PostgreDllConnection\Npgsql.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Fixtures\SybaseDllConnection\iAnywhere.Data.SQLAnywhere.v4.0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mocks\Versioned\2.0.0.0\8.Create Product Table.sql">
