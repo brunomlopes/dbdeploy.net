@@ -16,13 +16,13 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE }) 
+            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE, BancosSuportados.SYBASE }) 
             {
                 try 
                 {
-                    System.Console.WriteLine("Testing syntax {0}\n", syntax);
+                    Console.WriteLine("Testing syntax {0}\n", syntax);
 
-                    this.RunIntegratedTestAndConfirmOutputResults(syntax, new DirectoryInfo(@".\Resources"));
+                    RunIntegratedTestAndConfirmOutputResults(syntax, new DirectoryInfo(@".\Resources"));
                 }
                 catch (Exception e) 
                 {
@@ -34,13 +34,13 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesLoadingTemplatesFromResourcesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE })
+            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE, BancosSuportados.SYBASE })
             {
                 try 
                 {
-                    System.Console.WriteLine("Testing syntax {0}\n", syntax);
+                    Console.WriteLine("Testing syntax {0}\n", syntax);
 
-                    this.RunIntegratedTestAndConfirmOutputResults(syntax, null);
+                    RunIntegratedTestAndConfirmOutputResults(syntax, null);
                 }
                 catch (Exception e) 
                 {
@@ -51,7 +51,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         private void RunIntegratedTestAndConfirmOutputResults(string syntaxName, DirectoryInfo templateDirectory) 
         {
-            StringWriter writer = new StringWriter();
+            var writer = new StringWriter();
             var listReplaces = new List<string>() { "$script.Guid", "$script.Folder", "$script.ScriptNumber", "$script.ScriptName" };
             var listExpecteds = new List<string>()
                 {
@@ -66,17 +66,17 @@ namespace Net.Sf.Dbdeploy.Database
             ChangeScript changeOne = new StubChangeScript(1, "001_change.sql", "-- contents of change script 1");
             ChangeScript changeTwo = new StubChangeScript(2, "002_change.sql", "-- contents of change script 2");
 
-            List<ChangeScript> changeScripts = new List<ChangeScript> { changeOne, changeTwo };
-            ChangeScriptRepository changeScriptRepository = new ChangeScriptRepository(changeScripts);
+            var changeScripts = new List<ChangeScript> { changeOne, changeTwo };
+            var changeScriptRepository = new ChangeScriptRepository(changeScripts);
 
             var factory = new DbmsFactory(syntaxName, string.Empty);
             var dbmsSyntax = factory.CreateDbmsSyntax();
 
-            var createChangeLogTable = false;
-            StubSchemaManager schemaManager = new StubSchemaManager(dbmsSyntax, createChangeLogTable);
+            const bool createChangeLogTable = false;
+            var schemaManager = new StubSchemaManager(dbmsSyntax, createChangeLogTable);
 
             IChangeScriptApplier applier = new TemplateBasedApplier(writer, dbmsSyntax, "ChangeLog", ";", new NormalDelimiter(), templateDirectory);
-            Controller controller = new Controller(changeScriptRepository, schemaManager, applier, null, createChangeLogTable, System.Console.Out);
+            var controller = new Controller(changeScriptRepository, schemaManager, applier, null, createChangeLogTable, Console.Out);
 
             controller.ProcessChangeScripts(null);
 
@@ -93,7 +93,7 @@ namespace Net.Sf.Dbdeploy.Database
                 foreach (var replace in listReplaces)
                 {
                     if (actual.Contains(replace)) 
-                        Assert.Fail(string.Format("A regex from template does not were replaced. \n\rRegex: {0} ", replace));
+                        Assert.Fail("A regex from template does not were replaced. \n\rRegex: {0} ", replace);
                 }
             }
             catch (Exception)
@@ -114,11 +114,11 @@ namespace Net.Sf.Dbdeploy.Database
         {
             Stream stream = File.OpenRead(expectedFilename);
 
-            StreamReader reader = new StreamReader(stream);
+            var reader = new StreamReader(stream);
 
             try 
             {
-                return this.ReadEntireStreamIntoAStringWithConversionToSystemDependantLineTerminators(reader);
+                return ReadEntireStreamIntoAStringWithConversionToSystemDependantLineTerminators(reader);
             }
             finally 
             {
@@ -128,7 +128,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         private string ReadEntireStreamIntoAStringWithConversionToSystemDependantLineTerminators(TextReader reader)
         {
-            StringWriter writer = new StringWriter();
+            var writer = new StringWriter();
             try 
             {
                 string line;

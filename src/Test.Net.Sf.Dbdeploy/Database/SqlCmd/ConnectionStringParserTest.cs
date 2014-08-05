@@ -1,7 +1,5 @@
 namespace Net.Sf.Dbdeploy.Database.SqlCmd
 {
-    using System.IO;
-
     using NUnit.Framework;
 
     /// <summary>
