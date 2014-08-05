@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using Net.Sf.Dbdeploy.Scripts;
-
 namespace Net.Sf.Dbdeploy.Database
 {
     using System.Globalization;
     using System.IO;
     using System.Reflection;
     using System.Text.RegularExpressions;
-    using System.Collections;
-
     using NVelocity.Exception;
 
     /// <summary>
@@ -49,7 +42,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="dbms">The DBMS.</param>
         protected DbmsSyntax(string dbms)
         {
-            this.Dbms = dbms;
+            Dbms = dbms;
         }
 
         /// <summary>
@@ -98,7 +91,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <returns>Table name and schema.</returns>
         public TableInfo GetTableInfo(string tableName)
         {
-            var info = new TableInfo { TableName = tableName, Schema = this.DefaultSchema };
+            var info = new TableInfo { TableName = tableName, Schema = DefaultSchema };
 
             // Splite schema out if it is specified.
             var match = SchemaRegex.Match(tableName);
@@ -124,7 +117,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected virtual string GetQueryTableExists(TableInfo tableInfo)
         {
-            string syntax = string.Format(CultureInfo.InvariantCulture,
+            var syntax = string.Format(CultureInfo.InvariantCulture,
             @"SELECT table_schema 
             FROM INFORMATION_SCHEMA.TABLES 
             WHERE TABLE_NAME = '{0}'", tableInfo.TableName.ToLower());
@@ -137,7 +130,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public string GetTemplateFileNameFor(string templateQualifier)
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}_{1}.vm", this.Dbms, templateQualifier);
+            return string.Format(CultureInfo.InvariantCulture, "{0}_{1}.vm", Dbms, templateQualifier);
         }
 
         /// <summary>
@@ -152,7 +145,7 @@ namespace Net.Sf.Dbdeploy.Database
             string script;
 
             var assembly = Assembly.GetExecutingAssembly();
-            string resourceName = string.Format("Net.Sf.Dbdeploy.Resources.CreateSchemaVersionTable.{0}.sql", this.Dbms);
+            var resourceName = string.Format("Net.Sf.Dbdeploy.Resources.CreateSchemaVersionTable.{0}.sql", Dbms);
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
                 if (stream == null)

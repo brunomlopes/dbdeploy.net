@@ -49,7 +49,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string GetQueryTableExists(TableInfo tableInfo)
         {
-            string syntax = string.Format(CultureInfo.InvariantCulture,
+            var syntax = string.Format(CultureInfo.InvariantCulture,
             @"SELECT table_schema 
             FROM INFORMATION_SCHEMA.TABLES 
             WHERE TABLE_NAME = '{0}'", tableInfo.TableName);
