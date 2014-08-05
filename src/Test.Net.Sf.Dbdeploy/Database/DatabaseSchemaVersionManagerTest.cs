@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
     using System.Collections.Generic;
     using System.Data;
@@ -9,7 +7,7 @@ namespace Net.Sf.Dbdeploy.Database
 
     using Moq;
 
-    using Net.Sf.Dbdeploy.Scripts;
+    using Scripts;
 
     using NUnit.Framework;
 

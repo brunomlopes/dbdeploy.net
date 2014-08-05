@@ -1,4 +1,5 @@
 using Net.Sf.Dbdeploy.Configuration;
+using Net.Sf.Dbdeploy.Exceptions;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -38,7 +39,7 @@ namespace Net.Sf.Dbdeploy.Database
                 case BancosSuportados.SYBASE:
                     return new SybaseDbmsSyntax();
                 default:
-                    throw new ArgumentException("Supported dbms: ora, mssql, mysql, firebird, postgre, sybase");
+                    throw new DbmsNotSupportedException("Supported dbms: ora, mssql, mysql, firebird, postgre, sybase");
             }
         }
 

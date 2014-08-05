@@ -8,12 +8,10 @@ namespace Net.Sf.Dbdeploy.Database
     using System.Globalization;
     using System.IO;
     using System.Text;
-    using global::Dbdeploy.Powershell;
-    using Net.Sf.Dbdeploy.Appliers;
-    using Net.Sf.Dbdeploy.Configuration;
-    using Net.Sf.Dbdeploy.Database.SqlCmd;
-    using Net.Sf.Dbdeploy.Exceptions;
-    using Net.Sf.Dbdeploy.Scripts;
+    using Appliers;
+    using Configuration;
+    using SqlCmd;
+    using Scripts;
     using NUnit.Framework;
 
     [Category("MSSQL"), Category("DbIntegration")]

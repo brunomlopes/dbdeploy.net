@@ -144,12 +144,7 @@
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
-    <Compile Include="Database\DbmsFactoryAbstractTest.cs" />
-    <Compile Include="Database\DbmsFactoryFirebirdTest.cs" />
-    <Compile Include="Database\DbmsFactoryMySqlTest.cs" />
-    <Compile Include="Database\DbmsFactoryOracleTest.cs" />
-    <Compile Include="Database\DbmsFactoryPostgreTest.cs" />
-    <Compile Include="Database\DbmsFactorySybaseTest.cs" />
+    <Compile Include="Database\DbmsFactoryTest.cs" />
     <Compile Include="Database\FirebirdDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\MySqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\PostgreDatabaseSchemaVersionManagerTest.cs" />

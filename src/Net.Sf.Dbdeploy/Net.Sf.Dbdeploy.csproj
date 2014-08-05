@@ -143,6 +143,7 @@
     <Compile Include="Appliers\DirectToDbApplier.cs" />
     <Compile Include="Database\SybaseDbmsSyntax.cs" />
     <Compile Include="Database\TableInfo.cs" />
+    <Compile Include="Exceptions\DbmsNotSupportedException.cs" />
     <Compile Include="Exceptions\ScriptFailedException.cs" />
     <Compile Include="Scripts\AllScriptScanner.cs" />
     <Compile Include="Scripts\AssemblyScanner.cs" />

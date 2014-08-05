@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Database
+﻿using Net.Sf.Dbdeploy.Exceptions;
+
+namespace Net.Sf.Dbdeploy.Database
 {
     using System;
     using System.Globalization;
@@ -24,7 +26,7 @@
                     return provider;
             }
 
-            throw new NotImplementedException(
+            throw new DbmsNotSupportedException(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     "No provider for type '{0}' implemented." + Environment.NewLine + "Supported dbms: ora, mssql, mysql, firebird, postgre, sybase", 
