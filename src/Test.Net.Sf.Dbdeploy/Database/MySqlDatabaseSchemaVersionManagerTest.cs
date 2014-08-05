@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Net.Sf.Dbdeploy.Configuration;
 using NUnit.Framework;
 using Net.Sf.Dbdeploy.Database.SqlCmd;
 
@@ -15,7 +16,6 @@ namespace Net.Sf.Dbdeploy.Database
     class MySqlDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private string connectionString;
-        private const string DBMS = "mysql";
         private const string FOLDER = "Scripts";
         private readonly string mySqlDataDll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "MySqlDllConnection", "MySql.Data.dll");
         private IDbmsSyntax syntax;
@@ -52,7 +52,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string Dbms
         {
-            get { return DBMS; }
+            get { return BancosSuportados.MYSQL; }
         }
 
         [Test]

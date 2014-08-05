@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using FluentAssertions;
+﻿using FluentAssertions;
+using Net.Sf.Dbdeploy.Configuration;
 
 namespace Net.Sf.Dbdeploy.Database
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Net.Sf.Dbdeploy.Appliers;
-    using Net.Sf.Dbdeploy.Scripts;
+    using Appliers;
+    using Scripts;
     using NUnit.Framework;
 
     [TestFixture]
@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgre" }) 
+            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE }) 
             {
                 try 
                 {
@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesLoadingTemplatesFromResourcesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora", "firebird", "postgre" })
+            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE })
             {
                 try 
                 {

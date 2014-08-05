@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Net.Sf.Dbdeploy.Configuration;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -14,7 +15,6 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private string connectionString;
         private readonly string firebirdConnectionString = string.Format("User=SYSDBA;Password=masterkey;Database={0};DataSource=localhost;Port=3050;", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "DatabaseFirebird", "DBDEPLOY.FDB"));
-        private const string DBMS = "firebird";
         private const string FOLDER = "Scripts";
         private readonly string firebirdSqlDataFirebirdClient = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "FirebirdDllConnection", "FirebirdSql.Data.FirebirdClient.dll");
         private IDbmsSyntax syntax;
@@ -50,7 +50,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string Dbms
         {
-            get { return DBMS; }
+            get { return BancosSuportados.FIREBIRD; }
         }
 
         [Test]

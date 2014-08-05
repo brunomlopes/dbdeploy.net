@@ -1,4 +1,5 @@
 using System;
+using Net.Sf.Dbdeploy.Configuration;
 
 namespace Net.Sf.Dbdeploy.Database
 {
@@ -14,7 +15,6 @@ namespace Net.Sf.Dbdeploy.Database
 	{
 		private static string _connectionString;
 		private const string FOLDER = "Scripts";
-		private const string DBMS = "ora";
 
 		protected override string ConnectionString
 		{
@@ -37,7 +37,7 @@ namespace Net.Sf.Dbdeploy.Database
 
 		protected override string Dbms
 		{
-			get { return DBMS; }
+			get { return BancosSuportados.ORACLE; }
 		}
 
 		protected override void InsertRowIntoTable(int i)

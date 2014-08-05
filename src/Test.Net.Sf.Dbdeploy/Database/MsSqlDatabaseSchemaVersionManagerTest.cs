@@ -21,7 +21,6 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private static string _connectionString;
         private const string FOLDER = "Scripts";
-		private const string DBMS = "mssql";
 
         protected override string ConnectionString
         {
@@ -43,7 +42,7 @@ namespace Net.Sf.Dbdeploy.Database
 
     	protected override string Dbms
     	{
-			get { return DBMS; }
+			get { return BancosSuportados.MSSQL; }
     	}
 
         [Test]

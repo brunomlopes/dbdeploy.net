@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Net.Sf.Dbdeploy.Configuration;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -14,7 +15,6 @@ namespace Net.Sf.Dbdeploy.Database
     class PostgreDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private string connectionString;
-        private const string DBMS = "postgre";
         private const string FOLDER = "Scripts";
         private readonly string postGreDataDll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mocks", "Fixtures", "PostgreDllConnection", "Npgsql.dll");
         private IDbmsSyntax syntax;
@@ -49,7 +49,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string Dbms
         {
-            get { return DBMS; }
+            get { return BancosSuportados.POSTGRE; }
         }
 
         [Test]

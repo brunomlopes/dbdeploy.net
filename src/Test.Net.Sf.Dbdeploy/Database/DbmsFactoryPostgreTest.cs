@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Net.Sf.Dbdeploy.Configuration;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -7,7 +8,6 @@ namespace Net.Sf.Dbdeploy.Database
     class DbmsFactoryPostgreTest : DbmsFactoryAbstractTest
     {
         private const string PostgreConnectionString = "Server=localhost;Port=5432;Database=dbdeploy;User Id=postgres;Password=postgres;";
-        private const string DbmsPostgre = "postgre";
         private const string PostgreDllName = "Npgsql.dll";
         private readonly string postGreDllPath = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\PostgreDllConnection\\" + PostgreDllName;
 
@@ -15,7 +15,7 @@ namespace Net.Sf.Dbdeploy.Database
         [ExpectedException("System.IO.FileNotFoundException")]
         public override void GivenAnEntryWithoutDllConnectionShouldThrowsException()
         {
-            var factory = new DbmsFactory(DbmsPostgre, PostgreConnectionString);
+            var factory = new DbmsFactory(BancosSuportados.POSTGRE, PostgreConnectionString);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
         }
@@ -23,7 +23,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public override void GivenAnEntryWithDllConnectionShouldOpenedSuccessful()
         {
-            var factory = new DbmsFactory(DbmsPostgre, PostgreConnectionString, postGreDllPath);
+            var factory = new DbmsFactory(BancosSuportados.POSTGRE, PostgreConnectionString, postGreDllPath);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
         }
@@ -31,7 +31,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public override void ShouldExecuteSqlCommandSuccessful()
         {
-            var factory = new DbmsFactory(DbmsPostgre, PostgreConnectionString, postGreDllPath);
+            var factory = new DbmsFactory(BancosSuportados.POSTGRE, PostgreConnectionString, postGreDllPath);
             OpenConnection(factory);
             const string query = "SELECT CURRENT_DATE;";
             ExecuteNonQuery(query);
@@ -41,7 +41,7 @@ namespace Net.Sf.Dbdeploy.Database
         [ExpectedException("Npgsql.NpgsqlException")]
         public override void ShouldExecuteSqlCommandFailed()
         {
-            var factory = new DbmsFactory(DbmsPostgre, PostgreConnectionString, postGreDllPath);
+            var factory = new DbmsFactory(BancosSuportados.POSTGRE, PostgreConnectionString, postGreDllPath);
             OpenConnection(factory);
             const string query = "Select ANY_TABLE From Dual;";
             ExecuteNonQuery(query);

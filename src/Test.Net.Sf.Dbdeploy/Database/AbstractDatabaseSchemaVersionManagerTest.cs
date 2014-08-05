@@ -7,7 +7,7 @@ namespace Net.Sf.Dbdeploy.Database
     using System.Globalization;
     using System.Linq;
 
-    using Net.Sf.Dbdeploy.Exceptions;
+    using Exceptions;
 
     using NUnit.Framework;
 

@@ -1,4 +1,5 @@
-﻿using Net.Sf.Dbdeploy.Utils;
+﻿using Net.Sf.Dbdeploy.Configuration;
+using Net.Sf.Dbdeploy.Utils;
 
 namespace Net.Sf.Dbdeploy.Appliers
 {
@@ -25,11 +26,11 @@ namespace Net.Sf.Dbdeploy.Appliers
             : base(ConfigurationManager.AppSettings["ConnString"])
         {
         }
-        
+
         /// <summary>
         /// The database management system type.
         /// </summary>
-        private const string Dbms = "mssql";
+        private const string Dbms = BancosSuportados.MSSQL;
         
         /// <summary>
         /// Target of the test.

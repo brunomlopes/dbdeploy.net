@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using FluentAssertions;
+using Net.Sf.Dbdeploy.Configuration;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -10,12 +11,11 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private readonly string CaminhoDllConexao = AppDomain.CurrentDomain.BaseDirectory + @"\Mocks\Fixtures\SybaseDllConnection\iAnywhere.Data.SQLAnywhere.v4.0.dll";
         private readonly string ConnectionString = string.Format(@"UID=dbdeploy;PWD=dbdeploy;DBN=dbdeploy;DBF={0}", AppDomain.CurrentDomain.BaseDirectory + @"\Mocks\Fixtures\DatabaseSybase\dbdeploy.db");
-        private const string NomeSgbd = "sybase";
 
         [Test]
         public void retornar_instancia_de_sybase()
         {
-            var dbmsFactory = new DbmsFactory(NomeSgbd, ConnectionString, CaminhoDllConexao);
+            var dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, ConnectionString, CaminhoDllConexao);
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
             dbmsSyntax.Should().NotBeNull();
@@ -25,7 +25,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void abrir_a_conexao_com_o_banco()
         {
-            var dbmsFactory = new DbmsFactory(NomeSgbd, ConnectionString, CaminhoDllConexao);
+            var dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, ConnectionString, CaminhoDllConexao);
 
             var connection = OpenConnection(dbmsFactory);
 
@@ -36,7 +36,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_um_comando_sql()
         {
-            var dbmsFactory = new DbmsFactory(NomeSgbd, ConnectionString, CaminhoDllConexao);
+            var dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, ConnectionString, CaminhoDllConexao);
             var connection = OpenConnection(dbmsFactory);
             const string sql = "SELECT * FROM SYSOBJECTS where name = 'SYSTYPEMAP'";
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Net.Sf.Dbdeploy.Configuration;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -12,13 +13,12 @@ namespace Net.Sf.Dbdeploy.Database
     {
         private const string OracleConnectionStringTns = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=dbdeploy;Password=dbdeploy;";
         private readonly string oracleDllConnection = AppDomain.CurrentDomain.BaseDirectory + "\\Mocks\\Fixtures\\OracleDllConnection\\" + OracleDllName;
-        private const string DbmsOracle = "ora";
         private const string OracleDllName = "Oracle.DataAccess.dll";
 
         [Test]
         public override void GivenAnEntryWithoutDllConnectionShouldThrowsException()
         {
-            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns);
+            var factory = new DbmsFactory(BancosSuportados.ORACLE, OracleConnectionStringTns);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
         }
@@ -26,7 +26,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public override void GivenAnEntryWithDllConnectionShouldOpenedSuccessful()
         {
-            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllConnection);
+            var factory = new DbmsFactory(BancosSuportados.ORACLE, OracleConnectionStringTns, oracleDllConnection);
             var connection = OpenConnection(factory);
             Assert.AreEqual(ConnectionState.Open, connection.State);
         }
@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public override void ShouldExecuteSqlCommandSuccessful()
         {
-            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllConnection);
+            var factory = new DbmsFactory(BancosSuportados.ORACLE, OracleConnectionStringTns, oracleDllConnection);
             OpenConnection(factory);
             const string query = "Select Sysdate From Dual";
             ExecuteNonQuery(query);
@@ -44,7 +44,7 @@ namespace Net.Sf.Dbdeploy.Database
         [ExpectedException("Oracle.DataAccess.Client.OracleException")]
         public override void ShouldExecuteSqlCommandFailed()
         {
-            var factory = new DbmsFactory(DbmsOracle, OracleConnectionStringTns, oracleDllConnection);
+            var factory = new DbmsFactory(BancosSuportados.ORACLE, OracleConnectionStringTns, oracleDllConnection);
             OpenConnection(factory);
             const string query = "Select * from ANY_TABLE";
             ExecuteNonQuery(query);
