@@ -46,7 +46,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public override void ShouldNotThrowExceptionIfAllPreviousScriptsAreCompleted()
     	{
-			this.EnsureTableDoesNotExist();
+			EnsureTableDoesNotExist();
 			CreateTable();
     		InsertRowIntoTable(3);
 			var changeNumbers = new List<ChangeEntry>(databaseSchemaVersion.GetAppliedChanges());
@@ -59,10 +59,10 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void TestDoesNotRunSecondScriptIfFirstScriptFails()
         {
-            this.EnsureTableDoesNotExist("TableWeWillUse");
-            this.EnsureTableDoesNotExist(TableName);
+            EnsureTableDoesNotExist("TableWeWillUse");
+            EnsureTableDoesNotExist(TableName);
 
-            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            var factory = new DbmsFactory(Dbms, ConnectionString);
             var dbmsSyntax = factory.CreateDbmsSyntax();
 
             var output = new StringBuilder();
@@ -79,14 +79,14 @@ namespace Net.Sf.Dbdeploy.Database
             {
                 new StubChangeScript(1, "1.test.sql", "INSERT INTO TableWeWillUse VALUES (1);"), 
                 new StubChangeScript(2, "2.test.sql", "CREATE TABLE dbo.TableWeWillUse (Id int NULL);"), 
-            }, createChangeLogTable: true);
+            }, true);
 
-            using (var sqlExecuter = new SqlCmdExecutor(this.ConnectionString))
+            using (var sqlExecuter = new SqlCmdExecutor(ConnectionString))
             {
                 var cmdOutput = new StringBuilder();
                 sqlExecuter.ExecuteString(output.ToString(), cmdOutput);
             }
-            this.AssertTableDoesNotExist("TableWeWillUse");
+            AssertTableDoesNotExist("TableWeWillUse");
         }
 
 
@@ -120,9 +120,9 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void TestShouldHandleCreatingChangeLogTableWithSchema()
         {
-            this.EnsureTableDoesNotExist("log.Installs");
+            EnsureTableDoesNotExist("log.Installs");
 
-            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            var factory = new DbmsFactory(Dbms, ConnectionString);
             var executer = new QueryExecuter(factory);
             var databaseSchemaManager = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), "log.Installs");
 
@@ -131,7 +131,7 @@ namespace Net.Sf.Dbdeploy.Database
             
             applier.Apply(new ChangeScript[] {}, createChangeLogTable: true);
 
-            this.AssertTableExists("log.Installs");
+            AssertTableExists("log.Installs");
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             var syntax = new MsSqlDbmsSyntax();
             var tableInfo = syntax.GetTableInfo(tableName);
-            this.ExecuteSql(string.Format(
+            ExecuteSql(string.Format(
                 CultureInfo.InvariantCulture,
 @"IF (EXISTS (SELECT * 
     FROM INFORMATION_SCHEMA.TABLES 
@@ -161,7 +161,7 @@ END",
 
         protected override void InsertRowIntoTable(int i)
         {
-            this.ExecuteSql("INSERT INTO " + TableName
+            ExecuteSql("INSERT INTO " + TableName
                        + " (ChangeId, Folder, ScriptNumber, StartDate, CompleteDate, AppliedBy, ScriptName, ScriptStatus, ScriptOutput) VALUES (newid(), "
                        + "'" + FOLDER + "', " + i
                        + ", getdate(), getdate(), user_name(), 'Unit test', 1, '')");

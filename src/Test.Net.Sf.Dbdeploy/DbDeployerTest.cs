@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
 using Net.Sf.Dbdeploy.Configuration;
 using Net.Sf.Dbdeploy.Utils;
-using NUnit.Core;
 using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy
@@ -22,9 +20,9 @@ namespace Net.Sf.Dbdeploy
         public void Setup()
         {
             // Remove any existing changelog and customers test table.
-            this.EnsureTableDoesNotExist(ChangeLogTableName);
-            this.EnsureTableDoesNotExist("Product");
-            this.EnsureTableDoesNotExist("Customer");
+            EnsureTableDoesNotExist(ChangeLogTableName);
+            EnsureTableDoesNotExist("Product");
+            EnsureTableDoesNotExist("Customer");
         }
 
         [Test]
@@ -35,8 +33,8 @@ namespace Net.Sf.Dbdeploy
                 var dbDeployer = new DbDeployer();
                 var config = new DbDeployConfig
                     {
-                        ConnectionString = base.ConnectionString,
-                        Dbms = "mssql",
+                        ConnectionString = ConnectionString,
+                        Dbms = BancosSuportados.MSSQL,
                         Delimiter = "GO",
                         ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
                         ScriptAssembly = AssemblieWithEmbeddedScripts(),
@@ -46,9 +44,9 @@ namespace Net.Sf.Dbdeploy
                 dbDeployer.Execute(config, tw);
             }
 
-            this.AssertTableExists(ChangeLogTableName);
-            this.AssertTableExists("Product");
-            this.AssertTableExists("Customer");
+            AssertTableExists(ChangeLogTableName);
+            AssertTableExists("Product");
+            AssertTableExists("Customer");
         }
 
         [Test]
@@ -59,8 +57,8 @@ namespace Net.Sf.Dbdeploy
                 var dbDeployer = new DbDeployer();
                 var config = new DbDeployConfig
                 {
-                    ConnectionString = base.ConnectionString,
-                    Dbms = "mssql",
+                    ConnectionString = ConnectionString,
+                    Dbms = BancosSuportados.MSSQL,
                     Delimiter = "GO",
                     ScriptDirectory = null,
                     ScriptAssembly = AssemblieWithEmbeddedScripts(),
@@ -70,8 +68,8 @@ namespace Net.Sf.Dbdeploy
                 dbDeployer.Execute(config, tw);
             }
 
-            this.AssertTableExists(ChangeLogTableName);
-            this.AssertTableExists("Customer");
+            AssertTableExists(ChangeLogTableName);
+            AssertTableExists("Customer");
         }
 
         [Test]
@@ -82,8 +80,8 @@ namespace Net.Sf.Dbdeploy
                 var dbDeployer = new DbDeployer();
                 var config = new DbDeployConfig
                 {
-                    ConnectionString = base.ConnectionString,
-                    Dbms = "mssql",
+                    ConnectionString = ConnectionString,
+                    Dbms = BancosSuportados.MSSQL,
                     Delimiter = "GO",
                     ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
                     DelimiterType = Parser.ParseDelimiterType("row"),
@@ -92,8 +90,8 @@ namespace Net.Sf.Dbdeploy
                 dbDeployer.Execute(config, tw);
             }
 
-            this.AssertTableExists(ChangeLogTableName);
-            this.AssertTableExists("Product");
+            AssertTableExists(ChangeLogTableName);
+            AssertTableExists("Product");
         }
 
         private Assembly AssemblieWithEmbeddedScripts()

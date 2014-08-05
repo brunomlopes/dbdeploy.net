@@ -3,7 +3,7 @@ namespace Net.Sf.Dbdeploy.Scripts
     using System;
     using System.Collections.Generic;
 
-    using Net.Sf.Dbdeploy.Exceptions;
+    using Exceptions;
 
     /// <summary>
     /// Repository for verifying and providing change scripts in correct order.
@@ -36,7 +36,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         /// </returns>
         public ICollection<ChangeScript> GetAvailableChangeScripts()
         {
-            return new List<ChangeScript>(this.scripts.AsReadOnly());
+            return new List<ChangeScript>(scripts.AsReadOnly());
         }
 
         /// <summary>

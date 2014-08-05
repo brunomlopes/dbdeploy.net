@@ -3,16 +3,15 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Reflection;
 
     using Commons.Collections;
 
-    using Net.Sf.Dbdeploy.Appliers.NVelocityReplacements;
-    using Net.Sf.Dbdeploy.Database;
-    using Net.Sf.Dbdeploy.Exceptions;
-    using Net.Sf.Dbdeploy.Scripts;
+    using NVelocityReplacements;
+    using Database;
+    using Exceptions;
+    using Scripts;
 
     using NVelocity;
     using NVelocity.App;
@@ -58,24 +57,24 @@
 
         public void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable)
         {
-            string filename = this.syntax.GetTemplateFileNameFor(this.GetTemplateQualifier());
+            string filename = syntax.GetTemplateFileNameFor(GetTemplateQualifier());
 
             var model = new Hashtable();
             
             model.Add("scripts", changeScripts);
-            model.Add("changeLogTableName", this.changeLogTableName);
-            model.Add("delimiter", this.delimiter);
-            model.Add("separator", this.delimiterType is RowDelimiter ? Environment.NewLine : string.Empty);
+            model.Add("changeLogTableName", changeLogTableName);
+            model.Add("delimiter", delimiter);
+            model.Add("separator", delimiterType is RowDelimiter ? Environment.NewLine : string.Empty);
 
             try
             {
-                ExtendedProperties props = new ExtendedProperties();
+                var props = new ExtendedProperties();
 
-                var assemblyName = this.GetType().Assembly.GetName().Name;
+                var assemblyName = GetType().Assembly.GetName().Name;
 
                 ReplaceManagersWithDbDeployVersions(props, assemblyName);
 
-                if (this.templateDirectory == null)
+                if (templateDirectory == null)
                 {
                     props.AddProperty("resource.loader", "assembly");
                     props.AddProperty("assembly.resource.loader.class",
@@ -88,21 +87,21 @@
                 }
                 else
                 {
-                    props.SetProperty("file.resource.loader.path", this.templateDirectory.FullName);
+                    props.SetProperty("file.resource.loader.path", templateDirectory.FullName);
                 }
 
                 if (createChangeLogTable)
                 {
-                    this.writer.Write(this.syntax.CreateChangeLogTableSqlScript(this.changeLogTableName));
+                    writer.Write(syntax.CreateChangeLogTableSqlScript(changeLogTableName));
                 }
 
                 var templateEngine = new VelocityEngine(props);
 
                 var context = new VelocityContext(model);
 
-                Template template = templateEngine.GetTemplate(filename);
+                var template = templateEngine.GetTemplate(filename);
 
-                template.Merge(context, this.writer);
+                template.Merge(context, writer);
             }
             catch (ResourceNotFoundException ex)
             {

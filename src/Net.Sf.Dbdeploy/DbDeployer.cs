@@ -77,7 +77,7 @@ namespace Net.Sf.Dbdeploy
             else if (config.UseSqlCmd)
             {
                 // Verify database is MSSQL.
-                if (!string.Equals(config.Dbms, "mssql", StringComparison.InvariantCultureIgnoreCase))
+                if (!string.Equals(config.Dbms, BancosSuportados.MSSQL, StringComparison.InvariantCultureIgnoreCase))
                 {
                     throw new InvalidOperationException("SQLCMD mode can only be applied against an mssql database.");
                 }

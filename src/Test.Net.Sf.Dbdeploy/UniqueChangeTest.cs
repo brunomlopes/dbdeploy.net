@@ -2,7 +2,7 @@ namespace Net.Sf.Dbdeploy
 {
     using System.Collections.Generic;
 
-    using Net.Sf.Dbdeploy.Database;
+    using Database;
 
     using NUnit.Framework;
 
@@ -28,7 +28,7 @@ namespace Net.Sf.Dbdeploy
                                     };
             changeEntries.Sort();
 
-            this.AssertSequence(changeEntries, "Alpha/2", "Alpha/3", "Beta/4", "Beta/8", "Gamma/0");
+            AssertSequence(changeEntries, "Alpha/2", "Alpha/3", "Beta/4", "Beta/8", "Gamma/0");
         }
 
         /// <summary>
@@ -44,11 +44,11 @@ namespace Net.Sf.Dbdeploy
                                         new ChangeEntry("v2.0.10.1", 3), 
                                         new ChangeEntry("2.1.0", 4), 
                                         new ChangeEntry("v2.0", 5),
-                                        new ChangeEntry("v1", 6)
+                                        new ChangeEntry("v1.0", 6)
                                     };
             changeEntries.Sort(); 
 
-            this.AssertSequence(changeEntries, "v1/6", "v2.0/5", "v2.0.4.0/1", "v2.0.10.1/3", "2.1.0/4", "v10.1.0.0/2");
+            AssertSequence(changeEntries, "v1.0/6", "v2.0/5", "v2.0.4.0/1", "v2.0.10.1/3", "2.1.0/4", "v10.1.0.0/2");
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Net.Sf.Dbdeploy
                                     };
             changeEntries.Sort();
 
-            this.AssertSequence(changeEntries, "Alpha/2", "Alpha/6", "v2.0/5", "v2.0.4.0/1", "v2.0.10.1/3", "Zeta/4");
+            AssertSequence(changeEntries, "Alpha/2", "Alpha/6", "v2.0/5", "v2.0.4.0/1", "v2.0.10.1/3", "Zeta/4");
         }
 
         /// <summary>
