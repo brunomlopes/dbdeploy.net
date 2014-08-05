@@ -118,7 +118,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <returns>SQL for checking if a table exists.</returns>
         public virtual string TableExists(string tableName)
         {
-            var tableInfo = this.GetTableInfo(tableName);
+            var tableInfo = GetTableInfo(tableName);
             return GetQueryTableExists(tableInfo);
         }
 

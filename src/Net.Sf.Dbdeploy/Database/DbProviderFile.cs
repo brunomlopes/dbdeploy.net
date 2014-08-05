@@ -1,8 +1,6 @@
 namespace Net.Sf.Dbdeploy.Database
 {
-    using System;
     using System.IO;
-    using System.Reflection;
     using System.Xml;
     using System.Xml.Serialization;
 
@@ -37,21 +35,6 @@ namespace Net.Sf.Dbdeploy.Database
 
                 return (DbProviders)serializer.Deserialize(reader);
             }
-        }
-        
-
-        private static string GetDefaultPath()
-        {
-            DirectoryInfo assemblyDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-
-            string providerFilePath = System.IO.Path.Combine(assemblyDirectory.FullName, ProviderFilename);
-            
-            if (!File.Exists(providerFilePath))
-            {
-                providerFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, ProviderFilename);
-            }
-            
-            return providerFilePath;
         }
     }
 }

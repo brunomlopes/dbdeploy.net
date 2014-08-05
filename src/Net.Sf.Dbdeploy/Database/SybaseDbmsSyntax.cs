@@ -1,21 +1,23 @@
-using System;
-
 namespace Net.Sf.Dbdeploy.Database
 {
     public class SybaseDbmsSyntax : DbmsSyntax
     {
         public SybaseDbmsSyntax() : base("sybase")
-        {
-        }
+        {}
 
         public override string CurrentTimestamp
         {
-            get { throw new NotImplementedException(); }
+            get { return "getdate()"; }
         }
 
         public override string CurrentUser
         {
-            get { throw new NotImplementedException(); }
+            get { return "user_name()"; }
+        }
+
+        protected override string GetQueryTableExists(TableInfo tableInfo)
+        {
+            return string.Format("SELECT NAME FROM SYSOBJECTS WHERE NAME = '{0}'", tableInfo.TableName);
         }
     }
 }
