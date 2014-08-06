@@ -17,7 +17,7 @@ namespace Net.Sf.Dbdeploy.Database
         private readonly string FirebirdDll = AppDomain.CurrentDomain.BaseDirectory + @"\Mocks\Fixtures\FirebirdDllConnection\FirebirdSql.Data.FirebirdClient.dll";
         private readonly string PostgreDll = AppDomain.CurrentDomain.BaseDirectory + @"\Mocks\Fixtures\PostgreDllConnection\Npgsql.dll";
 
-        private readonly string ConnectionStringSybase = string.Format(@"UID=dbdeploy;PWD=dbdeploy;DBN=dbdeploy;DBF={0}", AppDomain.CurrentDomain.BaseDirectory + @"\Mocks\Fixtures\DatabaseSybase\dbdeploy.db");
+        private const string connectionStringSybase = "UID=dbdeploy;PWD=dbdeploy;DBN=dbdeploy;host=localhost";
         private const string connectionStringMsSql = @"Server=localhost\SQLEXPRESS;Database=dbdeploy;User Id=sa;Password=sa;";
         private const string connectionStringOracleTns = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=dbdeploy;Password=dbdeploy;";
         private const string connectionStringMySql = "Server=localhost; Database=dbdeploy; Uid=dbdeploy; Pwd=dbdeploy;";
@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_sybase()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, ConnectionStringSybase, SybaseDll);
+            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, connectionStringSybase, SybaseDll);
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
             dbmsSyntax.Should().NotBeNull();
@@ -40,7 +40,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void efetuar_conexao_com_banco_sybase()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, ConnectionStringSybase, SybaseDll);
+            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, connectionStringSybase, SybaseDll);
 
             var connection = OpenConnection(dbmsFactory);
 
@@ -51,7 +51,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_script_sql_sybase()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, ConnectionStringSybase, SybaseDll);
+            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, connectionStringSybase, SybaseDll);
             var connection = OpenConnection(dbmsFactory);
             const string sql = "SELECT * FROM SYSOBJECTS where name = 'SYSTYPEMAP'";
 
