@@ -17,7 +17,7 @@ namespace Net.Sf.Dbdeploy.Database
         private readonly string FirebirdDll = AppDomain.CurrentDomain.BaseDirectory + @"\Mocks\Fixtures\FirebirdDllConnection\FirebirdSql.Data.FirebirdClient.dll";
         private readonly string PostgreDll = AppDomain.CurrentDomain.BaseDirectory + @"\Mocks\Fixtures\PostgreDllConnection\Npgsql.dll";
 
-        private const string connectionStringSybase = "UID=dbdeploy;PWD=dbdeploy;DBN=dbdeploy;host=localhost";
+        private const string connectionStringSybase = "UID=dbdeploy;PWD=dbdeploy;DBN=dbdeploy;host=localhost:2638";
         private const string connectionStringMsSql = @"Server=localhost\SQLEXPRESS;Database=dbdeploy;User Id=sa;Password=sa;";
         private const string connectionStringOracleTns = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=dbdeploy;Password=dbdeploy;";
         private const string connectionStringMySql = "Server=localhost; Database=dbdeploy; Uid=dbdeploy; Pwd=dbdeploy;";
@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_sybase()
         {
-            dbmsFactory = new DbmsFactory(SupportedDbms.SYBASE, connectionStringSybase, SybaseDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.SYBASE, connectionStringSybase);
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
             dbmsSyntax.Should().NotBeNull();
@@ -70,7 +70,7 @@ namespace Net.Sf.Dbdeploy.Database
         #region MsSql
         public void instanciar_factory_mssql()
         {
-            dbmsFactory = new DbmsFactory(SupportedDbms.MSSQL, "connection string");
+            dbmsFactory = new DbmsFactory(SupportedDbms.MSSQL, connectionStringMySql);
 
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
