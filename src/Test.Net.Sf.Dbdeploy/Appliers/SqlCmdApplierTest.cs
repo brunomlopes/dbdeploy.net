@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Appliers
         /// <summary>
         /// The database management system type.
         /// </summary>
-        private const string Dbms = BancosSuportados.MSSQL;
+        private const string Dbms = SupportedDbms.MSSQL;
         
         /// <summary>
         /// Target of the test.

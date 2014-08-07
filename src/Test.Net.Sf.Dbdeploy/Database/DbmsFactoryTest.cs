@@ -30,7 +30,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_sybase()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, connectionStringSybase, SybaseDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.SYBASE, connectionStringSybase, SybaseDll);
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
             dbmsSyntax.Should().NotBeNull();
@@ -40,7 +40,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void efetuar_conexao_com_banco_sybase()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, connectionStringSybase, SybaseDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.SYBASE, connectionStringSybase, SybaseDll);
 
             var connection = OpenConnection(dbmsFactory);
 
@@ -51,7 +51,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_script_sql_sybase()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.SYBASE, connectionStringSybase, SybaseDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.SYBASE, connectionStringSybase, SybaseDll);
             var connection = OpenConnection(dbmsFactory);
             const string sql = "SELECT * FROM SYSOBJECTS where name = 'SYSTYPEMAP'";
 
@@ -70,7 +70,7 @@ namespace Net.Sf.Dbdeploy.Database
         #region MsSql
         public void instanciar_factory_mssql()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.MSSQL, "connection string");
+            dbmsFactory = new DbmsFactory(SupportedDbms.MSSQL, "connection string");
 
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
@@ -81,7 +81,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void efetuar_conexao_com_banco_mssql()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.MSSQL, connectionStringMsSql);
+            dbmsFactory = new DbmsFactory(SupportedDbms.MSSQL, connectionStringMsSql);
 
             var connection = OpenConnection(dbmsFactory);
 
@@ -92,7 +92,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_script_sql_mssql()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.MSSQL, connectionStringMsSql);
+            dbmsFactory = new DbmsFactory(SupportedDbms.MSSQL, connectionStringMsSql);
             var connection = OpenConnection(dbmsFactory);
             var command = connection.CreateCommand();
             command.CommandText = "Select getDate()";
@@ -105,7 +105,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_oracle()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.ORACLE, connectionStringOracleTns);
+            dbmsFactory = new DbmsFactory(SupportedDbms.ORACLE, connectionStringOracleTns);
 
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
@@ -116,7 +116,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void efetuar_conexao_com_banco_oracle()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.ORACLE, connectionStringOracleTns, OracleDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.ORACLE, connectionStringOracleTns, OracleDll);
 
             var connection = OpenConnection(dbmsFactory);
 
@@ -127,7 +127,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_script_sql_oracle()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.ORACLE, connectionStringOracleTns, OracleDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.ORACLE, connectionStringOracleTns, OracleDll);
             var connection = OpenConnection(dbmsFactory);
             var command = connection.CreateCommand();
             command.CommandText = "Select * from sysdate from dual";
@@ -140,7 +140,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_mysql_syntax()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.MYSQL, "connectionString");
+            dbmsFactory = new DbmsFactory(SupportedDbms.MYSQL, "connectionString");
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
             dbmsSyntax.Should().NotBeNull();
@@ -150,7 +150,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void efetuar_conexao_com_banco_mysql()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.MYSQL, connectionStringMySql, MySqlDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.MYSQL, connectionStringMySql, MySqlDll);
             var connection = OpenConnection(dbmsFactory);
 
             connection.Should().NotBeNull();
@@ -160,7 +160,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_script_sql_mysql()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.MYSQL, connectionStringMySql, MySqlDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.MYSQL, connectionStringMySql, MySqlDll);
             var connection = OpenConnection(dbmsFactory);
             var command = connection.CreateCommand();
             command.CommandText = "Select CURRENT_TIMESTAMP From Dual;";
@@ -173,7 +173,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_firebird_sintaxe()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.FIREBIRD, "connectionString");
+            dbmsFactory = new DbmsFactory(SupportedDbms.FIREBIRD, "connectionString");
 
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
@@ -184,7 +184,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void efetuar_conexao_com_banco_firebird()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.FIREBIRD, connectionStringFirebird, FirebirdDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.FIREBIRD, connectionStringFirebird, FirebirdDll);
             var connection = OpenConnection(dbmsFactory);
 
             connection.Should().NotBeNull();
@@ -194,7 +194,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_script_sql_firebird()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.FIREBIRD, connectionStringFirebird, FirebirdDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.FIREBIRD, connectionStringFirebird, FirebirdDll);
             var connection = OpenConnection(dbmsFactory);
             var command = connection.CreateCommand();
             command.CommandText = "SELECT * FROM rdb$relation_fields";
@@ -207,7 +207,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_postgre_sintaxe()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.POSTGRE, "connectionString");
+            dbmsFactory = new DbmsFactory(SupportedDbms.POSTGRE, "connectionString");
 
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
@@ -218,7 +218,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void efetuar_conexao_com_banco_postgre()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.POSTGRE, connectionStringPostgre, PostgreDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.POSTGRE, connectionStringPostgre, PostgreDll);
             var connection = OpenConnection(dbmsFactory);
 
             connection.Should().NotBeNull();
@@ -228,7 +228,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void executar_script_sql_postgre()
         {
-            dbmsFactory = new DbmsFactory(BancosSuportados.POSTGRE, connectionStringPostgre, PostgreDll);
+            dbmsFactory = new DbmsFactory(SupportedDbms.POSTGRE, connectionStringPostgre, PostgreDll);
             var connection = OpenConnection(dbmsFactory);
             var command = connection.CreateCommand();
             command.CommandText = "SELECT CURRENT_DATE;";

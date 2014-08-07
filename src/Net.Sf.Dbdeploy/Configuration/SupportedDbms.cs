@@ -1,6 +1,6 @@
 namespace Net.Sf.Dbdeploy.Configuration
 {
-    public static class BancosSuportados
+    public static class SupportedDbms
     {
         public const string MSSQL = "mssql";
         public const string ORACLE = "ora";

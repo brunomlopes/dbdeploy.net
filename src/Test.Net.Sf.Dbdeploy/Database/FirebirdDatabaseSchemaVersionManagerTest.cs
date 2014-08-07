@@ -50,7 +50,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string Dbms
         {
-            get { return BancosSuportados.FIREBIRD; }
+            get { return SupportedDbms.FIREBIRD; }
         }
 
         [Test]

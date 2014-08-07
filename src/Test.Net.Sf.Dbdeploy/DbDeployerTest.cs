@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy
                 var config = new DbDeployConfig
                     {
                         ConnectionString = ConnectionString,
-                        Dbms = BancosSuportados.MSSQL,
+                        Dbms = SupportedDbms.MSSQL,
                         Delimiter = "GO",
                         ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
                         ScriptAssembly = AssemblieWithEmbeddedScripts(),
@@ -58,7 +58,7 @@ namespace Net.Sf.Dbdeploy
                 var config = new DbDeployConfig
                 {
                     ConnectionString = ConnectionString,
-                    Dbms = BancosSuportados.MSSQL,
+                    Dbms = SupportedDbms.MSSQL,
                     Delimiter = "GO",
                     ScriptDirectory = null,
                     ScriptAssembly = AssemblieWithEmbeddedScripts(),
@@ -81,7 +81,7 @@ namespace Net.Sf.Dbdeploy
                 var config = new DbDeployConfig
                 {
                     ConnectionString = ConnectionString,
-                    Dbms = BancosSuportados.MSSQL,
+                    Dbms = SupportedDbms.MSSQL,
                     Delimiter = "GO",
                     ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
                     DelimiterType = Parser.ParseDelimiterType("row"),

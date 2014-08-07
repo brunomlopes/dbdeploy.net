@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE, BancosSuportados.SYBASE }) 
+            foreach (string syntax in new[] { SupportedDbms.MSSQL, SupportedDbms.MYSQL, SupportedDbms.ORACLE, SupportedDbms.FIREBIRD, SupportedDbms.POSTGRE, SupportedDbms.SYBASE }) 
             {
                 try 
                 {
@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesLoadingTemplatesFromResourcesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { BancosSuportados.MSSQL, BancosSuportados.MYSQL, BancosSuportados.ORACLE, BancosSuportados.FIREBIRD, BancosSuportados.POSTGRE, BancosSuportados.SYBASE })
+            foreach (string syntax in new[] { SupportedDbms.MSSQL, SupportedDbms.MYSQL, SupportedDbms.ORACLE, SupportedDbms.FIREBIRD, SupportedDbms.POSTGRE, SupportedDbms.SYBASE })
             {
                 try 
                 {

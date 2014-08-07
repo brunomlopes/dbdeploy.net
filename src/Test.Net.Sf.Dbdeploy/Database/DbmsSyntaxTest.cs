@@ -13,35 +13,35 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_o_nome_do_sgbd_sybase()
         {
-            Instanciar(BancosSuportados.SYBASE);
+            Instanciar(SupportedDbms.SYBASE);
             dbmsSyntax.Dbms.Should().Be("sybase");
         }
 
         [Test]
         public void retornar_comando_data_e_hora_atual_sybase()
         {
-            Instanciar(BancosSuportados.SYBASE);
+            Instanciar(SupportedDbms.SYBASE);
             dbmsSyntax.CurrentTimestamp.Should().Be("getdate()");
         }
 
         [Test]
         public void retornar_comando_usuario_atual_sybase()
         {
-            Instanciar(BancosSuportados.SYBASE);
+            Instanciar(SupportedDbms.SYBASE);
             dbmsSyntax.CurrentUser.Should().Be("user_name()");
         }
 
         [Test]
         public void retornar_default_schema_em_branco()
         {
-            Instanciar(BancosSuportados.SYBASE);
+            Instanciar(SupportedDbms.SYBASE);
             dbmsSyntax.DefaultSchema.Should().BeEmpty();
         }
 
         [Test]
         public void retornar_query_para_verificar_se_tabela_existe_sybase()
         {
-            Instanciar(BancosSuportados.SYBASE);
+            Instanciar(SupportedDbms.SYBASE);
             const string queryQueDeveRetornar = "SELECT NAME FROM SYSOBJECTS WHERE NAME = 'ChangeLog'";
 
             var queryTableExists = dbmsSyntax.TableExists("ChangeLog");
@@ -52,7 +52,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_query_para_verificar_se_tabela_sybase()
         {
-            Instanciar(BancosSuportados.SYBASE);
+            Instanciar(SupportedDbms.SYBASE);
             const string SintaxeCreateTableChangeLog = "CREATE TABLE ChangeLog";
             var changeLogTableSqlScript = dbmsSyntax.CreateChangeLogTableSqlScript("ChangeLog");
 
@@ -64,35 +64,35 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_comando_data_e_hora_atual_mssql()
         {
-            Instanciar(BancosSuportados.MSSQL);
+            Instanciar(SupportedDbms.MSSQL);
             dbmsSyntax.CurrentTimestamp.Should().Be("getdate()");
         }
 
         [Test]
         public void retornar_comando_usuario_atual_mssql()
         {
-            Instanciar(BancosSuportados.MSSQL);
+            Instanciar(SupportedDbms.MSSQL);
             dbmsSyntax.CurrentUser.Should().Be("user_name()");
         }
 
         [Test]
         public void retornar_o_nome_do_sgbd_mssql()
         {
-            Instanciar(BancosSuportados.MSSQL);
+            Instanciar(SupportedDbms.MSSQL);
             dbmsSyntax.Dbms.Should().Be("mssql");
         }
 
         [Test]
         public void retornar_default_schema_mssql()
         {
-            Instanciar(BancosSuportados.MSSQL);
+            Instanciar(SupportedDbms.MSSQL);
             dbmsSyntax.DefaultSchema.Should().Be("dbo");
         }
 
         [Test]
         public void retornar_informacoes_da_tabela_changelog()
         {
-            Instanciar(BancosSuportados.MSSQL);
+            Instanciar(SupportedDbms.MSSQL);
             var tableInfo = dbmsSyntax.GetTableInfo("ChangeLog");
 
             tableInfo.Should().NotBeNull();
@@ -103,7 +103,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_query_para_verificar_se_tabela_existe_mssql()
         {
-            Instanciar(BancosSuportados.MSSQL);
+            Instanciar(SupportedDbms.MSSQL);
             const string scriptEsperado = @"SELECT table_schema 
             FROM INFORMATION_SCHEMA.TABLES 
             WHERE TABLE_NAME = 'changelog' AND TABLE_SCHEMA = 'dbo'";
@@ -118,28 +118,28 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_comando_data_e_hora_atual_oracle()
         {
-            Instanciar(BancosSuportados.ORACLE);
+            Instanciar(SupportedDbms.ORACLE);
             dbmsSyntax.CurrentTimestamp.Should().Be("CURRENT_TIMESTAMP");
         }
 
         [Test]
         public void retornar_comando_usuario_atual_oracle()
         {
-            Instanciar(BancosSuportados.ORACLE);
+            Instanciar(SupportedDbms.ORACLE);
             dbmsSyntax.CurrentUser.Should().Be("USER");
         }
 
         [Test]
         public void retornar_o_nome_do_sgbd_oracle()
         {
-            Instanciar(BancosSuportados.ORACLE);
+            Instanciar(SupportedDbms.ORACLE);
             dbmsSyntax.Dbms.Should().Be("ora");
         }
 
         [Test]
         public void retornar_query_para_verificar_se_tabela_existe_oracle()
         {
-            Instanciar(BancosSuportados.ORACLE);
+            Instanciar(SupportedDbms.ORACLE);
             const string queryEsperada = "SELECT * FROM USER_TABLES WHERE TABLE_NAME = 'CHANGELOG'";
 
             var queryTableExists = dbmsSyntax.TableExists("ChangeLog");
@@ -152,28 +152,28 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_comando_data_e_hora_atual_mysql()
         {
-            Instanciar(BancosSuportados.MYSQL);
+            Instanciar(SupportedDbms.MYSQL);
             dbmsSyntax.CurrentTimestamp.Should().Be("CURRENT_TIMESTAMP");
         }
 
         [Test]
         public void retornar_comando_usuario_atual_mysql()
         {
-            Instanciar(BancosSuportados.MYSQL);
+            Instanciar(SupportedDbms.MYSQL);
             dbmsSyntax.CurrentUser.Should().Be("USER()");
         }
 
         [Test]
         public void retornar_o_nome_do_sgbd_mysql()
         {
-            Instanciar(BancosSuportados.MYSQL);
+            Instanciar(SupportedDbms.MYSQL);
             dbmsSyntax.Dbms.Should().Be("mysql");
         }
 
         [Test]
         public void retornar_query_para_verificar_se_tabela_existe_mysql()
         {
-            Instanciar(BancosSuportados.MYSQL);
+            Instanciar(SupportedDbms.MYSQL);
             const string connectionString = "Server=localhost; Database=dbdeploy; Uid=dbdeploy; Pwd=dbdeploy;";
             const string scriptEsperado = @"SELECT table_schema 
             FROM INFORMATION_SCHEMA.TABLES 
@@ -190,28 +190,28 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_comando_data_e_hora_atual_firebird()
         {
-            Instanciar(BancosSuportados.FIREBIRD);
+            Instanciar(SupportedDbms.FIREBIRD);
             dbmsSyntax.CurrentTimestamp.Should().Be("CURRENT_TIMESTAMP");
         }
 
         [Test]
         public void retornar_comando_usuario_atual_firebird()
         {
-            Instanciar(BancosSuportados.FIREBIRD);
+            Instanciar(SupportedDbms.FIREBIRD);
             dbmsSyntax.CurrentUser.Should().Be("CURRENT_USER");
         }
 
         [Test]
         public void retornar_o_nome_do_sgdb_firebird()
         {
-            Instanciar(BancosSuportados.FIREBIRD);
+            Instanciar(SupportedDbms.FIREBIRD);
             dbmsSyntax.Dbms.Should().Be("firebird");
         }
 
         [Test]
         public void retornar_query_para_verificar_se_tabela_existe_firebird()
         {
-            Instanciar(BancosSuportados.FIREBIRD);
+            Instanciar(SupportedDbms.FIREBIRD);
             const string scriptEsperado = "SELECT * FROM rdb$relation_fields WHERE rdb$relation_name = 'CHANGELOG'";
 
             var queryTableExists = dbmsSyntax.TableExists("ChangeLog");
@@ -224,28 +224,28 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void retornar_comando_data_e_hora_atual_postgre()
         {
-            Instanciar(BancosSuportados.POSTGRE);
+            Instanciar(SupportedDbms.POSTGRE);
             dbmsSyntax.CurrentTimestamp.Should().Be("CURRENT_DATE");
         }
 
         [Test]
         public void retornar_comando_usuario_atual_postgre()
         {
-            Instanciar(BancosSuportados.POSTGRE);
+            Instanciar(SupportedDbms.POSTGRE);
             dbmsSyntax.CurrentUser.Should().Be("CURRENT_USER");
         }
 
         [Test]
         public void retornar_o_nome_do_sgbd_postgre()
         {
-            Instanciar(BancosSuportados.POSTGRE);
+            Instanciar(SupportedDbms.POSTGRE);
             dbmsSyntax.Dbms.Should().Be("postgres");
         }
 
         [Test]
         public void retornar_query_para_verificar_se_tabela_existe_postgre()
         {
-            Instanciar(BancosSuportados.POSTGRE);
+            Instanciar(SupportedDbms.POSTGRE);
             const string scriptEsperado = @"SELECT table_schema 
             FROM INFORMATION_SCHEMA.TABLES 
             WHERE TABLE_NAME = 'changelog'";

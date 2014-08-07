@@ -26,17 +26,17 @@ namespace Net.Sf.Dbdeploy.Database
         {
             switch (dbms)
             {
-                case BancosSuportados.ORACLE:
+                case SupportedDbms.ORACLE:
                     return new OracleDbmsSyntax();
-                case BancosSuportados.MSSQL:
+                case SupportedDbms.MSSQL:
                     return new MsSqlDbmsSyntax();
-                case BancosSuportados.MYSQL:
+                case SupportedDbms.MYSQL:
                     return new MySqlDbmsSyntax();
-                case BancosSuportados.FIREBIRD:
+                case SupportedDbms.FIREBIRD:
                     return new FirebirdDbmsSyntax();
-                case BancosSuportados.POSTGRE:
+                case SupportedDbms.POSTGRE:
                     return new PostgreDbmsSyntax();
-                case BancosSuportados.SYBASE:
+                case SupportedDbms.SYBASE:
                     return new SybaseDbmsSyntax();
                 default:
                     throw new DbmsNotSupportedException("Supported dbms: ora, mssql, mysql, firebird, postgre, sybase");

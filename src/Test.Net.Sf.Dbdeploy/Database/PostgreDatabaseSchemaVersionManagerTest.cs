@@ -49,7 +49,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string Dbms
         {
-            get { return BancosSuportados.POSTGRE; }
+            get { return SupportedDbms.POSTGRE; }
         }
 
         [Test]

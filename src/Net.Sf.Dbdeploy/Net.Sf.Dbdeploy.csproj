@@ -104,7 +104,7 @@
     <Compile Include="Appliers\NVelocityReplacements\DbDeployDirectiveManager.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployResourceManager.cs" />
     <Compile Include="Appliers\SqlCmdApplier.cs" />
-    <Compile Include="Configuration\BancosSuportados.cs" />
+    <Compile Include="Configuration\SupportedDbms.cs" />
     <Compile Include="Configuration\DbDeployConfig.cs" />
     <Compile Include="Configuration\DbDeployConfigurationManager.cs" />
     <Compile Include="Configuration\DbDeployDefaults.cs" />
