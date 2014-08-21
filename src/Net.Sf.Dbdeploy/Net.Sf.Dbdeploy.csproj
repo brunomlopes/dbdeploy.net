@@ -147,6 +147,7 @@
     <Compile Include="Exceptions\ScriptFailedException.cs" />
     <Compile Include="Scripts\AllScriptScanner.cs" />
     <Compile Include="Scripts\AssemblyScanner.cs" />
+    <Compile Include="Scripts\ChangeScriptRepositoryFactory.cs" />
     <Compile Include="Scripts\EmbeddedResources\EmbeddedFileInfo.cs" />
     <Compile Include="Scripts\IScriptScanner.cs" />
     <Compile Include="UniqueChange.cs" />

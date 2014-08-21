@@ -48,15 +48,10 @@ namespace Net.Sf.Dbdeploy
             dbmsSyntax.SetDefaultDatabaseName(config.ConnectionString);
 
             var queryExecuter = new QueryExecuter(factory);
+            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
 
-            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, 
-                                                                                dbmsSyntax, 
-                                                                                config.ChangeLogTableName);
-
-            var scriptScanners = GetScriptScanners(config, infoWriter);
-            var scanner = new AllScriptScanner(scriptScanners.ToArray());
-
-            var changeScriptRepository = new ChangeScriptRepository(scanner.GetChangeScripts());
+            var changeScriptRepositoryFactory = new ChangeScriptRepositoryFactory(config, infoWriter);
+            var changeScriptRepository = changeScriptRepositoryFactory.Obter();
 
             IChangeScriptApplier doScriptApplier;
             TextWriter doWriter = null;
@@ -156,19 +151,6 @@ namespace Net.Sf.Dbdeploy
                     undoWriter.Dispose();
                 }
             }
-        }
-
-        private IList<IScriptScanner> GetScriptScanners(DbDeployConfig config, TextWriter infoWriter)
-        {
-            var scanners = new List<IScriptScanner>();
-            scanners.Add(new AssemblyScanner(infoWriter, config.Encoding, config.ScriptAssembly, config.AssemblyResourceNameFilter));
-
-            if (config.AssemblyOnly)
-                return scanners;
-
-            scanners.Add(new DirectoryScanner(infoWriter, config.Encoding, config.ScriptDirectory));
-
-            return scanners;
         }
 
         /// <summary>
