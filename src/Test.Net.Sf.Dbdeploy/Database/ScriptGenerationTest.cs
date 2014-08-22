@@ -76,7 +76,7 @@ namespace Net.Sf.Dbdeploy.Database
             var schemaManager = new StubSchemaManager(dbmsSyntax, createChangeLogTable);
 
             IChangeScriptApplier applier = new TemplateBasedApplier(writer, dbmsSyntax, "ChangeLog", ";", new NormalDelimiter(), templateDirectory);
-            var controller = new Controller(changeScriptRepository, schemaManager, applier, null, createChangeLogTable, Console.Out);
+            var controller = new Controller(new RepositorioScripts(schemaManager,changeScriptRepository), schemaManager, applier, null, createChangeLogTable, Console.Out);
 
             controller.ProcessChangeScripts(null);
 

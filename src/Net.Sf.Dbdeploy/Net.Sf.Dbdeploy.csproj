@@ -100,6 +100,7 @@
     <Compile Include="..\SolutionVersionAssemblyInfo.cs">
       <Link>Properties\SolutionVersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Appliers\IChangeScriptApplier.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployAssemblyResourceLoader.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployDirectiveManager.cs" />
     <Compile Include="Appliers\NVelocityReplacements\DbDeployResourceManager.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Configuration\Parser.cs" />
     <Compile Include="Database\ChangeEntry.cs" />
     <Compile Include="Database\FirebirdDbmsSyntax.cs" />
+    <Compile Include="Database\IAppliedChangesProvider.cs" />
     <Compile Include="Database\PostgreDbmsSyntax.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
@@ -149,7 +151,10 @@
     <Compile Include="Scripts\AssemblyScanner.cs" />
     <Compile Include="Scripts\ChangeScriptRepositoryFactory.cs" />
     <Compile Include="Scripts\EmbeddedResources\EmbeddedFileInfo.cs" />
+    <Compile Include="Scripts\IAvailableChangeScriptsProvider.cs" />
+    <Compile Include="Scripts\IRepositorioScripts.cs" />
     <Compile Include="Scripts\IScriptScanner.cs" />
+    <Compile Include="Scripts\RepositorioScripts.cs" />
     <Compile Include="UniqueChange.cs" />
     <Compile Include="DbDeployer.cs" />
     <Compile Include="Database\DelimiterTypeFactory.cs">
@@ -163,9 +168,6 @@
     <Compile Include="Exceptions\SchemaVersionTrackingException.cs" />
     <Compile Include="Exceptions\UnrecognisedFilenameException.cs" />
     <Compile Include="Exceptions\UsageException.cs" />
-    <Compile Include="IAppliedChangesProvider.cs" />
-    <Compile Include="IAvailableChangeScriptsProvider.cs" />
-    <Compile Include="IChangeScriptApplier.cs" />
     <Compile Include="OutputFileEncoding.cs" />
     <Compile Include="PrettyPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -274,6 +276,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

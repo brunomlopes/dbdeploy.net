@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Net.Sf.Dbdeploy
+﻿namespace Net.Sf.Dbdeploy
 {
     using System;
     using System.IO;
@@ -49,9 +46,7 @@ namespace Net.Sf.Dbdeploy
 
             var queryExecuter = new QueryExecuter(factory);
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
-
-            var changeScriptRepositoryFactory = new ChangeScriptRepositoryFactory(config, infoWriter);
-            var changeScriptRepository = changeScriptRepositoryFactory.Obter();
+            
 
             IChangeScriptApplier doScriptApplier;
             TextWriter doWriter = null;
@@ -122,13 +117,16 @@ namespace Net.Sf.Dbdeploy
 
             try
             {
+                var changeScriptRepository = new ChangeScriptRepositoryFactory(config, infoWriter).Obter();
+                var repositorioScripts = new RepositorioScripts(databaseSchemaVersionManager, changeScriptRepository);
+                
                 var controller = new Controller(
-                    changeScriptRepository, 
-                    databaseSchemaVersionManager, 
-                    doScriptApplier, 
-                    undoScriptApplier, 
-                    config.AutoCreateChangeLogTable,
-                    infoWriter);
+                                        repositorioScripts, 
+                                        databaseSchemaVersionManager, 
+                                        doScriptApplier, 
+                                        undoScriptApplier, 
+                                        config.AutoCreateChangeLogTable,
+                                        infoWriter);
 
                 controller.ProcessChangeScripts(config.LastChangeToApply, config.ForceUpdate);
 

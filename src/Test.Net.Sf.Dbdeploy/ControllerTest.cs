@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Appliers;
+
 namespace Net.Sf.Dbdeploy
 {
     using System.Collections.Generic;
@@ -37,7 +39,7 @@ namespace Net.Sf.Dbdeploy
         /// <summary>
         /// The available change scripts provider for retrieving what changes are on the file system.
         /// </summary>
-        private Mock<IAvailableChangeScriptsProvider> availableChangeScriptsProvider;
+        private Mock<IRepositorioScripts> repositorioScripts;
 
         /// <summary>
         /// Runs the scripts against the database.
@@ -56,8 +58,8 @@ namespace Net.Sf.Dbdeploy
         public void Setup()
         {
             // Setup default available scripts.
-            this.availableChangeScriptsProvider = new Mock<IAvailableChangeScriptsProvider>();
-            this.availableChangeScriptsProvider.Setup(p => p.GetAvailableChangeScripts())
+            this.repositorioScripts = new Mock<IRepositorioScripts>();
+            this.repositorioScripts.Setup(p => p.ObterTodosOsScripts())
                 .Returns(new List<ChangeScript>
                         {
                             new ChangeScript("1.0", 1),
@@ -78,7 +80,7 @@ namespace Net.Sf.Dbdeploy
             this.appliedChangesProvider = new Mock<IAppliedChangesProvider>();
             var undoApplier = new Mock<IChangeScriptApplier>();
             this.output = new StringBuilder();
-            this.controller = new Controller(this.availableChangeScriptsProvider.Object, this.appliedChangesProvider.Object, this.doApplier.Object, undoApplier.Object, false, new StringWriter(this.output));
+            this.controller = new Controller(this.repositorioScripts.Object, this.appliedChangesProvider.Object, this.doApplier.Object, undoApplier.Object, false, new StringWriter(this.output));
         }
 
         /// <summary>
@@ -89,8 +91,8 @@ namespace Net.Sf.Dbdeploy
         public void ShouldThrowErrorWhenPreviousScriptRunFailed()
         {
             // Setup script already run.
-            this.appliedChangesProvider
-                .Setup(p => p.GetAppliedChanges())
+            this.repositorioScripts
+                .Setup(p => p.ObterScriptsAplicados())
                 .Returns(new List<ChangeEntry>
                         {
                             new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
@@ -108,37 +110,23 @@ namespace Net.Sf.Dbdeploy
         public void ShouldApplyScriptsNotRunToDatabase()
         {
             // Setup script already run.
-            this.appliedChangesProvider
-                .Setup(p => p.GetAppliedChanges())
+            this.repositorioScripts
+                .Setup(p => p.ObterScriptsAplicados())
                 .Returns(new List<ChangeEntry>
                         {
                             new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
                             new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Success }
                         });
 
-            // Execute controller.
-            this.controller.ProcessChangeScripts(null);
-
-            // Verify scripts attempted.
-            AssertRunScripts(this.runScripts, "1.0/3", "1.0/4", "1.1/1", "1.1/2");
-        }
-
-        /// <summary>
-        /// Tests that <see cref="Controller" /> will apply scripts from a previous failed run that have been marked as resolved.
-        /// </summary>
-        [Test]
-        public void ShouldApplyScriptsMarkedAsResolved()
-        {
-            // Setup script already run.
-            this.appliedChangesProvider
-                .Setup(p => p.GetAppliedChanges())
-                .Returns(new List<ChangeEntry>
+            this.repositorioScripts
+               .Setup(p => p.ObterScriptsPendenteExecucao(null))
+               .Returns(new List<ChangeScript>
                         {
-                            new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 3) { ScriptName = "3.test.sql", Status = ScriptStatus.ProblemResolved }
+                            new ChangeScript("1.0", 3),
+                            new ChangeScript("1.0", 4) ,
+                            new ChangeScript("1.1", 1) ,
+                            new ChangeScript("1.1", 2) ,
                         });
-
             // Execute controller.
             this.controller.ProcessChangeScripts(null);
 
@@ -153,8 +141,8 @@ namespace Net.Sf.Dbdeploy
         public void ShouldApplyScriptsMarkedAsFailedWhenForceUpdateIsSet()
         {
             // Setup script already run.
-            this.appliedChangesProvider
-                .Setup(p => p.GetAppliedChanges())
+            this.repositorioScripts
+                .Setup(p => p.ObterScriptsAplicados())
                 .Returns(new List<ChangeEntry>
                         {
                             new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
@@ -162,33 +150,21 @@ namespace Net.Sf.Dbdeploy
                             new ChangeEntry("1.0", 3) { ScriptName = "3.test.sql", Status = ScriptStatus.Failure }
                         });
 
+            this.repositorioScripts
+               .Setup(p => p.ObterScriptsPendenteExecucao(null))
+               .Returns(new List<ChangeScript>
+                        {
+                            new ChangeScript("1.0", 3),
+                            new ChangeScript("1.0", 4) ,
+                            new ChangeScript("1.1", 1) ,
+                            new ChangeScript("1.1", 2) ,
+                        });
+
             // Execute controller with force update set to true.
             this.controller.ProcessChangeScripts(null, true);
 
             // Verify scripts attempted.
             AssertRunScripts(this.runScripts, "1.0/3", "1.0/4", "1.1/1", "1.1/2");
-        }
-
-        /// <summary>
-        /// Tests that <see cref="Controller" /> can apply changes up to and stopping at a requested script number.
-        /// </summary>
-        [Test]
-        public void ShouldApplyChangesUpToRequestedScript()
-        {
-            // Setup script already run.
-            this.appliedChangesProvider
-                .Setup(p => p.GetAppliedChanges())
-                .Returns(new List<ChangeEntry>
-                        {
-                            new ChangeEntry("1.0", 1) { ScriptName = "1.test.sql", Status = ScriptStatus.Success },
-                            new ChangeEntry("1.0", 2) { ScriptName = "2.test.sql", Status = ScriptStatus.Success }
-                        });
-
-            // Execute controller with force update set to true.
-            this.controller.ProcessChangeScripts(new UniqueChange("1.1", 1), true);
-
-            // Verify scripts attempted.
-            AssertRunScripts(this.runScripts, "1.0/3", "1.0/4", "1.1/1");
         }
 
         /// <summary>

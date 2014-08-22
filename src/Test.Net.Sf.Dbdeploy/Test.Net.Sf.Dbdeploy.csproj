@@ -142,6 +142,7 @@
     <Compile Include="Appliers\SqlCmdApplierTest.cs" />
     <Compile Include="Appliers\DirectToDbApplierAccessor.cs" />
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
+    <Compile Include="RepositorioScriptsTeste.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
     <Compile Include="Database\DbmsFactoryTest.cs" />

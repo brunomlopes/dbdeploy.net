@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Appliers;
+
 namespace Net.Sf.Dbdeploy
 {
     using System.Collections.Generic;
@@ -19,9 +21,8 @@ namespace Net.Sf.Dbdeploy
         /// </summary>
         private static TextWriter infoWriter;
 
-        /// <summary>
-        /// The available change scripts provider.
-        /// </summary>
+        private readonly IRepositorioScripts repositorioScripts;
+
         private readonly IAvailableChangeScriptsProvider availableChangeScriptsProvider;
 
         /// <summary>
@@ -55,8 +56,9 @@ namespace Net.Sf.Dbdeploy
         /// <param name="undoApplier">The undo applier.</param>
         /// <param name="createChangeLogTable">Whether the change log table should be created or not.</param>
         /// <param name="infoTextWriter">The info text writer.</param>
+        /// <param name="repositorioScripts"></param>
         public Controller(
-            IAvailableChangeScriptsProvider availableChangeScriptsProvider,
+            IRepositorioScripts repositorioScripts,
             IAppliedChangesProvider appliedChangesProvider,
             IChangeScriptApplier doApplier,
             IChangeScriptApplier undoApplier,
@@ -68,10 +70,9 @@ namespace Net.Sf.Dbdeploy
             this.createChangeLogTable = createChangeLogTable;
 
             this.appliedChangesProvider = appliedChangesProvider;
-
-            this.availableChangeScriptsProvider = availableChangeScriptsProvider;
             
             infoWriter = infoTextWriter;
+            this.repositorioScripts = repositorioScripts;
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace Net.Sf.Dbdeploy
                 Info("\nOnly applying changes up to and including change script '{0}'.\n", lastChangeToApply);
             }
             
-            var applied = this.appliedChangesProvider.GetAppliedChanges();
+            var applied = repositorioScripts.ObterScriptsAplicados();
 
             // If force update is not set, than if there are any previous script runs that failed it should stop.
             if (!forceUpdate)
@@ -94,8 +95,8 @@ namespace Net.Sf.Dbdeploy
                 this.CheckForFailedScripts(applied);
             }
 
-            var scripts = this.availableChangeScriptsProvider.GetAvailableChangeScripts();
-            var toApply = this.IdentifyChangesToApply(lastChangeToApply, scripts, applied);
+            var scripts = repositorioScripts.ObterTodosOsScripts();
+            var toApply = repositorioScripts.ObterScriptsPendenteExecucao(lastChangeToApply);
 
             this.LogStatus(scripts, applied, toApply);
 
