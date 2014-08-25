@@ -4,9 +4,8 @@ using System.Configuration;
 using System.IO;
 using System.Linq.Expressions;
 using System.Text;
-using Net.Sf.Dbdeploy.Appliers;
+using FluentAssertions;
 using Net.Sf.Dbdeploy.Configuration;
-using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Scripts;
 using Net.Sf.Dbdeploy.Utils;
 using NUnit.Framework;
@@ -28,10 +27,11 @@ namespace Net.Sf.Dbdeploy
         {
             EnsureTableDoesNotExist(ChangeLogTableName);
             EnsureTableDoesNotExist("Product");
+            EnsureTableDoesNotExist("Customer");
             EnsureTableDoesNotExist("Teste");
             EnsureTableDoesNotExist("Teste2");
 
-            dbDeployConfig = new DbDeployConfig { ConnectionString = @"Server=.\SQLEXPRESS;Initial Catalog=dbdeploy;User Id=sa;Password=sa", Delimiter = "GO" };
+            dbDeployConfig = new DbDeployConfig { ConnectionString = @"Server=.\SQLEXPRESS;Initial Catalog=dbdeploy;User Id=sa;Password=sa" };
 
             executorScriptsIndividuais = new ExecutorScriptsIndividuais(dbDeployConfig, new StringWriter());
         }
@@ -46,47 +46,30 @@ namespace Net.Sf.Dbdeploy
             };
 
             foreach (var script in listaChangeScript)
-            {
                 executorScriptsIndividuais.Executar(script);
-            }
 
             AssertTableExists("ChangeLog");
             AssertTableExists("Product");
             AssertTableExists("Teste");
             AssertTableExists("Teste2");
         }
-    }
 
-    public class ExecutorScriptsIndividuais
-    {
-        private readonly DbDeployConfig dbDeployConfig;
-        private readonly TextWriter textWriter;
-
-        public ExecutorScriptsIndividuais(DbDeployConfig dbDeployConfig, TextWriter textWriter)
+        [Test]
+        public void ao_lancar_excecao_deve_retornar_o_motivo_do_erro()
         {
-            this.dbDeployConfig = dbDeployConfig;
-            this.textWriter = textWriter;
-        }
+            var listaChangeScript = new List<ChangeScript>
+            {
+                new ChangeScript("2.0.0.0", 8, new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\Versioned\2.0.0.0\10.Add Sold Column.sql")), Encoding.UTF8)
+            };
 
-        public void Executar(ChangeScript changeScript)
-        {
-            var dbmsFactory = new DbmsFactory(dbDeployConfig.Dbms, dbDeployConfig.ConnectionString);
-            var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
-            var queryExecuter = new QueryExecuter(dbmsFactory);
-            var queryStatementSplitter = new QueryStatementSplitter();
-            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, dbDeployConfig.ChangeLogTableName);
-            var directToDbApplier = new DirectToDbApplier(queryExecuter, databaseSchemaVersionManager, queryStatementSplitter, dbmsSyntax, dbDeployConfig.ChangeLogTableName, textWriter);
-
-            var criarChangeLog = CriarTabelaChangeLog(databaseSchemaVersionManager);
+            try
+            {
+                executorScriptsIndividuais.Executar(listaChangeScript[0]);
+            }
+            catch (Exception)
+            {}  // Esperada exceção
             
-            directToDbApplier.ApplyChangeScript(changeScript, criarChangeLog);
-
-            queryExecuter.Close();
-        }
-
-        private bool CriarTabelaChangeLog(IDatabaseSchemaVersionManager databaseSchemaVersionManager)
-        {
-            return dbDeployConfig.AutoCreateChangeLogTable && !databaseSchemaVersionManager.ChangeLogTableExists();
+            VerificarSeGravouAMensagemDeErroEStatusCorreto();
         }
     }
 }

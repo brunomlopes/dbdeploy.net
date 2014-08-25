@@ -165,10 +165,10 @@
                 }
                 catch (Exception exception)
                 {
-                    if (exception.InnerException != null)
-                        output.AppendLine(exception.InnerException.Message);
+                    output.AppendLine(exception.InnerException != null ? exception.InnerException.Message : exception.Message);
 
                     schemaVersionManager.RecordScriptStatus(changeScript, ScriptStatus.Failure, output.ToString());
+                    queryExecuter.CommitTransaction();
                     throw;
                 }
                 finally

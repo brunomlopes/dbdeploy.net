@@ -148,6 +148,7 @@
     <Compile Include="Database\UniqueChange.cs" />
     <Compile Include="Exceptions\DbmsNotSupportedException.cs" />
     <Compile Include="Exceptions\ScriptFailedException.cs" />
+    <Compile Include="ExecutorScriptsIndividuais.cs" />
     <Compile Include="Scripts\AllScriptScanner.cs" />
     <Compile Include="Scripts\AssemblyScanner.cs" />
     <Compile Include="Scripts\ChangeScriptRepositoryFactory.cs" />
