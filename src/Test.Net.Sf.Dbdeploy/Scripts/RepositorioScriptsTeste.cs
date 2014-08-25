@@ -2,22 +2,21 @@
 using FluentAssertions;
 using Moq;
 using Net.Sf.Dbdeploy.Database;
-using Net.Sf.Dbdeploy.Scripts;
 using NUnit.Framework;
 
-namespace Net.Sf.Dbdeploy
+namespace Net.Sf.Dbdeploy.Scripts
 {
     [TestFixture]
     public class RepositorioScriptsTeste
     {
         private RepositorioScripts repositorioScripts;
         private Mock<IAvailableChangeScriptsProvider> changeScriptRepository;
-        private Mock<IAppliedChangesProvider> databaseSchemaVersionManager;
+        private Mock<IDatabaseSchemaVersionManager> databaseSchemaVersionManager;
 
         [SetUp]
         public void SetUp()
         {
-            databaseSchemaVersionManager = new Mock<IAppliedChangesProvider>();
+            databaseSchemaVersionManager = new Mock<IDatabaseSchemaVersionManager>();
             changeScriptRepository = new Mock<IAvailableChangeScriptsProvider>();
             repositorioScripts = new RepositorioScripts(databaseSchemaVersionManager.Object,changeScriptRepository.Object );
         }

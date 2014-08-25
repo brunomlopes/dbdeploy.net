@@ -6,10 +6,10 @@ namespace Net.Sf.Dbdeploy.Scripts
 {
     public class RepositorioScripts : IRepositorioScripts
     {
-        private readonly IAppliedChangesProvider databaseSchemaVersionManager;
+        private readonly IDatabaseSchemaVersionManager databaseSchemaVersionManager;
         private readonly IAvailableChangeScriptsProvider changeScriptRepository;
         
-        public RepositorioScripts(IAppliedChangesProvider databaseSchemaVersionManager, IAvailableChangeScriptsProvider changeScriptRepository)
+        public RepositorioScripts(IDatabaseSchemaVersionManager databaseSchemaVersionManager, IAvailableChangeScriptsProvider changeScriptRepository)
         {
             this.databaseSchemaVersionManager = databaseSchemaVersionManager;
             this.changeScriptRepository = changeScriptRepository;

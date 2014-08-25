@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy.Configuration
+﻿using Net.Sf.Dbdeploy.Database;
+
+namespace Net.Sf.Dbdeploy.Configuration
 {
     using System;
     using System.IO;

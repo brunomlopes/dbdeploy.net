@@ -7,15 +7,15 @@
     using System.Linq;
     using System.Text;
 
-    using Net.Sf.Dbdeploy.Database;
-    using Net.Sf.Dbdeploy.Exceptions;
-    using Net.Sf.Dbdeploy.Scripts;
+    using Database;
+    using Exceptions;
+    using Scripts;
 
     public class DirectToDbApplier : IChangeScriptApplier
     {
         private readonly QueryExecuter queryExecuter;
 
-        private readonly DatabaseSchemaVersionManager schemaVersionManager;
+        private readonly IDatabaseSchemaVersionManager schemaVersionManager;
 
         private readonly QueryStatementSplitter splitter;
 
@@ -27,7 +27,7 @@
 
         public DirectToDbApplier(
             QueryExecuter queryExecuter,
-            DatabaseSchemaVersionManager schemaVersionManager,
+            IDatabaseSchemaVersionManager schemaVersionManager,
             QueryStatementSplitter splitter,
             IDbmsSyntax dbmsSyntax,
             string changeLogTableName,
@@ -56,30 +56,26 @@
         public void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable)
         {
             if (createChangeLogTable)
-            {
-                this.infoTextWriter.WriteLine("Creating change log table");
-                var script = this.dbmsSyntax.CreateChangeLogTableSqlScript(this.changeLogTableName);
-                this.ApplyChangeScript(script);
-            }
+                CriarTabelaChangeLog();
 
-            this.infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
+            infoTextWriter.WriteLine(changeScripts.Any() ? "Applying change scripts...\n" : "No changes to apply.\n");
 
             foreach (var script in changeScripts)
             {
-                this.RecordScriptStatus(script, ScriptStatus.Started);
+                RecordScriptStatus(script, ScriptStatus.Started);
 
                 // Begin transaction
-                this.queryExecuter.BeginTransaction();
+                queryExecuter.BeginTransaction();
 
-                this.infoTextWriter.WriteLine(script);
-                this.infoTextWriter.WriteLine("----------------------------------------------------------");
+                infoTextWriter.WriteLine(script);
+                infoTextWriter.WriteLine("----------------------------------------------------------");
 
                 // Apply changes and update ChangeLog table
                 var output = new StringBuilder();
                 try
                 {
-                    this.ApplyChangeScript(script, output);
-                    this.RecordScriptStatus(script, ScriptStatus.Success, output.ToString());
+                    ApplyChangeScript(script, output);
+                    RecordScriptStatus(script, ScriptStatus.Success, output.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -88,25 +84,25 @@
                         output.AppendLine(ex.InnerException.Message);
                     }
 
-                    this.RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
+                    RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
                     throw;
                 }
 
                 // Commit transaction
-                this.queryExecuter.CommitTransaction();
+                queryExecuter.CommitTransaction();
             }
         }
 
         /// <summary>
-        /// Applies the change script.
+        /// Applies the change changeScript.
         /// </summary>
-        /// <param name="script">The script.</param>
-        /// <param name="output">The output from applying the change script.</param>
-        protected void ApplyChangeScript(ChangeScript script, StringBuilder output)
+        /// <param name="changeScript">The changeScript.</param>
+        /// <param name="output">The output from applying the change changeScript.</param>
+        protected void ApplyChangeScript(ChangeScript changeScript, StringBuilder output)
         {
-            ICollection<string> statements = this.splitter.Split(script.GetContent());
+            var statements = splitter.Split(changeScript.GetContent());
 
-            int i = 0;
+            var i = 0;
 
             foreach (var statement in statements)
             {
@@ -114,32 +110,84 @@
                 {
                     if (statements.Count > 1)
                     {
-                        this.infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
+                        infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
                     }
 
-                    this.queryExecuter.Execute(statement, output);
+                    queryExecuter.Execute(statement, output);
 
                     i++;
                 }
                 catch (DbException e)
                 {
-                    throw new ChangeScriptFailedException(e, script, i + 1, statement);
+                    throw new ChangeScriptFailedException(e, changeScript, i + 1, statement);
                 }
                 finally
                 {
                     // Write out SQL execution output.
                     if (output.Length > 0)
                     {
-                        this.infoTextWriter.WriteLine(output.ToString());
+                        infoTextWriter.WriteLine(output.ToString());
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Aplicar um script por vez, implementação para o Inventti.Config
+        /// </summary>
+        /// <param name="changeScript">The changeScript.</param>
+        /// <param name="createChangeLogTable">Create or not ChangeLog table</param>
+        public void ApplyChangeScript(ChangeScript changeScript, bool createChangeLogTable)
+        {
+            if (createChangeLogTable)
+                CriarTabelaChangeLog();
+
+            schemaVersionManager.RecordScriptStatus(changeScript, ScriptStatus.Started);
+            queryExecuter.BeginTransaction();
+
+            var statements = splitter.Split(changeScript.GetContent());
+
+            var i = 0;
+
+            foreach (var statement in statements)
+            {
+                var output = new StringBuilder();
+                try
+                {
+                    if (statements.Count > 1)
+                    {
+                        infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
+                    }
+
+                    queryExecuter.Execute(statement, output);
+
+                    i++;
+                }
+                catch (Exception exception)
+                {
+                    if (exception.InnerException != null)
+                        output.AppendLine(exception.InnerException.Message);
+
+                    schemaVersionManager.RecordScriptStatus(changeScript, ScriptStatus.Failure, output.ToString());
+                    throw;
+                }
+                finally
+                {
+                    // Write out SQL execution output.
+                    if (output.Length > 0)
+                    {
+                        infoTextWriter.WriteLine(output.ToString());
+                    }
+                }
+            }
+            queryExecuter.CommitTransaction();
+            schemaVersionManager.RecordScriptStatus(changeScript, ScriptStatus.Success);
+        }
+
         protected void ApplyChangeScript(string script)
         {
-            ICollection<string> statements = this.splitter.Split(script);
-            int i = 0;
+            var statements = splitter.Split(script);
+            var i = 0;
 
             foreach (var statement in statements)
             {
@@ -147,10 +195,10 @@
                 {
                     if (statements.Count > 1)
                     {
-                        this.infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
+                        infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
                     }
 
-                    this.queryExecuter.Execute(statement);
+                    queryExecuter.Execute(statement);
 
                     i++;
                 }
@@ -163,14 +211,21 @@
         }
 
         /// <summary>
-        /// Records details about a change script in the database.
+        /// Records details about a change changeScript in the database.
         /// </summary>
-        /// <param name="changeScript">The change script.</param>
-        /// <param name="status">Status of the script execution.</param>
-        /// <param name="output">The output from running the script.</param>
+        /// <param name="changeScript">The change changeScript.</param>
+        /// <param name="status">Status of the changeScript execution.</param>
+        /// <param name="output">The output from running the changeScript.</param>
         protected void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output = null) 
         {
-            this.schemaVersionManager.RecordScriptStatus(changeScript, status, output);
+            schemaVersionManager.RecordScriptStatus(changeScript, status, output);
+        }
+
+        private void CriarTabelaChangeLog()
+        {
+            infoTextWriter.WriteLine("Creating change log table");
+            var scriptCreateChangeLog = dbmsSyntax.CreateChangeLogTableSqlScript(changeLogTableName);
+            ApplyChangeScript(scriptCreateChangeLog);
         }
     }
 }

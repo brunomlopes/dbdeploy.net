@@ -1,11 +1,8 @@
-namespace Net.Sf.Dbdeploy
+using System.Collections.Generic;
+using NUnit.Framework;
+
+namespace Net.Sf.Dbdeploy.Database
 {
-    using System.Collections.Generic;
-
-    using Database;
-
-    using NUnit.Framework;
-
     /// <summary>
     /// Tests for <see cref="UniqueChange"/> base class.
     /// </summary>

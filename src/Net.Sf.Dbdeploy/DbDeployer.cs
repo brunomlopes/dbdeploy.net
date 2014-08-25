@@ -46,7 +46,6 @@
 
             var queryExecuter = new QueryExecuter(factory);
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
-            
 
             IChangeScriptApplier doScriptApplier;
             TextWriter doWriter = null;
@@ -117,7 +116,8 @@
 
             try
             {
-                var changeScriptRepository = new ChangeScriptRepositoryFactory(config, infoWriter).Obter();
+                var changeScriptRepositoryFactory = new ChangeScriptRepositoryFactory(config, infoWriter);
+                var changeScriptRepository = changeScriptRepositoryFactory.Obter();
                 var repositorioScripts = new RepositorioScripts(databaseSchemaVersionManager, changeScriptRepository);
                 
                 var controller = new Controller(

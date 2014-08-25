@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
     using System;
     using System.Data;
@@ -19,13 +17,13 @@ namespace Net.Sf.Dbdeploy.Database
 
         public QueryExecuter(DbmsFactory factory)
         {
-            this.connection = factory.CreateConnection();
+            connection = factory.CreateConnection();
 
-            this.connection.Open();
+            connection.Open();
 
-            this.currentOutput = null;
+            currentOutput = null;
 
-            this.AttachInfoMessageEventHandler(this.connection);
+            AttachInfoMessageEventHandler(connection);
         }
 
         /// <summary>
@@ -53,16 +51,16 @@ namespace Net.Sf.Dbdeploy.Database
         public virtual IDataReader ExecuteQuery(string sql, StringBuilder output, params object[] parameters)
         {
             // Capture output to string builder specified.
-            this.currentOutput = output;
+            currentOutput = output;
 
-            IDbCommand command = this.CreateCommand();
+            var command = CreateCommand();
             command.CommandText = sql;
 
             if (parameters != null)
             {
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    IDbDataParameter parameterObject = command.CreateParameter();
+                    var parameterObject = command.CreateParameter();
 
                     parameterObject.ParameterName = (i + 1).ToString();
                     parameterObject.Value = parameters[i];
@@ -80,7 +78,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="parameters">The parameters to format into the SQL.</param>
         public virtual void Execute(string sql, params object[] parameters)
         {
-            this.Execute(sql, null, parameters);
+            Execute(sql, null, parameters);
         }
 
         /// <summary>
@@ -92,9 +90,9 @@ namespace Net.Sf.Dbdeploy.Database
         public virtual void Execute(string sql, StringBuilder output, params object[] parameters)
         {
             // Capture output to string builder specified.
-            this.currentOutput = output;
+            currentOutput = output;
 
-            using (IDbCommand command = this.CreateCommand())
+            using (var command = CreateCommand())
             {
                 command.CommandText = sql;
 
@@ -102,7 +100,7 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     for (int i = 0; i < parameters.Length; i++)
                     {
-                        IDbDataParameter parameterObject = command.CreateParameter();
+                        var parameterObject = command.CreateParameter();
 
                         parameterObject.ParameterName = (i + 1).ToString();
                         parameterObject.Value = parameters[i];
@@ -116,7 +114,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual void Execute(string sql)
         {
-            using (IDbCommand command = this.CreateCommand())
+            using (var command = CreateCommand())
             {
                 command.CommandText = sql;
                 command.ExecuteNonQuery();
@@ -125,28 +123,28 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual void BeginTransaction()
         {
-            if (this.transaction != null)
+            if (transaction != null)
                 throw new InvalidOperationException("There is already an open transaction.");
 
-            this.transaction = this.connection.BeginTransaction();
+            transaction = connection.BeginTransaction();
         }
 
         public virtual void CommitTransaction()
         {
-            if (this.transaction == null)
+            if (transaction == null)
                 throw new InvalidOperationException("There is no open transaction.");
 
-            this.transaction.Commit();
+            transaction.Commit();
 
-            this.transaction.Dispose();
-            this.transaction = null;
+            transaction.Dispose();
+            transaction = null;
         }
 
         public virtual void Close()
         {
-            if (this.connection.State == ConnectionState.Open)
+            if (connection.State == ConnectionState.Open)
             {
-                this.connection.Close();
+                connection.Close();
             }
         }
 
@@ -159,9 +157,9 @@ namespace Net.Sf.Dbdeploy.Database
         {
             var propertyInfo = args.GetType().GetProperty("Message");
 
-            if (this.currentOutput != null && propertyInfo != null)
+            if (currentOutput != null && propertyInfo != null)
             {
-                this.currentOutput.AppendLine(((dynamic)args).Message);
+                currentOutput.AppendLine(((dynamic)args).Message);
             }
         }
 
@@ -178,7 +176,7 @@ namespace Net.Sf.Dbdeploy.Database
                 var eventInfo = dbConnection.GetType().GetEvent("InfoMessage");
                 if (eventInfo != null)
                 {
-                    var methodInfo = this.GetType().GetMethod("InfoMessageEventHandler", new[] { typeof(object), typeof(EventArgs) });
+                    var methodInfo = GetType().GetMethod("InfoMessageEventHandler", new[] { typeof(object), typeof(EventArgs) });
                     var handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, this, methodInfo, true);
                     eventInfo.AddEventHandler(dbConnection, handler);
                 }
@@ -191,11 +189,11 @@ namespace Net.Sf.Dbdeploy.Database
 
         private IDbCommand CreateCommand()
         {
-            IDbCommand command = this.connection.CreateCommand();
+            var command = connection.CreateCommand();
 
-            if (this.transaction != null)
+            if (transaction != null)
             {
-                command.Transaction = this.transaction;
+                command.Transaction = transaction;
             }
 
             return command;

@@ -12,7 +12,7 @@ namespace Net.Sf.Dbdeploy.Database
     /// <summary>
     /// Manages updating the change log table in the database, and retrieving applied changes.
     /// </summary>
-    public class DatabaseSchemaVersionManager : IAppliedChangesProvider
+    public class DatabaseSchemaVersionManager : IDatabaseSchemaVersionManager
     {
         /// <summary>
         /// The query executer for getting and updating the change log table.

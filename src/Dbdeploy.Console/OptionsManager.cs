@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Net.Sf.Dbdeploy.Database;
 
 namespace Net.Sf.Dbdeploy
 {

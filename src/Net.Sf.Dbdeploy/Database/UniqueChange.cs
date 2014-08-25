@@ -1,8 +1,8 @@
-﻿namespace Net.Sf.Dbdeploy
-{
-    using System;
-    using System.Globalization;
+﻿using System;
+using System.Globalization;
 
+namespace Net.Sf.Dbdeploy.Database
+{
     /// <summary>
     /// Represents any unique change.
     /// </summary>

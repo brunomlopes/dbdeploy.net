@@ -1,4 +1,5 @@
 using System;
+using Net.Sf.Dbdeploy.Database;
 using Net.Sf.Dbdeploy.Scripts.EmbeddedResources;
 
 namespace Net.Sf.Dbdeploy.Scripts

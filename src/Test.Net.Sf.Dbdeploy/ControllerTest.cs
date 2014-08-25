@@ -34,7 +34,7 @@ namespace Net.Sf.Dbdeploy
         /// <summary>
         /// The applied changes provider for retrieving what changes have been applied to the database.
         /// </summary>
-        private Mock<IAppliedChangesProvider> appliedChangesProvider;
+        private Mock<IDatabaseSchemaVersionManager> appliedChangesProvider;
 
         /// <summary>
         /// The available change scripts provider for retrieving what changes are on the file system.
@@ -77,7 +77,7 @@ namespace Net.Sf.Dbdeploy
                 .Setup(a => a.Apply(It.IsAny<IEnumerable<ChangeScript>>(), false))
                 .Callback<IEnumerable<ChangeScript>, bool>((l,b) => this.runScripts = l.ToList());
 
-            this.appliedChangesProvider = new Mock<IAppliedChangesProvider>();
+            this.appliedChangesProvider = new Mock<IDatabaseSchemaVersionManager>();
             var undoApplier = new Mock<IChangeScriptApplier>();
             this.output = new StringBuilder();
             this.controller = new Controller(this.repositorioScripts.Object, this.appliedChangesProvider.Object, this.doApplier.Object, undoApplier.Object, false, new StringWriter(this.output));

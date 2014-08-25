@@ -28,7 +28,7 @@ namespace Net.Sf.Dbdeploy
         /// <summary>
         /// The applied changes provider.
         /// </summary>
-        private readonly IAppliedChangesProvider appliedChangesProvider;
+        private readonly IDatabaseSchemaVersionManager databaseSchemaVersionManager;
 
         /// <summary>
         /// The applier to upgrade the database.
@@ -51,7 +51,7 @@ namespace Net.Sf.Dbdeploy
         /// Initializes a new instance of the <see cref="Controller" /> class.
         /// </summary>
         /// <param name="availableChangeScriptsProvider">The available change scripts provider.</param>
-        /// <param name="appliedChangesProvider">The applied changes provider.</param>
+        /// <param name="databaseSchemaVersionManager">The applied changes provider.</param>
         /// <param name="doApplier">The do applier.</param>
         /// <param name="undoApplier">The undo applier.</param>
         /// <param name="createChangeLogTable">Whether the change log table should be created or not.</param>
@@ -59,7 +59,7 @@ namespace Net.Sf.Dbdeploy
         /// <param name="repositorioScripts"></param>
         public Controller(
             IRepositorioScripts repositorioScripts,
-            IAppliedChangesProvider appliedChangesProvider,
+            IDatabaseSchemaVersionManager databaseSchemaVersionManager,
             IChangeScriptApplier doApplier,
             IChangeScriptApplier undoApplier,
             bool createChangeLogTable,
@@ -69,7 +69,7 @@ namespace Net.Sf.Dbdeploy
             this.undoApplier = undoApplier;
             this.createChangeLogTable = createChangeLogTable;
 
-            this.appliedChangesProvider = appliedChangesProvider;
+            this.databaseSchemaVersionManager = databaseSchemaVersionManager;
             
             infoWriter = infoTextWriter;
             this.repositorioScripts = repositorioScripts;
@@ -100,7 +100,7 @@ namespace Net.Sf.Dbdeploy
 
             this.LogStatus(scripts, applied, toApply);
 
-            var includeChangeLogTable = this.createChangeLogTable && !this.appliedChangesProvider.ChangeLogTableExists();
+            var includeChangeLogTable = this.createChangeLogTable && !this.databaseSchemaVersionManager.ChangeLogTableExists();
             this.doApplier.Apply(toApply, includeChangeLogTable);
 
             if (this.undoApplier != null)

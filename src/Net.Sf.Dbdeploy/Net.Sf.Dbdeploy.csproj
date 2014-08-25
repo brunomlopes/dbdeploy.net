@@ -114,7 +114,7 @@
     <Compile Include="Configuration\Parser.cs" />
     <Compile Include="Database\ChangeEntry.cs" />
     <Compile Include="Database\FirebirdDbmsSyntax.cs" />
-    <Compile Include="Database\IAppliedChangesProvider.cs" />
+    <Compile Include="Database\IDatabaseSchemaVersionManager.cs" />
     <Compile Include="Database\PostgreDbmsSyntax.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
@@ -145,6 +145,7 @@
     <Compile Include="Appliers\DirectToDbApplier.cs" />
     <Compile Include="Database\SybaseDbmsSyntax.cs" />
     <Compile Include="Database\TableInfo.cs" />
+    <Compile Include="Database\UniqueChange.cs" />
     <Compile Include="Exceptions\DbmsNotSupportedException.cs" />
     <Compile Include="Exceptions\ScriptFailedException.cs" />
     <Compile Include="Scripts\AllScriptScanner.cs" />
@@ -155,7 +156,6 @@
     <Compile Include="Scripts\IRepositorioScripts.cs" />
     <Compile Include="Scripts\IScriptScanner.cs" />
     <Compile Include="Scripts\RepositorioScripts.cs" />
-    <Compile Include="UniqueChange.cs" />
     <Compile Include="DbDeployer.cs" />
     <Compile Include="Database\DelimiterTypeFactory.cs">
       <DependentUpon>IDelimiterType.cs</DependentUpon>

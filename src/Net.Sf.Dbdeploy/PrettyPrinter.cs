@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Database;
+
 namespace Net.Sf.Dbdeploy
 {
     using System;
