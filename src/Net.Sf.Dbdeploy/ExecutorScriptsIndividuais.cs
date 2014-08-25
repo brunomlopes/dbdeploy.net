@@ -19,8 +19,9 @@ namespace Net.Sf.Dbdeploy
 
         public void Executar(ChangeScript changeScript)
         {
-            var dbmsFactory = new DbmsFactory(dbDeployConfig.Dbms, dbDeployConfig.ConnectionString);
+            var dbmsFactory = new DbmsFactory(dbDeployConfig.Dbms, dbDeployConfig.ConnectionString, dbDeployConfig.DllPathConnector);
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
+            dbmsSyntax.SetDefaultDatabaseName(dbDeployConfig.ConnectionString);
             var queryExecuter = new QueryExecuter(dbmsFactory);
             var queryStatementSplitter = new QueryStatementSplitter();
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, dbDeployConfig.ChangeLogTableName);
