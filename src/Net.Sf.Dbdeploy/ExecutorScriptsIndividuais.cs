@@ -27,14 +27,14 @@ namespace Net.Sf.Dbdeploy
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, dbDeployConfig.ChangeLogTableName);
             var directToDbApplier = new DirectToDbApplier(queryExecuter, databaseSchemaVersionManager, queryStatementSplitter, dbmsSyntax, dbDeployConfig.ChangeLogTableName, textWriter);
 
-            var criarChangeLog = CriarTabelaChangeLog(databaseSchemaVersionManager);
+            var criarChangeLog = VerificarSeDeveCriarTabelaChangeLog(databaseSchemaVersionManager);
             
             directToDbApplier.ApplyChangeScript(changeScript, criarChangeLog);
 
             queryExecuter.Close();
         }
 
-        private bool CriarTabelaChangeLog(IDatabaseSchemaVersionManager databaseSchemaVersionManager)
+        private bool VerificarSeDeveCriarTabelaChangeLog(IDatabaseSchemaVersionManager databaseSchemaVersionManager)
         {
             return dbDeployConfig.AutoCreateChangeLogTable && !databaseSchemaVersionManager.ChangeLogTableExists();
         }

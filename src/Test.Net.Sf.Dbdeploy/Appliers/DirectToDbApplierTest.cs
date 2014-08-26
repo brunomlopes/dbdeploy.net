@@ -46,13 +46,13 @@ namespace Net.Sf.Dbdeploy.Appliers
                 this.queryExecuter.Object,
                 this.schemaVersionManager.Object,
                 this.splitter.Object,
-                dbmsSyntax, 
+                dbmsSyntax,
                 ChangeLogTableName,
                 System.Console.Out);
         }
 
         [Test]
-        public void ShouldApplyChangeScriptBySplittingContentUsingTheSplitter() 
+        public void ShouldApplyChangeScriptBySplittingContentUsingTheSplitter()
         {
             this.splitter.Setup(s => s.Split("split; content")).Returns(new List<string> { "split", "content" });
 
@@ -64,22 +64,22 @@ namespace Net.Sf.Dbdeploy.Appliers
         }
 
         [Test]
-        public void ShouldRethrowSqlExceptionsWithInformationAboutWhatStringFailed() 
+        public void ShouldRethrowSqlExceptionsWithInformationAboutWhatStringFailed()
         {
             this.splitter.Setup(s => s.Split("split; content")).Returns(new List<string> { "split", "content" });
-                
+
             var script = new StubChangeScript(1, "script", "split; content");
-            
+
             this.queryExecuter.Setup(e => e.Execute("split", It.IsAny<StringBuilder>())).Throws(new DummyDbException());
 
-            try 
+            try
             {
                 var output = new StringBuilder();
                 this.applier.ApplyChangeScript(script, output);
-                        
+
                 Assert.Fail("exception expected");
             }
-            catch (ChangeScriptFailedException e) 
+            catch (ChangeScriptFailedException e)
             {
                 Assert.AreEqual("split", e.ExecutedSql);
                 Assert.AreEqual(script, e.Script);
@@ -89,7 +89,7 @@ namespace Net.Sf.Dbdeploy.Appliers
         }
 
         [Test]
-        public void ShouldRecordSuccessInSchemaVersionTable() 
+        public void ShouldRecordSuccessInSchemaVersionTable()
         {
             var changeScript = new ChangeScript("Scripts", 1, "script.sql");
 
@@ -109,14 +109,14 @@ namespace Net.Sf.Dbdeploy.Appliers
         }
 
         [Test]
-        public void ShouldCommitTransaction() 
+        public void ShouldCommitTransaction()
         {
             var scripts = new List<ChangeScript> { new StubChangeScript(1, "description", "content") };
 
             this.queryExecuter.Setup(e => e.BeginTransaction()).Callback(() => { return; });
             this.queryExecuter.Setup(e => e.CommitTransaction()).Callback(() => { return; });
 
-            this.splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new [] { s });
+            this.splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new[] { s });
 
             this.applier.Apply(scripts, false);
 
@@ -153,18 +153,14 @@ namespace Net.Sf.Dbdeploy.Appliers
             changeScript.Setup(x => x.GetContent()).Returns(It.IsAny<string>);
             queryExecuter.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<StringBuilder>())).Throws(new DummyDbException());
 
-            try
-            {
-                var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, dbmsSyntax2.Object, ChangeLogTableName, System.Console.Out);
-                directToDbApplier.ApplyChangeScript(changeScript.Object, false);
-            }
-            catch (Exception)
-            {}  // Esperada exceção
+            var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, dbmsSyntax2.Object, ChangeLogTableName, System.Console.Out);
+            directToDbApplier.Invoking(x => x.ApplyChangeScript(changeScript.Object, false)).ShouldThrow<Exception>();
 
             schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript.Object, ScriptStatus.Started, It.IsAny<string>()), Times.Once);
             queryExecuter.Verify(x => x.BeginTransaction(), Times.Once);
             queryExecuter.Verify(x => x.Execute(It.IsAny<string>(), It.IsAny<StringBuilder>()), Times.Once);
             schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript.Object, ScriptStatus.Failure, It.IsAny<string>()), Times.Once);
+            queryExecuter.Verify(x => x.CommitTransaction(), Times.Once);
         }
     }
 }

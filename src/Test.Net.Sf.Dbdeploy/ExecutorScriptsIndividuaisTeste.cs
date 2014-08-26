@@ -62,13 +62,8 @@ namespace Net.Sf.Dbdeploy
                 new ChangeScript("2.0.0.0", 8, new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\Versioned\2.0.0.0\10.Add Sold Column.sql")), Encoding.UTF8)
             };
 
-            try
-            {
-                executorScriptsIndividuais.Executar(listaChangeScript[0]);
-            }
-            catch (Exception)
-            {}  // Esperada exceção
-            
+            executorScriptsIndividuais.Invoking(x => x.Executar(listaChangeScript[0])).ShouldThrow<Exception>();
+
             VerificarSeGravouAMensagemDeErroEStatusCorreto();
         }
     }

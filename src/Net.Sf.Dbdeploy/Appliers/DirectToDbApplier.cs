@@ -87,9 +87,11 @@
                     RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
                     throw;
                 }
-
-                // Commit transaction
-                queryExecuter.CommitTransaction();
+                finally
+                {
+                    // Commit transaction
+                    queryExecuter.CommitTransaction();
+                }
             }
         }
 
@@ -139,49 +141,7 @@
         /// <param name="createChangeLogTable">Create or not ChangeLog table</param>
         public void ApplyChangeScript(ChangeScript changeScript, bool createChangeLogTable)
         {
-            if (createChangeLogTable)
-                CriarTabelaChangeLog();
-
-            schemaVersionManager.RecordScriptStatus(changeScript, ScriptStatus.Started);
-            queryExecuter.BeginTransaction();
-
-            var statements = splitter.Split(changeScript.GetContent());
-
-            var i = 0;
-
-            foreach (var statement in statements)
-            {
-                var output = new StringBuilder();
-                try
-                {
-                    if (statements.Count > 1)
-                    {
-                        infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
-                    }
-
-                    queryExecuter.Execute(statement, output);
-
-                    i++;
-                }
-                catch (Exception exception)
-                {
-                    output.AppendLine(exception.InnerException != null ? exception.InnerException.Message : exception.Message);
-
-                    schemaVersionManager.RecordScriptStatus(changeScript, ScriptStatus.Failure, output.ToString());
-                    queryExecuter.CommitTransaction();
-                    throw;
-                }
-                finally
-                {
-                    // Write out SQL execution output.
-                    if (output.Length > 0)
-                    {
-                        infoTextWriter.WriteLine(output.ToString());
-                    }
-                }
-            }
-            queryExecuter.CommitTransaction();
-            schemaVersionManager.RecordScriptStatus(changeScript, ScriptStatus.Success);
+            Apply(new List<ChangeScript> { changeScript }, createChangeLogTable);
         }
 
         protected void ApplyChangeScript(string script)
@@ -207,7 +167,7 @@
                     throw new ScriptFailedException(e, script, i + 1, statement);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -216,7 +176,7 @@
         /// <param name="changeScript">The change changeScript.</param>
         /// <param name="status">Status of the changeScript execution.</param>
         /// <param name="output">The output from running the changeScript.</param>
-        protected void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output = null) 
+        protected void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output = null)
         {
             schemaVersionManager.RecordScriptStatus(changeScript, status, output);
         }
