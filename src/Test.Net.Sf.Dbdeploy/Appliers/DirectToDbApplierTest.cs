@@ -189,5 +189,37 @@ namespace Net.Sf.Dbdeploy.Appliers
 
             schemaVersionManager.Verify(x => x.RecordScriptStatus(changeScript, ScriptStatus.SucessRevisedUser, It.IsAny<string>()), Times.Once);
         }
+
+        [Test]
+        public void criar_tabela_changelog()
+        {
+            const string conteudoSql = "Create Table tabelaTeste (id int not null, name varchar(45) not null, primary key (id));";
+            var changeScript = new ChangeScript("1.0.0.0", 1);
+            splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new[] { s });
+            dbmsSyntax = new MsSqlDbmsSyntax();
+            var changeLogTableSqlScript = dbmsSyntax.CreateChangeLogTableSqlScript(ChangeLogTableName);
+
+            var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, dbmsSyntax, ChangeLogTableName, System.Console.Out);
+            directToDbApplier.ApplyScriptContent(changeScript, conteudoSql, true);
+
+            schemaVersionManager.Verify(x => x.RecordScriptStatus(changeScript, ScriptStatus.SucessRevisedUser, It.IsAny<string>()), Times.Once);
+            queryExecuter.Verify(x => x.Execute(changeLogTableSqlScript), Times.Once);
+        }
+
+        [Test]
+        public void nao_criar_tabela_changelog()
+        {
+            const string conteudoSql = "Create Table tabelaTeste (id int not null, name varchar(45) not null, primary key (id));";
+            var changeScript = new ChangeScript("1.0.0.0", 1);
+            splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new[] { s });
+            dbmsSyntax = new MsSqlDbmsSyntax();
+            var changeLogTableSqlScript = dbmsSyntax.CreateChangeLogTableSqlScript(ChangeLogTableName);
+
+            var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, dbmsSyntax, ChangeLogTableName, System.Console.Out);
+            directToDbApplier.ApplyScriptContent(changeScript, conteudoSql, false);
+
+            schemaVersionManager.Verify(x => x.RecordScriptStatus(changeScript, ScriptStatus.SucessRevisedUser, It.IsAny<string>()), Times.Once);
+            queryExecuter.Verify(x => x.Execute(changeLogTableSqlScript), Times.Never());
+        }
     }
 }

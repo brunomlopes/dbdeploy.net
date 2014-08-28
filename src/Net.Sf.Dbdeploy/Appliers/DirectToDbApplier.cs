@@ -84,6 +84,9 @@
         /// <param name="createChangeLogTable"></param>
         public void ApplyScriptContent(ChangeScript changeScript, string scriptContent, bool createChangeLogTable)
         {
+            if (createChangeLogTable)
+                CriarTabelaChangeLog();
+
             ApplyScript(changeScript, scriptContent, ScriptStatus.SucessRevisedUser);
         }
 
