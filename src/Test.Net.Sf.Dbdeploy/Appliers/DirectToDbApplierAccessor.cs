@@ -21,7 +21,7 @@
         
         public new void ApplyChangeScript(ChangeScript script, StringBuilder output)
         {
-            base.ApplyChangeScript(script, output);
+            base.ApplyChangeScript(script, script.GetContent(), output);
         }
 
         public new void RecordScriptStatus(ChangeScript changeScript, ScriptStatus status, string output)

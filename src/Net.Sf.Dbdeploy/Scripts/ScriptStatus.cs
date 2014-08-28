@@ -23,6 +23,11 @@
         /// <summary>
         /// The script has started execution.
         /// </summary>
-        Started = 3
+        Started = 3,
+
+        /// <summary>
+        /// The script was revised for the user and ran successfully
+        /// </summary>
+        SucessRevisedUser = 4
     }
 }

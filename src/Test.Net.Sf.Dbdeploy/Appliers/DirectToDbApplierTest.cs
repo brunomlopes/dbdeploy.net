@@ -131,14 +131,15 @@ namespace Net.Sf.Dbdeploy.Appliers
             var changeScript = new Mock<ChangeScript>("Scripts", 1, new FileInfo("script.sql"), Encoding.UTF8);
             dbmsSyntax2.Setup(x => x.CreateChangeLogTableSqlScript(It.IsAny<string>())).Returns("ScriptCreateChangeLog");
             splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new[] { s });
-            changeScript.Setup(x => x.GetContent()).Returns(It.IsAny<string>);
+            const string scriptParaExecutar = "script para executar";
+            changeScript.Setup(x => x.GetContent()).Returns(scriptParaExecutar);
 
             var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, dbmsSyntax2.Object, ChangeLogTableName, System.Console.Out);
             directToDbApplier.ApplyChangeScript(changeScript.Object, true);
 
             schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript.Object, ScriptStatus.Started, It.IsAny<string>()), Times.Once);
             queryExecuter.Verify(x => x.BeginTransaction(), Times.Once);
-            queryExecuter.Verify(x => x.Execute(It.IsAny<string>(), It.IsAny<StringBuilder>()), Times.Once);
+            queryExecuter.Verify(x => x.Execute(scriptParaExecutar, It.IsAny<StringBuilder>()), Times.Once);
             queryExecuter.Verify(e => e.CommitTransaction(), Times.Once());
             schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript.Object, ScriptStatus.Success, It.IsAny<string>()), Times.Once);
         }
@@ -150,7 +151,7 @@ namespace Net.Sf.Dbdeploy.Appliers
             var changeScript = new Mock<ChangeScript>("Scripts", 1, new FileInfo("script.sql"), Encoding.UTF8);
             dbmsSyntax2.Setup(x => x.CreateChangeLogTableSqlScript(It.IsAny<string>())).Returns("ScriptCreateChangeLog");
             splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new[] { s });
-            changeScript.Setup(x => x.GetContent()).Returns(It.IsAny<string>);
+            changeScript.Setup(x => x.GetContent()).Returns("conteudo do script");
             queryExecuter.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<StringBuilder>())).Throws(new DummyDbException());
 
             var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, dbmsSyntax2.Object, ChangeLogTableName, System.Console.Out);
@@ -161,6 +162,32 @@ namespace Net.Sf.Dbdeploy.Appliers
             queryExecuter.Verify(x => x.Execute(It.IsAny<string>(), It.IsAny<StringBuilder>()), Times.Once);
             schemaVersionManager.Verify(s => s.RecordScriptStatus(changeScript.Object, ScriptStatus.Failure, It.IsAny<string>()), Times.Once);
             queryExecuter.Verify(x => x.CommitTransaction(), Times.Once);
+        }
+
+        [Test]
+        public void executar_script_passando_conteudo()
+        {
+            const string conteudoSql = "Create Table tabelaTeste (id int not null, name varchar(45) not null, primary key (id));";
+            var changeScript = new ChangeScript("1.0.0.0", 1);
+            splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new[] { s });
+
+            var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, new Mock<IDbmsSyntax>().Object, ChangeLogTableName, System.Console.Out);
+            directToDbApplier.ApplyScriptContent(changeScript, conteudoSql, true);
+
+            queryExecuter.Verify(x => x.Execute(conteudoSql, It.IsAny<StringBuilder>()), Times.Once);
+        }
+
+        [Test]
+        public void atualizar_status_do_script_para_sucess_revised_user()
+        {
+            const string conteudoSql = "Create Table tabelaTeste (id int not null, name varchar(45) not null, primary key (id));";
+            var changeScript = new ChangeScript("1.0.0.0", 1);
+            splitter.Setup(s => s.Split(It.IsAny<string>())).Returns<string>(s => new[] { s });
+
+            var directToDbApplier = new DirectToDbApplier(queryExecuter.Object, schemaVersionManager.Object, splitter.Object, new Mock<IDbmsSyntax>().Object, ChangeLogTableName, System.Console.Out);
+            directToDbApplier.ApplyScriptContent(changeScript, conteudoSql, true);
+
+            schemaVersionManager.Verify(x => x.RecordScriptStatus(changeScript, ScriptStatus.SucessRevisedUser, It.IsAny<string>()), Times.Once);
         }
     }
 }

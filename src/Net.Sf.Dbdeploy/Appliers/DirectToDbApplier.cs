@@ -53,6 +53,16 @@
             this.infoTextWriter = infoTextWriter;
         }
 
+        /// <summary>
+        /// Aplicar o ChangeScript
+        /// </summary>
+        /// <param name="changeScript">The changeScript.</param>
+        /// <param name="createChangeLogTable">Create or not ChangeLog table</param>
+        public void ApplyChangeScript(ChangeScript changeScript, bool createChangeLogTable)
+        {
+            Apply(new List<ChangeScript> { changeScript }, createChangeLogTable);
+        }
+
         public void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable)
         {
             if (createChangeLogTable)
@@ -62,36 +72,52 @@
 
             foreach (var script in changeScripts)
             {
-                RecordScriptStatus(script, ScriptStatus.Started);
+                ApplyScript(script, script.GetContent(), ScriptStatus.Success);
+            }
+        }
 
-                // Begin transaction
-                queryExecuter.BeginTransaction();
+        /// <summary>
+        /// Aplicar o conteúdo do script
+        /// </summary>
+        /// <param name="changeScript"></param>
+        /// <param name="scriptContent"></param>
+        /// <param name="createChangeLogTable"></param>
+        public void ApplyScriptContent(ChangeScript changeScript, string scriptContent, bool createChangeLogTable)
+        {
+            ApplyScript(changeScript, scriptContent, ScriptStatus.SucessRevisedUser);
+        }
 
-                infoTextWriter.WriteLine(script);
-                infoTextWriter.WriteLine("----------------------------------------------------------");
+        private void ApplyScript(ChangeScript script, string scriptContent, ScriptStatus scriptStatusSucess)
+        {
+            RecordScriptStatus(script, ScriptStatus.Started);
 
-                // Apply changes and update ChangeLog table
-                var output = new StringBuilder();
-                try
+            // Begin transaction
+            queryExecuter.BeginTransaction();
+
+            infoTextWriter.WriteLine(script);
+            infoTextWriter.WriteLine("----------------------------------------------------------");
+
+            // Apply changes and update ChangeLog table
+            var output = new StringBuilder();
+            try
+            {
+                ApplyChangeScript(script, scriptContent, output);
+                RecordScriptStatus(script, scriptStatusSucess, output.ToString());
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
                 {
-                    ApplyChangeScript(script, output);
-                    RecordScriptStatus(script, ScriptStatus.Success, output.ToString());
+                    output.AppendLine(ex.Message);
                 }
-                catch (Exception ex)
-                {
-                    if (ex.InnerException != null)
-                    {
-                        output.AppendLine(ex.InnerException.Message);
-                    }
 
-                    RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
-                    throw;
-                }
-                finally
-                {
-                    // Commit transaction
-                    queryExecuter.CommitTransaction();
-                }
+                RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
+                throw;
+            }
+            finally
+            {
+                // Commit transaction
+                queryExecuter.CommitTransaction();
             }
         }
 
@@ -99,10 +125,11 @@
         /// Applies the change changeScript.
         /// </summary>
         /// <param name="changeScript">The changeScript.</param>
+        /// <param name="scriptContent"></param>
         /// <param name="output">The output from applying the change changeScript.</param>
-        protected void ApplyChangeScript(ChangeScript changeScript, StringBuilder output)
+        protected void ApplyChangeScript(ChangeScript changeScript, string scriptContent, StringBuilder output)
         {
-            var statements = splitter.Split(changeScript.GetContent());
+            var statements = splitter.Split(scriptContent);
 
             var i = 0;
 
@@ -132,16 +159,6 @@
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Aplicar um script por vez, implementação para o Inventti.Config
-        /// </summary>
-        /// <param name="changeScript">The changeScript.</param>
-        /// <param name="createChangeLogTable">Create or not ChangeLog table</param>
-        public void ApplyChangeScript(ChangeScript changeScript, bool createChangeLogTable)
-        {
-            Apply(new List<ChangeScript> { changeScript }, createChangeLogTable);
         }
 
         protected void ApplyChangeScript(string script)
