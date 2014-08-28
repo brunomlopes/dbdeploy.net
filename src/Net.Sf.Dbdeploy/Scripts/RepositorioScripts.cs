@@ -38,6 +38,12 @@ namespace Net.Sf.Dbdeploy.Scripts
             return scriptsAplicados.Where(x => x.Status == ScriptStatus.Failure).ToList();
         }
 
+        public ChangeEntry ObterScriptExecutado(ChangeScript changeScript)
+        {
+            var scriptsAplicados = ObterScriptsAplicados();
+            return scriptsAplicados.FirstOrDefault(x => x.CompareTo(changeScript) == 0);
+        }
+
         private IList<ChangeScript> IdentificarScriptsQueFaltamExecutar(UniqueChange lastChangeToApply, IEnumerable<ChangeScript> scripts, IList<ChangeEntry> aplicados)
         {
             var listaScriptsParaAplicar = new List<ChangeScript>();

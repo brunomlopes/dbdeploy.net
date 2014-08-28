@@ -9,5 +9,6 @@ namespace Net.Sf.Dbdeploy.Scripts
         ICollection<ChangeScript> ObterTodosOsScripts();
         IList<ChangeEntry> ObterScriptsAplicados();
         IList<ChangeEntry> ObterScritpsExecutadosComErro();
+        ChangeEntry ObterScriptExecutado(ChangeScript changeScript);
     }
 }

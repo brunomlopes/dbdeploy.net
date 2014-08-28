@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using FluentAssertions;
 using Moq;
 using Net.Sf.Dbdeploy.Database;
@@ -176,6 +178,36 @@ namespace Net.Sf.Dbdeploy.Scripts
             scripsComErroDeExecucao[0].Output.Should().Be("Ocorreu algum erro ao executar");
             scripsComErroDeExecucao[1].ScriptName.Should().Be("09.Add Product Data.sql");
             scripsComErroDeExecucao[1].Output.Should().Be("Insert duplicate ID error");
+        }
+
+        [Test]
+        public void obter_script_especifico()
+        {
+            var changeEntryASerRetornado = new ChangeEntry("folder2", 1);
+            databaseSchemaVersionManager.Setup(x => x.GetAppliedChanges()).Returns(new List<ChangeEntry>
+            {
+                new ChangeEntry("folder1", 1),
+                new ChangeEntry("folder1", 2),
+                changeEntryASerRetornado,
+                new ChangeEntry("folder2", 2),
+            });
+            var changeScript = new ChangeScript("folder2", 1, new FileInfo("script.sql"), Encoding.UTF8);
+
+            var changeEntry = repositorioScripts.ObterScriptExecutado(changeScript);
+
+            changeEntry.Should().NotBeNull();
+            changeEntry.Should().Be(changeEntryASerRetornado);
+        }
+
+        [Test]
+        public void retornar_nulo_quando_nao_encontrar_script_especifico()
+        {
+            databaseSchemaVersionManager.Setup(x => x.GetAppliedChanges()).Returns(new List<ChangeEntry>());
+            var changeScript = new ChangeScript("folder2", 1, new FileInfo("script.sql"), Encoding.UTF8);
+
+            var changeEntry = repositorioScripts.ObterScriptExecutado(changeScript);
+
+            changeEntry.Should().BeNull();
         }
 
         [Test]
