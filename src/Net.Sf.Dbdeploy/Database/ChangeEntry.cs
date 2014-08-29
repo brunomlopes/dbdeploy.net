@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Net.Sf.Dbdeploy.Database
+﻿namespace Net.Sf.Dbdeploy.Database
 {
     using System.Globalization;
 
-    using Net.Sf.Dbdeploy.Scripts;
+    using Scripts;
 
     /// <summary>
     /// Represents a logged change to the database.
@@ -52,6 +50,8 @@ namespace Net.Sf.Dbdeploy.Database
         /// The output.
         /// </value>
         public string Output { get; set; }
+
+        public bool ExecutedSuccessfully { get { return Status == ScriptStatus.Success || Status == ScriptStatus.SucessRevisedUser; } }
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

@@ -154,6 +154,7 @@
     <Compile Include="ExecutorScriptsIndividuaisTeste.cs" />
     <Compile Include="Scripts\AllScriptScannerTest.cs" />
     <Compile Include="Scripts\AssemblyScannerTest.cs" />
+    <Compile Include="Scripts\ChangeEntryTest.cs" />
     <Compile Include="Scripts\ChangeScriptRepositoryFactoryTeste.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\QueryStatementSplitterTest.cs" />
