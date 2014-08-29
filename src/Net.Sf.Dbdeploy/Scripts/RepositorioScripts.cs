@@ -62,7 +62,7 @@ namespace Net.Sf.Dbdeploy.Scripts
                 else
                 {
                     // If the script has already been run check if it should be run again.
-                    if (changeEntry.Status != ScriptStatus.Success)
+                    if (!changeEntry.ExecutedSuccessfully)
                     {
                         // Assign the ID so the record can be updated.
                         script.ChangeId = changeEntry.ChangeId;

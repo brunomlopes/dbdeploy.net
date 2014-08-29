@@ -72,10 +72,15 @@ namespace Net.Sf.Dbdeploy.Scripts
             scriptAplicado2.ScriptName = "09.Add Product Data.sql";
             scriptAplicado2.Status = ScriptStatus.Success;
 
+            var scriptAplicado3 = new ChangeEntry("2.0.0.0", 10);
+            scriptAplicado2.ScriptName = "10.Add Product Data.sql";
+            scriptAplicado2.Status = ScriptStatus.SucessRevisedUser;
+
             databaseSchemaVersionManager.Setup(x => x.GetAppliedChanges()).Returns(new List<ChangeEntry>
             {
                 scriptAplicado1,
-                scriptAplicado2
+                scriptAplicado2,
+                scriptAplicado3,
             });
 
             var changeScript1 = new ChangeScript("2.0.0.0", 8, "8.Create Product Table.sql");
@@ -95,6 +100,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             listaChangeScripts.Count.Should().Be(2);
 
             listaChangeScripts.Should().NotContain(x => x.ScriptName == "09.Add Product Data.sql" && x.Folder == "2.0.0.0");
+            listaChangeScripts.Should().NotContain(x => x.ScriptName == "10.Add Product Data.sql" && x.Folder == "2.0.0.0");
             listaChangeScripts.Should().Contain(x => x.ScriptName == "8.Create Product Table.sql" && x.Folder == "2.0.0.0");
             listaChangeScripts.Should().Contain(x => x.ScriptName == "1.SQLCMD Add Customer Table.sql" && x.Folder == "2.10.0.0");
         }
