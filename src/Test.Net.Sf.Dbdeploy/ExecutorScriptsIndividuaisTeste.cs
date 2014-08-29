@@ -30,6 +30,7 @@ namespace Net.Sf.Dbdeploy
             EnsureTableDoesNotExist("Customer");
             EnsureTableDoesNotExist("Teste");
             EnsureTableDoesNotExist("Teste2");
+            EnsureTableDoesNotExist("tabelaTeste");
 
             dbDeployConfig = new DbDeployConfig { ConnectionString = @"Server=.\SQLEXPRESS;Initial Catalog=dbdeploy;User Id=sa;Password=sa" };
 
@@ -52,6 +53,18 @@ namespace Net.Sf.Dbdeploy
             AssertTableExists("Product");
             AssertTableExists("Teste");
             AssertTableExists("Teste2");
+        }
+
+        [Test]
+        public void executar_um_conteudo_script()
+        {
+            const string conteudoSql = "Create Table tabelaTeste (id int not null, name varchar(45) not null, primary key (id));";
+            var changeScript = new ChangeScript("2.0.0.0", 8, new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\Versioned\2.0.0.0\8.Create Product Table.sql")), Encoding.UTF8);
+
+            executorScriptsIndividuais.Executar(changeScript, conteudoSql);
+
+            AssertTableExists("tabelaTeste");
+            AssertTableExists("ChangeLog");
         }
 
         [Test]

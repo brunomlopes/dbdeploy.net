@@ -140,6 +140,14 @@
             transaction = null;
         }
 
+        public virtual void Open()
+        {
+            if (connection.State == ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+        }
+
         public virtual void Close()
         {
             if (connection.State == ConnectionState.Open)

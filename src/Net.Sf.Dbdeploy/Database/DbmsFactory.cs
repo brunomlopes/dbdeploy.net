@@ -24,23 +24,33 @@ namespace Net.Sf.Dbdeploy.Database
 
         public virtual IDbmsSyntax CreateDbmsSyntax()
         {
+            IDbmsSyntax dmDbmsSyntax;
+            
             switch (dbms)
             {
                 case SupportedDbms.ORACLE:
-                    return new OracleDbmsSyntax();
+                    dmDbmsSyntax = new OracleDbmsSyntax();
+                    break;
                 case SupportedDbms.MSSQL:
-                    return new MsSqlDbmsSyntax();
+                    dmDbmsSyntax = new MsSqlDbmsSyntax();
+                    break;
                 case SupportedDbms.MYSQL:
-                    return new MySqlDbmsSyntax();
+                    dmDbmsSyntax = new MySqlDbmsSyntax();
+                    break;
                 case SupportedDbms.FIREBIRD:
-                    return new FirebirdDbmsSyntax();
+                    dmDbmsSyntax = new FirebirdDbmsSyntax();
+                    break;
                 case SupportedDbms.POSTGRE:
-                    return new PostgreDbmsSyntax();
+                    dmDbmsSyntax = new PostgreDbmsSyntax();
+                    break;
                 case SupportedDbms.SYBASE:
-                    return new SybaseDbmsSyntax();
+                    dmDbmsSyntax = new SybaseDbmsSyntax();
+                    break;
                 default:
                     throw new DbmsNotSupportedException("Supported dbms: ora, mssql, mysql, firebird, postgre, sybase");
             }
+            dmDbmsSyntax.SetDefaultDatabaseName(connectionString);
+            return dmDbmsSyntax;
         }
 
         public virtual IDbConnection CreateConnection()

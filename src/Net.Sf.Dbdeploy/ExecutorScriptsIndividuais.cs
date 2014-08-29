@@ -11,32 +11,63 @@ namespace Net.Sf.Dbdeploy
         private readonly DbDeployConfig dbDeployConfig;
         private readonly TextWriter textWriter;
 
+        private DbmsFactory dbmsFactory;
+
         public ExecutorScriptsIndividuais(DbDeployConfig dbDeployConfig, TextWriter textWriter)
         {
             this.dbDeployConfig = dbDeployConfig;
             this.textWriter = textWriter;
         }
 
-        public void Executar(ChangeScript changeScript)
+        private DbmsFactory DbmsFactory
         {
-            var dbmsFactory = new DbmsFactory(dbDeployConfig.Dbms, dbDeployConfig.ConnectionString, dbDeployConfig.DllPathConnector);
-            var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
-            dbmsSyntax.SetDefaultDatabaseName(dbDeployConfig.ConnectionString);
-            var queryExecuter = new QueryExecuter(dbmsFactory);
-            var queryStatementSplitter = new QueryStatementSplitter();
-            var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, dbDeployConfig.ChangeLogTableName);
-            var directToDbApplier = new DirectToDbApplier(queryExecuter, databaseSchemaVersionManager, queryStatementSplitter, dbmsSyntax, dbDeployConfig.ChangeLogTableName, textWriter);
-
-            var criarChangeLog = VerificarSeDeveCriarTabelaChangeLog(databaseSchemaVersionManager);
-            
-            directToDbApplier.ApplyChangeScript(changeScript, criarChangeLog);
-
-            queryExecuter.Close();
+            get { return dbmsFactory ?? (dbmsFactory = new DbmsFactory(dbDeployConfig.Dbms, dbDeployConfig.ConnectionString, dbDeployConfig.DllPathConnector)); }
         }
 
-        private bool VerificarSeDeveCriarTabelaChangeLog(IDatabaseSchemaVersionManager databaseSchemaVersionManager)
+        private IDbmsSyntax dbmsSyntax;
+        private IDbmsSyntax DbmsSyntax
         {
-            return dbDeployConfig.AutoCreateChangeLogTable && !databaseSchemaVersionManager.ChangeLogTableExists();
+            get { return dbmsSyntax ?? (dbmsSyntax = DbmsFactory.CreateDbmsSyntax()); }
+
+        }
+
+        private QueryExecuter queryExecuter;
+        private QueryExecuter QueryExecuter
+        {
+            get { return queryExecuter ?? (queryExecuter = new QueryExecuter(DbmsFactory)); }
+        }
+
+        private DatabaseSchemaVersionManager databaseSchemaVersionManager;
+        private DatabaseSchemaVersionManager DatabaseSchemaVersionManager
+        {
+            get { return databaseSchemaVersionManager ?? (databaseSchemaVersionManager = new DatabaseSchemaVersionManager(QueryExecuter, DbmsSyntax, dbDeployConfig.ChangeLogTableName)); }
+        }
+
+        private DirectToDbApplier directToDbApplier;
+        private DirectToDbApplier DirectToDbApplier
+        {
+            get { return directToDbApplier ?? (directToDbApplier = new DirectToDbApplier(QueryExecuter, DatabaseSchemaVersionManager, new QueryStatementSplitter(), DbmsSyntax, dbDeployConfig.ChangeLogTableName, textWriter)); }
+        }
+
+        public void Executar(ChangeScript changeScript)
+        {
+            QueryExecuter.Open();
+            var criarChangeLog = VerificarSeDeveCriarTabelaChangeLog();
+            DirectToDbApplier.ApplyChangeScript(changeScript, criarChangeLog);
+            QueryExecuter.Close();
+        }
+
+        public void Executar(ChangeScript changeScript, string scriptContent)
+        {
+            QueryExecuter.Open();
+            var criarChangeLog = VerificarSeDeveCriarTabelaChangeLog();
+            DirectToDbApplier.ApplyScriptContent(changeScript, scriptContent, criarChangeLog);
+            QueryExecuter.Close();
+        }
+
+        private bool VerificarSeDeveCriarTabelaChangeLog()
+        {
+            return dbDeployConfig.AutoCreateChangeLogTable && !DatabaseSchemaVersionManager.ChangeLogTableExists();
         }
     }
 }
