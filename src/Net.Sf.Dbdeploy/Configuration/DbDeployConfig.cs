@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Net.Sf.Dbdeploy.Configuration
 {
@@ -36,12 +37,7 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// The script directory.
         /// </value>
         public DirectoryInfo ScriptDirectory { get; set; }
-
-        /// <summary>
-        /// The directory where the service runs/executes
-        /// </summary>
-        public DirectoryInfo DirectoryServiceRun { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the assembly to read all change scripts resource files from.
         /// </summary>
@@ -51,7 +47,7 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// <remarks>
         /// This is a optional parameter.
         /// </remarks>
-        public IEnumerable<Type> ScriptAssemblies { get; set; }
+        public IEnumerable<Assembly> ScriptAssemblies { get; set; }
 
         /// <summary>
         /// Gets or sets the filter function to filter the embbeded resources found in a assembly.
@@ -173,9 +169,7 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// The line ending.
         /// </value>
         public string LineEnding { get; set; }
-
-        //public bool AssemblyOnly { get; set; }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="DbDeployConfig" /> class.
         /// </summary>
@@ -198,7 +192,6 @@ namespace Net.Sf.Dbdeploy.Configuration
             LineEnding = DbDeployDefaults.LineEnding;
             DllPathConnector = DbDeployDefaults.DllPathConnector;
             ScriptAssemblies = DbDeployDefaults.ScriptAssemblies;
-            DirectoryServiceRun = DbDeployDefaults.DirectoryServiceRun;
         }
     }
 }

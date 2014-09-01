@@ -7,7 +7,7 @@ namespace Net.Sf.Dbdeploy.Configuration
     using System.IO;
     using System.Text;
 
-    using Net.Sf.Dbdeploy.Database;
+    using Database;
 
     /// <summary>
     /// Default values for DbDeploy configuration.
@@ -85,9 +85,9 @@ namespace Net.Sf.Dbdeploy.Configuration
         public static readonly string LineEnding = Database.LineEnding.Platform;
 
         /// <summary>
-        /// Embedded script assembly type default value.
+        /// Embedded script assembly default value.
         /// </summary>
-        public static IEnumerable<Type> ScriptAssemblies = new List<Type>();
+        public static IEnumerable<Assembly> ScriptAssemblies = new List<Assembly>();
 
         public static Func<string, bool> AssemblyResourceNameFilter = value => true;
         

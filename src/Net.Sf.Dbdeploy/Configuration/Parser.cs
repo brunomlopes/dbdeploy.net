@@ -46,21 +46,20 @@ namespace Net.Sf.Dbdeploy.Configuration
 
                 case "LF":
                     return LineEnding.Lf;
-
                 default:
                 case "PLATFORM":
                     return LineEnding.Platform;
             }
         }
 
-        public static IEnumerable<Type> ParseType(string value)
+        public static IEnumerable<Assembly> ParseAssembly(string value)
         {
             var listaAssemblyInformado = value.Split(';');
-            var listaType = new List<Type>();
+            var listaType = new List<Assembly>();
             foreach (var assembly in listaAssemblyInformado)
             {
                 var assemblyName = AssemblyName.GetAssemblyName(assembly);
-                listaType.Add(assemblyName.GetType());
+                listaType.Add(Assembly.Load(assemblyName));
             }
             return listaType;
         }

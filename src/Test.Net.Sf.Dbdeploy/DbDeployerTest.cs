@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Net.Sf.Dbdeploy.Configuration;
 using Net.Sf.Dbdeploy.Utils;
@@ -30,9 +29,8 @@ namespace Net.Sf.Dbdeploy
         [Test]
         public void DbDebployCanExecuteBothEmbeddedScriptsAndScriptsInDirectories()
         {
-            var loadFrom = Assembly.LoadFrom("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
-            var type = loadFrom.GetTypes().FirstOrDefault();
-
+            var assembly = Assembly.LoadFrom("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
+            
             using (var tw = File.CreateText("database_" + DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss") + ".txt"))
             {
                 var dbDeployer = new DbDeployer();
@@ -42,7 +40,7 @@ namespace Net.Sf.Dbdeploy
                         Dbms = SupportedDbms.MSSQL,
                         Delimiter = "GO", 
                         ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
-                        ScriptAssemblies = new List<Type> {type},
+                        ScriptAssemblies = new List<Assembly> {assembly},
                         DelimiterType = Parser.ParseDelimiterType("row"),
                         UseSqlCmd = false,
                         AssemblyResourceNameFilter = resourceName => resourceName.Contains("db.MsSql.")
@@ -58,8 +56,7 @@ namespace Net.Sf.Dbdeploy
         [Test]
         public void DbDebployCanExecuteEmbeddedScripts()
         {
-            var loadFrom = Assembly.LoadFrom("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
-            var type = loadFrom.GetTypes().FirstOrDefault();
+            var assembly = Assembly.LoadFrom("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
             using (var tw = File.CreateText("database_" + DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss") + ".txt"))
             {
                 var dbDeployer = new DbDeployer();
@@ -69,7 +66,7 @@ namespace Net.Sf.Dbdeploy
                     Dbms = SupportedDbms.MSSQL,
                     Delimiter = "GO",
                     ScriptDirectory = null,
-                    ScriptAssemblies = new List<Type> {type},
+                    ScriptAssemblies = new List<Assembly> { assembly },
                     DelimiterType = Parser.ParseDelimiterType("row"),
                     UseSqlCmd = false,
                     AssemblyResourceNameFilter = resourceName => resourceName.Contains("db.MsSql.")

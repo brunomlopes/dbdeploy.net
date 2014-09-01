@@ -29,16 +29,12 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             if (dbDeployConfig.ScriptAssemblies != null)
             {
-                foreach (var type in dbDeployConfig.ScriptAssemblies)
+                foreach (var assembly in dbDeployConfig.ScriptAssemblies)
                 {
-                    var pathAssembly = Path.Combine(dbDeployConfig.DirectoryServiceRun.FullName, type.Module.Name);
-                    var assemblyScriptEmbedded = Assembly.LoadFile(pathAssembly);
-                    scanners.Add(new AssemblyScanner(infoWriter, dbDeployConfig.Encoding, assemblyScriptEmbedded, dbDeployConfig.AssemblyResourceNameFilter));
+                    scanners.Add(new AssemblyScanner(infoWriter, dbDeployConfig.Encoding, assembly, dbDeployConfig.AssemblyResourceNameFilter));
                 }
             }
 
-            //if (dbDeployConfig.AssemblyOnly)
-            //    return scanners;
             if (dbDeployConfig.ScriptDirectory != null)
                 scanners.Add(new DirectoryScanner(infoWriter, dbDeployConfig.Encoding, dbDeployConfig.ScriptDirectory));
 
