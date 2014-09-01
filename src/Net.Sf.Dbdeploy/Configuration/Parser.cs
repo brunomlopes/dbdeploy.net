@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Net.Sf.Dbdeploy.Configuration
@@ -52,10 +53,16 @@ namespace Net.Sf.Dbdeploy.Configuration
             }
         }
 
-        public static Assembly ParseAssembly(string value)
+        public static IEnumerable<Type> ParseType(string value)
         {
-            var assemblyName = AssemblyName.GetAssemblyName(value);
-            return Assembly.Load(assemblyName);
+            var listaAssemblyInformado = value.Split(';');
+            var listaType = new List<Type>();
+            foreach (var assembly in listaAssemblyInformado)
+            {
+                var assemblyName = AssemblyName.GetAssemblyName(assembly);
+                listaType.Add(assemblyName.GetType());
+            }
+            return listaType;
         }
 
         public static Func<string, bool> ParseAssemblyFilterByName(string value)

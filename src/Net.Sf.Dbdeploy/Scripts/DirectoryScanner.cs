@@ -1,11 +1,10 @@
 namespace Net.Sf.Dbdeploy.Scripts
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
 
-    using Net.Sf.Dbdeploy.Exceptions;
+    using Exceptions;
 
     public class DirectoryScanner : IScriptScanner
     {

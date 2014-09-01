@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Net.Sf.Dbdeploy.Configuration;
 
 namespace Net.Sf.Dbdeploy.Scripts
@@ -25,12 +26,21 @@ namespace Net.Sf.Dbdeploy.Scripts
         private IEnumerable<IScriptScanner> GetScriptScanners()
         {
             var scanners = new List<IScriptScanner>();
-            scanners.Add(new AssemblyScanner(infoWriter, dbDeployConfig.Encoding, dbDeployConfig.ScriptAssembly, dbDeployConfig.AssemblyResourceNameFilter));
 
-            if (dbDeployConfig.AssemblyOnly)
-                return scanners;
+            if (dbDeployConfig.ScriptAssemblies != null)
+            {
+                foreach (var type in dbDeployConfig.ScriptAssemblies)
+                {
+                    var pathAssembly = Path.Combine(dbDeployConfig.DirectoryServiceRun.FullName, type.Module.Name);
+                    var assemblyScriptEmbedded = Assembly.LoadFile(pathAssembly);
+                    scanners.Add(new AssemblyScanner(infoWriter, dbDeployConfig.Encoding, assemblyScriptEmbedded, dbDeployConfig.AssemblyResourceNameFilter));
+                }
+            }
 
-            scanners.Add(new DirectoryScanner(infoWriter, dbDeployConfig.Encoding, dbDeployConfig.ScriptDirectory));
+            //if (dbDeployConfig.AssemblyOnly)
+            //    return scanners;
+            if (dbDeployConfig.ScriptDirectory != null)
+                scanners.Add(new DirectoryScanner(infoWriter, dbDeployConfig.Encoding, dbDeployConfig.ScriptDirectory));
 
             return scanners;
         }

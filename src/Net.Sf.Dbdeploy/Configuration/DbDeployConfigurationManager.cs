@@ -71,9 +71,9 @@ namespace Net.Sf.Dbdeploy.Configuration
             config.DelimiterType = GetAttribute(element, "delimiterType", DbDeployDefaults.DelimiterType, Parser.ParseDelimiterType);
             config.LineEnding = GetAttribute(element, "lineEnding", DbDeployDefaults.LineEnding, Parser.ParseLineEnding);
 
-            config.ScriptAssembly = GetAttribute(element, "assembly", DbDeployDefaults.ScriptAssembly, Parser.ParseAssembly);
+            config.ScriptAssemblies = GetAttribute(element, "assembly", DbDeployDefaults.ScriptAssemblies, Parser.ParseType);
             config.AssemblyResourceNameFilter = GetAttribute(element, "assemblyFilterByName", DbDeployDefaults.AssemblyResourceNameFilter, Parser.ParseAssemblyFilterByName);
-            config.AssemblyOnly = GetAttribute(element, "assemblyOnly", DbDeployDefaults.AssemblyOnly, Parser.ParseAssemblyOnly);
+            //config.AssemblyOnly = GetAttribute(element, "assemblyOnly", DbDeployDefaults.AssemblyOnly, Parser.ParseAssemblyOnly);
 
             return config;
         }

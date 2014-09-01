@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Net.Sf.Dbdeploy.Configuration
 {
     using System.IO;
     using System.Text;
 
-    using Net.Sf.Dbdeploy.Database;
+    using Database;
 
     /// <summary>
     /// Represents DbDeploy configuration settings.
@@ -39,6 +38,11 @@ namespace Net.Sf.Dbdeploy.Configuration
         public DirectoryInfo ScriptDirectory { get; set; }
 
         /// <summary>
+        /// The directory where the service runs/executes
+        /// </summary>
+        public DirectoryInfo DirectoryServiceRun { get; set; }
+
+        /// <summary>
         /// Gets or sets the assembly to read all change scripts resource files from.
         /// </summary>
         /// <value>
@@ -47,11 +51,11 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// <remarks>
         /// This is a optional parameter.
         /// </remarks>
-        public Assembly ScriptAssembly { get; set; }
+        public IEnumerable<Type> ScriptAssemblies { get; set; }
 
         /// <summary>
         /// Gets or sets the filter function to filter the embbeded resources found in a assembly.
-        /// This property is used in conjunction ScriptAssembly property.
+        /// This property is used in conjunction ScriptAssemblies property.
         /// </summary>
         /// <value>
         /// The filter function.
@@ -170,7 +174,7 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// </value>
         public string LineEnding { get; set; }
 
-        public bool AssemblyOnly { get; set; }
+        //public bool AssemblyOnly { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbDeployConfig" /> class.
@@ -178,22 +182,23 @@ namespace Net.Sf.Dbdeploy.Configuration
         public DbDeployConfig()
         {
             // Set all defaults.
-            this.Dbms = DbDeployDefaults.Dbms;
-            this.ConnectionString = DbDeployDefaults.ConnectionString;
-            this.ScriptDirectory = DbDeployDefaults.ScriptDirectory;
-            this.OutputFile = DbDeployDefaults.OutputFile;
-            this.ChangeLogTableName = DbDeployDefaults.ChangeLogTableName;
-            this.AutoCreateChangeLogTable = DbDeployDefaults.AutoCreateChangeLogTable;
-            this.ForceUpdate = DbDeployDefaults.ForceUpdate;
-            this.UseSqlCmd = DbDeployDefaults.UseSqlCmd;
-            this.LastChangeToApply = DbDeployDefaults.LastChangeToApply;
-            this.Encoding = DbDeployDefaults.Encoding;
-            this.TemplateDirectory = DbDeployDefaults.TemplateDirectory;
-            this.Delimiter = DbDeployDefaults.Delimiter;
-            this.DelimiterType = DbDeployDefaults.DelimiterType;
-            this.LineEnding = DbDeployDefaults.LineEnding;
-            this.DllPathConnector = DbDeployDefaults.DllPathConnector;
-            this.AssemblyOnly = DbDeployDefaults.AssemblyOnly;
+            Dbms = DbDeployDefaults.Dbms;
+            ConnectionString = DbDeployDefaults.ConnectionString;
+            ScriptDirectory = DbDeployDefaults.ScriptDirectory;
+            OutputFile = DbDeployDefaults.OutputFile;
+            ChangeLogTableName = DbDeployDefaults.ChangeLogTableName;
+            AutoCreateChangeLogTable = DbDeployDefaults.AutoCreateChangeLogTable;
+            ForceUpdate = DbDeployDefaults.ForceUpdate;
+            UseSqlCmd = DbDeployDefaults.UseSqlCmd;
+            LastChangeToApply = DbDeployDefaults.LastChangeToApply;
+            Encoding = DbDeployDefaults.Encoding;
+            TemplateDirectory = DbDeployDefaults.TemplateDirectory;
+            Delimiter = DbDeployDefaults.Delimiter;
+            DelimiterType = DbDeployDefaults.DelimiterType;
+            LineEnding = DbDeployDefaults.LineEnding;
+            DllPathConnector = DbDeployDefaults.DllPathConnector;
+            ScriptAssemblies = DbDeployDefaults.ScriptAssemblies;
+            DirectoryServiceRun = DbDeployDefaults.DirectoryServiceRun;
         }
     }
 }

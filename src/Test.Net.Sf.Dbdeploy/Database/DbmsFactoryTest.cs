@@ -140,7 +140,7 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public void criar_instancia_de_mysql_syntax()
         {
-            dbmsFactory = new DbmsFactory(SupportedDbms.MYSQL, "connectionString");
+            dbmsFactory = new DbmsFactory(SupportedDbms.MYSQL, connectionStringMySql);
             var dbmsSyntax = dbmsFactory.CreateDbmsSyntax();
 
             dbmsSyntax.Should().NotBeNull();

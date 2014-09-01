@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Net.Sf.Dbdeploy.Configuration;
 using Net.Sf.Dbdeploy.Utils;
@@ -28,6 +30,9 @@ namespace Net.Sf.Dbdeploy
         [Test]
         public void DbDebployCanExecuteBothEmbeddedScriptsAndScriptsInDirectories()
         {
+            var loadFrom = Assembly.LoadFrom("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
+            var type = loadFrom.GetTypes().FirstOrDefault();
+
             using (var tw = File.CreateText("database_" + DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss") + ".txt"))
             {
                 var dbDeployer = new DbDeployer();
@@ -35,11 +40,12 @@ namespace Net.Sf.Dbdeploy
                     {
                         ConnectionString = ConnectionString,
                         Dbms = SupportedDbms.MSSQL,
-                        Delimiter = "GO",
+                        Delimiter = "GO", 
                         ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
-                        ScriptAssembly = AssemblieWithEmbeddedScripts(),
+                        ScriptAssemblies = new List<Type> {type},
                         DelimiterType = Parser.ParseDelimiterType("row"),
-                        UseSqlCmd = false
+                        UseSqlCmd = false,
+                        AssemblyResourceNameFilter = resourceName => resourceName.Contains("db.MsSql.")
                     };
                 dbDeployer.Execute(config, tw);
             }
@@ -52,6 +58,8 @@ namespace Net.Sf.Dbdeploy
         [Test]
         public void DbDebployCanExecuteEmbeddedScripts()
         {
+            var loadFrom = Assembly.LoadFrom("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
+            var type = loadFrom.GetTypes().FirstOrDefault();
             using (var tw = File.CreateText("database_" + DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss") + ".txt"))
             {
                 var dbDeployer = new DbDeployer();
@@ -61,9 +69,10 @@ namespace Net.Sf.Dbdeploy
                     Dbms = SupportedDbms.MSSQL,
                     Delimiter = "GO",
                     ScriptDirectory = null,
-                    ScriptAssembly = AssemblieWithEmbeddedScripts(),
+                    ScriptAssemblies = new List<Type> {type},
                     DelimiterType = Parser.ParseDelimiterType("row"),
-                    UseSqlCmd = false
+                    UseSqlCmd = false,
+                    AssemblyResourceNameFilter = resourceName => resourceName.Contains("db.MsSql.")
                 };
                 dbDeployer.Execute(config, tw);
             }
@@ -92,12 +101,6 @@ namespace Net.Sf.Dbdeploy
 
             AssertTableExists(ChangeLogTableName);
             AssertTableExists("Product");
-        }
-
-        private Assembly AssemblieWithEmbeddedScripts()
-        {
-            var fileInfo = new FileInfo("Test.Net.Sf.DbDeploy.EmbeddedScripts.dll");
-            return Assembly.LoadFile(fileInfo.FullName);
         }
     }
 }

@@ -48,12 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClasseCarregadaReflectionTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="EmbeddedScripts\Versioned\2.2.0.0\09.Add Customer Data.sql" />
-    <EmbeddedResource Include="EmbeddedScripts\Versioned\2.3.0.0\10.Add Age Column.sql" />
-    <EmbeddedResource Include="EmbeddedScripts\Versioned\2.2.0.0\8.Create Customer Table.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EmbeddedScripts\Versioned\R1\" />
@@ -61,6 +57,21 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedScripts\Versioned\db\MsSql2000\Ret_1.00.00\11.Add Gender Column.sql" />
     <EmbeddedResource Include="EmbeddedScripts\Versioned\db\MsSql\Ret_1.00.00\11.Add Gender Column.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedScripts\Versioned\db\MsSql\2.3.0.0\09.Add Customer Data.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedScripts\Versioned\db\MsSql\2.2.0.0\8.Create Customer Table.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedScripts\Versioned\db\MsSql\2.3.0.0\10.Add Age Column.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedScripts\Versioned\db\MsSql2000\2.2.0.0\09.Add Customer Data.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedScripts\Versioned\db\MsSql2000\2.2.0.0\8.Create Customer Table.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

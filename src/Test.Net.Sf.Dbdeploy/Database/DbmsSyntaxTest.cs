@@ -258,7 +258,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         private void Instanciar(string sgbd)
         {
-            var dbmsFactory = new DbmsFactory(sgbd, "connection string");
+            var dbmsFactory = new DbmsFactory(sgbd, "connection=string");
             dbmsSyntax = (DbmsSyntax)dbmsFactory.CreateDbmsSyntax();
         }
     }

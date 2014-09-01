@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Net.Sf.Dbdeploy.Configuration
@@ -84,9 +85,9 @@ namespace Net.Sf.Dbdeploy.Configuration
         public static readonly string LineEnding = Database.LineEnding.Platform;
 
         /// <summary>
-        /// Embedded script assembly default value.
+        /// Embedded script assembly type default value.
         /// </summary>
-        public static Assembly ScriptAssembly = null;
+        public static IEnumerable<Type> ScriptAssemblies = new List<Type>();
 
         public static Func<string, bool> AssemblyResourceNameFilter = value => true;
         
@@ -96,8 +97,8 @@ namespace Net.Sf.Dbdeploy.Configuration
         public static readonly string DllPathConnector = null;
 
         /// <summary>
-        /// If true the directory scan for scripts will not be executed
+        /// Default value for the directory where the service runs/executes
         /// </summary>
-        public static bool AssemblyOnly = false;
+        public static DirectoryInfo DirectoryServiceRun = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
     }
 }

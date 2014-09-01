@@ -26,7 +26,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             Assert.Greater(changeScripts.Count, 0, "No change scripts where found.");
 
             VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
-            VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
+            VerifyChangeScript(changeScripts, "2.3.0.0", 9, "09.Add Customer Data.sql");
             VerifyChangeScript(changeScripts, "2.3.0.0", 10, "10.Add Age Column.sql");
         }
 
@@ -45,7 +45,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             Assert.Greater(changeScripts.Count, 0, "No change scripts where found.");
 
             VerifyChangeScript(changeScripts, "2.2.0.0", 8, "8.Create Customer Table.sql");
-            VerifyChangeScript(changeScripts, "2.2.0.0", 9, "09.Add Customer Data.sql");
+            VerifyChangeScript(changeScripts, "2.3.0.0", 9, "09.Add Customer Data.sql");
             VerifyScriptNotInTheList(changeScripts, "10.Add Age Column.sql");
         }
 
@@ -61,7 +61,7 @@ namespace Net.Sf.Dbdeploy.Scripts
             var changeScripts = assemblyScanner.GetChangeScripts();
 
             Assert.IsNotNull(changeScripts, "Change scripts should not be null.");
-            Assert.AreEqual(changeScripts.Count, 1, "Only one change script should have been found.");
+            Assert.AreEqual(changeScripts.Count, 4, "Only one change script should have been found.");
         }
 
         /// <summary>

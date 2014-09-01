@@ -111,17 +111,17 @@ namespace Net.Sf.Dbdeploy
                 .Add(
                     "an|assembly=",
                     "script assembly fullname",
-                    s => config.ScriptAssembly = Parser.ParseAssembly(StripQuotes(s)))
+                    s => config.ScriptAssemblies = Parser.ParseType(StripQuotes(s)))
                     
                 .Add(
                     "fbn|filterbyname=",
                     "filter assembly resource by name",
                     s => config.AssemblyResourceNameFilter = Parser.ParseAssemblyFilterByName(StripQuotes(s)))
 
-                .Add(
-                    "assemblyOnly=",
-                    "ignores scripts in directories",
-                    s => config.AssemblyOnly = Parser.ParseAssemblyOnly(StripQuotes(s)))
+                //.Add(
+                //    "assemblyOnly=",
+                //    "ignores scripts in directories",
+                //    s => config.AssemblyOnly = Parser.ParseAssemblyOnly(StripQuotes(s)))
                     
                 .Add(
                     "t|changelogtablename=",

@@ -134,7 +134,7 @@
       <Name>Net.Sf.Dbdeploy</Name>
     </ProjectReference>
     <ProjectReference Include="..\Test.Net.Sf.DbDeploy.EmbeddedScripts\Test.Net.Sf.DbDeploy.EmbeddedScripts.csproj">
-      <Project>{914E375C-D23A-401B-9975-4A7E552EB30D}</Project>
+      <Project>{914e375c-d23a-401b-9975-4a7e552eb30d}</Project>
       <Name>Test.Net.Sf.DbDeploy.EmbeddedScripts</Name>
     </ProjectReference>
   </ItemGroup>

@@ -42,7 +42,6 @@
             var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.DllPathConnector);
             
             var dbmsSyntax = factory.CreateDbmsSyntax();
-            dbmsSyntax.SetDefaultDatabaseName(config.ConnectionString);
 
             var queryExecuter = new QueryExecuter(factory);
             var databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, dbmsSyntax, config.ChangeLogTableName);
@@ -163,7 +162,7 @@
             this.CheckForRequiredParameter(config.ConnectionString, "connectionString");
             this.CheckForRequiredParameter(infoWriter, "infoWriter");
 
-            if (config.ScriptAssembly == null)
+            if (config.ScriptAssemblies == null)
             {
                 this.CheckForRequiredParameter(config.ScriptDirectory, "dir");
             }
