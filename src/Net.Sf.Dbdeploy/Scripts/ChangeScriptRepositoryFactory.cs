@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Net.Sf.Dbdeploy.Configuration;
 
 namespace Net.Sf.Dbdeploy.Scripts

@@ -2,7 +2,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 {
     using System.Text.RegularExpressions;
 
-    using Net.Sf.Dbdeploy.Exceptions;
+    using Exceptions;
 
     public class FilenameParser
     {
@@ -10,12 +10,12 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         public FilenameParser()
         {
-            this.pattern = new Regex(@"^(\d+)", RegexOptions.Compiled);
+            pattern = new Regex(@"^(\d+)", RegexOptions.Compiled);
         }
 
         public int ExtractScriptNumberFromFilename(string filename)
         {
-            Match match = this.pattern.Match(filename);
+            var match = pattern.Match(filename);
             
             if (!match.Success || match.Groups.Count != 2)
                 throw new UnrecognisedFilenameException("Could not extract a change script number from filename: " + filename);

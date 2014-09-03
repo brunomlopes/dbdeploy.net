@@ -17,7 +17,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
         public DirectoryScanner(TextWriter infoTextWriter, Encoding encoding, DirectoryInfo directory)
         {
-            this.filenameParser = new FilenameParser();
+            filenameParser = new FilenameParser();
             
             this.infoTextWriter = infoTextWriter;
             this.encoding = encoding;
@@ -31,14 +31,14 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             try
             {
-                this.infoTextWriter.WriteLine("Reading change scripts from directory '" + directory.FullName + "'...");
+                infoTextWriter.WriteLine("Reading change scripts from directory '" + directory.FullName + "'...");
             }
             catch (IOException)
             {
                 // ignore
             }
 
-            List<ChangeScript> scripts = new List<ChangeScript>();
+            var scripts = new List<ChangeScript>();
 
             foreach (FileInfo file in directory.GetFiles("*.*", SearchOption.AllDirectories))
             {
@@ -49,9 +49,9 @@ namespace Net.Sf.Dbdeploy.Scripts
 
                 try
                 {
-                    int scriptNumber = this.filenameParser.ExtractScriptNumberFromFilename(filename);
+                    var scriptNumber = filenameParser.ExtractScriptNumberFromFilename(filename);
 
-                    scripts.Add(new ChangeScript(file.Directory.Name, scriptNumber, file, this.encoding));
+                    scripts.Add(new ChangeScript(file.Directory.Name, scriptNumber, file, encoding));
                 }
                 catch (UnrecognisedFilenameException)
                 {

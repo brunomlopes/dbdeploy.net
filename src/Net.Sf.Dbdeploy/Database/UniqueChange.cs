@@ -32,8 +32,8 @@ namespace Net.Sf.Dbdeploy.Database
                 throw new ArgumentException("The unique key script number must be an integer (Alpha/2).", "uniqueKey");
             }
 
-            this.Folder = parts[0];
-            this.ScriptNumber = scriptNumber;
+            Folder = parts[0];
+            ScriptNumber = scriptNumber;
         }
 
         /// <summary>
@@ -43,12 +43,12 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="scriptNumber">The script number.</param>
         public UniqueChange(string folder, int scriptNumber)
         {
-            this.Folder = folder;
-            this.ScriptNumber = scriptNumber;
+            Folder = folder;
+            ScriptNumber = scriptNumber;
 
             Version version;
             Version.TryParse(folder.TrimStart('v'), out version);
-            this.Version = version;
+            Version = version;
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Net.Sf.Dbdeploy.Database
         {
             get
             {
-                return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", this.Folder, this.ScriptNumber);
+                return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", Folder, ScriptNumber);
             }
         }
 
@@ -108,20 +108,20 @@ namespace Net.Sf.Dbdeploy.Database
 
             // Compare versions if both folders are in version format v1.0.0.0.
             int result;
-            if (this.Version != null && other.Version != null)
+            if (Version != null && other.Version != null)
             {
-                result = this.Version.CompareTo(other.Version);
+                result = Version.CompareTo(other.Version);
             }
             else
             {
                 // Compare folder names as is.
-                result = string.Compare(this.Folder, other.Folder, StringComparison.InvariantCultureIgnoreCase);
+                result = string.Compare(Folder, other.Folder, StringComparison.InvariantCultureIgnoreCase);
             }
 
             // Compare script number of folders are the same.
             if (result == 0)
             {
-                result = this.ScriptNumber.CompareTo(other.ScriptNumber);
+                result = ScriptNumber.CompareTo(other.ScriptNumber);
             }
 
             return result;
@@ -135,7 +135,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", this.Folder, this.ScriptNumber);
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", Folder, ScriptNumber);
         }
     }
 }

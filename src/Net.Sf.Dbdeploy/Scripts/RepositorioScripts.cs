@@ -15,6 +15,11 @@ namespace Net.Sf.Dbdeploy.Scripts
             this.changeScriptRepository = changeScriptRepository;
         }
 
+        /// <summary>
+        /// Compara os scritps aplicados e os scripts que se encontram no diretório e retorna uma lista dos scripts pendentes de execução
+        /// </summary>
+        /// <param name="lastChangeToApply"></param>
+        /// <returns></returns>
         public IList<ChangeScript> ObterScriptsPendenteExecucao(UniqueChange lastChangeToApply)
         {
             var scriptsAplicados = ObterScriptsAplicados();
@@ -22,22 +27,39 @@ namespace Net.Sf.Dbdeploy.Scripts
             return IdentificarScriptsQueFaltamExecutar(lastChangeToApply, todosScripts, scriptsAplicados);
         }
 
+        /// <summary>
+        /// Obtém todos os scrits do diretório
+        /// </summary>
+        /// <returns></returns>
         public ICollection<ChangeScript> ObterTodosOsScripts()
         {
             return changeScriptRepository.GetAvailableChangeScripts();
         }
 
+        /// <summary>
+        /// Obtém somente os scripts aplicados
+        /// </summary>
+        /// <returns></returns>
         public IList<ChangeEntry> ObterScriptsAplicados()
         {
             return databaseSchemaVersionManager.GetAppliedChanges();
         }
 
+        /// <summary>
+        /// Obtém os scripts aplicados que se encontram com status de erro na ChangeLog
+        /// </summary>
+        /// <returns></returns>
         public IList<ChangeEntry> ObterScritpsExecutadosComErro()
         {
             var scriptsAplicados = ObterScriptsAplicados();
             return scriptsAplicados.Where(x => x.Status == ScriptStatus.Failure).ToList();
         }
 
+        /// <summary>
+        /// Retornar um objeto ChangeEntry com as informações de um determinado script aplicado
+        /// </summary>
+        /// <param name="changeScript"></param>
+        /// <returns></returns>
         public ChangeEntry ObterScriptExecutado(ChangeScript changeScript)
         {
             var scriptsAplicados = ObterScriptsAplicados();

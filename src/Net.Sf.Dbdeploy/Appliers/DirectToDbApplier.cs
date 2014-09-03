@@ -14,24 +14,13 @@
     public class DirectToDbApplier : IChangeScriptApplier
     {
         private readonly QueryExecuter queryExecuter;
-
         private readonly IDatabaseSchemaVersionManager schemaVersionManager;
-
         private readonly QueryStatementSplitter splitter;
-
         private readonly IDbmsSyntax dbmsSyntax;
-
         private readonly string changeLogTableName;
-
         private readonly TextWriter infoTextWriter;
 
-        public DirectToDbApplier(
-            QueryExecuter queryExecuter,
-            IDatabaseSchemaVersionManager schemaVersionManager,
-            QueryStatementSplitter splitter,
-            IDbmsSyntax dbmsSyntax,
-            string changeLogTableName,
-            TextWriter infoTextWriter)
+        public DirectToDbApplier(QueryExecuter queryExecuter, IDatabaseSchemaVersionManager schemaVersionManager, QueryStatementSplitter splitter, IDbmsSyntax dbmsSyntax, string changeLogTableName, TextWriter infoTextWriter)
         {
             if (queryExecuter == null)
                 throw new ArgumentNullException("queryExecuter");
@@ -54,7 +43,7 @@
         }
 
         /// <summary>
-        /// Aplicar o ChangeScript
+        /// Aplicar um determinado ChangeScript
         /// </summary>
         /// <param name="changeScript">The changeScript.</param>
         /// <param name="createChangeLogTable">Create or not ChangeLog table</param>
@@ -63,6 +52,11 @@
             Apply(new List<ChangeScript> { changeScript }, createChangeLogTable);
         }
 
+        /// <summary>
+        /// Aplicar uma lista de ChangeScripts
+        /// </summary>
+        /// <param name="changeScripts"></param>
+        /// <param name="createChangeLogTable"></param>
         public void Apply(IEnumerable<ChangeScript> changeScripts, bool createChangeLogTable)
         {
             if (createChangeLogTable)

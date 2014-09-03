@@ -11,26 +11,22 @@
 
         private string lineEnding = Database.LineEnding.Platform;
 
-        public QueryStatementSplitter()
-        {
-        }
-
         public string Delimiter
         {
-            get { return this.delimiter; }
-            set { this.delimiter = value; }
+            get { return delimiter; }
+            set { delimiter = value; }
         }
 
         public IDelimiterType DelimiterType
         {
-            get { return this.delimiterType; }
-            set { this.delimiterType = value; }
+            get { return delimiterType; }
+            set { delimiterType = value; }
         }
 
         public string LineEnding
         {
-            get { return this.lineEnding; }
-            set { this.lineEnding = value; }
+            get { return lineEnding; }
+            set { lineEnding = value; }
         }
 
         public virtual ICollection<string> Split(string input)
@@ -38,25 +34,25 @@
             var statements = new List<string>();
             var currentSql = new StringBuilder();
 
-            string[] lines = input.Split("\r\n".ToCharArray());
+            var lines = input.Split("\r\n".ToCharArray());
 
             foreach (string line in lines)
             {
-                string strippedLine = line.TrimEnd();
+                var strippedLine = line.TrimEnd();
 
                 if (string.IsNullOrEmpty(strippedLine))
                     continue;
 
                 if (currentSql.Length != 0)
                 {
-                    currentSql.Append(this.lineEnding);
+                    currentSql.Append(lineEnding);
                 }
 
                 currentSql.Append(strippedLine);
 
-                if (this.delimiterType.Matches(strippedLine, this.delimiter))
+                if (delimiterType.Matches(strippedLine, delimiter))
                 {
-                    statements.Add(currentSql.ToString(0, currentSql.Length - this.delimiter.Length));
+                    statements.Add(currentSql.ToString(0, currentSql.Length - delimiter.Length));
 
                     // Clear StringBuilder
                     currentSql.Length = 0;

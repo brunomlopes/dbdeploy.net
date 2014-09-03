@@ -6,6 +6,9 @@ using Net.Sf.Dbdeploy.Scripts;
 
 namespace Net.Sf.Dbdeploy
 {
+    /// <summary>
+    /// Porta de entrada no dbdeploy para executar scripts individuais
+    /// </summary>
     public class ExecutorScriptsIndividuais
     {
         private readonly DbDeployConfig dbDeployConfig;
@@ -49,6 +52,10 @@ namespace Net.Sf.Dbdeploy
             get { return directToDbApplier ?? (directToDbApplier = new DirectToDbApplier(QueryExecuter, DatabaseSchemaVersionManager, new QueryStatementSplitter(), DbmsSyntax, dbDeployConfig.ChangeLogTableName, textWriter)); }
         }
 
+        /// <summary>
+        /// Executa um determinado script passando um objeto ChangeScript
+        /// </summary>
+        /// <param name="changeScript"></param>
         public void Executar(ChangeScript changeScript)
         {
             QueryExecuter.Open();
@@ -57,6 +64,11 @@ namespace Net.Sf.Dbdeploy
             QueryExecuter.Close();
         }
 
+        /// <summary>
+        /// Executa um determinado script passando um objeto ChangeScript e seu respectivo conteúdo SQL
+        /// </summary>
+        /// <param name="changeScript"></param>
+        /// <param name="scriptContent"></param>
         public void Executar(ChangeScript changeScript, string scriptContent)
         {
             QueryExecuter.Open();

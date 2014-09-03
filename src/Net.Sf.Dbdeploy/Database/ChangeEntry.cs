@@ -51,6 +51,9 @@
         /// </value>
         public string Output { get; set; }
 
+        /// <summary>
+        /// Verifies whether the script was successfully executed
+        /// </summary>
         public bool ExecutedSuccessfully { get { return Status == ScriptStatus.Success || Status == ScriptStatus.SucessRevisedUser; } }
 
         /// <summary>
@@ -61,7 +64,7 @@
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", this.Folder, this.ScriptName, ScriptNumber);
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", Folder, ScriptName, ScriptNumber);
         }
     }
 }
