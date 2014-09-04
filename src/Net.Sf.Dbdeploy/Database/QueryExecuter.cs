@@ -198,7 +198,8 @@
         private IDbCommand CreateCommand()
         {
             var command = connection.CreateCommand();
-            command.CommandTimeout = 120;
+            const int timeOutInfinito = 0;
+            command.CommandTimeout = timeOutInfinito;
 
             if (transaction != null)
             {
