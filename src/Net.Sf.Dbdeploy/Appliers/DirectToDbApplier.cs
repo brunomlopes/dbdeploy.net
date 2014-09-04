@@ -105,9 +105,9 @@
             {
                 if (ex.InnerException != null)
                 {
+                    infoTextWriter.WriteLine(ex.ToString());
                     output.AppendLine(ex.Message);
                 }
-
                 RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
                 throw;
             }
