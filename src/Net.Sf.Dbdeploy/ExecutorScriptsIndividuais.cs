@@ -43,7 +43,7 @@ namespace Net.Sf.Dbdeploy
         private DatabaseSchemaVersionManager databaseSchemaVersionManager;
         private DatabaseSchemaVersionManager DatabaseSchemaVersionManager
         {
-            get { return databaseSchemaVersionManager ?? (databaseSchemaVersionManager = new DatabaseSchemaVersionManager(QueryExecuter, DbmsSyntax, dbDeployConfig.ChangeLogTableName)); }
+            get { return databaseSchemaVersionManager ?? (databaseSchemaVersionManager = new DatabaseSchemaVersionManager(new QueryExecuter(DbmsFactory), DbmsSyntax, dbDeployConfig.ChangeLogTableName)); }
         }
 
         private DirectToDbApplier directToDbApplier;

@@ -113,8 +113,18 @@
             }
             finally
             {
-                // Commit transaction
-                queryExecuter.CommitTransaction();
+                try
+                {
+                    // Commit transaction
+                    queryExecuter.CommitTransaction();
+                }
+                catch (Exception e)
+                {
+                    output.Clear();
+                    infoTextWriter.WriteLine(e.ToString());
+                    output.AppendLine(e.Message);
+                    RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
+                }
             }
         }
 

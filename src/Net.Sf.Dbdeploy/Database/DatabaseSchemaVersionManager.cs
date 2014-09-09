@@ -126,21 +126,23 @@ namespace Net.Sf.Dbdeploy.Database
                 output = string.IsNullOrEmpty(output) ? " " : RemoveInvalidCharacters(output);
                 var completeDateValue = status != ScriptStatus.Started ? syntax.CurrentTimestamp : "NULL";
 
+                queryExecuter.BeginTransaction();
+
                 if (string.IsNullOrWhiteSpace(script.ChangeId))
                 {
                     var sqlInsert = string.Format(
-                    CultureInfo.InvariantCulture,
-                    @"INSERT INTO {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES ('{1}', '{2}', {3}, '{4}', {5}, {6}, {7}, {8}, '{9}')",
-                    changeLogTableName,
-                    Guid.NewGuid(),
-                    script.Folder,
-                    script.ScriptNumber,
-                    script.ScriptName,
-                    syntax.CurrentTimestamp,
-                    completeDateValue,
-                    syntax.CurrentUser,
-                    (int)status,
-                    output);
+                        CultureInfo.InvariantCulture,
+                        @"INSERT INTO {0} (ChangeId, Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES ('{1}', '{2}', {3}, '{4}', {5}, {6}, {7}, {8}, '{9}')",
+                        changeLogTableName,
+                        Guid.NewGuid(),
+                        script.Folder,
+                        script.ScriptNumber,
+                        script.ScriptName,
+                        syntax.CurrentTimestamp,
+                        completeDateValue,
+                        syntax.CurrentUser,
+                        (int) status,
+                        output);
 
                     queryExecuter.Execute(sqlInsert);
 
@@ -164,7 +166,7 @@ namespace Net.Sf.Dbdeploy.Database
                         status == ScriptStatus.Started ? string.Format(CultureInfo.InvariantCulture, "StartDate = {0}, ", syntax.CurrentTimestamp) : string.Empty,
                         completeDateValue,
                         syntax.CurrentUser,
-                        (int)status,
+                        (int) status,
                         output,
                         script.ChangeId);
 
@@ -174,6 +176,10 @@ namespace Net.Sf.Dbdeploy.Database
             catch (DbException e)
             {
                 throw new SchemaVersionTrackingException("Could not update change log because: " + e.Message, e);
+            }
+            finally
+            {
+                queryExecuter.CommitTransaction();
             }
         }
 
