@@ -89,7 +89,7 @@
             RecordScriptStatus(script, ScriptStatus.Started);
 
             // Begin transaction
-            queryExecuter.BeginTransaction();
+            //queryExecuter.BeginTransaction();
 
             infoTextWriter.WriteLine(script);
             infoTextWriter.WriteLine("----------------------------------------------------------");
@@ -111,21 +111,21 @@
                 RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
                 throw;
             }
-            finally
-            {
-                try
-                {
-                    // Commit transaction
-                    queryExecuter.CommitTransaction();
-                }
-                catch (Exception e)
-                {
-                    output.Clear();
-                    infoTextWriter.WriteLine(e.ToString());
-                    output.AppendLine(e.Message);
-                    RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
-                }
-            }
+            //finally
+            //{
+            //    try
+            //    {
+            //        // Commit transaction
+            //        queryExecuter.CommitTransaction();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        output.Clear();
+            //        infoTextWriter.WriteLine(e.ToString());
+            //        output.AppendLine(e.Message);
+            //        RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
+            //    }
+            //}
         }
 
         /// <summary>
@@ -144,6 +144,7 @@
             {
                 try
                 {
+                    queryExecuter.BeginTransaction();
                     if (statements.Count > 1)
                     {
                         infoTextWriter.WriteLine(" -> statement " + (i + 1) + " of " + statements.Count + "...");
@@ -151,6 +152,7 @@
 
                     queryExecuter.Execute(statement, output);
 
+                    //queryExecuter.CommitTransaction();
                     i++;
                 }
                 catch (DbException e)
@@ -163,6 +165,18 @@
                     if (output.Length > 0)
                     {
                         infoTextWriter.WriteLine(output.ToString());
+                    }
+                    try
+                    {
+                        // Commit transaction
+                        queryExecuter.CommitTransaction();
+                    }
+                    catch (Exception e)
+                    {
+                        output.Clear();
+                        infoTextWriter.WriteLine(e.ToString());
+                        output.AppendLine(e.Message);
+                        RecordScriptStatus(changeScript, ScriptStatus.Failure, output.ToString());
                     }
                 }
             }
