@@ -111,21 +111,6 @@
                 RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
                 throw;
             }
-            //finally
-            //{
-            //    try
-            //    {
-            //        // Commit transaction
-            //        queryExecuter.CommitTransaction();
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        output.Clear();
-            //        infoTextWriter.WriteLine(e.ToString());
-            //        output.AppendLine(e.Message);
-            //        RecordScriptStatus(script, ScriptStatus.Failure, output.ToString());
-            //    }
-            //}
         }
 
         /// <summary>
@@ -152,7 +137,6 @@
 
                     queryExecuter.Execute(statement, output);
 
-                    //queryExecuter.CommitTransaction();
                     i++;
                 }
                 catch (DbException e)
