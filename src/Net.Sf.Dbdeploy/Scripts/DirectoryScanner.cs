@@ -40,7 +40,7 @@ namespace Net.Sf.Dbdeploy.Scripts
 
             var scripts = new List<ChangeScript>();
 
-            foreach (FileInfo file in directory.GetFiles("*.*", SearchOption.AllDirectories))
+            foreach (FileInfo file in directory.GetFiles("*.sql", SearchOption.AllDirectories))
             {
                 if ((file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
                     continue;
