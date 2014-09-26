@@ -13,13 +13,7 @@ namespace Dbdeploy.Powershell.Commands
         {
             base.ProcessRecord();
 
-            var config = new DbDeployConfig
-            {
-                Dbms = DatabaseType,
-                ConnectionString = ConnectionString,
-                ChangeLogTableName = TableName,
-                ScriptDirectory = new DirectoryInfo(deltasDirectory),
-            };
+            var config = ConfigFromParameters();
 
             var deployer = new DbDeployer();
             deployer.Execute(config, new LambdaTextWriter(WriteVerbose));

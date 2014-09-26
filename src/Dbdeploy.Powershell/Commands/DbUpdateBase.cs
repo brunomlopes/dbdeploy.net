@@ -87,5 +87,19 @@ namespace Dbdeploy.Powershell.Commands
 
             return deltasDirectory;
         }
+
+        protected DbDeployConfig ConfigFromParameters()
+        {
+            return new DbDeployConfig
+            {
+                Dbms = this.DatabaseType,
+                ConnectionString = this.ConnectionString,
+                ChangeLogTableName = this.TableName,
+                ScriptDirectory = new DirectoryInfo(this.deltasDirectory),
+                AutoCreateChangeLogTable = this.AutoCreateChangeLogTable,
+                ForceUpdate = this.ForceUpdate,
+                UseSqlCmd = this.UseSqlCmd
+            };
+        }
     }
 }
