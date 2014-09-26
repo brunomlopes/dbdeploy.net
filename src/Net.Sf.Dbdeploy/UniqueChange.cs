@@ -47,7 +47,16 @@
             this.ScriptNumber = scriptNumber;
 
             Version version;
-            Version.TryParse(folder.TrimStart('v'), out version);
+            var folderWithoutV = folder.TrimStart('v','V');
+            int singleDigitVersion;
+            if(int.TryParse(folderWithoutV, out singleDigitVersion))
+            {
+                version = new Version(singleDigitVersion,0);
+            }
+            else
+            {
+                Version.TryParse(folderWithoutV, out version);
+            }
             this.Version = version;
         }
 

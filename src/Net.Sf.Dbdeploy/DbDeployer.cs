@@ -59,6 +59,8 @@
 
             if (config.OutputFile != null) 
             {
+                if(config.OutputFile.Exists) config.OutputFile.Delete();
+
                 doWriter = new StreamWriter(config.OutputFile.OpenWrite(), config.Encoding);
 
                 doScriptApplier = new TemplateBasedApplier(
