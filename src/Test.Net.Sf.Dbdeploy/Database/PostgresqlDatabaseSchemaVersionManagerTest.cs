@@ -6,6 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Dbdeploy.Powershell;
+using Net.Sf.Dbdeploy.Appliers;
+using Net.Sf.Dbdeploy.Configuration;
+using Net.Sf.Dbdeploy.Database.SqlCmd;
+using Net.Sf.Dbdeploy.Scripts;
 using Npgsql;
 using NUnit.Framework;
 
@@ -20,7 +25,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override void EnsureTableDoesNotExist(string tableName)
         {
-            ExecuteSql("DROP TABLE IF EXISTS " + TableName);
+            ExecuteSql("DROP TABLE IF EXISTS " + tableName);
         }
 
         protected override string ConnectionString
@@ -87,6 +92,78 @@ namespace Net.Sf.Dbdeploy.Database
             base.TestShouldCreateChangeLogTableWhenToldToDoSo();
         }
 
+        [Test]
+        public void TestChangeDateIncludesTime()
+        {
+            this.EnsureTableDoesNotExist(TableName);
+
+            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            var dbmsSyntax = factory.CreateDbmsSyntax();
+
+            var changeScripts = new ChangeScript[]
+            {
+                new StubChangeScript(1, "1.test.sql", "SELECT 1;"),
+            };
+
+            var queryExecuter = new QueryExecuter(factory);
+
+            var doScriptApplier = new DirectToDbApplier(
+                queryExecuter,
+                databaseSchemaVersion,
+                QueryStatementSplitter,
+                dbmsSyntax,
+                TableName,
+                new LambdaTextWriter(s => { }));
+            doScriptApplier.Apply(changeScripts, true);
+
+            var now = DateTime.UtcNow;
+            var date = ExecuteScalar<DateTime>("SELECT CompleteDate FROM {0} LIMIT 1", TableName);
+            Assert.Less(Math.Abs((now - date).TotalMilliseconds), TimeSpan.FromSeconds(1).TotalMilliseconds);
+
+        }
+
+        [Test]
+        public  void TestCanExecuteAnUpdateScript()
+        {
+            this.EnsureTableDoesNotExist("TableWeWillUse");
+            this.EnsureTableDoesNotExist(TableName);
+
+            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            var dbmsSyntax = factory.CreateDbmsSyntax();
+
+            var changeScripts = new ChangeScript[]
+            {
+                new StubChangeScript(1, "1.test.sql", "CREATE TABLE TableWeWillUse (Id int NULL);"),
+                new StubChangeScript(2, "2.test.sql", "INSERT INTO TableWeWillUse VALUES (1);"),
+            };
+
+            var queryExecuter = new QueryExecuter(factory);
+
+
+            var doScriptApplier = new DirectToDbApplier(
+                queryExecuter,
+                databaseSchemaVersion,
+                QueryStatementSplitter,
+                dbmsSyntax,
+                TableName,
+                new LambdaTextWriter(s => {}));
+
+            var changeScriptRepository = new ChangeScriptRepository(changeScripts.ToList());
+
+            var controller = new Controller(
+                changeScriptRepository,
+                databaseSchemaVersion,
+                doScriptApplier,
+                null,
+                true,
+                new LambdaTextWriter(s => { }));
+
+            controller.ProcessChangeScripts(null);
+
+            this.AssertTableExists("TableWeWillUse");
+        }
+
+
         protected override IDbConnection GetConnection()
         {
             return new NpgsqlConnection(ConnectionString);
@@ -100,5 +177,13 @@ namespace Net.Sf.Dbdeploy.Database
             commandBuilder.AppendFormat(" VALUES ({0}, '{1}', CURRENT_DATE, CURRENT_DATE, CURRENT_USER, 'Unit test', 1, '')", i, FOLDER);
             ExecuteSql(commandBuilder.ToString());
         }
+
+        private static QueryStatementSplitter QueryStatementSplitter = new QueryStatementSplitter
+        {
+            Delimiter = ";",
+            DelimiterType = DbDeployDefaults.DelimiterType,
+            LineEnding = DbDeployDefaults.LineEnding,
+        };
+
     }
 }

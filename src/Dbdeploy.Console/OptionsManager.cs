@@ -87,7 +87,7 @@
             options
                 .Add(
                     "d|dbms=",
-                    "DBMS type ('mssql', 'mysql', 'ora' or 'postgres')",
+                    "DBMS type ('mssql', 'mysql', 'ora' or 'postgresql')",
                     s => config.Dbms = s)
 
                 .Add(

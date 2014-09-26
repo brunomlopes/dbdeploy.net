@@ -129,7 +129,7 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     var sql = string.Format(
                         CultureInfo.InvariantCulture,
-@"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) 
+@"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) ;
 SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
                         this.changeLogTableName,
                         this.syntax.CurrentTimestamp,
