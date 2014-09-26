@@ -21,7 +21,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// </value>
         public override string CurrentTimestamp
         {
-            get { return "CURRENT_DATE"; }
+            get { return "CURRENT_TIMESTAMP"; }
         }
 
         /// <summary>
