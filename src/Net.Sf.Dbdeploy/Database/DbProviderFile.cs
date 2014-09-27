@@ -10,25 +10,26 @@ namespace Net.Sf.Dbdeploy.Database
     {
         public const string ProviderFilename = @"dbproviders.xml";
 
-        private string path;
-
         public DbProviderFile()
         {
-            this.path = null;
+            this.Path = null;
         }
 
-        public string Path
-        {
-            get { return this.path; }
-            set { this.path = value; }
-        }
+        public string Path { get; set; }
 
         public DbProviders LoadProviders()
         {
             Stream providerStream;
-            if (Path == null) providerStream = GetType().Assembly.GetManifestResourceStream(GetType(), ProviderFilename);
-            else if (!File.Exists(Path)) throw new FileNotFoundException("Could not load provider file from " + path);
-            else providerStream = File.OpenRead(Path);
+            if(!string.IsNullOrWhiteSpace(Path) && !System.IO.File.Exists(Path))
+                throw new FileNotFoundException("File not found for loading providers", Path);
+            var path = ProviderFilename;
+            if (!File.Exists(path))
+                path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(GetType().Assembly.Location), path);
+            
+            if (File.Exists(path))
+                providerStream = File.OpenRead(path);
+            else
+                providerStream = GetType().Assembly.GetManifestResourceStream(GetType(), ProviderFilename);
 
             using (providerStream)
             using (XmlReader reader = new XmlTextReader(providerStream))
