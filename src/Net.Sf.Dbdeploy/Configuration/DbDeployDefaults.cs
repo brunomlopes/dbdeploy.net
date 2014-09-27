@@ -48,7 +48,7 @@
         /// <summary>
         /// The delimiter default value.
         /// </summary>
-        public const string Delimiter = null;
+        public const string Delimiter = ";";
 
         /// <summary>
         /// The output file default value.
