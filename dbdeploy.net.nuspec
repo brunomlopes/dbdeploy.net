@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>dbdeploy.net</id>
+    <!-- This will be replaced by the build script-->
+    <version>0.0.0.1</version>
+    <authors>Bruno Lopes</authors>
+    <owners>Bruno Lopes</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Manages the deployment of numbered change scripts in versioned folders to a SQL, Oracle, or MySQL database, using a simple table in the database to track applied changess</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>database</tags>
+  </metadata>
+  <files>
+    <file src="build\**\*" target="tools" />
+  </files>
+</package>
