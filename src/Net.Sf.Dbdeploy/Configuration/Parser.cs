@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Xml.Schema;
 
 namespace Net.Sf.Dbdeploy.Configuration
 {
@@ -54,13 +55,18 @@ namespace Net.Sf.Dbdeploy.Configuration
 
         public static IEnumerable<Assembly> ParseAssembly(string value)
         {
-            var listaAssemblyInformado = value.Split(';');
             var listaType = new List<Assembly>();
-            foreach (var assembly in listaAssemblyInformado)
+            if (!string.IsNullOrWhiteSpace(value))
             {
-                var assemblyName = AssemblyName.GetAssemblyName(assembly);
-                listaType.Add(Assembly.Load(assemblyName));
+                var listaAssemblyInformado = value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var assembly in listaAssemblyInformado)
+                {
+                    var assemblyName = AssemblyName.GetAssemblyName(assembly);
+                    listaType.Add(Assembly.Load(assemblyName));
+                }
             }
+
             return listaType;
         }
 
