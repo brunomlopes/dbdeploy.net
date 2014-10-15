@@ -131,6 +131,7 @@
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
     <Compile Include="Database\PostgresqlDatabaseSchemaVersionManagerTest.cs" />
+    <Compile Include="Database\PostgresqlStatementSplitterTest.cs" />
     <Compile Include="UniqueChangeTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\QueryStatementSplitterTest.cs" />

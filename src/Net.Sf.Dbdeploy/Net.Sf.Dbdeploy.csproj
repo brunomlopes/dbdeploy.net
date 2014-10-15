@@ -97,6 +97,7 @@
     <Compile Include="Configuration\Parser.cs" />
     <Compile Include="Database\ChangeEntry.cs" />
     <Compile Include="Database\PostgresqlDbmsSyntax.cs" />
+    <Compile Include="Database\PostgresqlStatementSplitter.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
     <Compile Include="Database\SqlCmd\SqlCmdExecutor.cs" />

@@ -9,12 +9,17 @@
     [TestFixture]
     public class QueryStatementSplitterTest
     {
-        private QueryStatementSplitter splitter;
+        protected QueryStatementSplitter splitter;
 
         [SetUp]
         public void SetUp() 
         {
-            this.splitter = new QueryStatementSplitter();
+            this.splitter = CreateSplitter();
+        }
+
+        protected virtual QueryStatementSplitter CreateSplitter()
+        {
+            return new QueryStatementSplitter();
         }
 
         [Test]

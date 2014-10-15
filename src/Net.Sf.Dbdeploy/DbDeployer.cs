@@ -88,12 +88,20 @@
             }
             else 
             {
-                var splitter = new QueryStatementSplitter
+                QueryStatementSplitter splitter;
+                if (config.Dbms == "postgresql")
                 {
-                    Delimiter = config.Delimiter,
-                    DelimiterType = config.DelimiterType,
-                    LineEnding = config.LineEnding,
-                };
+                    splitter = new PostgresqlStatementSplitter();
+                }
+                else
+                {
+                    splitter= new QueryStatementSplitter();
+                }
+                
+                splitter.Delimiter = config.Delimiter;
+                splitter.DelimiterType = config.DelimiterType;
+                splitter.LineEnding = config.LineEnding;
+                
 
                 // Do not share query executor between schema manager and applier, since a failure in one will effect the other.
                 applierExecutor = new QueryExecuter(factory);

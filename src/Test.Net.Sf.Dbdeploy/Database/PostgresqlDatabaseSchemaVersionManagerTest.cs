@@ -119,7 +119,45 @@ namespace Net.Sf.Dbdeploy.Database
             var now = DateTime.UtcNow;
             var date = ExecuteScalar<DateTime>("SELECT CompleteDate FROM {0} LIMIT 1", TableName);
             Assert.Less(Math.Abs((now - date).TotalMilliseconds), TimeSpan.FromSeconds(1).TotalMilliseconds);
+        }
 
+
+        [Test]
+        public void TestScriptWithDollarQuotedString()
+        {
+            this.EnsureTableDoesNotExist(TableName);
+
+            var factory = new DbmsFactory(this.Dbms, this.ConnectionString);
+            var dbmsSyntax = factory.CreateDbmsSyntax();
+
+            var changeScripts = new ChangeScript[]
+            {
+                new StubChangeScript(1, "1.test.sql", @"
+-- from at time zone
+
+CREATE OR REPLACE FUNCTION to_day_at_tz(timestamptz, text)
+RETURNS timestamptz AS
+$$
+SELECT (DATE_TRUNC('day', $1 AT TIME ZONE $2) + INTERVAL '1 day') AT TIME ZONE $2;
+$$
+LANGUAGE SQL STABLE;
+"),
+            };
+
+            var queryExecuter = new QueryExecuter(factory);
+
+            var doScriptApplier = new DirectToDbApplier(
+                queryExecuter,
+                databaseSchemaVersion,
+                QueryStatementSplitter,
+                dbmsSyntax,
+                TableName,
+                new LambdaTextWriter(s => { }));
+            doScriptApplier.Apply(changeScripts, true);
+
+            var expected = new DateTime(2014,10,14,21,00,00);
+            var actual = ExecuteScalar<DateTime>("SELECT to_day_at_tz('2014-10-14 00:00+00'::timestamptz, 'Asia/Riyadh')::timestamp");
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
@@ -178,7 +216,7 @@ namespace Net.Sf.Dbdeploy.Database
             ExecuteSql(commandBuilder.ToString());
         }
 
-        private static QueryStatementSplitter QueryStatementSplitter = new QueryStatementSplitter
+        private static QueryStatementSplitter QueryStatementSplitter = new PostgresqlStatementSplitter()
         {
             Delimiter = ";",
             DelimiterType = DbDeployDefaults.DelimiterType,
