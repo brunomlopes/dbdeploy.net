@@ -1,8 +1,10 @@
+using Net.Sf.Dbdeploy.Configuration;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     public class SybaseDbmsSyntax : DbmsSyntax
     {
-        public SybaseDbmsSyntax() : base("sybase")
+        public SybaseDbmsSyntax() : base(SupportedDbms.SYBASE)
         {}
 
         public override string CurrentTimestamp

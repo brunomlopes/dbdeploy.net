@@ -1,4 +1,5 @@
 using System.Globalization;
+using Net.Sf.Dbdeploy.Configuration;
 using Net.Sf.Dbdeploy.Database.SqlCmd;
 
 namespace Net.Sf.Dbdeploy.Database
@@ -12,7 +13,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// Initializes a new instance of the <see cref="MySqlDbmsSyntax" /> class.
         /// </summary>
         public MySqlDbmsSyntax()
-            : base("mysql")
+            : base(SupportedDbms.MYSQL)
         {
         }
 

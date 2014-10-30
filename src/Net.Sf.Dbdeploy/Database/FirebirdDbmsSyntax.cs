@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Net.Sf.Dbdeploy.Configuration;
-using System.Collections;
 
 namespace Net.Sf.Dbdeploy.Database
 {
     public class FirebirdDbmsSyntax : DbmsSyntax
     {
-        public FirebirdDbmsSyntax() : base("firebird")
+        public FirebirdDbmsSyntax() : base(SupportedDbms.FIREBIRD)
         {}
 
         public override string CurrentTimestamp

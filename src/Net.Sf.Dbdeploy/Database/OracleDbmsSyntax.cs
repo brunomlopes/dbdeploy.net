@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Configuration;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// Initializes a new instance of the <see cref="OracleDbmsSyntax" /> class.
         /// </summary>
         public OracleDbmsSyntax()
-            : base("ora")
+            : base(SupportedDbms.ORACLE)
         {
         }
 
