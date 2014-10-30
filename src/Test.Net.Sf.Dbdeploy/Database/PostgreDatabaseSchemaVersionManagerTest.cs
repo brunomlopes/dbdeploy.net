@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using Net.Sf.Dbdeploy.Configuration;
@@ -11,7 +10,7 @@ using NUnit.Framework;
 
 namespace Net.Sf.Dbdeploy.Database
 {
-    [Category("Postgres"), Category("DbIntegration")]
+    [Category("Postgre"), Category("DbIntegration")]
     class PostgreDatabaseSchemaVersionManagerTest : AbstractDatabaseSchemaVersionManagerTest
     {
         private string connectionString;

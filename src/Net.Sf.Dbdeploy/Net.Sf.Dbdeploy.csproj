@@ -223,10 +223,10 @@
     <EmbeddedResource Include="Resources\firebird_undo.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\postgres_apply.vm">
+    <EmbeddedResource Include="Resources\postgre_apply.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\postgres_undo.vm">
+    <EmbeddedResource Include="Resources\postgre_undo.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
@@ -258,7 +258,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\CreateSchemaVersionTable.postgres.sql">
+    <EmbeddedResource Include="Resources\CreateSchemaVersionTable.postgre.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
