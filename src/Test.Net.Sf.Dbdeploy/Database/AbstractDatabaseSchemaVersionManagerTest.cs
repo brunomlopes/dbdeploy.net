@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
     {
         public const string TableName = "ChangeLog";
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
-        private IDbmsSyntax syntax;
+        protected IDbmsSyntax syntax;
         private readonly string[] CHANGELOG_TABLE_DOES_NOT_EXIST_MESSAGES = new[] 
         {
             "No table found with name 'ChangeLog'.",
@@ -107,7 +107,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// Asserts that the table does not exist
         /// </summary>
         /// <param name="tableName">Name of the table.</param>
-        public void AssertTableDoesNotExist(string tableName)
+        public virtual void AssertTableDoesNotExist(string tableName)
         {
             var schema = this.ExecuteScalar<string>(this.syntax.TableExists(tableName));
 

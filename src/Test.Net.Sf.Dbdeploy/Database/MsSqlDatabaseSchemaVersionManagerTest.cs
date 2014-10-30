@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System;
@@ -111,27 +113,19 @@ namespace Net.Sf.Dbdeploy.Database
         [Test]
         public override void TestShouldCreateChangeLogTableWhenToldToDoSo()
         {
-            base.TestShouldCreateChangeLogTableWhenToldToDoSo();
+            this.EnsureTableDoesNotExist();
+
+            // Create change log table
+            CreateTable();
+
+            AssertTableExist("ChangeLog");
         }
 
-        /// <summary>
-        /// Tests that <see cref="DatabaseSchemaVersionManager" /> can create a change log table under a specified schema.
-        /// </summary>
-        [Test]
-        public void TestShouldHandleCreatingChangeLogTableWithSchema()
+        public void AssertTableExist(string tableName)
         {
-            EnsureTableDoesNotExist("log.Installs");
+            var schema = this.ExecuteScalar<int>(this.syntax.TableExists(tableName));
 
-            var factory = new DbmsFactory(Dbms, ConnectionString);
-            var executer = new QueryExecuter(factory);
-            var databaseSchemaManager = new DatabaseSchemaVersionManager(executer, factory.CreateDbmsSyntax(), "log.Installs");
-
-            var applier = new DirectToDbApplier(executer, databaseSchemaManager, new QueryStatementSplitter(),
-                factory.CreateDbmsSyntax(), "log.Installs", new NullWriter());
-            
-            applier.Apply(new ChangeScript[] {}, createChangeLogTable: true);
-
-            AssertTableExists("log.Installs");
+            schema.Should().BeGreaterThan(0);
         }
 
         /// <summary>
@@ -146,17 +140,22 @@ namespace Net.Sf.Dbdeploy.Database
                 CultureInfo.InvariantCulture,
 @"IF (EXISTS (SELECT * 
     FROM INFORMATION_SCHEMA.TABLES 
-    WHERE TABLE_SCHEMA = '{0}' 
-    AND  TABLE_NAME = '{1}'))
+    WHERE TABLE_NAME = '{0}'))
 BEGIN
-    DROP Table {0}.{1}
-END", 
-                tableInfo.Schema, tableInfo.TableName));
+    DROP Table {0}
+END", tableInfo.TableName));
         }
 
         protected override IDbConnection GetConnection()
         {
             return new SqlConnection(_connectionString);
+        }
+
+        public override void AssertTableDoesNotExist(string tableName)
+        {
+            var schema = this.ExecuteScalar<int>(this.syntax.TableExists(tableName));
+
+            Assert.IsNull(schema, string.Format("{0} table was created.", tableName));
         }
 
         protected override void InsertRowIntoTable(int i)

@@ -52,9 +52,9 @@ namespace Net.Sf.Dbdeploy.Utils
         protected void AssertTableExists(string name)
         {
             var syntax = new MsSqlDbmsSyntax();
-            var schema = this.ExecuteScalar<string>(syntax.TableExists(name));
+            var schema = this.ExecuteScalar<int>(syntax.TableExists(name));
 
-            Assert.IsNotEmpty(schema, "'{0}' table was not created.", name);
+            schema.Should().BeGreaterThan(0);
         }
 
         /// <summary>

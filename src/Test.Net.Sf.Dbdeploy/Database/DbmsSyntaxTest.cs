@@ -14,7 +14,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_o_nome_do_sgbd_sybase()
         {
             Instanciar(SupportedDbms.SYBASE);
-            dbmsSyntax.Dbms.Should().Be("sybase");
+            dbmsSyntax.Dbms.Should().Be(SupportedDbms.SYBASE);
         }
 
         [Test]
@@ -79,14 +79,14 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_o_nome_do_sgbd_mssql()
         {
             Instanciar(SupportedDbms.MSSQL);
-            dbmsSyntax.Dbms.Should().Be("mssql");
+            dbmsSyntax.Dbms.Should().Be(SupportedDbms.MSSQL);
         }
 
         [Test]
         public void retornar_default_schema_mssql()
         {
             Instanciar(SupportedDbms.MSSQL);
-            dbmsSyntax.DefaultSchema.Should().Be("dbo");
+            dbmsSyntax.DefaultSchema.Should().BeEmpty();
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace Net.Sf.Dbdeploy.Database
             var tableInfo = dbmsSyntax.GetTableInfo("ChangeLog");
 
             tableInfo.Should().NotBeNull();
-            tableInfo.Schema.Should().Be("dbo");
+            tableInfo.Schema.Should().BeEmpty();
             tableInfo.TableName.Should().Be("ChangeLog");
         }
 
@@ -104,9 +104,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_query_para_verificar_se_tabela_existe_mssql()
         {
             Instanciar(SupportedDbms.MSSQL);
-            const string scriptEsperado = @"SELECT table_schema 
-            FROM INFORMATION_SCHEMA.TABLES 
-            WHERE TABLE_NAME = 'changelog' AND TABLE_SCHEMA = 'dbo'";
+            const string scriptEsperado = @"select object_id(concat(schema_name(), '.', 'ChangeLog'))";
 
             var queryTableExists = dbmsSyntax.TableExists("ChangeLog");
 
@@ -133,7 +131,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_o_nome_do_sgbd_oracle()
         {
             Instanciar(SupportedDbms.ORACLE);
-            dbmsSyntax.Dbms.Should().Be("ora");
+            dbmsSyntax.Dbms.Should().Be(SupportedDbms.ORACLE);
         }
 
         [Test]
@@ -167,7 +165,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_o_nome_do_sgbd_mysql()
         {
             Instanciar(SupportedDbms.MYSQL);
-            dbmsSyntax.Dbms.Should().Be("mysql");
+            dbmsSyntax.Dbms.Should().Be(SupportedDbms.MYSQL);
         }
 
         [Test]
@@ -205,7 +203,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_o_nome_do_sgdb_firebird()
         {
             Instanciar(SupportedDbms.FIREBIRD);
-            dbmsSyntax.Dbms.Should().Be("firebird");
+            dbmsSyntax.Dbms.Should().Be(SupportedDbms.FIREBIRD);
         }
 
         [Test]
@@ -239,7 +237,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_o_nome_do_sgbd_postgre()
         {
             Instanciar(SupportedDbms.POSTGRE);
-            dbmsSyntax.Dbms.Should().Be("postgres");
+            dbmsSyntax.Dbms.Should().Be(SupportedDbms.POSTGRE);
         }
 
         [Test]
