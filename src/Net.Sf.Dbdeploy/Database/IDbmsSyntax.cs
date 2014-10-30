@@ -29,6 +29,8 @@ namespace Net.Sf.Dbdeploy.Database
         /// <value>Default schema.</value>
         string DefaultSchema { get; }
 
+        string Dbms { get; }
+
         /// <summary>
         /// Set default database name method
         /// </summary>

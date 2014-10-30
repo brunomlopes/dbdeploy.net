@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Configuration;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     /// <summary>
@@ -8,8 +10,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <summary>
         /// Initializes a new instance of the <see cref="MsSqlDbmsSyntax" /> class.
         /// </summary>
-        public MsSqlDbmsSyntax()
-            : base("mssql")
+        public MsSqlDbmsSyntax() : base(SupportedDbms.MSSQL)
         {
         }
 
@@ -35,15 +36,21 @@ namespace Net.Sf.Dbdeploy.Database
             get { return "user_name()"; }
         }
 
-        /// <summary>
-        /// Gets the default schema for a table.
-        /// </summary>
-        /// <value>
-        /// Default schema.
-        /// </value>
-        public override string DefaultSchema
+        ///// <summary>
+        ///// Gets the default schema for a table.
+        ///// </summary>
+        ///// <value>
+        ///// Default schema.
+        ///// </value>
+        //public override string DefaultSchema
+        //{
+        //    get { return "dbo"; }
+        //}
+
+        protected override string GetQueryTableExists(TableInfo tableInfo)
         {
-            get { return "dbo"; }
+            var syntax = string.Format("select object_id(concat(schema_name(), '.', '{0}'))", tableInfo.TableName);
+            return syntax;
         }
     }
 }

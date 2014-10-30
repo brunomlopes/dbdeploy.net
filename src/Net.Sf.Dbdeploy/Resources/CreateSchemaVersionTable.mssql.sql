@@ -1,8 +1,3 @@
-IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '$(SchemaName)')
-BEGIN
-EXEC ('CREATE SCHEMA $(SchemaName) AUTHORIZATION dbo')
-END
-
 CREATE TABLE $(QualifiedTableName) (
 	ChangeId VARCHAR(64) NOT NULL,
 	Folder VARCHAR(20) NOT NULL,

@@ -1,3 +1,5 @@
+using Net.Sf.Dbdeploy.Configuration;
+
 namespace Net.Sf.Dbdeploy.Database
 {
     using System;
@@ -98,6 +100,14 @@ namespace Net.Sf.Dbdeploy.Database
         {
             using (var reader = queryExecuter.ExecuteQuery(syntax.TableExists(changeLogTableName)))
             {
+                if (syntax.Dbms == SupportedDbms.MSSQL)
+                {
+                    if (reader.Read())
+                    {
+                        var value = reader.GetValue(0);
+                        return value != null && !value.ToString().Equals("");
+                    }
+                }
                 return reader.Read();
             }
         }
