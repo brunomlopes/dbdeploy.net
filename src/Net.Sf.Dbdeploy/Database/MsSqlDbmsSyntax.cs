@@ -49,7 +49,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected override string GetQueryTableExists(TableInfo tableInfo)
         {
-            var syntax = string.Format("select object_id(concat(schema_name(), '.', '{0}'))", tableInfo.TableName);
+            var syntax = string.Format("select object_id(schema_name() + '.' + '{0}')", tableInfo.TableName);
             return syntax;
         }
     }

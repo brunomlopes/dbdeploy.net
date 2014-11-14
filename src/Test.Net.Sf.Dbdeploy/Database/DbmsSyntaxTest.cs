@@ -104,7 +104,7 @@ namespace Net.Sf.Dbdeploy.Database
         public void retornar_query_para_verificar_se_tabela_existe_mssql()
         {
             Instanciar(SupportedDbms.MSSQL);
-            const string scriptEsperado = @"select object_id(concat(schema_name(), '.', 'ChangeLog'))";
+            const string scriptEsperado = @"select object_id(schema_name() + '.' + 'ChangeLog')";
 
             var queryTableExists = dbmsSyntax.TableExists("ChangeLog");
 
