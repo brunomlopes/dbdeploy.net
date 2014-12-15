@@ -103,6 +103,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +130,7 @@
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
+    <Compile Include="Database\OracleDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\PostgresqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="UniqueChangeTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
