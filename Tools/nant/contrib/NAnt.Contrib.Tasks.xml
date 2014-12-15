@@ -4,6 +4,76 @@
         <name>NAnt.Contrib.Tasks</name>
     </assembly>
     <members>
+        <member name="T:NAnt.Contrib.Functions.ArrayFunctions">
+            <summary>
+            Provides a set of functions that deals with Arrays.
+            </summary>
+        </member>
+        <member name="M:NAnt.Contrib.Functions.ArrayFunctions.#ctor(NAnt.Core.Project,NAnt.Core.PropertyDictionary)">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:NAnt.Contrib.Functions.ArrayFunctions"/> class.
+            </summary>
+            <param name="project">
+            Project.
+            </param>
+            <param name="properties">
+            Properties.
+            </param>
+        </member>
+        <member name="M:NAnt.Contrib.Functions.ArrayFunctions.Sort(System.String,System.String)">
+            <summary>
+            Sorts the items in an array.
+            </summary>
+            <param name="array">
+            The <see cref="T:System.String"/> containing all the array items to sort.
+            </param>
+            <param name="separator">
+            The <see cref="T:System.String"/> used to separate the items in
+            <paramref name="array"/>
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="separator"/> is invalid because it
+            is empty or <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:NAnt.Contrib.Functions.ArrayFunctions.Reverse(System.String,System.String)">
+            <summary>
+            Reverse the items in an array.
+            </summary>
+            <param name="array">
+            The <see cref="T:System.String"/> containing all the array items to reverse.
+            </param>
+            <param name="separator">
+            The <see cref="T:System.String"/> used to separate the items in
+            <paramref name="array"/>
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="separator"/> is invalid because it
+            is empty or <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:NAnt.Contrib.Functions.ArrayFunctions.StringToArray(System.String,System.String)">
+            <summary>
+            Converts a <see cref="T:System.String"/> variable to
+            an <see cref="T:System.Array"/> based on a value separator.
+            </summary>
+            <returns>
+            The value of <paramref name="array"/> in an <see cref="T:System.Array"/>
+            format.
+            </returns>
+            <param name="array">
+            The <see cref="T:System.String"/> to parse to an <see cref="T:System.Array"/>.
+            </param>
+            <param name="separator">
+            The <see cref="T:System.String"/> used to separate the items in
+            <paramref name="array"/>
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="separator"/> is invalid because it
+            is empty or <see langword="null"/>.
+            </exception>
+        </member>
         <member name="T:NAnt.Contrib.Functions.FileFunctions">
             <summary>
             Groups a set of functions for dealing with files.
@@ -3923,251 +3993,253 @@
             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Msi.InstallerTaskBase.InstallerControlsElement">
-            <summary>
-            <para>
-            Creates user interface controls displayed on custom dialogs.
-            </para>
-            <h3>Parameters</h3>
-            <list type="table">
-                <listheader>
-                    <term>Attribute</term>
-                       <term>Type</term>
-                       <term>Description</term>
-                       <term>Required</term>
-                </listheader>
-                <item>
-                       <term>name</term>
-                       <term>string</term>
-                       <term>Name of the control. This name must be unique within a dialog box but can be repeated on different dialog boxes.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>dialog</term>
-                       <term>string</term>
-                       <term>Refrence to a dialog.  Used to associate the control with the dialog.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>type</term>
-                       <term>string</term>
-                       <term>The type of the control.
-                       <list type="table">
-                           <listheader>
-                               <term>Control name</term>
-                               <description>Description</description>
-                           </listheader>
-                           <item>
-                               <term>Billboard</term>
-                               <description>Displays billboards based on progress messages.</description>
-                           </item>
-                           <item>
-                               <term>Bitmap</term>
-                               <description>Displays a static picture of a bitmap.</description>
-                           </item>
-                           <item>
-                               <term>CheckBox</term>
-                               <description>A two-state check box.</description>
-                           </item>
-                           <item>
-                               <term>ComboBox</term>
-                               <description>A drop-down list with an edit field.</description>
-                           </item>
-                           <item>
-                               <term>DirectoryCombo</term>
-                               <description>Select all except the last segment of the path.</description>
-                           </item>
-                           <item>
-                               <term>DirectoryList</term>
-                               <description>Displays folders below the main part of path.</description>
-                           </item>
-                           <item>
-                               <term>Edit</term>
-                               <description>A regular edit field for any string or integer.</description>
-                           </item>
-                           <item>
-                               <term>GroupBox</term>
-                               <description>Displays a rectangle that groups other controls together.</description>
-                           </item>
-                           <item>
-                               <term>Icon</term>
-                               <description>Displays a static picture of an icon.</description>
-                           </item>
-                           <item>
-                               <term>Line</term>
-                               <description>Displays a horizontal line.</description>
-                           </item>
-                           <item>
-                               <term>ListBox</term>
-                               <description>A drop-down list without an edit field.</description>
-                           </item>
-                           <item>
-                               <term>ListView</term>
-                               <description>Displays a column of values with icons for selection.</description>
-                           </item>
-                           <item>
-                               <term>MaskedEdit</term>
-                               <description>An edit field with a mask in the text field.</description>
-                           </item>
-                           <item>
-                               <term>PathEdit</term>
-                               <description>Displays folder name or entire path in an edit field.</description>
-                           </item>
-                           <item>
-                               <term>ProgressBar</term>
-                               <description>Bar graph that changes length as it receives progress messages.</description>
-                           </item>
-                           <item>
-                               <term>PushButton</term>
-                               <description>Displays a basic push button.</description>
-                           </item>
-                           <item>
-                               <term>RadioButtonGroup</term>
-                               <description>A group of radio buttons.</description>
-                           </item>
-                           <item>
-                               <term>ScrollableText</term>
-                               <description>Displays a long string of text.</description>
-                           </item>
-                           <item>
-                               <term>SelectionTree</term>
-                               <description>Displays information from the Feature table and enables the user to change their selection state.</description>
-                           </item>
-                           <item>
-                               <term>Text</term>
-                               <description>Displays static text.</description>
-                           </item>
-                           <item>
-                               <term>VolumeCostList</term>
-                               <description>Displays costing information on different volumes.</description>
-                           </item>
-                           <item>
-                               <term>VolumeSelectCombo</term>
-                               <description>Selects volume from an alphabetical list.</description>
-                           </item>
-                       </list>
-                       More information found here: <a href="http://msdn.microsoft.com/library/en-us/msi/setup/controls.asp">http://msdn.microsoft.com/library/en-us/msi/setup/controls.asp</a></term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>x</term>
-                       <term>int</term>
-                       <term>Horizontal coordinate of the upper-left corner of the rectangular boundary of the control. This must be a non-negative number.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>y</term>
-                       <term>int</term>
-                       <term>Vertical coordinate of the upper-left corner of the rectangular boundary of the control. This must be a non-negative number.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>width</term>
-                       <term>int</term>
-                       <term>Width of the rectangular boundary of the control. This must be a non-negative number.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>height</term>
-                       <term>int</term>
-                       <term>Height of the rectangular boundary of the control. This must be a non-negative number.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>attr</term>
-                       <term>int</term>
-                       <term>A 32-bit word that specifies the bit flags to be applied to this control. This must be a non-negative number, and the allowed values depend upon the type of control.For a list of all control attributes, and the value to enter in this field, see <a href="http://msdn.microsoft.com/library/en-us/msi/setup/control_attributes.asp">Control Attributes</a>.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>property</term>
-                       <term>string</term>
-                       <term>The name of a defined property to be linked to this control. Radio button, list box, and combo box values are tied into a group by being linked to the same property. This column is required for active controls and is ignored by static controls.</term>
-                       <term>False</term>
-                   </item>
-                <item>
-                       <term>text</term>
-                       <term>string</term>
-                       <term>A localizable string used to set the initial text contained in a control. The string can also contain embedded properties.</term>
-                       <term>False</term>
-                   </item>
-                <item>
-                       <term>nextcontrol</term>
-                       <term>string</term>
-                       <term>The name of another control on the same dialog box. If the focus in the dialog box is on the control in the Control column, hitting the tab key moves the focus to the control listed here. Therefore this is used to specify the tab order of the controls on the dialog box. The links between the controls must form a closed cycle. Some controls, such as static text controls, can be left out of the cycle. In that case, this field may be left blank. </term>
-                       <term>False</term>
-                   </item>
-                <item>
-                       <term>help</term>
-                       <term>string</term>
-                       <term>Optional, localizable text strings that are used with the Help button. The string is divided into two parts by a separator character (|). The first part of the string is used as ToolTip text. This text is used by screen readers for controls that contain a picture. The second part of the string is reserved for future use. The separator character is required even if only one of the two kinds of text is present.</term>
-                       <term>False</term>
-                   </item>
-                <item>
-                       <term>remove</term>
-                       <term>bool</term>
-                       <term>If <c>true</c>, the control is removed.  If <c>false</c>, the control is added.</term>
-                       <term>False</term>
-                   </item>
-               </list>
-            <h3>Examples</h3>
-            <example>
-                <para>Remove the Browse button from the customize dialog and add controls for a web dialog</para>
-                <code>
-            &lt;controls&gt;
-                &lt;!-- Remove the Browse button from customize dialog --&gt;
-                &lt;control dialog="CustomizeDlg" name="Browse" type="PushButton"
-                    x="304" y="200" width="56" height="17" attr="3" remove="true" /&gt;
-                &lt;control dialog="CustomizeDlg" name="Tree" type="SelectionTree"
-                    x="25" y="85" width="175" height="95" attr="7" remove="true" /&gt;
-                            &lt;!-- Re add the tree control with the proper next control --&gt;
-                &lt;control dialog="CustomizeDlg" name="Tree" type="SelectionTree"
-                    x="25" y="85" width="175" height="95" attr="7" 
-                    property="_BrowseProperty" text="Tree of selections" nextcontrol="Reset" /&gt;
-                            &lt;!-- Adds the controls associated with the webfolder dialog --&gt;
-                &lt;control dialog="WebFolderDlg" name="BannerBitmap" type="Bitmap" 
-                    x="0" y="0" width="374" height="44" attr="1" 
-                    text="[BannerBitmap]" nextcontrol="VDirLabel" /&gt;
-                &lt;control dialog="WebFolderDlg" name="Title" type="Text" 
-                    x="15" y="6" width="200" height="15" attr="196611" 
-                    text="[DlgTitleFont]Virtual Directory Information" /&gt;
-                &lt;control dialog="WebFolderDlg" name="Description" type="Text" 
-                    x="25" y="23" width="280" height="15" attr="196611" 
-                    text="Please enter your virtual directory and port information." /&gt;
-                &lt;control dialog="WebFolderDlg" name="BannerLine" type="Line" 
-                    x="0" y="44" width="374" height="0" attr="1" /&gt;
-                &lt;control dialog="WebFolderDlg" name="VDirLabel" type="Text" 
-                    x="18" y="73" width="348" height="15" attr="3" 
-                    text="&amp;Virtual directory:" 
-                    nextcontrol="Edit_VDir" /&gt;            
-                &lt;control dialog="WebFolderDlg" name="Edit_VDir" type="Edit" 
-                    x="18" y="85" width="252" height="18" attr="7" 
-                    property="TARGETVDIR" 
-                    text="[TARGETVDIR]" 
-                    nextcontrol="PortLabel" /&gt;
-                &lt;control dialog="WebFolderDlg" name="PortLabel" type="Text" 
-                    x="18" y="110" width="348" height="15" attr="3" 
-                    text="&amp;Port:" 
-                    nextcontrol="Edit_Port" /&gt;            
-                &lt;control dialog="WebFolderDlg" name="Edit_Port" type="Edit" 
-                    x="18" y="122" width="48" height="18" attr="7" 
-                    property="TARGETPORT" 
-                    text="[TARGETPORT]" 
-                    nextcontrol="Back" /&gt;
-                &lt;control dialog="WebFolderDlg" name="BottomLine" type="Line" 
-                    x="0" y="234" width="374" height="0" attr="1" /&gt;                
-                &lt;control dialog="WebFolderDlg" name="Back" type="PushButton" 
-                    x="180" y="243" width="56" height="17" attr="3" 
-                    text="[ButtonText_Back]" nextcontrol="Next" /&gt;
-                &lt;control dialog="WebFolderDlg" name="Next" type="PushButton" 
-                    x="236" y="243" width="56" height="17" attr="3" 
-                    text="[ButtonText_Next]" nextcontrol="Cancel" /&gt;
-                &lt;control dialog="WebFolderDlg" name="Cancel" type="PushButton" 
-                    x="304" y="243" width="56" height="17" attr="3" 
-                    text="[ButtonText_Cancel]" nextcontrol="BannerBitmap" /&gt;
-            &lt;/controls&gt;
-                </code>
-            </example>
-            </summary>
+             <summary>
+             <para>
+             Creates user interface controls displayed on custom dialogs.
+             </para>
+             <h3>Parameters</h3>
+             <list type="table">
+                 <listheader>
+                     <term>Attribute</term>
+                        <term>Type</term>
+                        <term>Description</term>
+                        <term>Required</term>
+                 </listheader>
+                 <item>
+                        <term>name</term>
+                        <term>string</term>
+                        <term>Name of the control. This name must be unique within a dialog box but can be repeated on different dialog boxes.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>dialog</term>
+                        <term>string</term>
+                        <term>Refrence to a dialog.  Used to associate the control with the dialog.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>type</term>
+                        <term>string</term>
+                        <term>The type of the control.
+                        <list type="table">
+                            <listheader>
+                                <term>Control name</term>
+                                <description>Description</description>
+                            </listheader>
+                            <item>
+                                <term>Billboard</term>
+                                <description>Displays billboards based on progress messages.</description>
+                            </item>
+                            <item>
+                                <term>Bitmap</term>
+                                <description>Displays a static picture of a bitmap.</description>
+                            </item>
+                            <item>
+                                <term>CheckBox</term>
+                                <description>A two-state check box.</description>
+                            </item>
+                            <item>
+                                <term>ComboBox</term>
+                                <description>A drop-down list with an edit field.</description>
+                            </item>
+                            <item>
+                                <term>DirectoryCombo</term>
+                                <description>Select all except the last segment of the path.</description>
+                            </item>
+                            <item>
+                                <term>DirectoryList</term>
+                                <description>Displays folders below the main part of path.</description>
+                            </item>
+                            <item>
+                                <term>Edit</term>
+                                <description>A regular edit field for any string or integer.</description>
+                            </item>
+                            <item>
+                                <term>GroupBox</term>
+                                <description>Displays a rectangle that groups other controls together.</description>
+                            </item>
+                            <item>
+                                <term>Icon</term>
+                                <description>Displays a static picture of an icon.</description>
+                            </item>
+                            <item>
+                                <term>Line</term>
+                                <description>Displays a horizontal line.</description>
+                            </item>
+                            <item>
+                                <term>ListBox</term>
+                                <description>A drop-down list without an edit field.</description>
+                            </item>
+                            <item>
+                                <term>ListView</term>
+                                <description>Displays a column of values with icons for selection.</description>
+                            </item>
+                            <item>
+                                <term>MaskedEdit</term>
+                                <description>An edit field with a mask in the text field.</description>
+                            </item>
+                            <item>
+                                <term>PathEdit</term>
+                                <description>Displays folder name or entire path in an edit field.</description>
+                            </item>
+                            <item>
+                                <term>ProgressBar</term>
+                                <description>Bar graph that changes length as it receives progress messages.</description>
+                            </item>
+                            <item>
+                                <term>PushButton</term>
+                                <description>Displays a basic push button.</description>
+                            </item>
+                            <item>
+                                <term>RadioButtonGroup</term>
+                                <description>A group of radio buttons.</description>
+                            </item>
+                            <item>
+                                <term>ScrollableText</term>
+                                <description>Displays a long string of text.</description>
+                            </item>
+                            <item>
+                                <term>SelectionTree</term>
+                                <description>Displays information from the Feature table and enables the user to change their selection state.</description>
+                            </item>
+                            <item>
+                                <term>Text</term>
+                                <description>Displays static text.</description>
+                            </item>
+                            <item>
+                                <term>VolumeCostList</term>
+                                <description>Displays costing information on different volumes.</description>
+                            </item>
+                            <item>
+                                <term>VolumeSelectCombo</term>
+                                <description>Selects volume from an alphabetical list.</description>
+                            </item>
+                        </list>
+                        More information found here: <a href="http://msdn.microsoft.com/library/en-us/msi/setup/controls.asp">http://msdn.microsoft.com/library/en-us/msi/setup/controls.asp</a></term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>x</term>
+                        <term>int</term>
+                        <term>Horizontal coordinate of the upper-left corner of the rectangular boundary of the control. This must be a non-negative number.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>y</term>
+                        <term>int</term>
+                        <term>Vertical coordinate of the upper-left corner of the rectangular boundary of the control. This must be a non-negative number.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>width</term>
+                        <term>int</term>
+                        <term>Width of the rectangular boundary of the control. This must be a non-negative number.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>height</term>
+                        <term>int</term>
+                        <term>Height of the rectangular boundary of the control. This must be a non-negative number.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>attr</term>
+                        <term>int</term>
+                        <term>A 32-bit word that specifies the bit flags to be applied to this control. This must be a non-negative number, and the allowed values depend upon the type of control.For a list of all control attributes, and the value to enter in this field, see <a href="http://msdn.microsoft.com/library/en-us/msi/setup/control_attributes.asp">Control Attributes</a>.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>property</term>
+                        <term>string</term>
+                        <term>The name of a defined property to be linked to this control. Radio button, list box, and combo box values are tied into a group by being linked to the same property. This column is required for active controls and is ignored by static controls.</term>
+                        <term>False</term>
+                    </item>
+                 <item>
+                        <term>text</term>
+                        <term>string</term>
+                        <term>A localizable string used to set the initial text contained in a control. The string can also contain embedded properties.</term>
+                        <term>False</term>
+                    </item>
+                 <item>
+                        <term>nextcontrol</term>
+                        <term>string</term>
+                        <term>The name of another control on the same dialog box. If the focus in the dialog box is on the control in the Control column, hitting the tab key moves the focus to the control listed here. Therefore this is used to specify the tab order of the controls on the dialog box. The links between the controls must form a closed cycle. Some controls, such as static text controls, can be left out of the cycle. In that case, this field may be left blank. </term>
+                        <term>False</term>
+                    </item>
+                 <item>
+                        <term>help</term>
+                        <term>string</term>
+                        <term>Optional, localizable text strings that are used with the Help button. The string is divided into two parts by a separator character (|). The first part of the string is used as ToolTip text. This text is used by screen readers for controls that contain a picture. The second part of the string is reserved for future use. The separator character is required even if only one of the two kinds of text is present.</term>
+                        <term>False</term>
+                    </item>
+                 <item>
+                        <term>remove</term>
+                        <term>bool</term>
+                        <term>If <c>true</c>, the control is removed.  If <c>false</c>, the control is added.</term>
+                        <term>False</term>
+                    </item>
+                </list>
+             <h3>Examples</h3>
+             <example>
+                 <para>Remove the Browse button from the customize dialog and add controls for a web dialog</para>
+                 <code>
+             &lt;controls&gt;
+                 &lt;!-- Remove the Browse button from customize dialog --&gt;
+                 &lt;control dialog="CustomizeDlg" name="Browse" type="PushButton"
+                     x="304" y="200" width="56" height="17" attr="3" remove="true" /&gt;
+                 &lt;control dialog="CustomizeDlg" name="Tree" type="SelectionTree"
+                     x="25" y="85" width="175" height="95" attr="7" remove="true" /&gt;
+            
+                 &lt;!-- Re add the tree control with the proper next control --&gt;
+                 &lt;control dialog="CustomizeDlg" name="Tree" type="SelectionTree"
+                     x="25" y="85" width="175" height="95" attr="7" 
+                     property="_BrowseProperty" text="Tree of selections" nextcontrol="Reset" /&gt;
+            
+                 &lt;!-- Adds the controls associated with the webfolder dialog --&gt;
+                 &lt;control dialog="WebFolderDlg" name="BannerBitmap" type="Bitmap" 
+                     x="0" y="0" width="374" height="44" attr="1" 
+                     text="[BannerBitmap]" nextcontrol="VDirLabel" /&gt;
+                 &lt;control dialog="WebFolderDlg" name="Title" type="Text" 
+                     x="15" y="6" width="200" height="15" attr="196611" 
+                     text="[DlgTitleFont]Virtual Directory Information" /&gt;
+                 &lt;control dialog="WebFolderDlg" name="Description" type="Text" 
+                     x="25" y="23" width="280" height="15" attr="196611" 
+                     text="Please enter your virtual directory and port information." /&gt;
+                 &lt;control dialog="WebFolderDlg" name="BannerLine" type="Line" 
+                     x="0" y="44" width="374" height="0" attr="1" /&gt;
+                 &lt;control dialog="WebFolderDlg" name="VDirLabel" type="Text" 
+                     x="18" y="73" width="348" height="15" attr="3" 
+                     text="&amp;Virtual directory:" 
+                     nextcontrol="Edit_VDir" /&gt;            
+                 &lt;control dialog="WebFolderDlg" name="Edit_VDir" type="Edit" 
+                     x="18" y="85" width="252" height="18" attr="7" 
+                     property="TARGETVDIR" 
+                     text="[TARGETVDIR]" 
+                     nextcontrol="PortLabel" /&gt;
+                 &lt;control dialog="WebFolderDlg" name="PortLabel" type="Text" 
+                     x="18" y="110" width="348" height="15" attr="3" 
+                     text="&amp;Port:" 
+                     nextcontrol="Edit_Port" /&gt;            
+                 &lt;control dialog="WebFolderDlg" name="Edit_Port" type="Edit" 
+                     x="18" y="122" width="48" height="18" attr="7" 
+                     property="TARGETPORT" 
+                     text="[TARGETPORT]" 
+                     nextcontrol="Back" /&gt;
+                 &lt;control dialog="WebFolderDlg" name="BottomLine" type="Line" 
+                     x="0" y="234" width="374" height="0" attr="1" /&gt;                
+                 &lt;control dialog="WebFolderDlg" name="Back" type="PushButton" 
+                     x="180" y="243" width="56" height="17" attr="3" 
+                     text="[ButtonText_Back]" nextcontrol="Next" /&gt;
+                 &lt;control dialog="WebFolderDlg" name="Next" type="PushButton" 
+                     x="236" y="243" width="56" height="17" attr="3" 
+                     text="[ButtonText_Next]" nextcontrol="Cancel" /&gt;
+                 &lt;control dialog="WebFolderDlg" name="Cancel" type="PushButton" 
+                     x="304" y="243" width="56" height="17" attr="3" 
+                     text="[ButtonText_Cancel]" nextcontrol="BannerBitmap" /&gt;
+             &lt;/controls&gt;
+                 </code>
+             </example>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Msi.InstallerTaskBase.InstallerControlConditionsElement">
             <summary>
@@ -4260,116 +4332,117 @@
             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Msi.InstallerTaskBase.InstallerControlEventsElement">
-            <summary>
-            <para>
-            Used to route the flow of the installation process as the result of 
-            events raised by the user interacting with controls on dialogs.
-            </para>
-            <h3>Parameters</h3>
-            <list type="table">
-                <listheader>
-                    <term>Attribute</term>
-                       <term>Type</term>
-                       <term>Description</term>
-                       <term>Required</term>
-                </listheader>
-                <item>
-                       <term>dialog</term>
-                       <term>string</term>
-                       <term>Refrence to a dialog.  Used to associate the control with the dialog.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>control</term>
-                       <term>string</term>
-                       <term>Refrence to a control.  Maps to a control for the specified dialog.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>name</term>
-                       <term>string</term>
-                       <term>An identifier that specifies the type of event that should take place when the user interacts with the control 
-                       specified by Dialog_ and Control_. For a list of possible values see <a href="http://msdn.microsoft.com/library/en-us/msi/setup/controlevent_overview.asp">ControlEvent Overview</a>. <br/>
-                       To set a property with a control, put [Property_Name] in this field and the new value in the argument field. Put { } 
-                       into the argument field to enter the null value.
-                       </term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>argument</term>
-                       <term>string</term>
-                       <term>A value used as a modifier when triggering a particular event.</term>
-                       <term>True</term>
-                   </item>
-                <item>
-                       <term>condition</term>
-                       <term>string</term>
-                       <term>A conditional statement that determines whether the installer activates the event in the Event column. The installer 
-                       triggers the event if the conditional statement in the Condition field evaluates to True. Therefore put a 1 in this column 
-                       to ensure that the installer triggers the event. The installer does not trigger the event if the Condition field contains 
-                       a statement that evaluates to False. The installer does not trigger an event with a blank in the Condition field unless no 
-                       other events of the control evaluate to True. If none of the Condition fields for the control named in the Control_ field 
-                       evaluate to True, the installer triggers the one event having a blank Condition field, and if more than one Condition field 
-                       is blank it triggers the one event of these with the largest value in the Ordering field.</term>
-                       <term>False</term>
-                   </item>
-                <item>
-                       <term>order</term>
-                       <term>int</term>
-                       <term>An integer used to order several events tied to the same control. This must be a non-negative number.</term>
-                       <term>False</term>
-                   </item>
-                <item>
-                       <term>remove</term>
-                       <term>bool</term>
-                       <term>If <c>true</c>, the control condition is removed.  If <c>false</c>, the control condition is added.</term>
-                       <term>False</term>
-                   </item>
-               </list>
-            <h3>Examples</h3>
-            <example>
-                <para>Remove the control events for the Browse button from the customize dialog and add events conditions for a web dialog</para>
-                <code>
-            <!-- Make sure the dialog is put into the execute order -->
-            &lt;controlevents&gt;
-                &lt;!-- Remove the old control events --&gt;
-                &lt;controlevent dialog="UserRegistrationDlg" control="Next" name="NewDialog" 
-                    argument="SetupTypeDlg" condition="ProductID" remove="true" /&gt;
-                &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
-                    argument="LicenseAgreementDlg" condition="ShowUserRegistrationDlg &lt;&gt; 1" remove="true" /&gt;
-                &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
-                    argument="UserRegistrationDlg" condition="ShowUserRegistrationDlg = 1" remove="true" /&gt;
-                &lt;!-- Remove control events for Browse button on CustomizeDlg --&gt;
-                &lt;controlevent dialog="CustomizeDlg" control="Browse" name="SelectionBrowse" 
-                    argument="BrowseDlg" condition="1" remove="true" /&gt;                
-                            &lt;!-- Add new control events for the web dialog --&gt;
-                &lt;controlevent dialog="UserRegistrationDlg" control="Next" name="NewDialog" 
-                    argument="WebFolderDlg" condition="ProductID" /&gt;                        
-                &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
-                    argument="WebFolderDlg" condition="ShowWebFolderDlg &lt;&gt; 1" /&gt;
-                &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
-                    argument="WebFolderDlg" condition="ShowWebFolderDlg = 1" /&gt;
-                &lt;controlevent dialog="WebFolderDlg" control="Cancel" name="SpawnDialog" 
-                    argument="CancelDlg" order="0" /&gt;
-                &lt;controlevent dialog="WebFolderDlg" control="Back" name="NewDialog" 
-                    argument="LicenseAgreementDlg" condition="ShowUserRegistrationDlg&lt;&gt;1" 
-                    order="0" /&gt;
-                &lt;controlevent dialog="WebFolderDlg" control="Back" name="NewDialog" 
-                    argument="UserRegistrationDlg" condition="ShowUserRegistrationDlg=1" 
-                    order="0" /&gt;
-                &lt;!-- Virtual Directory Control Events --&gt;
-                &lt;controlevent dialog="WebFolderDlg" control="Next" name="DoAction" 
-                    argument="WEBCA_CreateURLs" condition="1" order="0" /&gt;
-                &lt;controlevent dialog="WebFolderDlg" control="Next" name="DoAction" 
-                    argument="WEBCA_EvaluateURLsMB" condition="1" order="1" /&gt;
-                &lt;controlevent dialog="WebFolderDlg" control="Next" name="SetTargetPath" 
-                    argument="TARGETDIR" condition="1" order="2" /&gt;
-                &lt;controlevent dialog="WebFolderDlg" control="Next" name="NewDialog" 
-                    argument="SetupTypeDlg" condition="1" order="3" /&gt;
-            &lt;/controlevents&gt;
-                </code>
-            </example>
-            </summary>
+             <summary>
+             <para>
+             Used to route the flow of the installation process as the result of 
+             events raised by the user interacting with controls on dialogs.
+             </para>
+             <h3>Parameters</h3>
+             <list type="table">
+                 <listheader>
+                     <term>Attribute</term>
+                        <term>Type</term>
+                        <term>Description</term>
+                        <term>Required</term>
+                 </listheader>
+                 <item>
+                        <term>dialog</term>
+                        <term>string</term>
+                        <term>Refrence to a dialog.  Used to associate the control with the dialog.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>control</term>
+                        <term>string</term>
+                        <term>Refrence to a control.  Maps to a control for the specified dialog.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>name</term>
+                        <term>string</term>
+                        <term>An identifier that specifies the type of event that should take place when the user interacts with the control 
+                        specified by Dialog_ and Control_. For a list of possible values see <a href="http://msdn.microsoft.com/library/en-us/msi/setup/controlevent_overview.asp">ControlEvent Overview</a>. <br/>
+                        To set a property with a control, put [Property_Name] in this field and the new value in the argument field. Put { } 
+                        into the argument field to enter the null value.
+                        </term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>argument</term>
+                        <term>string</term>
+                        <term>A value used as a modifier when triggering a particular event.</term>
+                        <term>True</term>
+                    </item>
+                 <item>
+                        <term>condition</term>
+                        <term>string</term>
+                        <term>A conditional statement that determines whether the installer activates the event in the Event column. The installer 
+                        triggers the event if the conditional statement in the Condition field evaluates to True. Therefore put a 1 in this column 
+                        to ensure that the installer triggers the event. The installer does not trigger the event if the Condition field contains 
+                        a statement that evaluates to False. The installer does not trigger an event with a blank in the Condition field unless no 
+                        other events of the control evaluate to True. If none of the Condition fields for the control named in the Control_ field 
+                        evaluate to True, the installer triggers the one event having a blank Condition field, and if more than one Condition field 
+                        is blank it triggers the one event of these with the largest value in the Ordering field.</term>
+                        <term>False</term>
+                    </item>
+                 <item>
+                        <term>order</term>
+                        <term>int</term>
+                        <term>An integer used to order several events tied to the same control. This must be a non-negative number.</term>
+                        <term>False</term>
+                    </item>
+                 <item>
+                        <term>remove</term>
+                        <term>bool</term>
+                        <term>If <c>true</c>, the control condition is removed.  If <c>false</c>, the control condition is added.</term>
+                        <term>False</term>
+                    </item>
+                </list>
+             <h3>Examples</h3>
+             <example>
+                 <para>Remove the control events for the Browse button from the customize dialog and add events conditions for a web dialog</para>
+                 <code>
+             <!-- Make sure the dialog is put into the execute order -->
+             &lt;controlevents&gt;
+                 &lt;!-- Remove the old control events --&gt;
+                 &lt;controlevent dialog="UserRegistrationDlg" control="Next" name="NewDialog" 
+                     argument="SetupTypeDlg" condition="ProductID" remove="true" /&gt;
+                 &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
+                     argument="LicenseAgreementDlg" condition="ShowUserRegistrationDlg &lt;&gt; 1" remove="true" /&gt;
+                 &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
+                     argument="UserRegistrationDlg" condition="ShowUserRegistrationDlg = 1" remove="true" /&gt;
+                 &lt;!-- Remove control events for Browse button on CustomizeDlg --&gt;
+                 &lt;controlevent dialog="CustomizeDlg" control="Browse" name="SelectionBrowse" 
+                     argument="BrowseDlg" condition="1" remove="true" /&gt;                
+            
+                 &lt;!-- Add new control events for the web dialog --&gt;
+                 &lt;controlevent dialog="UserRegistrationDlg" control="Next" name="NewDialog" 
+                     argument="WebFolderDlg" condition="ProductID" /&gt;                        
+                 &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
+                     argument="WebFolderDlg" condition="ShowWebFolderDlg &lt;&gt; 1" /&gt;
+                 &lt;controlevent dialog="SetupTypeDlg" control="Back" name="NewDialog" 
+                     argument="WebFolderDlg" condition="ShowWebFolderDlg = 1" /&gt;
+                 &lt;controlevent dialog="WebFolderDlg" control="Cancel" name="SpawnDialog" 
+                     argument="CancelDlg" order="0" /&gt;
+                 &lt;controlevent dialog="WebFolderDlg" control="Back" name="NewDialog" 
+                     argument="LicenseAgreementDlg" condition="ShowUserRegistrationDlg&lt;&gt;1" 
+                     order="0" /&gt;
+                 &lt;controlevent dialog="WebFolderDlg" control="Back" name="NewDialog" 
+                     argument="UserRegistrationDlg" condition="ShowUserRegistrationDlg=1" 
+                     order="0" /&gt;
+                 &lt;!-- Virtual Directory Control Events --&gt;
+                 &lt;controlevent dialog="WebFolderDlg" control="Next" name="DoAction" 
+                     argument="WEBCA_CreateURLs" condition="1" order="0" /&gt;
+                 &lt;controlevent dialog="WebFolderDlg" control="Next" name="DoAction" 
+                     argument="WEBCA_EvaluateURLsMB" condition="1" order="1" /&gt;
+                 &lt;controlevent dialog="WebFolderDlg" control="Next" name="SetTargetPath" 
+                     argument="TARGETDIR" condition="1" order="2" /&gt;
+                 &lt;controlevent dialog="WebFolderDlg" control="Next" name="NewDialog" 
+                     argument="SetupTypeDlg" condition="1" order="3" /&gt;
+             &lt;/controlevents&gt;
+                 </code>
+             </example>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Msi.InstallerTaskBase.InstallerRegistryElement">
             <summary>
@@ -11608,29 +11681,31 @@
             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Svn.AbstractSvnTask.Root">
-            <summary>
-            <para>
-            TODO: Add more documentation when I understand all svn root possibilities/
-            protocols.
-            The svn root is usually in the form of a URL from which the server, protocol
-            and path information can be derived.  Although the path to the repository
-            can also be determined from this the information is more implicit
-            than explicit.  For example a subversion root URL of:
-                        http://svn.collab.net/repos/svn/trunk/doc/book/tools
-                        would have the following components:
-                protocol:       http/ web_dav
-                username:       anonymous
-                servername:     svn.collab.net
-                repository:     /repos/svn
-                server path:    /trunk/doc/book/tools
-                
-                In addition the revision path or branch can also be determined as
-                subversion stores this information as a seperate physical directory.
-                In this example:
-                
-                revision: trunk
-            </para>
-            </summary>
+             <summary>
+             <para>
+             TODO: Add more documentation when I understand all svn root possibilities/
+             protocols.
+             The svn root is usually in the form of a URL from which the server, protocol
+             and path information can be derived.  Although the path to the repository
+             can also be determined from this the information is more implicit
+             than explicit.  For example a subversion root URL of:
+            
+             http://svn.collab.net/repos/svn/trunk/doc/book/tools
+            
+             would have the following components:
+                 protocol:       http/ web_dav
+                 username:       anonymous
+                 servername:     svn.collab.net
+                 repository:     /repos/svn
+                 server path:    /trunk/doc/book/tools
+                 
+                 In addition the revision path or branch can also be determined as
+                 subversion stores this information as a seperate physical directory.
+                 In this example:
+                 
+                 revision: trunk
+             </para>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Svn.AbstractSvnTask.UserName">
             <summary>
@@ -12880,196 +12955,226 @@
             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentClass">
-            <summary>
-            <see langword="true" /> if class statements should be indented.
-            <code>
+             <summary>
+             <see langword="true" /> if class statements should be indented.
+             <code>
+             
+                The default:
             
-               The default:
-                           class Foo
-               {
-               public:
-                   Foo();
-                   virtual ~Foo();
-               };
-                           becomes:
-                           class Foo
-               {
-                   public:
-                       Foo();
-                       virtual ~Foo();
-               };
-               
-            </code>
-            </summary>
+                class Foo
+                {
+                public:
+                    Foo();
+                    virtual ~Foo();
+                };
+            
+                becomes:
+            
+                class Foo
+                {
+                    public:
+                        Foo();
+                        virtual ~Foo();
+                };
+                
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentSwitch">
-            <summary>
-            <see langword="true" /> if switch statements should be indented.
-            <code>
+             <summary>
+             <see langword="true" /> if switch statements should be indented.
+             <code>
+             
+                    The default:
             
-                   The default:
-                               switch (foo)
-                   {
-                   case 1:
-                       a += 2;
-                       break;
-                               default:
-                       a += 2;
-                       break;
-                   }
-                               becomes:
-                               switch (foo)
-                   {
-                       case 1:
-                           a += 2;
-                           break;
-                                   default:
-                           a += 2;
-                           break;
-                   }
-                   
-            </code>
-            </summary>
+                    switch (foo)
+                    {
+                    case 1:
+                        a += 2;
+                        break;
+            
+                    default:
+                        a += 2;
+                        break;
+                    }
+            
+                    becomes:
+            
+                    switch (foo)
+                    {
+                        case 1:
+                            a += 2;
+                            break;
+            
+                        default:
+                            a += 2;
+                            break;
+                    }
+                    
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentCase">
-            <summary>
-            <see langword="true" /> if case statements should be indented.
-            <code>
+             <summary>
+             <see langword="true" /> if case statements should be indented.
+             <code>
+             
+                The default:
             
-               The default:
-                           switch (foo)
-               {
-               case 1:
-                   {
-                       a += 2;
-                       break;
-                   }
-                           default:
-                   {
-                       a += 2;
-                       break;
-                   }
-               }
-                           becomes:
-                           switch (foo)
-               {
-                   case 1:
-                   {
-                       a += 2;
-                       break;
-                   }
-                               default:
-                   {
-                       a += 2;
-                       break;
-                   }
-               }
-               
-            </code>
-            </summary>
+                switch (foo)
+                {
+                case 1:
+                    {
+                        a += 2;
+                        break;
+                    }
+            
+                default:
+                    {
+                        a += 2;
+                        break;
+                    }
+                }
+            
+                becomes:
+            
+                switch (foo)
+                {
+                    case 1:
+                    {
+                        a += 2;
+                        break;
+                    }
+            
+                    default:
+                    {
+                        a += 2;
+                        break;
+                    }
+                }
+                
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentBracket">
-            <summary>
-            <code>true</code> if bracket statements should be indented.
-            <code>
+             <summary>
+             <code>true</code> if bracket statements should be indented.
+             <code>
+             
+                The default:
             
-               The default:
-                           if (isFoo)
-               {
-                   bar();
-               }
-               else
-               {
-                   anotherBar();
-               }
-                           becomes:
-                           if (isFoo)
-                   {
-                   bar();
-                   }
-               else
-                   {
-                   anotherBar();
-                   }
-                   
-            </code>
-            </summary>
+                if (isFoo)
+                {
+                    bar();
+                }
+                else
+                {
+                    anotherBar();
+                }
+            
+                becomes:
+            
+                if (isFoo)
+                    {
+                    bar();
+                    }
+                else
+                    {
+                    anotherBar();
+                    }
+                    
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentBlock">
-            <summary>
-            <see langword="true" /> if block statements should be indented.
-               The default:
-                           if (isFoo)
-               {
-                   bar();
-               }
-               else
-                   anotherBar();
-                           becomes:
-                           if (isFoo)
-                   {
-                       bar();
-                   }
-               else
-                   anotherBar();
-            </summary>
+             <summary>
+             <see langword="true" /> if block statements should be indented.
+                The default:
+            
+                if (isFoo)
+                {
+                    bar();
+                }
+                else
+                    anotherBar();
+            
+                becomes:
+            
+                if (isFoo)
+                    {
+                        bar();
+                    }
+                else
+                    anotherBar();
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentNamespaces">
-            <summary>
-            <see langword="true" /> if namespace statements should be indented.
-            <code>
-                           The default:
-                           namespace foospace
-               {
-               class Foo
-               {
-                   public:
-                       Foo();
-                       virtual ~Foo();
-               };
-               }
-                           becomes:
-                           namespace foospace
-               {
-                   class Foo
-                   {
-                       public:
-                           Foo();
-                           virtual ~Foo();
-                   };
-               }
-                        </code>
-            </summary>
+             <summary>
+             <see langword="true" /> if namespace statements should be indented.
+             <code>
+            
+                The default:
+            
+                namespace foospace
+                {
+                class Foo
+                {
+                    public:
+                        Foo();
+                        virtual ~Foo();
+                };
+                }
+            
+                becomes:
+            
+                namespace foospace
+                {
+                    class Foo
+                    {
+                        public:
+                            Foo();
+                            virtual ~Foo();
+                    };
+                }
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentLabels">
-            <summary>
-            <see langword="true" /> if label statements should be indented.
-            <code>
+             <summary>
+             <see langword="true" /> if label statements should be indented.
+             <code>
+             
+                The default:
             
-               The default:
-                           int foospace()
-               {
-                   while (isFoo)
-                   {
-                       ...
-                       goto error;
-                           error:
-                       ...
-                   }
-               }
-                           becomes:
-                           int foospace()
-               {
-                   while (isFoo)
-                   {
-                       ...
-                       goto error;
-                               error:
-                       ...
-                   }
-               }
-                        </code>
-            </summary>
+                int foospace()
+                {
+                    while (isFoo)
+                    {
+                        ...
+                        goto error;
+            
+                error:
+                        ...
+                    }
+                }
+            
+                becomes:
+            
+                int foospace()
+                {
+                    while (isFoo)
+                    {
+                        ...
+                        goto error;
+            
+                    error:
+                        ...
+                    }
+                }
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.IndentMax">
             <summary>
@@ -13090,20 +13195,21 @@
             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.BracketsNewLine">
-            <summary>
-            <see langword="true" /> if brackets should be put on a new line.
-            <code>
-                           if (isFoo)
-               {
-                   bar();
-               }
-               else
-               {
-                   anotherBar();
-               }
-               
-            </code>
-            </summary>
+             <summary>
+             <see langword="true" /> if brackets should be put on a new line.
+             <code>
+            
+                if (isFoo)
+                {
+                    bar();
+                }
+                else
+                {
+                    anotherBar();
+                }
+                
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.BracketsAttach">
             <summary>
@@ -13120,174 +13226,212 @@
             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.BracketsLinux">
-            <summary>
-            <see langword="true" /> if brackets should be put on a new line and 
-            indented.
-            <code>
-                           namespace foospace
-               {
-                   int Foo()
-                   {
-                       if (isBar) {
-                           bar();
-                           return 1;
-                       } else
-                           return 0;
-                   }
-               }
-                        </code>
-            </summary>
+             <summary>
+             <see langword="true" /> if brackets should be put on a new line and 
+             indented.
+             <code>
+            
+                namespace foospace
+                {
+                    int Foo()
+                    {
+                        if (isBar) {
+                            bar();
+                            return 1;
+                        } else
+                            return 0;
+                    }
+                }
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.BreakClosing">
-            <summary>
-            <see langword="true" /> if the line after a bracket (i.e. an else 
-            statement after the closing if) should be placed on the next line.
-            <code>
+             <summary>
+             <see langword="true" /> if the line after a bracket (i.e. an else 
+             statement after the closing if) should be placed on the next line.
+             <code>
+             
+                if (isFoo){
+                    bar();
+                }else {
+                    anotherBar();
+                }
             
-               if (isFoo){
-                   bar();
-               }else {
-                   anotherBar();
-               }
-                           becomes:
-                           if (isFoo) {
-                   bar();
-               }
-               else {
-                   anotherBar();
-               }
-               
-            </code>
-            </summary>
+                becomes:
+            
+                if (isFoo) {
+                    bar();
+                }
+                else {
+                    anotherBar();
+                }
+                
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.BreakBlocks">
-            <summary>
-            <see langword="true" /> to break block statements with an empty line.
-            <code>
-                           isFoo = true;
-               if (isFoo) {
-                   bar();
-               } else {
-                   anotherBar();
-               }
-               isBar = false;
-                           becomes:
-                           isFoo = true;
-                           if (isFoo) {
-                   bar();
-               } else {
-                   anotherBar();
-               }
-                           isBar = false;
-                        </code>
-            </summary>
+             <summary>
+             <see langword="true" /> to break block statements with an empty line.
+             <code>
+            
+                isFoo = true;
+                if (isFoo) {
+                    bar();
+                } else {
+                    anotherBar();
+                }
+                isBar = false;
+            
+                becomes:
+            
+                isFoo = true;
+            
+                if (isFoo) {
+                    bar();
+                } else {
+                    anotherBar();
+                }
+            
+                isBar = false;
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.BreakBlocksAll">
-            <summary>
-            <see langword="true" /> to break all block statements, even on 
-            nested ifs with an empty line.
-            <code>
-                           isFoo = true;
-               if (isFoo) {
-                   bar();
-               } else {
-                   anotherBar();
-               }
-               isBar = false;
-                           becomes:
-                           isFoo = true;
-                           if (isFoo) {
-                   bar();
-                           } else {
-                   anotherBar();
-               }
-                           isBar = false;
-                        </code>
-            </summary>
+             <summary>
+             <see langword="true" /> to break all block statements, even on 
+             nested ifs with an empty line.
+             <code>
+            
+                isFoo = true;
+                if (isFoo) {
+                    bar();
+                } else {
+                    anotherBar();
+                }
+                isBar = false;
+            
+                becomes:
+            
+                isFoo = true;
+            
+                if (isFoo) {
+                    bar();
+            
+                } else {
+                    anotherBar();
+                }
+            
+                isBar = false;
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.BreakElseif">
-            <summary>
-            <see langword="true" /> to put the if component of an else if on a 
-            new line.
-            <code>
-                           if (isFoo) {
-                   bar();
-               } else if (isBar()){
-                   anotherBar();
-               }
-                           becomes:
-                           if (isFoo) {
-                   bar();
-               } else
-                   if (isBar()){
-                       anotherBar();
-                   } 
-                        </code>
+             <summary>
+             <see langword="true" /> to put the if component of an else if on a 
+             new line.
+             <code>
             
-            </summary>
+                if (isFoo) {
+                    bar();
+                } else if (isBar()){
+                    anotherBar();
+                }
+            
+                becomes:
+            
+                if (isFoo) {
+                    bar();
+                } else
+                    if (isBar()){
+                        anotherBar();
+                    } 
+            
+             </code>
+             
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.PadOperators">
-            <summary>
-            <see langword="true" /> to pad operators with a space.
-            <code>
+             <summary>
+             <see langword="true" /> to pad operators with a space.
+             <code>
+             
+                if (isFoo)
+                    a = bar((b-c)*a,*d--);
             
-               if (isFoo)
-                   a = bar((b-c)*a,*d--);
-                           becomes:
-                           if (isFoo)
-                   a = bar((b - c) * a, *d--);
-                        </code>
-            </summary>
+                becomes:
+            
+                if (isFoo)
+                    a = bar((b - c) * a, *d--);
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.PadParenthesis">
-            <summary>
-            <see langword="true" /> to pad parenthesis with a space.
-            <code>
-                           if (isFoo)
-                   a = bar((b-c)*a,*d--);
-                           becomes:
-                           if ( isFoo )
-                   a = bar( ( b-c )*a, *d-- );
-                        </code>
-            </summary>
+             <summary>
+             <see langword="true" /> to pad parenthesis with a space.
+             <code>
+            
+                if (isFoo)
+                    a = bar((b-c)*a,*d--);
+            
+                becomes:
+            
+                if ( isFoo )
+                    a = bar( ( b-c )*a, *d-- );
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.PadAll">
-            <summary>
-            <see langword="true" /> to pad operators and parenthesis.
-            <code>
+             <summary>
+             <see langword="true" /> to pad operators and parenthesis.
+             <code>
+             
+                if (isFoo)
+                    a = bar((b-c)*a,*d--);
             
-               if (isFoo)
-                   a = bar((b-c)*a,*d--);
-                           becomes:
-                           if ( isFoo )
-                   a = bar( ( b - c ) * a, *d-- );
-                        </code>
-            </summary>
+                becomes:
+            
+                if ( isFoo )
+                    a = bar( ( b - c ) * a, *d-- );
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.NoBreakComplex">
-            <summary>
-            <see langword="true" /> to keep complex statements on the same line.
-            <code>
+             <summary>
+             <see langword="true" /> to keep complex statements on the same line.
+             <code>
+             
+                if (isFoo)
+                {  
+                    isFoo = false; cout &lt;&lt; isFoo &lt;&lt; endl;
+                }
             
-               if (isFoo)
-               {  
-                   isFoo = false; cout &lt;&lt; isFoo &lt;&lt; endl;
-               }
-                           remains as is.
-                           if (isFoo) DoBar();
-                           remains as is.
-                        </code>
-            </summary>
+                remains as is.
+            
+                if (isFoo) DoBar();
+            
+                remains as is.
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.NoBreakSingleLineBlocks">
-            <summary>
-            <see langword="true" /> to keep single line statements on the same line.
-            <code>
-                           if (isFoo)
-               { isFoo = false; cout &lt;&lt; isFoo &lt;&lt; endl; }
-                           remains as is.
-                        </code>
-            </summary>
+             <summary>
+             <see langword="true" /> to keep single line statements on the same line.
+             <code>
+            
+                if (isFoo)
+                { isFoo = false; cout &lt;&lt; isFoo &lt;&lt; endl; }
+            
+                remains as is.
+            
+             </code>
+             </summary>
         </member>
         <member name="P:NAnt.Contrib.Tasks.Astyle.ProgramArguments">
             <summary>
@@ -13384,135 +13528,6 @@
         <member name="P:NAnt.Contrib.Tasks.ChecksumTask.FileSet">
             <summary>
             Set of files to use as input
-            </summary>
-        </member>
-        <member name="T:NAnt.Contrib.Tasks.ChooseTask">
-            <summary>
-              <para>
-              Executes an alternate set of task or type definition depending on
-              conditions that are individually set on each group.
-              </para>
-            </summary>
-            <remarks>
-              <para>
-              The <see cref="T:NAnt.Contrib.Tasks.ChooseTask"/> selects one among a number of possible
-              alternatives. It consists of a sequence of <c>&lt;when&gt;</c> elements
-              followed by an optional <c>&lt;otherwise&gt;</c> element.
-              </para>
-              <para>
-              Each <c>&lt;when&gt;</c> element has a single attribute, test, which 
-              specifies an expression. The content of the <c>&lt;when&gt;</c> and 
-              <c>&lt;otherwise&gt;</c> elements is a set of nested tasks.
-              </para>
-              <para>
-              The content of the first, and only the first, <c>&lt;when&gt;</c>
-              element whose test is <see langword="true"/> is executed. If no 
-              <c>&lt;when&gt;</c> element is <see langword="true"/>, the 
-              content of the <c>&lt;otherwise&gt;</c> element is executed.
-              If no <c>&lt;when&gt;</c> element is <see langword="true"/>, and no
-              <c>&lt;otherwise&gt;</c> element is present, nothing is done.
-              </para>
-            </remarks>
-            <example>
-              <para>
-              Execute alternate set of tasks depending on the configuration being
-              built.
-              </para>
-              <code>
-                <![CDATA[
-            <choose>
-                <when test="${build.config == 'Debug'}">
-                    <!-- compile app in debug configuration -->
-                    ...
-                </when>
-                <when test="${build.config == 'Release'}">
-                    <!-- compile app in release configuration -->
-                    ...
-                </when>
-                <otherwise>
-                    <fail>Build configuration '${build.config}' is not supported!</fail>
-                </otherwise>
-            </choose>
-                ]]>
-              </code>
-            </example>
-            <example>
-              <para>
-              Define a <c>sources</c> patternset holding an alternate set of patterns
-              depending on the configuration being built.
-              </para>
-              <code>
-                <![CDATA[
-            <choose>
-                <when test="${build.config == 'Debug'}">
-                    <patternset id="sources">
-                        <include name="**/*.cs" />
-                    </patternset>
-                </when>
-                <when test="${build.config == 'Release'}">
-                    <patternset id="sources">
-                        <include name="**/*.cs" />
-                        <exclude name="**/Instrumentation/*.cs" />
-                    </patternset>
-                </when>
-                <otherwise>
-                    <fail>Build configuration '${build.config}' is not supported!</fail>
-                </otherwise>
-            </choose>
-                ]]>
-              </code>
-            </example>
-        </member>
-        <member name="M:NAnt.Contrib.Tasks.ChooseTask.AddCondition(NAnt.Contrib.Tasks.When)">
-            <summary>
-            One or more alternative sets of tasks to execute.
-            </summary>
-            <param name="when">The set of tasks to add.</param>
-        </member>
-        <member name="M:NAnt.Contrib.Tasks.ChooseTask.AddFallback(NAnt.Contrib.Tasks.NestedTaskContainer)">
-            <summary>
-            The set of tasks to execute if none of the <see cref="T:NAnt.Contrib.Tasks.When"/>
-            elements are <see langword="true"/>.
-            </summary>
-        </member>
-        <member name="P:NAnt.Contrib.Tasks.ChooseTask.IsFallbackDefined">
-            <summary>
-            Gets a value indicating whether a fallback element is defined.
-            </summary>
-            <value>
-            <see langword="true" /> if a fallback element is defined; otherwise,
-            <see langword="false" />.
-            </value>
-        </member>
-        <member name="T:NAnt.Contrib.Tasks.When">
-            <summary>
-            Groups a set of tasks to execute when a condition is met.
-            </summary>
-        </member>
-        <member name="T:NAnt.Contrib.Tasks.NestedTaskContainer">
-            <summary>
-            Executes embedded tasks in the order in which they are defined.
-            </summary>
-        </member>
-        <member name="M:NAnt.Contrib.Tasks.NestedTaskContainer.ExecuteChildTasks">
-            <summary>
-            Creates and executes the embedded (child XML nodes) elements.
-            </summary>
-        </member>
-        <member name="P:NAnt.Contrib.Tasks.NestedTaskContainer.CustomXmlProcessing">
-            <summary>
-            Gets a value indicating whether the element is performing additional
-            processing using the <see cref="T:System.Xml.XmlNode"/> that was use to 
-            initialize the element.
-            </summary>
-            <value>
-            <see langword="true"/>, as a <see cref="T:NAnt.Contrib.Tasks.NestedTaskContainer"/> is
-            responsable for creating tasks from the nested build elements.
-            </value>
-        </member>
-        <member name="P:NAnt.Contrib.Tasks.When.Test">
-            <summary>
-            Used to test arbitrary boolean expression.
             </summary>
         </member>
         <member name="T:NAnt.Contrib.Tasks.CodeStatsTask">
@@ -15636,201 +15651,6 @@
             A <see cref="T:System.IO.TextWriter"/> for the file specified in <see cref="P:NAnt.Contrib.Tasks.SqlTask.Output"/>,
             or <see langword="null"/> if <see cref="P:NAnt.Contrib.Tasks.SqlTask.Output"/> is not set.
             </value>
-        </member>
-        <member name="T:NAnt.Contrib.Tasks.TryCatchTask">
-            <summary>
-            Executes a set of tasks, and optionally catches a build exception to
-            allow recovery or rollback steps to be taken, or to define some steps
-            to be taken regardless if the tasks succeed or fail, or both.
-            </summary>
-            <remarks>
-              <para>
-              The tasks defined in the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.TryBlock"/>&gt;</c> block
-              will be executed in turn, as they normally would in a target.
-              </para>
-              <para>
-              If a <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c> block is defined, the 
-              tasks in that block will be executed in turn only if one of the tasks 
-              in the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.TryBlock"/>&gt;</c> block fails. This 
-              failure will then be suppressed by the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c>
-              block.
-              </para>
-              <para>
-              The message associated with the failure can also be caught in a
-              property for use within the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c>
-              block.  The original contents of the property will be restored upon 
-              exiting the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c> block.
-              </para>
-              <para>
-              If a <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.FinallyBlock"/>&gt;</c> block is defined, the 
-              tasks in that block will be executed after the tasks in both the 
-              <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.TryBlock"/>&gt;</c> and <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c>
-              blocks have been executed, regardless of whether any task fails in 
-              either block.
-              </para>
-            </remarks>
-            <example>
-              <code>
-                <![CDATA[
-            <trycatch>
-                <try>
-                    <echo message="In try" />
-                    <fail message="Failing!" />
-                </try>
-                <catch>
-                    <echo message="In catch" />
-                </catch>
-                <finally>
-                    <echo message="Finally done" />
-                </finally>
-            </trycatch>
-                ]]>
-              </code>
-              <para>
-              The output of this example will be:
-              </para>
-              <code>
-            In try
-            In catch
-            Finally done
-              </code>
-              <para>
-              The failure in the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.TryBlock"/>&gt;</c> block will 
-              not cause the build to fail.
-              </para>
-            </example>
-            <example>
-              <code>
-                <![CDATA[
-            <trycatch>
-                <try>
-                    <echo message="In try" />
-                    <fail message="Just because..." />
-                </try>
-                <catch property="failure">
-                    <echo message="Caught failure: ${failure}" />
-                    <fail message="Bad catch" />
-                </catch>
-                <finally>
-                    <echo message="Finally done" />
-                </finally>
-            </trycatch>
-                ]]>
-              </code>
-              <para>
-              The output of this example will be:
-              </para>
-              <code>
-            In try
-            Caught failure: Just because...
-            Finally done
-            Build failed: Bad catch
-              </code>
-              <para>
-              Like the above, the failure in the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.TryBlock"/>&gt;</c>
-              block does not cause the build to fail.  The failure in the 
-              <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c> block does, however.
-              Note that the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.FinallyBlock"/>&gt;</c> block is 
-              executed even though the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c>
-              block failed.
-              </para>
-            </example>
-            <example>
-              <code>
-                <![CDATA[
-            <trycatch>
-                <try>
-                    <echo message="In try" />
-                    <fail message="yet again" />
-                </try>
-                <catch property="failure">
-                    <echo message="Caught failure ${failure}" />
-                    <fail message="Bad catch" />
-                </catch>
-                <finally>
-                    <echo message="Finally done ${failure}" />
-                </finally>
-            </trycatch>
-                ]]>
-              </code>
-              <para>
-              The output of this example will be:
-              </para>
-              <code>
-            In try
-            Caught failure yet again
-            Build failed: Property 'failure' has not been set.
-              </code>
-              <para>
-              The <see cref="T:NAnt.Core.Tasks.EchoTask"/> in the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.FinallyBlock"/>&gt;</c>
-              block failed because the "failure" property was not defined 
-              after exiting the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c> block.  
-              Note that the failure in the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.FinallyBlock"/>&gt;</c> 
-              block has eclipsed the failure in the <c>&lt;<see cref="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock"/>&gt;</c>
-              block.
-              </para>
-            </example>
-            <example>
-              <code>
-                <![CDATA[
-            <trycatch>
-                <try>
-                    <property name="temp.file" value="${path::get-temp-file-name()}" />
-                    <do-stuff to="${temp.file}" />
-                    <fail message="Oops..." />
-                </try>
-                <finally>
-                    <echo message="Cleaning up..." />
-                    <if test="${property::exists('temp.file')}">
-                        <delete file="${temp.file}" />
-                    </if>
-                </finally>
-            </trycatch>
-                ]]>
-              </code>
-              <para>
-              A more concrete example, that will always clean up the generated
-              temporary file after it has been created.
-              </para>
-            </example>
-        </member>
-        <member name="P:NAnt.Contrib.Tasks.TryCatchTask.TryBlock">
-            <summary>
-            The tasks in this block will be executed as a normal part of
-            the build script.
-            </summary>
-        </member>
-        <member name="P:NAnt.Contrib.Tasks.TryCatchTask.CatchBlock">
-            <summary>
-            The tasks in this block will be executed if any task in the try
-            block fails.
-            </summary>
-        </member>
-        <member name="P:NAnt.Contrib.Tasks.TryCatchTask.FinallyBlock">
-            <summary>
-            The tasks in this block will always be executed, regardless of
-            what happens in the try and catch blocks.
-            </summary>
-            <remarks>
-            Note that any failure in any of the tasks in this block will
-            prevent any subsequent tasks from executing.
-            </remarks>
-        </member>
-        <member name="P:NAnt.Contrib.Tasks.TryCatchTask.CatchElement.Property">
-            <summary>
-            Defines the name of the property to save the message describing
-            the failure that has been caught.
-            </summary>
-            <remarks>
-            <para>
-            The failure message is only available in the context of the catch
-            block.  If you wish to preserve the message, you will need to save
-            it into another property.
-            </para>
-            <para>
-            Readonly properties cannot be overridden by this mechanism.
-            </para>
-            </remarks>
         </member>
         <member name="T:NAnt.Contrib.Tasks.TypedCollectionTask">
              <summary>Generates collection classes based on a given XML specification file. Code generation is in the specified language.</summary>
@@ -17979,343 +17799,220 @@
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIBase">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.summaryinformation">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.summaryinformation">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.properties">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.properties">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.search">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.search">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.tables">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.tables">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.directories">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.directories">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.environment">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.environment">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.components">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.components">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.dialogs">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.dialogs">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.controls">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.controls">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.controlconditions">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.controlconditions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.controlevents">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.controlevents">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.registry">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.registry">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.icons">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.icons">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.shortcuts">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.shortcuts">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.binaries">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.binaries">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.customactions">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.customactions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.sequences">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.sequences">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.actiontext">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.actiontext">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.appmappings">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.appmappings">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.urlproperties">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.urlproperties">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.vdirproperties">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.vdirproperties">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.approots">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.approots">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.iisproperties">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.iisproperties">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.failonerror">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.failonerror">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.output">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.output">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.sourcedir">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.sourcedir">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.template">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.template">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.errortemplate">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.errortemplate">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.verbose">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.verbose">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.debug">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.debug">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBase.deterministicguids">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBase.deterministicguids">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msi.launchconditions">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msi.launchconditions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msi.features">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msi.features">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msi.mergemodules">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msi.mergemodules">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msi.license">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msi.license">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msi.banner">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msi.banner">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msi.background">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msi.background">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSILaunchCondition">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSILaunchCondition.description">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSILaunchCondition.description">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSILaunchCondition.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSILaunchCondition.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSILaunchCondition.condition">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSILaunchCondition.condition">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem">
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem.module">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.format">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.type">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIMerge">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.contextdata">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIMerge.modules">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.defaultvalue">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIMerge.configurationitems">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.attr">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIMerge.feature">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.displayname">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.NAntFileSet">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.description">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.include">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.helplocation">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.exclude">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.helpkeyword">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.includesfile">
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.excludesfile">
+        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.text">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.includes">
+        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.key">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.excludes">
+        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.integer">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.basedir">
+        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.bitfield">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.defaultexcludes">
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.failonempty">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.table">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSet.refid">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.row">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.column">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.value">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.frompath">
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleIgnoreTable">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.asIs">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleIgnoreTable.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.asIsSpecified">
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleSequence">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.if">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.type">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.unless">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.action">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.sequence">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.sequenceSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile.if">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.baseaction">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile.unless">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.after">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIFeatureCondition">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeatureCondition.expression">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeatureCondition.level">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIFeature">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.description">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.conditions">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.feature">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.name">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.attr">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.title">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.display">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.typical">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFeature.directory">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIIISProperty">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIIISProperty.directory">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIIISProperty.attr">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIIISProperty.defaultdoc">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIAppRoot">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIAppRoot.component">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIAppRoot.urlproperty">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIAppRoot.inprocflag">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIVDirProperty">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIVDirProperty.name">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIVDirProperty.portproperty">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIVDirProperty.urlproperty">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIURLProperty">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIURLProperty.name">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIURLProperty.property">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIAppMapping">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIAppMapping.directory">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIAppMapping.extension">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIAppMapping.exepath">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIAppMapping.verbs">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSIActionTextAction">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIActionTextAction.description">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIActionTextAction.name">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIActionTextAction.template">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSISequence">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSISequence.type">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSISequence.action">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSISequence.value">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSISequence.condition">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.condition">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSISequenceTable">
@@ -18336,115 +18033,358 @@
         <member name="F:NAnt.Contrib.Schemas.Msi.MSISequenceTable.advtexecute">
             <remarks/>
         </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.id">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.language">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.minversion">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.maxversion">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleDependency">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleDependency.id">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleDependency.language">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSMModuleDependency.version">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem.module">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIConfigurationItem.value">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIMerge">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIMerge.modules">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIMerge.configurationitems">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIMerge.feature">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.NAntFileSet">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.include">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.exclude">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.includesfile">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.excludesfile">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.includes">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.excludes">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.basedir">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.defaultexcludes">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.failonempty">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSet.refid">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.frompath">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.asIs">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.asIsSpecified">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.if">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetPattern.unless">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile.if">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.NAntFileSetExcludesfile.unless">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIFeatureCondition">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeatureCondition.expression">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeatureCondition.level">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIFeature">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.description">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.conditions">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.feature">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.attr">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.title">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.display">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.typical">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFeature.directory">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIIISProperty">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIIISProperty.directory">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIIISProperty.attr">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIIISProperty.defaultdoc">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIAppRoot">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIAppRoot.component">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIAppRoot.urlproperty">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIAppRoot.inprocflag">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIVDirProperty">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIVDirProperty.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIVDirProperty.portproperty">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIVDirProperty.urlproperty">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIURLProperty">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIURLProperty.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIURLProperty.property">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIAppMapping">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIAppMapping.directory">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIAppMapping.extension">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIAppMapping.exepath">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIAppMapping.verbs">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSIActionTextAction">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIActionTextAction.description">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIActionTextAction.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIActionTextAction.template">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSISequence">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSISequence.type">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSISequence.action">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSISequence.value">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSISequence.condition">
+            <remarks/>
+        </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSICustomAction">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSICustomAction.action">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSICustomAction.action">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSICustomAction.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSICustomAction.type">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSICustomAction.source">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSICustomAction.source">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSICustomAction.target">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSICustomAction.target">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIBinary">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBinary.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBinary.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIBinary.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIBinary.value">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIShortcut">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.description">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.description">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.directory">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.directory">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.filename">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.filename">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.component">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.component">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.target">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.target">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.arguments">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.arguments">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.hotkey">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.hotkey">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.icon">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.icon">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.iconindex">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.iconindex">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.iconindexSpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.iconindexSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.showcmd">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.showcmd">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.showcmdSpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.showcmdSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIShortcut.wkdir">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIShortcut.wkdir">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIIcon">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIIcon.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIIcon.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIIcon.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIIcon.value">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.value">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.dword">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.dword">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.id">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.id">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.Value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyValue.Value">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIRegistryKey">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.value">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.path">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.path">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.root">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.root">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.component">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRegistryKey.component">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIRegistryKeyRoot">
@@ -18468,286 +18408,286 @@
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIControlEvent">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.dialog">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.dialog">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.control">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.control">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.argument">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.argument">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.condition">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.condition">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.order">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.order">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.orderSpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.orderSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlEvent.remove">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlEvent.remove">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIControlCondition">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlCondition.dialog">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlCondition.dialog">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlCondition.control">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlCondition.control">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlCondition.action">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlCondition.action">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlCondition.condition">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlCondition.condition">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControlCondition.remove">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControlCondition.remove">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIControl">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.dialog">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.dialog">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.type">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.x">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.x">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.y">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.y">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.width">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.width">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.height">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.height">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.attr">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.attr">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.property">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.property">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.text">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.text">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.nextcontrol">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.nextcontrol">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.help">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.help">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIControl.remove">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIControl.remove">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIDialog">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.hcenter">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.hcenter">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.vcenter">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.vcenter">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.width">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.width">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.height">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.height">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.attr">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.attr">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.title">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.title">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.firstcontrol">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.firstcontrol">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.defaultcontrol">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.defaultcontrol">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDialog.cancelcontrol">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDialog.cancelcontrol">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIFileOverride">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFileOverride.file">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFileOverride.file">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFileOverride.id">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFileOverride.id">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFileOverride.attr">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFileOverride.attr">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFileOverride.version">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFileOverride.version">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFileOverride.language">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFileOverride.language">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFileOverride.checkinterop">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFileOverride.checkinterop">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIFileOverride.installtogac">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIFileOverride.installtogac">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIKeyFile">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIKeyFile.file">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIKeyFile.file">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIComponent">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.key">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.key">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.fileset">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.fileset">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.forceid">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.forceid">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.id">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.id">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.attr">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.attr">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.directory">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.directory">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.feature">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.feature">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.condition">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.condition">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.fileattr">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.fileattr">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.checkinterop">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.checkinterop">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.installassembliestogac">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.installassembliestogac">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIComponent.keepsubdirs">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIComponent.keepsubdirs">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIVariable">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIVariable.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIVariable.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIVariable.append">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIVariable.append">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIVariable.component">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIVariable.component">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIDirectory">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDirectory.directory">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDirectory.directory">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDirectory.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDirectory.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIDirectory.foldername">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIDirectory.foldername">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSIRootDirectory">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSIRootDirectory.root">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSIRootDirectory.root">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSITableRowColumnData">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableRowColumnData.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableRowColumnData.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableRowColumnData.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableRowColumnData.value">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSITableRow">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableRow.columns">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableRow.columns">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSITableColumn">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.nullable">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.nullable">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.category">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.category">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.categorySpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.categorySpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.type">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.key">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.key">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.minvalue">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.minvalue">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.minvalueSpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.minvalueSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.maxvalue">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.maxvalue">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.maxvalueSpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.maxvalueSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.keytable">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.keytable">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.keycolumn">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.keycolumn">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.keycolumnSpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.keycolumnSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.set">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.set">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITableColumn.description">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITableColumn.description">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSITableColumnCategoryType">
@@ -18828,37 +18768,112 @@
         <member name="T:NAnt.Contrib.Schemas.Msi.MSITable">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITable.columns">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITable.columns">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITable.rows">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITable.rows">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSITable.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.MSITable.name">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.searchKeyValue">
+        <member name="T:NAnt.Contrib.Schemas.Msi.summaryinformation">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchKeyValue.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.title">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchKeyValue.setproperty">
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.subject">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.searchKey">
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.author">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchKey.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.keywords">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchKey.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.comments">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchKey.path">
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.template">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchKey.root">
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.revisionnumber">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.summaryinformation.creatingapplication">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.property">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.property.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.property.value">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.search">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.search.app">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.search.registry">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.search.ini">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.search.dirfile">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.search.key">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.searchApp">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchApp.componentid">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchApp.type">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchApp.setproperty">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFile">
+            <remarks/>
+        </member>
+        <member name="F:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFile.directory">
+            <remarks/>
+        </member>
+        <member name="F:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFile.file">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.searchRegistry">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchRegistry.value">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchRegistry.type">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchRegistry.path">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchRegistry.root">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.searchRegistryValue">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchRegistryValue.name">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchRegistryValue.setproperty">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFileReg64">
@@ -18876,82 +18891,25 @@
         <member name="F:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFileReg64.Item64bit">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.searchDirfileFile">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.name">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.minversion">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxversion">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.minsize">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.minsizeSpecified">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxsize">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxsizeSpecified">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.mindate">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.mindateSpecified">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxdate">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxdateSpecified">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfileFile.languages">
-            <remarks/>
-        </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.searchDirfile">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfile.file">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfile.parent">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfile.path">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfile.depth">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchDirfile.setproperty">
-            <remarks/>
-        </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.searchIni">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchIni.filename">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchIni.filename">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchIni.section">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchIni.section">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchIni.key">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchIni.key">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchIni.field">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchIni.field">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchIni.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchIni.type">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchIni.setproperty">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchIni.setproperty">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFileRaw">
@@ -18966,253 +18924,295 @@
         <member name="F:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFileRaw.raw">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.searchRegistryValue">
+        <member name="T:NAnt.Contrib.Schemas.Msi.searchDirfile">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchRegistryValue.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfile.file">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchRegistryValue.setproperty">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfile.parent">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.searchRegistry">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfile.path">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchRegistry.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfile.depth">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchRegistry.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfile.setproperty">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchRegistry.path">
+        <member name="T:NAnt.Contrib.Schemas.Msi.searchDirfileFile">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchRegistry.root">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.name">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.searchApp">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.minversion">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchApp.componentid">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxversion">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchApp.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.minsize">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.searchApp.setproperty">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.minsizeSpecified">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFile">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxsize">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFile.directory">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxsizeSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSILocatorTypeDirFile.file">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.mindate">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.search">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.mindateSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.search.app">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxdate">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.search.registry">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.maxdateSpecified">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.search.ini">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchDirfileFile.languages">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.search.dirfile">
+        <member name="T:NAnt.Contrib.Schemas.Msi.searchKey">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.search.key">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchKey.value">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.property">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchKey.type">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.property.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchKey.path">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.property.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchKey.root">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.summaryinformation">
+        <member name="T:NAnt.Contrib.Schemas.Msi.searchKeyValue">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.title">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchKeyValue.name">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.subject">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.author">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.keywords">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.comments">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.template">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.revisionnumber">
-            <remarks/>
-        </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.summaryinformation.creatingapplication">
+        <member name="P:NAnt.Contrib.Schemas.Msi.searchKeyValue.setproperty">
             <remarks/>
         </member>
         <member name="T:NAnt.Contrib.Schemas.Msi.msm">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.moduledependencies">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.moduledependencies">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.moduleexclusions">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.moduleexclusions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.modulesequences">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.modulesequences">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.moduleignoretables">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.moduleignoretables">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.modulesubstitutions">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.modulesubstitutions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.moduleconfigurations">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.moduleconfigurations">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.id">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.id">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.language">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.language">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.msm.version">
+        <member name="P:NAnt.Contrib.Schemas.Msi.msm.version">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleDependency">
+        <member name="T:NAnt.Contrib.Schemas.Msi.properties">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleDependency.id">
+        <member name="P:NAnt.Contrib.Schemas.Msi.properties.property">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleDependency.language">
+        <member name="T:NAnt.Contrib.Schemas.Msi.launchconditions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleDependency.version">
+        <member name="P:NAnt.Contrib.Schemas.Msi.launchconditions.launchcondition">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion">
+        <member name="T:NAnt.Contrib.Schemas.Msi.tables">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.id">
+        <member name="P:NAnt.Contrib.Schemas.Msi.tables.table">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.language">
+        <member name="T:NAnt.Contrib.Schemas.Msi.directories">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.minversion">
+        <member name="P:NAnt.Contrib.Schemas.Msi.directories.directory">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleExclusion.maxversion">
+        <member name="T:NAnt.Contrib.Schemas.Msi.environment">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleSequence">
+        <member name="P:NAnt.Contrib.Schemas.Msi.environment.variable">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.type">
+        <member name="T:NAnt.Contrib.Schemas.Msi.features">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.action">
+        <member name="P:NAnt.Contrib.Schemas.Msi.features.feature">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.sequence">
+        <member name="T:NAnt.Contrib.Schemas.Msi.components">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.sequenceSpecified">
+        <member name="P:NAnt.Contrib.Schemas.Msi.components.component">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.baseaction">
+        <member name="T:NAnt.Contrib.Schemas.Msi.binaries">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.after">
+        <member name="P:NAnt.Contrib.Schemas.Msi.binaries.binary">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSequence.condition">
+        <member name="T:NAnt.Contrib.Schemas.Msi.dialogs">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleIgnoreTable">
+        <member name="P:NAnt.Contrib.Schemas.Msi.dialogs.dialog">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleIgnoreTable.name">
+        <member name="T:NAnt.Contrib.Schemas.Msi.controls">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution">
+        <member name="P:NAnt.Contrib.Schemas.Msi.controls.control">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.table">
+        <member name="T:NAnt.Contrib.Schemas.Msi.controlconditions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.row">
+        <member name="P:NAnt.Contrib.Schemas.Msi.controlconditions.controlcondition">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.column">
+        <member name="T:NAnt.Contrib.Schemas.Msi.controlevents">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleSubstitution.value">
+        <member name="P:NAnt.Contrib.Schemas.Msi.controlevents.controlevent">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration">
+        <member name="T:NAnt.Contrib.Schemas.Msi.mergemodules">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.name">
+        <member name="P:NAnt.Contrib.Schemas.Msi.mergemodules.merge">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.format">
+        <member name="T:NAnt.Contrib.Schemas.Msi.registry">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.type">
+        <member name="P:NAnt.Contrib.Schemas.Msi.registry.key">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.contextdata">
+        <member name="T:NAnt.Contrib.Schemas.Msi.customactions">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.defaultvalue">
+        <member name="P:NAnt.Contrib.Schemas.Msi.customactions.customaction">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.attr">
+        <member name="T:NAnt.Contrib.Schemas.Msi.sequences">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.displayname">
+        <member name="P:NAnt.Contrib.Schemas.Msi.sequences.sequence">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.description">
+        <member name="T:NAnt.Contrib.Schemas.Msi.actiontext">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.helplocation">
+        <member name="P:NAnt.Contrib.Schemas.Msi.actiontext.action">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfiguration.helpkeyword">
+        <member name="T:NAnt.Contrib.Schemas.Msi.appmappings">
             <remarks/>
         </member>
-        <member name="T:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat">
+        <member name="P:NAnt.Contrib.Schemas.Msi.appmappings.appmapping">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.text">
+        <member name="T:NAnt.Contrib.Schemas.Msi.urlproperties">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.key">
+        <member name="P:NAnt.Contrib.Schemas.Msi.urlproperties.urlproperty">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.integer">
+        <member name="T:NAnt.Contrib.Schemas.Msi.vdirproperties">
             <remarks/>
         </member>
-        <member name="F:NAnt.Contrib.Schemas.Msi.MSMModuleConfigurationFormat.bitfield">
+        <member name="P:NAnt.Contrib.Schemas.Msi.vdirproperties.vdirproperty">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.approots">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.approots.approot">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.iisproperties">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.iisproperties.iisproperty">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.icons">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.icons.icon">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.shortcuts">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.shortcuts.shortcut">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.moduledependencies">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.moduledependencies.dependency">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.moduleexclusions">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.moduleexclusions.exclusion">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.modulesequences">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.modulesequences.sequence">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.moduleignoretables">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.moduleignoretables.table">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.modulesubstitutions">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.modulesubstitutions.substitution">
+            <remarks/>
+        </member>
+        <member name="T:NAnt.Contrib.Schemas.Msi.moduleconfigurations">
+            <remarks/>
+        </member>
+        <member name="P:NAnt.Contrib.Schemas.Msi.moduleconfigurations.configuration">
             <remarks/>
         </member>
     </members>
