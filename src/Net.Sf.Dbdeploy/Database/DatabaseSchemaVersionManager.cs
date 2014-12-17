@@ -66,7 +66,7 @@ namespace Net.Sf.Dbdeploy.Database
                     while (reader.Read())
                     {
                         var folder = GetValue<string>(reader, "Folder");
-                        var scriptNumber = GetValue<short>(reader, "ScriptNumber");
+                        var scriptNumber = GetValue<int>(reader, "ScriptNumber");
                         var changeEntry = new ChangeEntry(folder, scriptNumber);
                         changeEntry.ChangeId = GetValue<int>(reader, "ChangeId");
                         changeEntry.ScriptName = GetValue<string>(reader, "ScriptName");
