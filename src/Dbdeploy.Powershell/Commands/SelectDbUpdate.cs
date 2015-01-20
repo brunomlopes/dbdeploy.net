@@ -19,7 +19,7 @@ namespace Dbdeploy.Powershell.Commands
 
             List<ChangeScript> allChangeScripts = new DirectoryScanner(infoTextWriter, Encoding.UTF8)
                 .GetChangeScriptsForDirectory(new DirectoryInfo(this.deltasDirectory));
-            
+
             var repository = new ChangeScriptRepository(allChangeScripts);
             var changeScripts = repository.GetAvailableChangeScripts();
 
@@ -28,19 +28,21 @@ namespace Dbdeploy.Powershell.Commands
 
             var schemaManager = new DatabaseSchemaVersionManager(queryExecuter, factory.CreateDbmsSyntax(), this.TableName);
 
-            var appliedChanges = schemaManager.GetAppliedChanges();
-            var notAppliedChangeScripts = changeScripts.Where(c => appliedChanges.All(a => a.ScriptNumber != c.ScriptNumber));
+            var appliedChanges = schemaManager.GetAppliedChanges()
+                .ToDictionary(c => c.ScriptNumber);
 
             var descriptionPrettyPrinter = new DescriptionPrettyPrinter();
 
-            var objects = notAppliedChangeScripts
+            var objects = changeScripts
                 .Select(script => new
-                    {
-                        Id = script.ScriptNumber,
-                        script.Version,
-                        Description = descriptionPrettyPrinter.Format(script.ScriptName),
-                        File = script.FileInfo
-                    });
+                {
+                    Id = script.ScriptNumber,
+                    Description = descriptionPrettyPrinter.Format(script.ScriptName),
+                    File = script.FileInfo,
+                    Status = appliedChanges.ContainsKey(script.ScriptNumber) ?
+                                    (ScriptStatus?)appliedChanges[script.ScriptNumber].Status :
+                                    null
+                });
 
             this.WriteObject(objects, true);
         }
