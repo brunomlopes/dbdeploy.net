@@ -162,7 +162,10 @@
         {
             if (this.currentOutput != null)
             {
-                this.currentOutput.AppendLine(((dynamic)args).Message);
+				foreach (var errorMessage in ((dynamic)args).errors)
+				{
+					this.currentOutput.AppendLine(errorMessage.Message);
+				}
             }
         }
 
