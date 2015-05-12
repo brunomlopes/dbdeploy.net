@@ -107,17 +107,12 @@ namespace Net.Sf.Dbdeploy.Database
             if (!string.IsNullOrWhiteSpace(tableInfo.Schema))
             {
                 syntax = string.Format(CultureInfo.InvariantCulture,
-@"SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_SCHEMA = '{0}' 
-AND  TABLE_NAME = '{1}'", tableInfo.Schema, tableInfo.TableName);
+@"SELECT table_schema FROM INFORMATION_SCHEMA.TABLES WHERE lower(TABLE_SCHEMA) = lower('{0}') AND  lower(TABLE_NAME) = lower('{1}')", tableInfo.Schema, tableInfo.TableName);
             }
             else
             {
-                syntax = string.Format(CultureInfo.InvariantCulture,
-@"SELECT table_schema 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = '{0}'", tableName);
+                syntax = string.Format(CultureInfo.InvariantCulture, 
+@"SELECT table_schema FROM INFORMATION_SCHEMA.TABLES WHERE lower(TABLE_NAME) = lower('{0}')", tableName);
             }
 
             return syntax;

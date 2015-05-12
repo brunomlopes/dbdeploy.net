@@ -12,11 +12,16 @@ namespace Net.Sf.Dbdeploy.Database
     [TestFixture]
     public abstract class AbstractDatabaseSchemaVersionManagerTest
     {
-        public const string TableName = "ChangeLog";
-
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
 
         private IDbmsSyntax syntax;
+
+        protected string TableName { get; set; }
+
+        public AbstractDatabaseSchemaVersionManagerTest()
+        {
+            TableName = "ChangeLog";
+        }
 
         [SetUp]
         protected void SetUp()
@@ -124,7 +129,7 @@ namespace Net.Sf.Dbdeploy.Database
         /// <param name="tableName">Name of the table.</param>
         protected virtual void EnsureTableDoesNotExist(string tableName)
         {
-            ExecuteSql("DROP TABLE " + TableName);
+            ExecuteSql("DROP TABLE " + tableName);
         }
 
         protected void ExecuteSql(string sql)

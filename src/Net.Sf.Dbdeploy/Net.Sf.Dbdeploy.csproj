@@ -96,6 +96,7 @@
     <Compile Include="Configuration\IDbDeployConfigurationManager.cs" />
     <Compile Include="Configuration\Parser.cs" />
     <Compile Include="Database\ChangeEntry.cs" />
+    <Compile Include="Database\PostgresDbmsSyntax.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringInfo.cs" />
     <Compile Include="Database\SqlCmd\ConnectionStringParser.cs" />
     <Compile Include="Database\SqlCmd\SqlCmdExecutor.cs" />
@@ -189,6 +190,12 @@
     <EmbeddedResource Include="Resources\SQLCMD.rll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\postgres_apply.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\postgres_undo.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\dbproviders.xml">
@@ -208,6 +215,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\CreateSchemaVersionTable.ora.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CreateSchemaVersionTable.postgres.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

@@ -178,7 +178,7 @@ SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
             var columnValue = reader[name];
             if (columnValue != DBNull.Value)
             {
-                value = (T)columnValue;
+                value = (T)Convert.ChangeType(columnValue, typeof(T));
             }
 
             return value;
