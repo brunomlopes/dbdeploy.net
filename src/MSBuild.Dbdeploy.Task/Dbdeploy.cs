@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace MSBuild.Dbdeploy.Task
 {
     using System;
@@ -34,8 +36,8 @@ namespace MSBuild.Dbdeploy.Task
         [Required]
         public string Dir
         {
-            get { return this.config.ScriptDirectory.FullName; }
-            set { this.config.ScriptDirectory = new DirectoryInfo(value); }
+            get { return string.Join(";", this.config.ScriptDirectory.Select(x => x.FullName).ToArray()); }
+            set { this.config.ScriptDirectory = Parser.ParseDirectory(value); }
         }
 
         public string OutputFile

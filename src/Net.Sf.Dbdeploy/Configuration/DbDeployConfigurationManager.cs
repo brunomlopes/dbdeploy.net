@@ -1,4 +1,5 @@
 ﻿using Net.Sf.Dbdeploy.Database;
+using NVelocity.Runtime.Directive;
 
 namespace Net.Sf.Dbdeploy.Configuration
 {
@@ -58,7 +59,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             var config = new DbDeployConfig();
             config.Dbms = GetAttribute(element, "dbms", DbDeployDefaults.Dbms);
             config.ConnectionString = GetAttribute(element, "connectionString", DbDeployDefaults.ConnectionString);
-            config.ScriptDirectory = GetAttribute(element, "scriptDirectory", DbDeployDefaults.ScriptDirectory, v => new DirectoryInfo(ResolveRelativePath(rootPath, v)));
+            config.ScriptDirectory = GetAttribute(element, "scriptDirectory", DbDeployDefaults.ScriptDirectory, v => Parser.ParseDirectory(rootPath, v));
             config.OutputFile = GetAttribute(element, "outputFile", DbDeployDefaults.OutputFile, v => new FileInfo(ResolveRelativePath(rootPath, v)));
             config.ChangeLogTableName = GetAttribute(element, "changeLogTableName", DbDeployDefaults.ChangeLogTableName);
             config.AutoCreateChangeLogTable = GetAttribute(element, "autoCreateChangeLogTable", DbDeployDefaults.AutoCreateChangeLogTable, bool.Parse);

@@ -36,7 +36,7 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// <value>
         /// The script directory.
         /// </value>
-        public DirectoryInfo ScriptDirectory { get; set; }
+        public IEnumerable<DirectoryInfo> ScriptDirectory { get; set; }
         
         /// <summary>
         /// Gets or sets the assembly to read all change scripts resource files from.

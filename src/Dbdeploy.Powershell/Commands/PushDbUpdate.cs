@@ -18,7 +18,7 @@ namespace Dbdeploy.Powershell.Commands
                 Dbms = DatabaseType,
                 ConnectionString = ConnectionString,
                 ChangeLogTableName = TableName,
-                ScriptDirectory = new DirectoryInfo(deltasDirectory),
+                ScriptDirectory = Parser.ParseDirectory(deltasDirectory),
             };
 
             var deployer = new DbDeployer();

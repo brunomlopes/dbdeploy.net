@@ -28,6 +28,8 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             if (directory == null)
                 return new List<ChangeScript>();
+            if (!directory.Exists)
+                return new List<ChangeScript>();
 
             try
             {

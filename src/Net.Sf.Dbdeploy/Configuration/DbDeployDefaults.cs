@@ -62,7 +62,7 @@ namespace Net.Sf.Dbdeploy.Configuration
         /// <summary>
         /// The script directory default value.
         /// </summary>
-        public static readonly DirectoryInfo ScriptDirectory = new DirectoryInfo(".");
+        public static readonly IEnumerable<DirectoryInfo> ScriptDirectory = new List<DirectoryInfo>();
 
         /// <summary>
         /// The encoding default value.

@@ -1,4 +1,6 @@
-﻿namespace Net.Sf.Dbdeploy
+﻿using System.Linq;
+
+namespace Net.Sf.Dbdeploy
 {
     using System;
     using System.IO;
@@ -167,9 +169,10 @@
                 this.CheckForRequiredParameter(config.ScriptDirectory, "dir");
             }
             
-            if (config.ScriptDirectory != null && !config.ScriptDirectory.Exists)
+            if (config.ScriptDirectory != null && !config.ScriptDirectory.Any(x => x.Exists))
             {
-                throw new UsageException(string.Format("The directory '{0}' does not exist.\nScript directory must point to a valid directory", config.ScriptDirectory));
+                var directoriesName = config.ScriptDirectory.Select(x => x.FullName).ToArray();
+                throw new UsageException(string.Format("Any directory '{0}' does not exist.\nScript directory must point to a valid directory", string.Join(",", directoriesName)));
             }
         }
 

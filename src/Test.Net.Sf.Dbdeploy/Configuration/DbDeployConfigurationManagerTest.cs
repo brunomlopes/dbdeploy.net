@@ -44,7 +44,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             Assert.AreEqual("mysql", deployment.Dbms, "Dbms is incorrect.");
             Assert.AreEqual(@"Server=.\;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01", deployment.ConnectionString, "ConnectionString is incorrect.");
             Assert.IsNotNull(deployment.ScriptDirectory, "ScriptDirectory is not set.");
-            StringAssert.EndsWith(@"Mocks\Versioned", deployment.ScriptDirectory.FullName, "ScriptDirectory is incorrect.");
+            StringAssert.EndsWith(@"Mocks\Versioned", deployment.ScriptDirectory.First().FullName, "ScriptDirectory is incorrect.");
             Assert.IsNotNull(deployment.OutputFile, "OutputFile is not set.");
             StringAssert.EndsWith(@"Mocks\Output\dbdeploy.sql", deployment.OutputFile.FullName, "OutputFile is incorrect.");
             Assert.AreEqual("InstallLog", deployment.ChangeLogTableName, "ChangeLogTableName is incorrect.");
@@ -65,7 +65,7 @@ namespace Net.Sf.Dbdeploy.Configuration
             Assert.AreEqual(DbDeployDefaults.Dbms, deployment.Dbms, "Dbms should be default.");
             Assert.AreEqual(@"Server=.\SQLEXPRESS;Initial Catalog=DBDEPLOY;User Id=DBDeployUser;Password=Password01", deployment.ConnectionString, "ConnectionString is incorrect.");
             Assert.IsNotNull(deployment.ScriptDirectory, "ScriptDirectory is not set.");
-            StringAssert.EndsWith(@"Mocks\Versioned\2.0.0.0", deployment.ScriptDirectory.FullName, "ScriptDirectory is incorrect.");
+            StringAssert.EndsWith(@"Mocks\Versioned\2.0.0.0", deployment.ScriptDirectory.First().FullName, "ScriptDirectory is incorrect.");
             Assert.AreEqual(DbDeployDefaults.OutputFile, deployment.OutputFile, "OutputFile should be default.");
             Assert.AreEqual(DbDeployDefaults.ChangeLogTableName, deployment.ChangeLogTableName, "ChangeLogTableName should be default.");
             Assert.AreEqual(DbDeployDefaults.AutoCreateChangeLogTable, deployment.AutoCreateChangeLogTable, "AutoCreateChangeLogTable should be default.");

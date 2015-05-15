@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Net.Sf.Dbdeploy
 {
     using System;
@@ -33,10 +35,10 @@ namespace Net.Sf.Dbdeploy
         }
         
         [TaskAttribute("dir", Required = true)]
-        public DirectoryInfo Dir
+        public string Dir
         {
-            get { return this.config.ScriptDirectory; }
-            set { this.config.ScriptDirectory = value; }
+            get { return string.Join(";", this.config.ScriptDirectory.Select(x => x.FullName).ToArray()); }
+            set { this.config.ScriptDirectory = Parser.ParseDirectory(value); }
         }
         
         [TaskAttribute("outputFile")]

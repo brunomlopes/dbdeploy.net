@@ -37,7 +37,7 @@
                 "--delimiter \\ --delimitertype row").Split(' ')).Deployments.First();
 
             Assert.AreEqual("DataSource:.\\SQLEXPRESS;...;", config.ConnectionString);
-            Assert.AreEqual(Environment.CurrentDirectory, config.ScriptDirectory.FullName);
+            Assert.AreEqual(Environment.CurrentDirectory, config.ScriptDirectory.First().FullName);
             Assert.AreEqual("output.sql", config.OutputFile.Name);
             Assert.AreEqual("ora", config.Dbms);
             Assert.AreEqual("my-change-log", config.ChangeLogTableName);

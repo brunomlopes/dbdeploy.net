@@ -101,7 +101,7 @@ namespace Net.Sf.Dbdeploy
                 .Add(
                     "s|scriptdirectory=",
                     "directory containing change scripts (default: .)",
-                    s => config.ScriptDirectory = new DirectoryInfo(StripQuotes(s)))
+                    s => config.ScriptDirectory = Parser.ParseDirectory(StripQuotes(s)))
 
                 .Add(
                     "o|outputfile=",

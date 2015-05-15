@@ -35,6 +35,18 @@ namespace Net.Sf.Dbdeploy.Scripts
             VerifyChangeScript(changeScripts, "v2.0.10.0", 3, "3.SQLCMD Add Customer Data.sql");
         }
 
+        [Test]
+        public void CanSearchForFilesFromNotExistDirectory()
+        {
+            var writer = new StringWriter();
+            var directoryScanner = new DirectoryScanner(writer, Encoding.UTF8, new DirectoryInfo(@"Mocks\NotExistDirectory"));
+
+            List<ChangeScript> changeScripts = directoryScanner.GetChangeScripts();
+
+            Assert.IsNotNull(changeScripts, "Change scripts should not be null.");
+            Assert.AreEqual(changeScripts.Count, 0, "Needs no change scripts where found.");
+        }
+
         /// <summary>
         /// Verifies the change script information.
         /// </summary>

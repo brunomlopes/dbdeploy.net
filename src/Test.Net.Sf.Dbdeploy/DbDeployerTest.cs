@@ -38,8 +38,8 @@ namespace Net.Sf.Dbdeploy
                     {
                         ConnectionString = ConnectionString,
                         Dbms = SupportedDbms.MSSQL,
-                        Delimiter = "GO", 
-                        ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
+                        Delimiter = "GO",
+                        ScriptDirectory = new List<DirectoryInfo> { new DirectoryInfo(@"Mocks\Versioned\2.0.0.0") },
                         ScriptAssemblies = new List<Assembly> {assembly},
                         DelimiterType = Parser.ParseDelimiterType("row"),
                         UseSqlCmd = false,
@@ -89,7 +89,7 @@ namespace Net.Sf.Dbdeploy
                     ConnectionString = ConnectionString,
                     Dbms = SupportedDbms.MSSQL,
                     Delimiter = "GO",
-                    ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned\2.0.0.0"),
+                    ScriptDirectory = new List<DirectoryInfo> { new DirectoryInfo(@"Mocks\Versioned\2.0.0.0") },
                     DelimiterType = Parser.ParseDelimiterType("row"),
                     UseSqlCmd = false
                 };

@@ -35,7 +35,12 @@ namespace Net.Sf.Dbdeploy.Scripts
             }
 
             if (dbDeployConfig.ScriptDirectory != null)
-                scanners.Add(new DirectoryScanner(infoWriter, dbDeployConfig.Encoding, dbDeployConfig.ScriptDirectory));
+            {
+                foreach (var directory in dbDeployConfig.ScriptDirectory)
+                {
+                    scanners.Add(new DirectoryScanner(infoWriter, dbDeployConfig.Encoding, directory));   
+                }
+            }
 
             return scanners;
         }

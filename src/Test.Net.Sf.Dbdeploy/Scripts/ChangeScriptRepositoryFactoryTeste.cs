@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using FluentAssertions;
 using Net.Sf.Dbdeploy.Configuration;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             var dbDeployConfig = new DbDeployConfig
             {
-                ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned"),
+                ScriptDirectory = new List<DirectoryInfo>{new DirectoryInfo(@"Mocks\Versioned")},
             };
             var changeScriptRepositoryFactory = new ChangeScriptRepositoryFactory(dbDeployConfig, new StringWriter());
 
@@ -28,7 +29,7 @@ namespace Net.Sf.Dbdeploy.Scripts
         {
             var dbDeployConfig = new DbDeployConfig
             {
-                ScriptDirectory = new DirectoryInfo(@"Mocks\Versioned"),
+                ScriptDirectory = new List<DirectoryInfo> { new DirectoryInfo(@"Mocks\Versioned") },
             };
 
             var changeScriptRepositoryFactory = new ChangeScriptRepositoryFactory(dbDeployConfig, new StringWriter());
