@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Net.Sf.Dbdeploy.Scripts
 {
     using System;
@@ -22,8 +24,6 @@ namespace Net.Sf.Dbdeploy.Scripts
         public ChangeScriptRepository(List<ChangeScript> scripts)
         {
             this.scripts = scripts;
-
-            scripts.Sort();
 
             CheckForDuplicateIds(scripts);
         }

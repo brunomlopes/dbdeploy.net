@@ -19,7 +19,9 @@ namespace Net.Sf.Dbdeploy.Scripts
             var scripts = new List<ChangeScript>();
             foreach (var scanner in scanners)
             {
-                scripts.AddRange(scanner.GetChangeScripts());
+                var changeScripts = scanner.GetChangeScripts();
+                changeScripts.Sort();
+                scripts.AddRange(changeScripts);
             }
 
             return scripts;
