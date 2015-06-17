@@ -23,7 +23,7 @@ namespace Net.Sf.Dbdeploy
         public string GenerateWelcomeString()
         {
             Version version = Assembly.GetAssembly(this.GetType()).GetName().Version;
-            
+
             return "dbdeploy.net " + version;
         }
 
@@ -42,7 +42,7 @@ namespace Net.Sf.Dbdeploy
             infoWriter.WriteLine(this.GenerateWelcomeString());
 
             var factory = new DbmsFactory(config.Dbms, config.ConnectionString, config.DllPathConnector);
-            
+
             var dbmsSyntax = factory.CreateDbmsSyntax();
 
             var queryExecuter = new QueryExecuter(factory);
@@ -52,7 +52,7 @@ namespace Net.Sf.Dbdeploy
             TextWriter doWriter = null;
             QueryExecuter applierExecutor = null;
 
-            if (config.OutputFile != null) 
+            if (config.OutputFile != null)
             {
                 doWriter = new StreamWriter(config.OutputFile.OpenWrite(), config.Encoding);
 
@@ -79,7 +79,7 @@ namespace Net.Sf.Dbdeploy
                     config.ChangeLogTableName,
                     infoWriter);
             }
-            else 
+            else
             {
                 var splitter = new QueryStatementSplitter
                 {
@@ -91,10 +91,10 @@ namespace Net.Sf.Dbdeploy
                 // Do not share query executor between schema manager and applier, since a failure in one will effect the other.
                 applierExecutor = new QueryExecuter(factory);
                 doScriptApplier = new DirectToDbApplier(
-                    applierExecutor, 
-                    databaseSchemaVersionManager, 
-                    splitter, 
-                    dbmsSyntax, 
+                    applierExecutor,
+                    databaseSchemaVersionManager,
+                    splitter,
+                    dbmsSyntax,
                     config.ChangeLogTableName,
                     infoWriter);
             }
@@ -102,7 +102,7 @@ namespace Net.Sf.Dbdeploy
             IChangeScriptApplier undoScriptApplier = null;
             TextWriter undoWriter = null;
 
-            if (config.UndoOutputFile != null) 
+            if (config.UndoOutputFile != null)
             {
                 undoWriter = new StreamWriter(config.UndoOutputFile.OpenWrite(), config.Encoding);
 
@@ -120,12 +120,12 @@ namespace Net.Sf.Dbdeploy
                 var changeScriptRepositoryFactory = new ChangeScriptRepositoryFactory(config, infoWriter);
                 var changeScriptRepository = changeScriptRepositoryFactory.Obter();
                 var repositorioScripts = new RepositorioScripts(databaseSchemaVersionManager, changeScriptRepository);
-                
+
                 var controller = new Controller(
-                                        repositorioScripts, 
-                                        databaseSchemaVersionManager, 
-                                        doScriptApplier, 
-                                        undoScriptApplier, 
+                                        repositorioScripts,
+                                        databaseSchemaVersionManager,
+                                        doScriptApplier,
+                                        undoScriptApplier,
                                         config.AutoCreateChangeLogTable,
                                         infoWriter);
 
@@ -168,11 +168,10 @@ namespace Net.Sf.Dbdeploy
             {
                 this.CheckForRequiredParameter(config.ScriptDirectory, "dir");
             }
-            
-            if (config.ScriptDirectory != null && !config.ScriptDirectory.Any(x => x.Exists))
+
+            if (config.ScriptDirectory == null)
             {
-                var directoriesName = config.ScriptDirectory.Select(x => x.FullName).ToArray();
-                throw new UsageException(string.Format("Any directory '{0}' does not exist.\nScript directory must point to a valid directory", string.Join(",", directoriesName)));
+                this.CheckForRequiredParameter(config.ScriptAssemblies, "assembly");
             }
         }
 
@@ -181,7 +180,7 @@ namespace Net.Sf.Dbdeploy
         /// </summary>
         /// <param name="parameterValue">The parameter value.</param>
         /// <param name="parameterName">Name of the parameter.</param>
-        private void CheckForRequiredParameter(string parameterValue, string parameterName) 
+        private void CheckForRequiredParameter(string parameterValue, string parameterName)
         {
             if (string.IsNullOrEmpty(parameterValue))
             {
@@ -194,9 +193,9 @@ namespace Net.Sf.Dbdeploy
         /// </summary>
         /// <param name="parameterValue">The parameter value.</param>
         /// <param name="parameterName">Name of the parameter.</param>
-        private void CheckForRequiredParameter(object parameterValue, string parameterName) 
+        private void CheckForRequiredParameter(object parameterValue, string parameterName)
         {
-            if (parameterValue == null) 
+            if (parameterValue == null)
             {
                 UsageException.ThrowForMissingRequiredValue(parameterName);
             }
