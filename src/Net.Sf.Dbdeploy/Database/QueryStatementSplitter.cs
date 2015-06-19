@@ -5,7 +5,7 @@
 
     public class QueryStatementSplitter
     {
-        private string delimiter = ";";
+        private string delimiter = "--GO";
 
         private IDelimiterType delimiterType = new NormalDelimiter();
 
