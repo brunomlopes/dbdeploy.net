@@ -75,31 +75,37 @@ namespace Net.Sf.Dbdeploy.Configuration
         {
             var listaType = new List<DirectoryInfo>();
             if (!string.IsNullOrWhiteSpace(value))
-            {   
+            {
                 var listaDirectoryInformado = value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var directory in listaDirectoryInformado)
                 {
                     var parsedDirectory = Path.IsPathRooted(directory) ? directory : Path.GetFullPath(Path.Combine(rootPath, directory));
-                    var dirInfo = new DirectoryInfo(parsedDirectory);
-                    listaType.Add(dirInfo);
+                    if (Directory.Exists(parsedDirectory))
+                    {
+                        var dirInfo = new DirectoryInfo(parsedDirectory);
+                        listaType.Add(dirInfo);
+                    }
                 }
             }
 
             return listaType;
         }
-        
+
         public static IEnumerable<DirectoryInfo> ParseDirectory(string value)
         {
             var listaType = new List<DirectoryInfo>();
             if (!string.IsNullOrWhiteSpace(value))
-            {   
+            {
                 var listaDirectoryInformado = value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var directory in listaDirectoryInformado)
                 {
-                    var dirInfo = new DirectoryInfo(directory);
-                    listaType.Add(dirInfo);
+                    if (Directory.Exists(directory))
+                    {
+                        var dirInfo = new DirectoryInfo(directory);
+                        listaType.Add(dirInfo);
+                    }
                 }
             }
 
