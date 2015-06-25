@@ -112,12 +112,12 @@ namespace Net.Sf.Dbdeploy
                     "an|assembly=",
                     "script assembly fullname",
                     s => config.ScriptAssemblies = Parser.ParseAssembly(StripQuotes(s)))
-                    
+
                 .Add(
                     "fbn|filterbyname=",
                     "filter assembly resource by name",
                     s => config.AssemblyResourceNameFilter = Parser.ParseAssemblyFilterByName(StripQuotes(s)))
-                    
+
                 .Add(
                     "t|changelogtablename=",
                     "name of change log table to use (default: ChangeLog)",
@@ -171,7 +171,12 @@ namespace Net.Sf.Dbdeploy
                 .Add(
                     "config=",
                     "configuration file to use for all settings.",
-                    s => configFile.FileInfo = !string.IsNullOrWhiteSpace(s) ? new FileInfo(StripQuotes(s)) : null);
+                    s => configFile.FileInfo = !string.IsNullOrWhiteSpace(s) ? new FileInfo(StripQuotes(s)) : null)
+                .Add(
+                    "dllPathConnector=",
+                    "Database Connector Dll Path",
+                    s => config.DllPathConnector = s
+                );
             
             return options;
         }
