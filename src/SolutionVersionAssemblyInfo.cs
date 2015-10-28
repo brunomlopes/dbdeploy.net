@@ -1,1 +1,1 @@
-using System.Reflection;[assembly: AssemblyVersionAttribute("3.0")][assembly: AssemblyInformationalVersionAttribute("3.0-20140925_1353")][assembly: AssemblyFileVersionAttribute("3.0")]
+using System.Reflection;[assembly: AssemblyVersionAttribute("1.1")][assembly: AssemblyInformationalVersionAttribute("1.1-20151026_1120")][assembly: AssemblyFileVersionAttribute("1.1")]
