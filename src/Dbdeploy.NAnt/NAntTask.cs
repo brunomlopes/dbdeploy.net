@@ -168,7 +168,7 @@ namespace Net.Sf.Dbdeploy
             string message = "\n\nDbdeploy Ant Task Usage"
                 + "\n======================="
                 + "\n\n\t<dbdeploy"
-                + "\n\t\tdbType=\"[DATABASE TYPE - mssql/mysql/ora]\" *"
+                + "\n\t\tdbType=\"[DATABASE TYPE - mssql/mysql/ora/postgres]\" *"
                 + "\n\t\tdbConnection=\"[DATABASE CONNECTION STRING]\" *"
                 + "\n\t\ttemplatedir=\"[DIRECTORY FOR DBMS TEMPLATE SCRIPTS, IF NOT USING BUILT-IN]\""
                 + "\n\t\tdir=\"[YOUR SCRIPT FOLDER]\" *"
