@@ -66,11 +66,11 @@ namespace Net.Sf.Dbdeploy.Database
                     while (reader.Read())
                     {
                         var folder = GetValue<string>(reader, "Folder");
-                        var scriptNumber = GetValue<short>(reader, "ScriptNumber");
+                        var scriptNumber = GetValue<int>(reader, "ScriptNumber");
                         var changeEntry = new ChangeEntry(folder, scriptNumber);
                         changeEntry.ChangeId = GetValue<int>(reader, "ChangeId");
                         changeEntry.ScriptName = GetValue<string>(reader, "ScriptName");
-                        changeEntry.Status = (ScriptStatus)GetValue<byte>(reader, "ScriptStatus");
+                        changeEntry.Status = (ScriptStatus)GetByteValue(reader, "ScriptStatus");
                         changeEntry.Output = GetValue<string>(reader, "ScriptOutput");
 
                         changes.Add(changeEntry);
@@ -129,7 +129,7 @@ namespace Net.Sf.Dbdeploy.Database
                 {
                     var sql = string.Format(
                         CultureInfo.InvariantCulture,
-@"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) 
+@"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) ;
 SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
                         this.changeLogTableName,
                         this.syntax.CurrentTimestamp,
@@ -182,6 +182,18 @@ SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
             }
 
             return value;
+        }
+
+        // Npgsql doesn't have a mapping to byte that I know of.
+        // This is here to support that particular case
+        private static byte GetByteValue(IDataReader reader, string name)
+        {
+            var columnValue = reader[name];
+            if (columnValue != DBNull.Value)
+            {
+                return Convert.ToByte(columnValue);
+            }
+            return default(byte);
         }
 
         /// <summary>

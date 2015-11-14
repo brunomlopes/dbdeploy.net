@@ -30,8 +30,10 @@ namespace Net.Sf.Dbdeploy.Database
                     return new MsSqlDbmsSyntax();
                 case "mysql":
                     return new MySqlDbmsSyntax();
+                case "postgresql":
+                    return new PostgresqlDbmsSyntax();
                 default:
-                    throw new ArgumentException("Supported dbms: ora, mssql, mysql");
+                    throw new ArgumentException("Supported dbms: ora, mssql, mysql, postgresql");
             }
         }
 

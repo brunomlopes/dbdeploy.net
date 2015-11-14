@@ -13,8 +13,13 @@
   />
   <provider
     name="mysql"
-    description="MySQL, MySQL provider 1.0.7.30072"
-    assemblyName="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d" 
+    description="MySQL, MySQL provider 6.9.5.0"
+    assemblyName="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d" 
     connectionClass="MySql.Data.MySqlClient.MySqlConnection"
   />
+  <provider
+    name="postgresql"
+    description="Postgres, Postgres provider Npgsql open source project 2.2.1.0"
+    assemblyName="Npgsql, Version=2.2.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"
+    connectionClass="Npgsql.NpgsqlConnection"/>
 </providers>

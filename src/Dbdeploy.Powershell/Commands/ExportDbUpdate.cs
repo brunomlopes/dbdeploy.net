@@ -30,21 +30,12 @@ namespace Dbdeploy.Powershell.Commands
                 return;
             }
 
-            var config = new DbDeployConfig
-                             {
-                                 Dbms = this.DatabaseType,
-                                 ConnectionString = this.ConnectionString,
-                                 ChangeLogTableName = this.TableName,
-                                 ScriptDirectory = new DirectoryInfo(this.deltasDirectory),
-                                 AutoCreateChangeLogTable = this.AutoCreateChangeLogTable,
-                                 ForceUpdate = this.ForceUpdate,
-                                 UseSqlCmd = this.UseSqlCmd,
-                                 OutputFile = new FileInfo(this.ToAbsolutePath(this.OutputFile))
-                             };
+            var config = ConfigFromParameters();
+            config.OutputFile = new FileInfo(this.ToAbsolutePath(this.OutputFile));
 
             if (!string.IsNullOrEmpty(this.UndoOutputFile))
             {
-                config.OutputFile = new FileInfo(this.ToAbsolutePath(UndoOutputFile));
+                config.UndoOutputFile = new FileInfo(this.ToAbsolutePath(UndoOutputFile));
             }
 
             var deployer = new DbDeployer();

@@ -28,6 +28,12 @@ namespace Net.Sf.Dbdeploy.Database
         public void TestCanLoadMySQLProvider()
         {
             Assert.IsNotNull(providers.GetProvider("mysql"));
+        }       
+        
+        [Test]
+        public void TestCanLoadPostGresQLProvider()
+        {
+            Assert.IsNotNull(providers.GetProvider("postgresql"));
         }
     }
 }
