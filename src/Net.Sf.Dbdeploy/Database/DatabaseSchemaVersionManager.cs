@@ -70,7 +70,9 @@ namespace Net.Sf.Dbdeploy.Database
                         var changeEntry = new ChangeEntry(folder, scriptNumber);
                         changeEntry.ChangeId = GetValue<int>(reader, "ChangeId");
                         changeEntry.ScriptName = GetValue<string>(reader, "ScriptName");
-                        changeEntry.Status = (ScriptStatus)GetValue<byte>(reader, "ScriptStatus");
+                        // SQL Server, PGSQL use byte, but mysql uses sbyte, 
+                        // so use Convert instead of cast to work with both cases
+                        changeEntry.Status = (ScriptStatus)Convert.ToByte(GetValue<object>(reader, "ScriptStatus"));
                         changeEntry.Output = GetValue<string>(reader, "ScriptOutput");
 
                         changes.Add(changeEntry);

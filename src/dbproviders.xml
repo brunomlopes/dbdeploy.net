@@ -14,7 +14,7 @@
   <provider
     name="mysql"
     description="MySQL, MySQL provider 1.0.7.30072"
-    assemblyName="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d" 
+    assemblyName="MySql.Data" 
     connectionClass="MySql.Data.MySqlClient.MySqlConnection"
   />
 </providers>
