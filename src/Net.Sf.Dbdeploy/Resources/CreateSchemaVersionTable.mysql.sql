@@ -1,5 +1,5 @@
-CREATE TABLE $(QualifiedTableName) (
-	ChangeId INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `$(QualifiedTableName)` (
+	ChangeId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	Folder VARCHAR(256) NOT NULL,
 	ScriptNumber SMALLINT NOT NULL,
 	ScriptName VARCHAR(512) NOT NULL,
@@ -10,6 +10,4 @@ CREATE TABLE $(QualifiedTableName) (
 	ScriptOutput TEXT NOT NULL
 );
 
-ALTER TABLE $(QualifiedTableName) ADD CONSTRAINT PK_$(TableName) PRIMARY KEY (ChangeId);
-
-ALTER TABLE $(QualifiedTableName) ADD UNIQUE INDEX(Folder, ScriptNumber);
+ALTER TABLE `$(QualifiedTableName)` ADD UNIQUE INDEX(Folder, ScriptNumber);
