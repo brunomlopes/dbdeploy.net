@@ -129,7 +129,7 @@ WHERE TABLE_NAME = '{0}'", t));
             this.syntax.Setup(s => s.CurrentTimestamp).Returns("TIMESTAMP");
 
             this.schemaVersionManager.RecordScriptStatus(this.script, ScriptStatus.Success, "Script output");
-            string expected = @"INSERT INTO ChangeLog (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5) 
+            string expected = @"INSERT INTO ChangeLog (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, TIMESTAMP, TIMESTAMP, DBUSER, @4, @5) ;
 SELECT ChangeId FROM ChangeLog WHERE Folder = @1 and ScriptNumber = @2";
 
             Assert.AreEqual(expected, this.executedQueries.FirstOrDefault(), "The query executed was incorrect.");
