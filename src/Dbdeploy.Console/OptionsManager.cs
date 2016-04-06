@@ -84,7 +84,7 @@ namespace Net.Sf.Dbdeploy
         /// <returns>
         /// Option set for the config.
         /// </returns>
-        private static OptionSet Initialize(DbDeployConfig config, ConfigFileInfo configFile) 
+        private static OptionSet Initialize(DbDeployConfig config, ConfigFileInfo configFile)
         {
             var options = new OptionSet();
 
@@ -177,8 +177,8 @@ namespace Net.Sf.Dbdeploy
                     "DllPathConnector=",
                     "Path dll Connector Data Base.",
                     s => config.DllPathConnector = s);
-                );
-            
+
+
             return options;
         }
 
