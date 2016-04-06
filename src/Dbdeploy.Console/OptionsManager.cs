@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Net.Sf.Dbdeploy.Database;
+using NVelocity.Runtime.Directive;
 
 namespace Net.Sf.Dbdeploy
 {
@@ -173,9 +174,9 @@ namespace Net.Sf.Dbdeploy
                     "configuration file to use for all settings.",
                     s => configFile.FileInfo = !string.IsNullOrWhiteSpace(s) ? new FileInfo(StripQuotes(s)) : null)
                 .Add(
-                    "dllPathConnector=",
-                    "Database Connector Dll Path",
-                    s => config.DllPathConnector = s
+                    "DllPathConnector=",
+                    "Path dll Connector Data Base.",
+                    s => config.DllPathConnector = s);
                 );
             
             return options;
