@@ -78,6 +78,9 @@
   </Target>
   -->
   <ItemGroup>
+    <Reference Include="Db2.Data">
+      <HintPath>..\..\lib\db2.data\Db2.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Moq, Version=4.1.1308.2321, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Moq.4.1.1308.2321\lib\net40\Moq.dll</HintPath>
@@ -128,6 +131,7 @@
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
+    <Compile Include="Database\Db2DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\MySqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="UniqueChangeTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
@@ -213,6 +217,9 @@
     </Content>
     <Content Include="Mocks\Versioned\v2.0.10.0\3.SQLCMD Add Customer Data.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Database\db2_expected.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Database\ora_expected.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

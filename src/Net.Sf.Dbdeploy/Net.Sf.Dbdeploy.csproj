@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="Appliers\DirectToDbApplier.cs" />
     <Compile Include="Database\TableInfo.cs" />
+    <Compile Include="Database\Db2DbmsSyntax.cs" />
     <Compile Include="UniqueChange.cs" />
     <Compile Include="DbDeployer.cs" />
     <Compile Include="Database\DelimiterTypeFactory.cs">
@@ -189,6 +190,12 @@
     <EmbeddedResource Include="Resources\SQLCMD.rll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\db2_undo.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\db2_apply.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\dbproviders.xml">
@@ -208,6 +215,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\CreateSchemaVersionTable.ora.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CreateSchemaVersionTable.db2.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

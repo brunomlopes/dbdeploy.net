@@ -1,1 +1,3 @@
-// This file will be changed when building a package to contain the correct version// Do not commit any changes hereusing System.Reflection;[assembly: AssemblyVersionAttribute("0.0.0.0")][assembly: AssemblyInformationalVersionAttribute("0.0.0.0-devel")][assembly: AssemblyFileVersionAttribute("0.0.0.0")]
+// This file will be changed when building a package to contain the correct version// Do not commit any changes hereusing System.Reflection;[assembly: AssemblyVersionAttribute("2.2.0.4")]
+[assembly: AssemblyInformationalVersionAttribute("2.2.0.4-devel")]
+[assembly: AssemblyFileVersionAttribute("2.2.0.4")]

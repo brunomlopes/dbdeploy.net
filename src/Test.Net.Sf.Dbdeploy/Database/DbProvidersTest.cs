@@ -29,5 +29,11 @@ namespace Net.Sf.Dbdeploy.Database
         {
             Assert.IsNotNull(providers.GetProvider("mysql"));
         }
+
+		[Test]
+		public void TestCanLoadDb2Provider()
+		{
+			Assert.IsNotNull(providers.GetProvider("db2"));
+		}
     }
 }
