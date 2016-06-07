@@ -78,9 +78,6 @@
   </Target>
   -->
   <ItemGroup>
-    <Reference Include="Db2.Data">
-      <HintPath>..\..\lib\db2.data\Db2.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Moq, Version=4.1.1308.2321, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Moq.4.1.1308.2321\lib\net40\Moq.dll</HintPath>
@@ -106,6 +103,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Xml" />
+    <Reference Include="Wintegra.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wintegra.Data.1.0.0-alpha1\lib\net20\Wintegra.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dbdeploy.Console\Dbdeploy.Console.csproj">

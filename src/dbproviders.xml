@@ -20,7 +20,7 @@
 	<provider
     name="db2"
     description="Wintegra, Wrapper over IBM DB2 ODBC DRIVER over Microsoft ODBC provider V2.0.0.0 in framework .NET V2.0"
-    assemblyName="Db2.Data"
-    connectionClass="Db2.Data.Db2Client.Db2Connection"
+    assemblyName="Wintegra.Data"
+    connectionClass="Wintegra.Data.Db2Client.Db2Connection"
   />
 </providers>

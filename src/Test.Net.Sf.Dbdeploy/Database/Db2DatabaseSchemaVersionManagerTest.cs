@@ -6,7 +6,6 @@ using System.IO;
 using System.Text;
 using Net.Sf.Dbdeploy.Appliers;
 using Net.Sf.Dbdeploy.Configuration;
-using Net.Sf.Dbdeploy.Database.SqlCmd;
 using Net.Sf.Dbdeploy.Scripts;
 using NUnit.Framework;
 
@@ -55,7 +54,7 @@ namespace Net.Sf.Dbdeploy.Database
 
 		protected override IDbConnection GetConnection()
 		{
-			return new Db2.Data.Db2Client.Db2Connection(ConnectionString);
+			return new Wintegra.Data.Db2Client.Db2Connection(ConnectionString);
 		}
 
 		protected override void InsertRowIntoTable(int i)
