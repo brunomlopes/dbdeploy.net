@@ -13,7 +13,7 @@
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora" }) 
+            foreach (string syntax in new[] { "mssql", "mysql", "ora", "db2" }) 
             {
                 try 
                 {
@@ -31,7 +31,7 @@
         [Test]
         public void GenerateConsolidatedChangesScriptForAllDatabasesLoadingTemplatesFromResourcesAndCompareAgainstTemplate()
         {
-            foreach (string syntax in new[] { "mssql", "mysql", "ora" }) 
+            foreach (string syntax in new[] { "mssql", "mysql", "ora", "db2" }) 
             {
                 try 
                 {
