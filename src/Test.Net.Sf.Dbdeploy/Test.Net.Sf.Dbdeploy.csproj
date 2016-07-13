@@ -187,6 +187,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="WorkflowDesign\Fluxograma_Dbdeploy.pdf" />
     <None Include="Mocks\Fixtures\DatabaseFirebird\DBDEPLOY.FDB">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -212,6 +213,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WorkflowDesign\Fluxograma_Dbdeploy.xml" />
+    <Content Include="WorkflowDesign\Readme.txt" />
     <Content Include="Mocks\DbDeploy.MultipleChangeSets.config.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
