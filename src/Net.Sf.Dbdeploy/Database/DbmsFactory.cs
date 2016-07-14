@@ -31,6 +31,9 @@ namespace Net.Sf.Dbdeploy.Database
                 case SupportedDbms.ORACLE:
                     dmDbmsSyntax = new OracleDbmsSyntax();
                     break;
+                case SupportedDbms.ORACLE8i:
+                    dmDbmsSyntax = new Oracle8iDbmsSyntax();
+                    break;
                 case SupportedDbms.MSSQL:
                     dmDbmsSyntax = new MsSqlDbmsSyntax();
                     break;
