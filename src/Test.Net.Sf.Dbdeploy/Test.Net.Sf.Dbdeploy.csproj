@@ -103,6 +103,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Xml" />
+    <Reference Include="Wintegra.Data, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wintegra.Data.1.1.2\lib\net20\Wintegra.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dbdeploy.Console\Dbdeploy.Console.csproj">
@@ -128,6 +132,7 @@
     <Compile Include="Appliers\DirectToDbApplierTest.cs" />
     <Compile Include="Console\OptionsManagerTest.cs" />
     <Compile Include="ControllerTest.cs" />
+    <Compile Include="Database\Db2DatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="Database\MySqlDatabaseSchemaVersionManagerTest.cs" />
     <Compile Include="UniqueChangeTest.cs" />
     <Compile Include="Database\DatabaseSchemaVersionManagerTest.cs" />
@@ -213,6 +218,9 @@
     </Content>
     <Content Include="Mocks\Versioned\v2.0.10.0\3.SQLCMD Add Customer Data.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Database\db2_expected.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Database\ora_expected.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

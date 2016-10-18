@@ -16,7 +16,7 @@ namespace Net.Sf.Dbdeploy.Database
 
         protected DatabaseSchemaVersionManager databaseSchemaVersion;
 
-        private IDbmsSyntax syntax;
+		protected IDbmsSyntax syntax;
 
         [SetUp]
         protected void SetUp()
