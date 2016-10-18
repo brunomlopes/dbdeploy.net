@@ -103,8 +103,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Xml" />
-    <Reference Include="Wintegra.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wintegra.Data.1.0.0-alpha1\lib\net20\Wintegra.Data.dll</HintPath>
+    <Reference Include="Wintegra.Data, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wintegra.Data.1.1.2\lib\net20\Wintegra.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
