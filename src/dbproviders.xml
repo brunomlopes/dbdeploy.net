@@ -12,6 +12,12 @@
     connectionClass="Oracle.DataAccess.Client.OracleConnection"
   />
   <provider
+    name="ora8i"
+    description="Oracle .NET connection provider"
+    assemblyName="Oracle.DataAccess, Version=4.112.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342"
+    connectionClass="Oracle.DataAccess.Client.OracleConnection"
+  />
+  <provider
     name="mysql"
     description="MySQL, MySQL provider 1.0.7.30072"
     assemblyName="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d" 
