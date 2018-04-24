@@ -29,7 +29,7 @@ namespace Net.Sf.Dbdeploy.Database
             throw new DbmsNotSupportedException(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    "No provider for type '{0}' implemented." + Environment.NewLine + "Supported dbms: ora, mssql, mysql, firebird, postgre, sybase", 
+                    "No provider for type '{0}' implemented." + Environment.NewLine + "Supported dbms: ora, ora8i, mssql, mysql, firebird, postgre, sybase", 
                     dbmsType));
         }
     }
