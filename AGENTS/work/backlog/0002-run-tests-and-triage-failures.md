@@ -4,7 +4,7 @@ title: Run the test suite, list failing tests and create fix work items
 status: backlog
 type: chore
 created: 2026-11-13
-related: [0001, 0003]
+related: [0001, 0003, 0005]
 ---
 
 ## Goal
@@ -20,7 +20,8 @@ Know exactly which tests fail on the .NET Framework 4.8 build and why, with one 
 ## Context
 - Depends on 0001 (run against the net48 build). If 0001 is not done, run against whatever builds and say so in Notes.
 - Test project: `src/Test.Net.Sf.Dbdeploy` (NUnit 2.x, referenced from checked-in `lib/nunit.*.dll`; no runner is checked in, so one has to be obtained, e.g. the NUnit 2 console runner or an adapter).
-- There is no test task in `psakefile.ps1`; `dbdeploy.build` (NAnt) and `go.bat` are the older build entry points and may show how tests used to be run.
+- Item 0005 adds a `./psake Test` task. Do 0005 first and use that task here instead of hand-picking a runner.
+- Until 0005 is done there is no test task in `psakefile.ps1`; `dbdeploy.build` (NAnt) and `go.bat` are the older build entry points and may show how tests used to be run.
 - Many tests need live databases, configured in `src/Test.Net.Sf.Dbdeploy/App.config`:
   - SQL Server: `Server=.;Initial Catalog=DBDEPLOY` with SQL login `DBDeployUser`
   - MySQL: `192.168.1.112`, database `DBDEPLOY`

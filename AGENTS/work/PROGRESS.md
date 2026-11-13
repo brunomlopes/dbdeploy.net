@@ -1,9 +1,9 @@
 ## 2026-11-13 (later)
-- Worked on: 0004 (update vendored psake 4.2.0 → 5.0.4)
-- Done: 0004
-- State: psake 5.0.4 is in `Tools/psake/`, `psake.ps1` is a repo-owned wrapper, `psakefile.ps1` (renamed from `default.ps1`) uses `Framework '4.8'`, ADR 0001 written. `./psake build`, `Clean` and `Help` pass. Changes are not committed (working tree is on branch `retarget-net48`, which holds 0001).
-- Next: commit 0004 on its own branch per the AGENTS.md naming rule, then start 0002
-- Watch out: the build now runs on Visual Studio's MSBuild (found via the `VSSetup` module) instead of the Framework-folder one; `cmd /c .\psake.cmd` returns 0 to the caller even when the build fails (pre-existing), so check the output or call `psake.ps1` directly; `psakefile.ps1` has CR-only line endings, edit it with a tool that preserves them
+- Worked on: 0004 (update vendored psake 4.2.0 → 5.0.4), 0006 (psake.cmd exit code)
+- Done: 0004, 0006
+- State: psake 5.0.4 is in `Tools/psake/`, `psake.ps1` is a repo-owned wrapper, `psakefile.ps1` (renamed from `default.ps1`) uses `Framework '4.8'`, ADR 0001 written. `./psake build`, `Clean` and `Help` pass. Branches stack: `retarget-net48` (0001) → `0004-update-psake` → `0006-fix-psake-cmd-exit-code`; none is pushed or merged to master.
+- Next: 0004 is committed on branch `0004-update-psake`. Created backlog item 0005 (psake `Test` task); do 0005 before 0002 so 0002 can use `./psake Test`. Did 0006 on branch `0006-fix-psake-cmd-exit-code`: `psake.cmd` now returns 1 when psake fails (one-line fix, `exit /b %errorlevel%` instead of `goto :eof`); not committed yet
+- Watch out: the build now runs on Visual Studio's MSBuild (found via the `VSSetup` module) instead of the Framework-folder one; `psakefile.ps1` has CR-only line endings, edit it with a tool that preserves them
 
 ## 2026-11-13
 - Worked on: created backlog items 0001 (retarget to .NET Framework 4.8), 0002 (run tests, triage failures), 0003 (migrate to .NET 11); then did 0001; created backlog item 0004 (update psake from 4.2.0 to latest, 5.0.4)
