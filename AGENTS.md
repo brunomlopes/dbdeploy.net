@@ -10,7 +10,8 @@ This project manages the deployment of numbered change scripts in versioned fold
 ### Commands
 
 - Build: `./psake build`
-- Test: `./psake Test` (builds, then runs the entire suite; run `nuget restore src/dbdeploy.net.sln` once first; results in `build/TestResult.xml`)
+- Test: `./psake test` (builds, then runs the entire suite; run `nuget restore src/dbdeploy.net.sln` once first; results in `build/TestResult.xml`)
+- Test databases (need Docker): `./psake start-databases` starts the SQL Server and MySQL containers from `Tools/docker-compose.yml` (`start-sqlserver` / `start-mysql` for one); `./psake stop-databases` removes them and their data. Start them before `./psake test`, otherwise the database tests fail in SetUp.
 
 ### Conventions
 

@@ -1,0 +1,56 @@
+# Throwaway databases for the test suite. Started through psake:
+#   .\psake start-sqlserver | start-mysql | start-databases | stop-databases
+#
+# All credentials here are for local test containers only. Ports are published
+# on 127.0.0.1 and match the connection strings in src\Test.Net.Sf.Dbdeploy\App.config.
+# Nothing is persisted: "stop-databases" removes the containers and their data.
+
+name: dbdeploy-tests
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-CU28-ubuntu-22.04
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: "DbDeploy_Test_Sa1"
+    ports:
+      - "127.0.0.1:14330:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  # Creates the DBDEPLOY database and the DBDeployUser login, then exits.
+  # The SQL Server image does not run init scripts by itself.
+  sqlserver-init:
+    image: mcr.microsoft.com/mssql/server:2022-CU28-ubuntu-22.04
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    volumes:
+      - ./docker-init/sqlserver-init.sql:/init/sqlserver-init.sql:ro
+    entrypoint: ["/opt/mssql-tools18/bin/sqlcmd", "-C", "-S", "sqlserver", "-U", "sa", "-P", "DbDeploy_Test_Sa1", "-b", "-i", "/init/sqlserver-init.sql"]
+    restart: "no"
+
+  mysql:
+    image: mysql:8.0.46
+    # The tests use MySql.Data 6.9.8, which predates MySQL 8's default
+    # authentication plugin and default collation.
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: DBDEPLOY
+    ports:
+      - "127.0.0.1:13306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" -e \"SELECT 1\" DBDEPLOY"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s

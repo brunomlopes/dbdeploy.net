@@ -1,3 +1,10 @@
+## 2026-11-13 (0007)
+- Worked on: 0007 (Docker Compose test databases)
+- Done: 0007; 0010 and 0011 closed as delivered by it
+- State: `Tools/docker-compose.yml` (SQL Server 2022 on 127.0.0.1:14330, MySQL 8.0 on 127.0.0.1:13306), psake tasks `start-sqlserver`, `start-mysql`, `start-databases`, `stop-databases`, tests pointed at them through `App.config`. `./psake test` with containers up: 92 run, 80 passed, 11 errors, 1 failure, about 8 s. Work is on branch `0007-docker-compose-test-databases`, not committed.
+- Next: 0014 (6 MySQL tests, SQL syntax error near '.ChangeLog'), 0015 (1 SQL Server test, second script runs after the first fails), then 0008 (PostgreSQL container), 0013 (task renames), 0009, 0003. 0012 (Oracle) stays parked.
+- Watch out: use `127.0.0.1`, not `localhost`, for the container ports (localhost resolves to IPv6 here); inside psake `Exec`, run docker through `cmd /c "... 2>&1"` because its stderr progress output is treated as an error by Windows PowerShell; the test containers were left running at the end of this session
+
 ## 2026-11-13 (0002)
 - Worked on: 0002 (run tests, triage failures)
 - Done: 0002

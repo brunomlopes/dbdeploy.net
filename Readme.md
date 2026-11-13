@@ -242,3 +242,21 @@ Using SQL Server Developer Tools is still highly valuable with dbdeploy.NET.  It
 # Additional Info
 
 dbdeploy.NET was originally ported from [dbdeploy](http://code.google.com/p/dbdeploy/).
+
+# Building and running the tests
+
+The build is driven by the psake copy in `Tools\psake`. From the repository root:
+
+```
+nuget restore src\dbdeploy.net.sln
+.\psake build
+.\psake start-databases
+.\psake test
+.\psake stop-databases
+```
+
+* `start-databases` needs Docker. It starts a SQL Server and a MySQL container defined in `Tools\docker-compose.yml`, published on `127.0.0.1:14330` and `127.0.0.1:13306`, and creates the `DBDEPLOY` test database in each. `start-sqlserver` and `start-mysql` start one of them.
+* The connection strings the tests use are in `src\Test.Net.Sf.Dbdeploy\App.config` and match the containers.
+* `stop-databases` removes the containers and their data.
+* The Oracle tests need a native Oracle client and are not covered by the containers; they fail in their setup.
+* `.\psake help` lists all tasks.
