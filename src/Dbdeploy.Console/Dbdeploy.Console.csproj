@@ -11,7 +11,7 @@
     <RootNamespace>Net.Sf.Dbdeploy</RootNamespace>
     <AssemblyName>dbdeploy</AssemblyName>
     <StartupObject>Net.Sf.Dbdeploy.CommandLine</StartupObject>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
