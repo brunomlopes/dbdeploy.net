@@ -1,0 +1,45 @@
+function Write-TaskTimeSummary {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [timespan]
+        $invokePsakeDuration
+    )
+    if ($psake.Context.count -eq 0) {
+        Write-Debug "No psake context found. Exiting Write-TaskTimeSummary."
+        return
+    }
+
+    $currentContext = $psake.Context.Peek()
+    if ($currentContext.config.taskNameFormat -is [ScriptBlock]) {
+        & $currentContext.config.taskNameFormat $msgs.build_time_report
+    } elseif ($currentContext.config.taskNameFormat -ne "Executing {0}") {
+        $currentContext.config.taskNameFormat -f $msgs.build_time_report
+    } else {
+        Write-BuildMessage ("-" * 70)
+        Write-BuildMessage $msgs.build_time_report
+        Write-BuildMessage ("-" * 70)
+    }
+
+    $list = @()
+    while ($currentContext.executedTasks.Count -gt 0) {
+        $taskKey = $currentContext.executedTasks.Pop()
+        $task = $currentContext.tasks.$taskKey
+        if ($taskKey -eq "default") {
+            continue
+        }
+        $list += [PSCustomObject]@{
+            Name     = $task.Name
+            Duration = $task.Duration.ToString("hh\:mm\:ss\.fff")
+            Cached   = $task.Cached
+        }
+    }
+    [Array]::Reverse($list)
+    $list += [PSCustomObject]@{
+        Name     = "Total:"
+        Duration = $invokePsakeDuration.ToString("hh\:mm\:ss\.fff")
+        Cached   = $false
+    }
+    # using "out-string | where-object" to filter out the blank line that format-table prepends
+    $list | Format-Table -AutoSize -Property Name, Duration, Cached | Out-String -Stream | Where-Object { $_ } | Write-BuildMessage
+}

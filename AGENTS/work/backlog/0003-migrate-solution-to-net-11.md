@@ -15,7 +15,7 @@ The solution builds, tests and packages on .NET 11 using SDK-style projects, wit
 - [ ] `dotnet test` runs the suite and no test that passed on net48 (baseline from 0002 and its fix items) fails.
 - [ ] No `packages.config`, `src/.nuget/` or checked-in dependency binaries in `lib/` are needed to build.
 - [ ] The fate of each host (console, NAnt, PowerShell, MSBuild task) is recorded in an ADR.
-- [ ] The packaging step in `default.ps1` produces a usable package without ILMerge, or its replacement is recorded in an ADR.
+- [ ] The packaging step in `psakefile.ps1` produces a usable package without ILMerge, or its replacement is recorded in an ADR.
 - [ ] AGENTS.md "Commands" is updated with the new build and test commands.
 
 ## Context
@@ -32,7 +32,7 @@ The solution builds, tests and packages on .NET 11 using SDK-style projects, wit
 - Known code-level work:
   - `System.Configuration.ConfigurationManager` and `DbProviderFactories` config in `app.config` (used in `Net.Sf.Dbdeploy/Configuration`, `Dbdeploy.Console/OptionsManager.cs` and the tests) need the compatibility package or a replacement, with provider factories registered in code.
   - Dependencies need versions with modern .NET support: NVelocity 1.0.3, NDesk.Options 0.2.1, Moq 4.1, MySql.Data 6.9.8, the SQL Server client (`System.Data.SqlClient` → `Microsoft.Data.SqlClient`) and an Oracle provider.
-  - `default.ps1` calls `msbuild` directly and publishes to Bintray, which no longer exists.
+  - `psakefile.ps1` calls `msbuild` directly and publishes to Bintray, which no longer exists.
 - These are public API and dependency changes; per AGENTS.md each child item must say so explicitly.
 
 ## Plan
@@ -54,7 +54,7 @@ Strategy: convert in place, bottom-up, keeping the solution building after every
 - [ ] `src/MSBuild.Dbdeploy.Task`
 - [ ] `src/Dbdeploy.Powershell`
 - [ ] `src/Dbdeploy.NAnt`
-- [ ] `default.ps1` / `psake.*` (Build, Clean, BuildPackage, PublishPackage), `Tools/ILMerge.exe`, `internalize_exclusions.txt`
+- [ ] `psakefile.ps1` / `psake.*` (Build, Clean, BuildPackage, PublishPackage), `Tools/ILMerge.exe`, `internalize_exclusions.txt`
 - [ ] Legacy build files: `dbdeploy.build`, `go.bat`, `Tools/nant`, `src/.nuget`, `lib/`
 - [ ] `Readme.md` and `example_scripts/` usage instructions
 
