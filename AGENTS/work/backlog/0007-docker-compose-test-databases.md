@@ -4,7 +4,7 @@ title: Run the database tests against Docker Compose instances
 status: backlog
 type: feature
 created: 2026-11-13
-related: [0002, 0005, 0008, 0009, 0010, 0011, 0012]
+related: [0002, 0005, 0008, 0009, 0010, 0011, 0012, 0013]
 ---
 
 ## Goal
@@ -44,7 +44,7 @@ A developer with Docker can start the test databases with psake and run the data
 - Effect on other items: this item is expected to deliver what 0010 (SQL Server) and 0011 (MySQL) describe. When it is done, close or shrink those two accordingly.
 
 ## Plan
-- [ ] Confirm with the maintainer: image versions, host ports, and task names (suggest `StartSqlServer`, `StartMySql`, plus a `StopDatabases` task).
+- [ ] Confirm with the maintainer: image versions, host ports, and task names (suggest `start-sqlserver`, `start-mysql`, `start-databases` for both, plus `stop-databases`; lowercase kebab-case per 0013).
 - [ ] Write `Tools/docker-compose.yml` with the two services, pinned images, localhost-only ports, health checks and named volumes or no persistence (decide which).
 - [ ] Add the SQL Server initialisation (database + login) and the MySQL database creation so a clean start is test-ready.
 - [ ] Add the psake start tasks, each waiting for its instance to be healthy.

@@ -4,7 +4,7 @@ title: Add a PostgreSQL container and psake start task
 status: backlog
 type: feature
 created: 2026-11-13
-related: [0007, 0009]
+related: [0007, 0009, 0013]
 ---
 
 ## Goal
@@ -13,7 +13,7 @@ A developer can start a PostgreSQL test database with one psake task, alongside 
 ## Acceptance criteria
 - [ ] `Tools/docker-compose.yml` (created by 0007) has a PostgreSQL service in its own container, with a pinned image version (no `latest`).
 - [ ] Its port is published on localhost only and does not collide with the `postgres:17` container already on the maintainer's machine (`127.0.0.1:15432`) or with a default local install (5432).
-- [ ] `psakefile.ps1` has a start task for the PostgreSQL instance, named and built like the start tasks from 0007, with a description so `./psake Help` lists it.
+- [ ] `psakefile.ps1` has a start task for the PostgreSQL instance, named and built like the start tasks from 0007 (lowercase kebab-case per 0013, e.g. `start-postgres`, and included in `start-databases` if that task exists), with a description so `./psake Help` lists it.
 - [ ] The task returns only when the database accepts connections, or fails with a clear message. A clean start leaves a `DBDEPLOY` database and a test login in place with no manual step.
 - [ ] The stop task from 0007 (if it exists) also stops this container.
 - [ ] Starting PostgreSQL does not start or disturb the SQL Server and MySQL containers, and `./psake Test` gives the same result as before this item.
