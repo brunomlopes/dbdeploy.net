@@ -1,3 +1,10 @@
+## 2026-11-13 (0002)
+- Worked on: 0002 (run tests, triage failures)
+- Done: 0002
+- State: `./psake Test` gives 92 run, 72 passed, 20 errors. All 20 are database connection errors in SetUp. Created backlog items 0010 (SQL Server, 9 tests), 0011 (MySQL, 6 tests), 0012 (Oracle, 5 tests). Work is on branch `0002-run-tests-and-triage-failures`, cut from the 0005 branch.
+- Next: 0007 (new: `Tools/docker-compose.yml` with SQL Server and MySQL containers, psake start tasks, tests pointed at them), then 0008 (new: PostgreSQL container and start task), then 0009 (new: PostgreSQL support in the tool). It is expected to deliver 0010 and 0011. Oracle (0012) is out of scope for now by maintainer decision. 0003 should wait for 0007
+- Watch out: the triage items were renumbered from 0007-0009 to 0010-0012; PostgreSQL has no support in the code yet (0009); real test failures may be hidden behind the SetUp errors; the Oracle tests need a native Oracle client, not just a database
+
 ## 2026-11-13 (0005)
 - Worked on: 0005 (psake `Test` task)
 - Done: 0005
