@@ -10,12 +10,14 @@ This project manages the deployment of numbered change scripts in versioned fold
 ### Commands
 
 - Build: `./psake build`
+- Test: `./psake Test` (builds, then runs the entire suite; run `nuget restore src/dbdeploy.net.sln` once first; results in `build/TestResult.xml`)
 
 ### Conventions
 
 
 - Do not change public APIs, schemas, or dependencies without a work item that says so.
 - Do not reverse a decision recorded in `AGENTS/docs/decisions/` without writing a new ADR that supersedes it.
+- Branches and commits reference the workitem item. So a workitem 0001-retarget-projects-and-packages-something would create a branch 0001-retarget-projects, and commits will start with 0001.
 
 ## Agent workspace layout
 

@@ -1,3 +1,10 @@
+## 2026-11-13 (0005)
+- Worked on: 0005 (psake `Test` task)
+- Done: 0005
+- State: `./psake Test` builds and runs the entire suite with NUnit.Runners 2.6.4 restored as a NuGet package (ADR 0002). Result here: 92 run, 20 errors, 0 failures; psake fails with exit code 1. 0006 is committed on `0006-fix-psake-cmd-exit-code`; 0005 work is on branch `0005-add-psake-task-to-run-tests`, cut from it.
+- Next: 0002 (triage the 20 errors; all are database fixture SetUp errors), then 0003
+- Watch out: the test run takes about 2 minutes, mostly waiting on unreachable databases; a green run of `./psake Test` has never been observed; `nuget restore src/dbdeploy.net.sln` is needed before the first `./psake Test`
+
 ## 2026-11-13 (later)
 - Worked on: 0004 (update vendored psake 4.2.0 → 5.0.4), 0006 (psake.cmd exit code)
 - Done: 0004, 0006
