@@ -16,6 +16,14 @@ SET CompleteDate = getdate(), ScriptStatus = 1, ScriptOutput = ''
 WHERE Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber
 GO
 
+IF NOT EXISTS (SELECT 1 FROM ${changeLogTableName} WHERE Folder = '$script.Folder' AND ScriptNumber = $script.ScriptNumber AND ScriptStatus = 1)
+BEGIN
+    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION
+    RAISERROR('Change script %s failed. The change scripts after it were not run.', 16, 1, '$script.Folder/$script.ScriptNumber')
+    SET NOEXEC ON
+END
+GO
+
 COMMIT
 GO
 

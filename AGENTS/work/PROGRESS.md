@@ -1,3 +1,10 @@
+## 2026-11-13 (0015)
+- Worked on: 0015 (SQL Server: second script runs after the first fails)
+- Done: 0015
+- State: product defect in `mssql_apply.vm` (the test was written failing in 2013 and never fixed). The template now checks the change log after each change script and, on failure, rolls back, raises an error and sets `NOEXEC ON`. `./psake test` with containers up: 92 run, 11 errors (MySQL 0014, Oracle 0012), 0 failures. Committed on branch `0015-fix-mssql-second-script`, cut from the 0007 branch.
+- Next: 0014 (6 MySQL tests), then 0008, 0013, 0009, 0003; 0016 (new: failures in earlier batches of a change script, and the undo template) when convenient
+- Watch out: the MySQL test of the same name (`MySqlDatabaseSchemaVersionManagerTest.TestDoesNotRunSecondScriptIfFirstScriptFails`) is one of the 0014 errors and may fail for the same template reason once 0014 is fixed
+
 ## 2026-11-13 (0007)
 - Worked on: 0007 (Docker Compose test databases)
 - Done: 0007; 0010 and 0011 closed as delivered by it
