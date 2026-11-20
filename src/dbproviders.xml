@@ -17,4 +17,10 @@
     assemblyName="MySql.Data" 
     connectionClass="MySql.Data.MySqlClient.MySqlConnection"
   />
+	<provider
+    name="db2"
+    description="Wintegra, Wrapper over IBM DB2 ODBC DRIVER over Microsoft ODBC provider V2.0.0.0 in framework .NET V2.0"
+    assemblyName="Wintegra.Data"
+    connectionClass="Wintegra.Data.Db2Client.Db2Connection"
+  />
 </providers>

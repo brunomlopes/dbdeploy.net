@@ -129,17 +129,25 @@ namespace Net.Sf.Dbdeploy.Database
                 var completeDateValue = status != ScriptStatus.Started ? this.syntax.CurrentTimestamp : "NULL";
                 if (script.ChangeId == 0)
                 {
+					var insertSql = string.Format(
+						CultureInfo.InvariantCulture,
+"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5)",
+						this.changeLogTableName,
+						this.syntax.CurrentTimestamp,
+						completeDateValue,
+						this.syntax.CurrentUser);
+
+					// Execute insert.
+					this.queryExecuter.ExecuteQuery(insertSql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output ?? string.Empty);
+
+
                     var sql = string.Format(
                         CultureInfo.InvariantCulture,
-@"INSERT INTO {0} (Folder, ScriptNumber, ScriptName, StartDate, CompleteDate, AppliedBy, ScriptStatus, ScriptOutput) VALUES (@1, @2, @3, {1}, {2}, {3}, @4, @5) 
-SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
-                        this.changeLogTableName,
-                        this.syntax.CurrentTimestamp,
-                        completeDateValue,
-                        this.syntax.CurrentUser);
+"SELECT ChangeId FROM {0} WHERE Folder = @1 and ScriptNumber = @2",
+                        this.changeLogTableName);
 
-                    // Execute insert and set change id so it can be updated.
-                    using (var reader = this.queryExecuter.ExecuteQuery(sql, script.Folder, script.ScriptNumber, script.ScriptName, (int)status, output ?? string.Empty))
+                    // Execute set change id so it can be updated.
+                    using (var reader = this.queryExecuter.ExecuteQuery(sql, script.Folder, script.ScriptNumber))
                     {
                         reader.Read();
                         script.ChangeId = reader.GetInt32(0);

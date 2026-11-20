@@ -24,6 +24,8 @@ namespace Net.Sf.Dbdeploy.Database
         {
             switch (this.dbms)
             {
+				case "db2":
+					return new Db2DbmsSyntax();
                 case "ora":
                     return new OracleDbmsSyntax();
                 case "mssql":
@@ -31,7 +33,7 @@ namespace Net.Sf.Dbdeploy.Database
                 case "mysql":
                     return new MySqlDbmsSyntax();
                 default:
-                    throw new ArgumentException("Supported dbms: ora, mssql, mysql");
+                    throw new ArgumentException("Supported dbms: db2, ora, mssql, mysql");
             }
         }
 
